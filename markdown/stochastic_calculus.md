@@ -1,23 +1,16 @@
 (stochastic_calculus)=
 # Stochastic Calculus
 
-
 (modelling_dynamical_systems)=
 ## Modelling dynamical systems
 
-Introduction to generalities of modelling
-
-Dynamical system: a set of variables that follow a time dynamics law
+A dynamical system is a set of variables that follow a time dynamics law
 
 $$y = f(t,{X_t})$$ 
 
 where $\{X_t\}$ is a set of external factors that influence the trajectory of the system.
 
-Reasons: prediction, understanding, input to other problems
-(optimization like pricing, etc)
-
-The trajectory might be difficult to derive, sometimes it is easier to
-derive the dynamics in small steps. Considering the case $y = f(t)$
+The trajectory might be difficult to derive, and sometimes it is easier to derive the dynamics in small steps. Considering the case $y = f(t)$
 
 $$\frac{dy}{dt} = g(t)$$
 
@@ -143,9 +136,11 @@ which has the structure:
 
 $$\frac{d {\bf y}}{dt} + A {\bf y} = 0$$ 
 
-where ${\bf y} = (y_0, ..., y_{n-1})$ and A is the matrix form with the coefficients of the system of equations above. The general solution to this equation is: $${\bf y} =  e^{-A t} {\bf y_0}$$ This is the formal
-solution, but to get a workable solution we need to diagonalize the matrix A, i.e. finding $A = C \Lambda C^{-1}$ where $\Lambda$ is a diagonal matrix with the eigenvalues of A, and C has its eigenvectors
-$\vec{w}$ as columns. One can then project the solution in the space of eigenvectors:
+where ${\bf y} = (y_0, ..., y_{n-1})$ and A is the matrix form with the coefficients of the system of equations above. The general solution to this equation is: 
+
+$${\bf y} =  e^{-A t} {\bf y_0}$$ 
+
+This is the formal solution, but to get a workable solution we need to diagonalize the matrix A, i.e. finding $A = C \Lambda C^{-1}$ where $\Lambda$ is a diagonal matrix with the eigenvalues of A, and C has its eigenvectors $\vec{w}$ as columns. One can then project the solution in the space of eigenvectors:
 
 $${\bf y_t} =  C C^{-1} e^{-A t} C C^{-1} {\bf y_0} = C e^{-\Lambda t} C^{-1} {\bf y_0}$$
 
@@ -491,7 +486,11 @@ SIMULATION GAUSSIAN PROCESS
 #### Multivariate processes
 
 Let us now simulate a multivariate Wiener process of dimension N. The strategy in this case is to start simulating N independent Wiener processes and then use them to generate the correlated paths. This can
-be done using the Cholesky decomposition of the correlation matrix $\Sigma$. Since $\Sigma$ is symmetric and positive define, the decomposition reads: $$\Sigma = L L^T$$ where $L$ is a lower triangular matrix. If we now we have a vector of N uncorrelated Wiener increments
+be done using the Cholesky decomposition of the correlation matrix $\Sigma$. Since $\Sigma$ is symmetric and positive define, the decomposition reads: 
+
+$$\Sigma = L L^T$$ 
+
+where $L$ is a lower triangular matrix. If we now we have a vector of N uncorrelated Wiener increments
 $d \hat{{\bf W_t}}$, we can obtain the correlated process by using $L$ such as $d {\bf W_t} = L d \hat{{\bf W_t}}$. We can see that this vector has the distribution of the multivariate Wiener process increment:
 
 $$\begin{aligned}
@@ -749,8 +748,11 @@ Brownian motion, which we already now how to integrate from the previous section
 
 $$\log S_t = \log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \int_0^t \sigma_u d W_u$$
 
-which means that $\log S_t$ follows a Gaussian distribution $\log S_t \sim N(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)$. The distribution of $S_t$ is the well studied Log-normal distribution,
-which by definition is the distribution of a random variable whose logarithm follows a Gaussian distribution:
+which means that $\log S_t$ follows a Gaussian distribution 
+
+$$\log S_t \sim N(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)$$
+
+The distribution of $S_t$ is the well studied Log-normal distribution, which by definition is the distribution of a random variable whose logarithm follows a Gaussian distribution:
 
 $$S_t \sim LN(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)$$
 

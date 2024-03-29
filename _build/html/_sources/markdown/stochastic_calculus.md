@@ -4,19 +4,13 @@
 (modelling_dynamical_systems)=
 ## Modelling dynamical systems
 
-Introduction to generalities of modelling
-
-Dynamical system: a set of variables that follow a time dynamics law
+A dynamical system is a set of variables that follow a time dynamics law
 
 $$y = f(t,{X_t})$$ 
 
 where $\{X_t\}$ is a set of external factors that influence the trajectory of the system.
 
-Reasons: prediction, understanding, input to other problems
-(optimization like pricing, etc)
-
-The trajectory might be difficult to derive, sometimes it is easier to
-derive the dynamics in small steps. Considering the case $y = f(t)$
+The trajectory might be difficult to derive, and sometimes it is easier to derive the dynamics in small steps. Considering the case $y = f(t)$
 
 $$\frac{dy}{dt} = g(t)$$
 
@@ -754,8 +748,11 @@ Brownian motion, which we already now how to integrate from the previous section
 
 $$\log S_t = \log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \int_0^t \sigma_u d W_u$$
 
-which means that $\log S_t$ follows a Gaussian distribution $\log S_t \sim N(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)$. The distribution of $S_t$ is the well studied Log-normal distribution,
-which by definition is the distribution of a random variable whose logarithm follows a Gaussian distribution:
+which means that $\log S_t$ follows a Gaussian distribution 
+
+$$\log S_t \sim N(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)$$
+
+The distribution of $S_t$ is the well studied Log-normal distribution, which by definition is the distribution of a random variable whose logarithm follows a Gaussian distribution:
 
 $$S_t \sim LN(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)$$
 

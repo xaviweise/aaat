@@ -28,6 +28,7 @@ Here is the citation in BibTeX format
   title = {{Advanced Analytics and Algorithmic Trading}},
   author = {Sabio Gonzalez, Javier},
   year = {2024},
+  url = "https://xaviweise.github.io/aaat/welcome.html"
 }
 ```
 
@@ -38,11 +39,6 @@ File an [issue](https://github.com/aaat/issues) if you notice anything broken so
 To run the code you will need to install the correct packages in a computational environment.
 We have provided instructions below for common options.
 
-### Conda
-```
-conda env create -f environment.yml
-conda activate bmcp
-```
 
 ### Colab
 The book code can also be run using Google Colab.
@@ -57,4 +53,4 @@ https://colab.research.google.com
 :align: center
 ```
 
-This book is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/), except for the code (including the code blocks and jupyter notebooks) which are licensed under the [GNU GENERAL PUBLIC LICENSE Version 2](https://github.com/BayesianModelingandComputationInPython/BookCode_Edition1/blob/main/LICENSE).
+Advanced Analytics and Algorithmic Trading © 2024 by Javier Sabio González is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/), except for the code (including the code blocks and jupyter notebooks) which are licensed under the [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/xaviweise/aaat/blob/main/LICENSE).

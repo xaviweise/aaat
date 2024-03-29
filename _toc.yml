@@ -41,6 +41,7 @@ parts:
     - file: markdown/liquidity_modelling.md
     - file: markdown/rfq_models.md
     - file: markdown/avellaneda_stoikov.md
+    - file: markdown/enriching_avellaneda.md
     - file: markdown/hedging.md
     - file: markdown/market_making_rl.md
 
