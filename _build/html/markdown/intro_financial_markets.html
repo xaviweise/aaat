@@ -1,0 +1,717 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>1. Financial Markets &#8212; Advanced Analytics and Algorithmic Trading</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'markdown/intro_financial_markets';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Market microstructure" href="market_microstructure.html" />
+    <link rel="prev" title="Symbols" href="symbollist.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../welcome.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Advanced Analytics and Algorithmic Trading - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Advanced Analytics and Algorithmic Trading - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../welcome.html">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dedication.html">Dedication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="symbollist.html">Symbols</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Fundamentals</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Financial Markets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_microstructure.html">2. Market microstructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmic_trading.html">3. Algorithmic Trading</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelling Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_bayesian.html">4. Introduction to Bayesian Modelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_causal.html">5. Causal inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stochastic_calculus.html">6. Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stochastic_optimal_control.html">7. Stochastic optimal control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_driven_methods.html">8. Data-driven methods</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Execution Algorithms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="execution_fundamentals.html">9. Execution fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lob_models.html">10. Modelling the Limit Order Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="almgren_chriss.html">11. The Almgren - Chriss Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution_tactics.html">12. Execution tactics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Market Making Algorithms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">13. Market Making fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">14. Fair price estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">15. Liquidity modelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rfq_models.html">16. Modelling the request for quote process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">17. The Avellaneda and Stoikov Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enriching_avellaneda.html">18. Enriching the Avellaneda and Stoikov Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hedging.html">19. Hedging strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_making_rl.html">20. Reinforcement Learning and Market Making</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Investment Algorithms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quant_investment_fundamentals.html">21. Quantitative investment fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mean_reversion_strategies.html">22. Mean reversion strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trend_following.html">23. Trend following strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arbitrage.html">24. Arbitrage Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="factor_investing.html">25. Factor Investing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimal_portfolios.html">26. Optimal portfolios</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">28. References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/xaviweise/aaat" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/xaviweise/aaat/issues/new?title=Issue%20on%20page%20%2Fmarkdown/intro_financial_markets.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/markdown/intro_financial_markets.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Financial Markets</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1.1. Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-purpose-of-financial-markets">1.2. The purpose of financial markets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-banking-system">1.2.1. The Banking System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.2.2. Financial markets</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-participate-in-financial-markets">1.3. Who participate in financial markets?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-financial-instruments-and-asset-classes">1.4. Types of financial instruments and asset classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#market-structures">1.5. Market structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.6. Equity market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.7. Fixed income market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.8. FX market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.9. Crypto market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.10. Regulation of financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.11. Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="financial-markets">
+<h1><span class="section-number">1. </span>Financial Markets<a class="headerlink" href="#financial-markets" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2><span class="section-number">1.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="the-purpose-of-financial-markets">
+<h2><span class="section-number">1.2. </span>The purpose of financial markets<a class="headerlink" href="#the-purpose-of-financial-markets" title="Permalink to this heading">#</a></h2>
+<p>Financial markets are a solution to a problem perennial to our
+societies: the efficient channelling of savings into productive uses.
+Legal and natural persons who have excess cash seek to obtain the
+maximum returns (investment) with the maximum availability (liquidity).
+Therefore, they would prefer to lend money short - term. Those however
+who need cash in order to fund their ventures (new companies, new
+business plans for existing companies, acquisition of assets like houses
+via mortgages, social programs, etc) prefer to pay the minimal
+compensation possible and retain the funds for long-term. The lack of a
+mechanism to be able to accommodate those opposing objectives might lead
+to a society where excess funds remain idle instead of being channeled
+to productive uses.</p>
+<p>Modern capitalist societies solve this problem in two ways, which form
+the backbone of the financial system: the banking system and financial
+markets.</p>
+<section id="the-banking-system">
+<h3><span class="section-number">1.2.1. </span>The Banking System<a class="headerlink" href="#the-banking-system" title="Permalink to this heading">#</a></h3>
+<p>In the banking system the center is the bank, an institution or private
+company that offers short-term deposits with high availability to those
+with excess funds, and long-term loans to those who need funds. A
+capital cushion based on short-term loans or directly cash is maintained
+in order to fulfills withdrawals. Their activity is not exempt from
+risks:</p>
+<ul class="simple">
+<li><p>liquidity risk, which can happens if the demand to withdraw deposits
+exceeds the capital cushion, and depositors cannot be satisfied
+(bank run)</p></li>
+<li><p>credit risk, which happens when borrowers of funds default on their
+obligations and don’t give back those funds.</p></li>
+</ul>
+<p>Banks compensate those risks by charging a spread between interest of
+loans and interest of deposits, on top of a margin to pay for their
+operations. The banking system has traditionally being the central core
+of the financial system in Europe.</p>
+</section>
+<section id="id1">
+<h3><span class="section-number">1.2.2. </span>Financial markets<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>In financial markets, those who need funds issue financial instruments,
+legally binding contracts that articulate the terms in which those funds
+will be returned to the investor, as well as the compensation for the
+service. So far that is not that different from traditional banking
+loans. The key for financial instruments is the possibility of
+transferring the property of the contract, i.e. the right to receive
+back those future cash-flows and compensations. This provides a
+mechanism for the lender to potentially recover the funds before the
+contract ends, solving the problem of liquidity even if contracts are
+issued with long-term horizons.</p>
+<p>Of course, for that the lender needs to find a counterpart that is
+willing to purchase the financial instrument, and agree to the price.
+Pricing financial instruments is however not a simple task, since their
+value depend on assumptions about the certainty of those future
+cash-flows (for instance, what if the borrower cannot commit in the
+future to pay back?). There are also considerations of opportunity
+costs, since the potential investor will necessarily compare the return
+on its investment when acquiring the financial instrument with other
+potential productive uses of her money. Financial markets developed
+precisely to solve these two problems: 1) finding counterparts, 2)
+setting a price.</p>
+<p>Financial markets are the place where interested parties meet and
+negotiate the prices of financial instruments. In <strong>primary markets</strong>,
+financial instruments are issued by the borrowers and acquire initially
+by investors, sometimes via intermediaries like banks. In <strong>secondary
+markets</strong>, already issued financial instruments are negotiated between
+investors, with the original borrower not playing any part any more in
+the process. Most of trading nowadays occurs in secondary markets.</p>
+<p>In this process, financial markets not only provide of a mechanism for
+investors to obtain liquidity from their investments, but also serve as
+a mechanism for price discovery. In the end, in financial markets (as in
+other markets), the price of a financial instrument is what two willing
+parties agree to transact, independently of the subjective value that
+each of them place on the instrument. Of course, by pulling multiple
+investors in the same place to negotiate, financial markets channel
+multiple speculative ways about the value of a financial instrument into
+an actual price. These prices can guide investors about future
+decisions.</p>
+</section>
+</section>
+<section id="who-participate-in-financial-markets">
+<h2><span class="section-number">1.3. </span>Who participate in financial markets?<a class="headerlink" href="#who-participate-in-financial-markets" title="Permalink to this heading">#</a></h2>
+<p>Financial markets are mostly the domain of legal persons, although
+natural persons might participate as investors normally via an
+intermediary like a bank or a broker. Financial instruments are issued
+by corporations who need to fund their business plans, governments at
+many different levels (local, regional, national, supranational) that
+seek to fund social programs or public investments, or by banks that
+create tailored products for investors.</p>
+<p>Financial instruments are acquired by institutional investors like hedge
+funds, mutual funds, pension funds or insurance companies, among others,
+in order to generate returns for their clients or themselves. Or to
+hedge particular risks of their concern. Corporations also acquire
+financial instruments to put to work their extra cash, and also to hedge
+risks. Banks acquire financial instruments as well to manage their
+liquidity, generate returns from deposits and hedge risks. And central
+banks use them to control their monetary policy.</p>
+</section>
+<section id="types-of-financial-instruments-and-asset-classes">
+<h2><span class="section-number">1.4. </span>Types of financial instruments and asset classes<a class="headerlink" href="#types-of-financial-instruments-and-asset-classes" title="Permalink to this heading">#</a></h2>
+<p>Intro, stocks, bonds</p>
+<p>those are cash instruments, the backbone of two asset classes, equity
+and fixed income</p>
+<p>Within fixed income, but also considered sometimes as its own asset
+class, money markets</p>
+<p>there are also derivatives, as their own asset class, although sometimes
+considered part of another asset class, being derived</p>
+<p>finally fx, spot transactions (two days), derivatives. fx spot not
+considered financial isntrument under mifid 2</p>
+<p>commodities per se not financial instrument, but their derivatives are</p>
+<p>crypto is considered an “asset class”, although cryptos are not
+financial instruments, i.e. contracts with obligations of payments.
+Derivatives of crypto again are financial contracts</p>
+<p>Liquidity providers vs liquidity takers</p>
+</section>
+<section id="market-structures">
+<h2><span class="section-number">1.5. </span>Market structures<a class="headerlink" href="#market-structures" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="equity-market-structure">
+<h2><span class="section-number">1.6. </span>Equity market structure<a class="headerlink" href="#equity-market-structure" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="fixed-income-market-structure">
+<h2><span class="section-number">1.7. </span>Fixed income market structure<a class="headerlink" href="#fixed-income-market-structure" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="fx-market-structure">
+<h2><span class="section-number">1.8. </span>FX market structure<a class="headerlink" href="#fx-market-structure" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="crypto-market-structure">
+<h2><span class="section-number">1.9. </span>Crypto market structure<a class="headerlink" href="#crypto-market-structure" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="regulation-of-financial-markets">
+<h2><span class="section-number">1.10. </span>Regulation of financial markets<a class="headerlink" href="#regulation-of-financial-markets" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="exercises">
+<h2><span class="section-number">1.11. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./markdown"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="symbollist.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Symbols</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="market_microstructure.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Market microstructure</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1.1. Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-purpose-of-financial-markets">1.2. The purpose of financial markets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-banking-system">1.2.1. The Banking System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.2.2. Financial markets</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-participate-in-financial-markets">1.3. Who participate in financial markets?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-financial-instruments-and-asset-classes">1.4. Types of financial instruments and asset classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#market-structures">1.5. Market structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.6. Equity market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.7. Fixed income market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.8. FX market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.9. Crypto market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.10. Regulation of financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.11. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Javier Sabio González
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

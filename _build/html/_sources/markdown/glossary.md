@@ -1,0 +1,5 @@
+(glossary)=
+
+# Glossary
+
+**Term**: Description

@@ -1,0 +1,629 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>4. Introduction to Bayesian Modelling &#8212; Advanced Analytics and Algorithmic Trading</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'markdown/intro_bayesian';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Causal inference" href="intro_causal.html" />
+    <link rel="prev" title="3. Algorithmic Trading" href="algorithmic_trading.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../welcome.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Advanced Analytics and Algorithmic Trading - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Advanced Analytics and Algorithmic Trading - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../welcome.html">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="dedication.html">Dedication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="symbollist.html">Symbols</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro_financial_markets.html">1. Financial Markets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_microstructure.html">2. Market microstructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmic_trading.html">3. Algorithmic Trading</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelling Fundamentals</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4. Introduction to Bayesian Modelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_causal.html">5. Causal inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stochastic_calculus.html">6. Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stochastic_optimal_control.html">7. Stochastic optimal control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_driven_methods.html">8. Data-driven methods</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Execution Algorithms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="execution_fundamentals.html">9. Execution fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lob_models.html">10. Modelling the Limit Order Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="almgren_chriss.html">11. The Almgren - Chriss Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution_tactics.html">12. Execution tactics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Market Making Algorithms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">13. Market Making fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">14. Fair price estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">15. Liquidity modelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rfq_models.html">16. Modelling the request for quote process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">17. The Avellaneda and Stoikov Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enriching_avellaneda.html">18. Enriching the Avellaneda and Stoikov Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hedging.html">19. Hedging strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_making_rl.html">20. Reinforcement Learning and Market Making</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Investment Algorithms</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quant_investment_fundamentals.html">21. Quantitative investment fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mean_reversion_strategies.html">22. Mean reversion strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trend_following.html">23. Trend following strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arbitrage.html">24. Arbitrage Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="factor_investing.html">25. Factor Investing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimal_portfolios.html">26. Optimal portfolios</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">28. References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/xaviweise/aaat" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/xaviweise/aaat/issues/new?title=Issue%20on%20page%20%2Fmarkdown/intro_bayesian.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/markdown/intro_bayesian.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction to Bayesian Modelling</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-probability-vs-frequentist-statistics">4.1. Bayesian probability vs frequentist statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">4.2. Example: estimating the probability of heads in a coin toss experiment</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-bayesian-modelling">
+<h1><span class="section-number">4. </span>Introduction to Bayesian Modelling<a class="headerlink" href="#introduction-to-bayesian-modelling" title="Permalink to this heading">#</a></h1>
+<section id="bayesian-probability-vs-frequentist-statistics">
+<h2><span class="section-number">4.1. </span>Bayesian probability vs frequentist statistics<a class="headerlink" href="#bayesian-probability-vs-frequentist-statistics" title="Permalink to this heading">#</a></h2>
+<p>Statistics is about reasoning in situations where it is not possible to argue with certainty. The main tool of statistics is probability, which was already used qualitatively since the ancient Greek but would be
+formalized by de Moivre’s in the 18th century as a ratio of possible outcomes for a certain event denoted <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[P(\textrm{event A}) = \frac{\#\textrm{outcomes where A happens}}{\#\textrm{total number of outcomes}}\]</div>
+<p>This definition was suitable for situations like dice games where 1) the outcomes are countable, 2) there is a symmetry in each outcome, in the sense that they can be considered equiprobable.</p>
+<p>This limitation would motivate several thinkers to consider alternative ways to compute probabilities. One emerging school lead by the work of Bernoulli would explore the link between probabilities of events and the
+relative frequency of observation of this event in repeatead observations. This would be the foundation of the so-called frequentist school of probability and statistics, which eventually would motivate
+philosophers like Venn or statisticians like Fisher to make frequencies the definition of probabilities. Such a departure was slightly at odds with Bernoulli, who simply proposed that frequencies could be a way to compute probabilities in specific set-ups. However, the appeal of
+frequencies to define probability laid in their apparent objectivity, which was in contrast with a parallel school of thought started by reverend Bayes also in the 18th century, and formalized and extended by Laplace, where probabilities were considered degrees of belief, and
+therefore always had an element of subjectivity from the observer. The advantage of such Bayesian way of thinking about probability is that it would make it available to many other setups apart from games of chance
+or repeated experiments, reconciling it with the intuitive way our brains think about uncertainty, where probability can be perfectly defined for events that only happen once, as tomorrow’s weather or a
+candidate winning an election, or scientific hypothesis that are validated using observational data but cannot be repeated in a controlled lab setup, as happens in astronomical science.</p>
+<p>Precisely is in the scientific contexts where some of the first obvious issues with the frequentist approach would become apparent. Take for instance an example discussed in [&#64;SilviaBayesian] in detail, entailing
+the estimation of the mass of Saturn. The mass of Saturn is not a random variable, it is (at our time measurement scales) a constant. The frequentist definition cannot be used directly on the mass of Saturn,
+but still some sort of “statistical” estimation is needed since the observations from orbital data are noisy. Laplace would precisely use Bayesian probability to make a (surprisingly good) estimation of this
+quantity.</p>
+<p>The way for the frequentist school to circumvent this issue was to introduce the concept of a statistic, a random variable that can be related to the magnitude we want to estimate, for example the mass of
+Saturn, which we assume is actually not directly observable. The statistic combines the information from the different measurements or observations, and if correctly built, under certain hypothesis it
+converges to the value of the magnitude we want to estimate. Since it is a random variable we can apply the theory of frequentist probability. This is the origin of the actual subject of Statistics, and was quite
+developed by Galton, Pearson, Neyman and Fisher, among others. They would introduce distinct features of Statistics such as the concept of statistical relevance and hypothesis testing, maximum likelihood
+estimation and inferential statistics.</p>
+<p>However, the issue with this classical statistics is the lack of a coherent methodology to choose the statistic, which in the end tends to look a bit like a series of cookbook recipes. It also hides in some way
+the difficulty of properly defining what is a random variable under the statistic. Randomness is an elusive concept that in most cases (Quantum Mechanics aside) reflects lack of detailed understanding of the process
+analysed, like in measurement errors. We are not that far then from here to coming back to the original concept of probability as representing a degree of belief or partial knowledge.</p>
+<p>On the other hand, one of the main critics regarding Bayesian probability was the fact that in some sense a degree of belief is perceived as subjective, depending on each person, and not objective.
+There was also no particular reason to think that degrees of belief could be framed within the mathematical rules of probability theory. A breakthrough would come in the 20th century with the work of Richard Cox and later Edwin T. Jaynes. In 1946, Richard Cox would give a step
+forward in the understanding of Bayesian probability by trying to derive quantitative rules necessary for logical and consistent reasoning in terms of degrees of belief. He started by associating a real number to
+our degree of belief in a proposition: the larger the number, the larger the degree of belief. Then he introduced consistency rules using logical
+reasoning:</p>
+<ul class="simple">
+<li><p>If we specify how much we believe a proposition X is true, we are implicitly specifying how much we believe it is false</p></li>
+<li><p>If we specify how much we believe a proposition Y is true, and then how much another proposition X is true, given that Y is true, then we are implicitly specifying how much we believe both X and Y to be true</p></li>
+</ul>
+<p>Then, using Boolean logic and ordinary algebra, he found that consistency constraints this real numbers associated to our degree of belief to follow the rules of probability theory:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+P(X) + P(\bar{X}) = 1 \; \textrm{(sum rule)} \\  
+P(X,Y) = P(X|Y) P(Y)  \; \textrm{(product rule)}
+\end{aligned}\end{split}\]</div>
+<p>where ̄X denotes the proposition that X is false. Therefore, if we are bound to use the rules of logical reasoning, we can see that our degrees of belief can be rigorously mapped to probability theory.</p>
+<p>These rules are just the basic building blocks from probability theory. Many other results can be derived from them, for instance the infamous Bayes’ theorem, which is a simple consequence of the product rule. Since
+we can write the product rule either way in terms of X or Y:</p>
+<div class="math notranslate nohighlight">
+\[P(X,Y) = P(X|Y) P(Y) = P(Y|X) P(X)\]</div>
+<p>Then:
+$<span class="math notranslate nohighlight">\(P(X|Y) = \frac{P(Y|X) P(X)}{P(Y)}\)</span>$</p>
+<p>which is Bayes’s theorem. We also could derive the marginalization rule:</p>
+<div class="math notranslate nohighlight">
+\[P(X) = \int P(X,Y) dY\]</div>
+<p>by taking the continuum limit starting from a discrete and complete set of events. We leave it as an exercise for the interested reader.</p>
+<p>The work of Cox was continued in the eighties of the same century by Jaynes, who would tackle the other controversial point of Bayesian theory, namely the subjectivity in the definition of probability. Such
+subjectivity disappears if we introduce the set of information available into the problem. Bayesian probabilities can be made objective once we
+agree on the information available when we formulate them. We can formalize this by introducing the set of information available, <span class="math notranslate nohighlight">\(I\)</span> into the definition of the probabilities, namely:</p>
+<div class="math notranslate nohighlight">
+\[P(X|I)\]</div>
+<p>If two different rational observers agree on the information set available, then their
+quantification of probability should match. As we will see, such information set typically makes it way into the computation of probabilities via so-called prior probabilities.</p>
+<p>For a more extensive discussion on the frequentist vs bayesian debate, reference [&#64;ClaytonBernoulli] is a good starting point. The very book from Jaynes [&#64;Jaynes] is also a good reference who has inspired a generation of Bayesian thinkers, but is less suitable as an introduction
+to the topic. As pointed out in these books, in the end the Bayesian definition of probability is the more general one, and definitions based on counting outcomes or measuring frequencies can be seen as specific
+cases of the formula applicable to particular set-ups. Still, those definitions hold only under certain assumptions made by the person computing the odds or making the observations, assumptions that the
+Bayesian paradigm make explicit instead of hiding them to provide an illusion of objectivity. For example, when we repeatedly throw a coin an measure relative frequencies of heads and tails, we are assuming that
+such experiment generates independent observations, i.e. that the environment is effectively stationary and that initial conditions when throwing the coin are so sensitive to the outcome as to consider them a
+source of randomness; we are also considering that the same coin has been used through the experiment, and so on. Those might seem obvious assumptions, but they are implicit in the computation of probabilities
+as frequencies.</p>
+</section>
+<section id="example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">
+<h2><span class="section-number">4.2. </span>Example: estimating the probability of heads in a coin toss experiment<a class="headerlink" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment" title="Permalink to this heading">#</a></h2>
+<p>A great way to understand the differences between frequentist probability / classical statistics and Bayesian probability is by looking at an example. We will use both methodologies to estimate the
+probability of getting heads or tails in a simulated coin, modelled as a Bernoulli random variable. Every time we get heads (H) we score 1 and for tails (T) we score 0.</p>
+<p>ADD DISCUSSION BEST POINT ESTIMATION POSTERIOR MEAN VS MODE VS MEDIAN
+FROM JAYNES</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./markdown"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="algorithmic_trading.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Algorithmic Trading</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="intro_causal.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Causal inference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-probability-vs-frequentist-statistics">4.1. Bayesian probability vs frequentist statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">4.2. Example: estimating the probability of heads in a coin toss experiment</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Javier Sabio González
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
