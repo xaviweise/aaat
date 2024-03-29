@@ -1,0 +1,60 @@
+format: jb-book
+root: welcome
+parts:
+- caption: Introduction
+  numbered: false
+  chapters:
+    - file: markdown/dedication.md
+    - file: markdown/preface.md
+    - file: markdown/symbollist.md
+
+- caption: Financial Fundamentals
+  numbered: true
+  chapters:
+    - file: markdown/intro_financial_markets.md
+    - file: markdown/market_microstructure.md
+    - file: markdown/algorithmic_trading.md
+
+- caption: Modelling Fundamentals
+  numbered: true
+  chapters:
+    - file: markdown/intro_bayesian.md
+    - file: markdown/intro_causal.md
+    - file: markdown/stochastic_calculus.md
+    - file: markdown/stochastic_optimal_control.md
+    - file: markdown/data_driven_methods.md
+
+- caption: Execution Algorithms
+  numbered: true
+  chapters:
+    - file: markdown/execution_fundamentals.md
+    - file: markdown/lob_models.md
+    - file: markdown/almgren_chriss.md
+    - file: markdown/execution_tactics.md
+
+
+- caption: Market Making Algorithms
+  numbered: true
+  chapters:
+    - file: markdown/market_making_fundamentals.md
+    - file: markdown/fair_price_estimation.md
+    - file: markdown/liquidity_modelling.md
+    - file: markdown/rfq_models.md
+    - file: markdown/avellaneda_stoikov.md
+    - file: markdown/hedging.md
+    - file: markdown/market_making_rl.md
+
+- caption: Investment Algorithms
+  numbered: true
+  chapters:
+    - file: markdown/quant_investment_fundamentals.md
+    - file: markdown/mean_reversion_strategies.md
+    - file: markdown/trend_following.md
+    - file: markdown/arbitrage.md
+    - file: markdown/optimal_portfolios.md
+
+- caption: Glossary and References
+  numbered: true
+  chapters:
+    - file: markdown/glossary.md
+    - file: markdown/references.md
