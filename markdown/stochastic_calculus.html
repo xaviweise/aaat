@@ -480,15 +480,11 @@ document.write(`
 <span id="id1"></span><h1><span class="section-number">6. </span>Stochastic Calculus<a class="headerlink" href="#stochastic-calculus" title="Permalink to this heading">#</a></h1>
 <section id="modelling-dynamical-systems">
 <span id="id2"></span><h2><span class="section-number">6.1. </span>Modelling dynamical systems<a class="headerlink" href="#modelling-dynamical-systems" title="Permalink to this heading">#</a></h2>
-<p>Introduction to generalities of modelling</p>
-<p>Dynamical system: a set of variables that follow a time dynamics law</p>
+<p>A dynamical system is a set of variables that follow a time dynamics law</p>
 <div class="math notranslate nohighlight">
 \[y = f(t,{X_t})\]</div>
 <p>where <span class="math notranslate nohighlight">\(\{X_t\}\)</span> is a set of external factors that influence the trajectory of the system.</p>
-<p>Reasons: prediction, understanding, input to other problems
-(optimization like pricing, etc)</p>
-<p>The trajectory might be difficult to derive, sometimes it is easier to
-derive the dynamics in small steps. Considering the case <span class="math notranslate nohighlight">\(y = f(t)\)</span></p>
+<p>The trajectory might be difficult to derive, and sometimes it is easier to derive the dynamics in small steps. Considering the case <span class="math notranslate nohighlight">\(y = f(t)\)</span></p>
 <div class="math notranslate nohighlight">
 \[\frac{dy}{dt} = g(t)\]</div>
 <p>where <span class="math notranslate nohighlight">\(g(t) = \frac{df}{dt}\)</span> and then integrate it</p>
@@ -1107,8 +1103,10 @@ d \log S_t = \frac{1}{S_t} d S_t - \frac{1}{2}\frac{1}{S_t^2} \sigma_t^2 S_t^2 d
 Brownian motion, which we already now how to integrate from the previous section:</p>
 <div class="math notranslate nohighlight">
 \[\log S_t = \log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \int_0^t \sigma_u d W_u\]</div>
-<p>which means that <span class="math notranslate nohighlight">\(\log S_t\)</span> follows a Gaussian distribution <span class="math notranslate nohighlight">\(\log S_t \sim N(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)\)</span>. The distribution of <span class="math notranslate nohighlight">\(S_t\)</span> is the well studied Log-normal distribution,
-which by definition is the distribution of a random variable whose logarithm follows a Gaussian distribution:</p>
+<p>which means that <span class="math notranslate nohighlight">\(\log S_t\)</span> follows a Gaussian distribution</p>
+<div class="math notranslate nohighlight">
+\[\log S_t \sim N(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)\]</div>
+<p>The distribution of <span class="math notranslate nohighlight">\(S_t\)</span> is the well studied Log-normal distribution, which by definition is the distribution of a random variable whose logarithm follows a Gaussian distribution:</p>
 <div class="math notranslate nohighlight">
 \[S_t \sim LN(\log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2), \int_0^u \sigma_u^2 du)\]</div>
 <p>We can also simply write:</p>
