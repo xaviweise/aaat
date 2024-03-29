@@ -1,3 +1,5 @@
-# Introduction
+# Stochastic optimal control
 
-# Exercises
+## Introduction
+
+## Exercises

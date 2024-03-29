@@ -1,21 +1,23 @@
-# Introduction
+# Modelling the Limit Order Book
 
-# Models for order arrival
+## Introduction
+
+## Models for order arrival
 
 ### Visible and hidden orders
 
-# Market impact models
+## Market impact models
 
-# Volume prediction models
+## Volume prediction models
 
-# Probability of filling a limit order
+## Probability of filling a limit order
 
-# Short term price prediction
+## Short term price prediction
 
-# Information Asymmetry
+## Information Asymmetry
 
-# Simulation of LOBs
+## Simulation of LOBs
 
-## Probabilistic generative models
+### Probabilistic generative models
 
-## Agent based models
+### Agent based models

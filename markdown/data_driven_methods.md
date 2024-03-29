@@ -1,9 +1,10 @@
-# Introduction
+# Data-driven methods
 
-Not really an advanced introduction, just to set the language. Many
-books on this topics
+## Introduction
 
-# Data-driven methodologies
+Not really an advanced introduction, just to set the language. Many books on this topics
+
+## Data-driven methodologies
 
 train set validation
 
@@ -11,14 +12,14 @@ types: supervised, unsupervised, reinforcement learning
 
 supervised: classification, regression
 
-# Supervised learning
+## Supervised learning
 
-## Regression
+### Regression
 
-## Classification
+### Classification
 
-# Unsupervised learning
+## Unsupervised learning
 
-# Reinforcement learning
+## Reinforcement learning
 
-# Exercises
+## Exercises

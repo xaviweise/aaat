@@ -1,3 +1,5 @@
-# Introduction
+# Algorithmic Trading
 
-# Exercises
+## Introduction
+
+## Exercises

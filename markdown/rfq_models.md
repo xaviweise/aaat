@@ -1,25 +1,27 @@
-# Introduction
+# Modelling the request for quote process
 
-# A general RfQ model
+## Introduction
 
-# Prediction of demand
+## A general RfQ model
 
-# Probability of winning the RfQ
+## Prediction of demand
 
-## Probabilistic framework
+## Probability of winning the RfQ
 
-## Data-driven approaches
+### Probabilistic framework
 
-# Price discovery models
+### Data-driven approaches
 
-# Client profiling models
+## Price discovery models
 
-## Behavioural tiering
+## Client profiling models
 
-## Information asymmetry and adverse flows
+### Behavioural tiering
 
-## Client activity and attrition risk
+### Information asymmetry and adverse flows
 
-## Axe matcher
+### Client activity and attrition risk
 
-# Exercises
+### Axe matcher
+
+## Exercises

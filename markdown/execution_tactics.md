@@ -1,9 +1,11 @@
-# Introduction
+# Execution tactics
 
-# Vanilla strategy
+## Introduction
 
-# Stochastic optimal control
+## Vanilla strategy
 
-# Reinforcement learning strategies
+## Stochastic optimal control
 
-# Exercises
+## Reinforcement learning strategies
+
+## Exercises

@@ -1,21 +1,23 @@
-# Introduction
+# Market Making fundamentals
 
-# The market-making business objective
+## Introduction
 
-# Market-Making risks and trade-offs
+## The market-making business objective
 
-# Deconstructing a market-making strategy
+## Market-Making risks and trade-offs
 
-## Fair price estimation
+## Deconstructing a market-making strategy
 
-## Spread determination
+### Fair price estimation
 
-## Hedging the inventory
+### Spread determination
 
-# Market - making and market microstructure
+### Hedging the inventory
 
-## Dealer to Client Platforms
+## Market - making and market microstructure
 
-## Limit Order Books
+### Dealer to Client Platforms
+
+### Limit Order Books
 
 ## Exercises

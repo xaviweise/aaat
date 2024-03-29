@@ -1,11 +1,13 @@
-# Introduction
+# The Almgren - Chriss Framework
 
-# Almgren - Chriss model
+## Introduction
 
-# Implementation Shortfall target
+## Almgren - Chriss model
 
-# VWAP target
+## Implementation Shortfall target
 
-# Portfolio execution
+## VWAP target
 
-# Exercises
+## Portfolio execution
+
+## Exercises

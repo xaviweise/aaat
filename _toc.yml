@@ -51,6 +51,7 @@ parts:
     - file: markdown/mean_reversion_strategies.md
     - file: markdown/trend_following.md
     - file: markdown/arbitrage.md
+    - file: markdown/factor_investing.md
     - file: markdown/optimal_portfolios.md
 
 - caption: Glossary and References

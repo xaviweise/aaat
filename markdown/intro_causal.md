@@ -1,7 +1,9 @@
-# Introduction
+# Causal inference
 
-# The three ladders of causation
+## Introduction
 
-# Interventions and the Do-calculus
+## The three ladders of causation
 
-# Counterfactuals
+## Interventions and the Do-calculus
+
+## Counterfactuals

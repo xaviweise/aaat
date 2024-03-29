@@ -1,6 +1,8 @@
-# Introduction
+# Financial Markets
 
-# The purpose of financial markets
+## Introduction
+
+## The purpose of financial markets
 
 Financial markets are a solution to a problem perennial to our
 societies: the efficient channelling of savings into productive uses.
@@ -19,7 +21,7 @@ Modern capitalist societies solve this problem in two ways, which form
 the backbone of the financial system: the banking system and financial
 markets.
 
-## The Banking System
+### The Banking System
 
 In the banking system the center is the bank, an institution or private
 company that offers short-term deposits with high availability to those
@@ -40,7 +42,7 @@ loans and interest of deposits, on top of a margin to pay for their
 operations. The banking system has traditionally being the central core
 of the financial system in Europe.
 
-## Financial markets
+### Financial markets
 
 In financial markets, those who need funds issue financial instruments,
 legally binding contracts that articulate the terms in which those funds
@@ -84,7 +86,7 @@ multiple speculative ways about the value of a financial instrument into
 an actual price. These prices can guide investors about future
 decisions.
 
-# Who participate in financial markets?
+## Who participate in financial markets?
 
 Financial markets are mostly the domain of legal persons, although
 natural persons might participate as investors normally via an
@@ -103,7 +105,7 @@ risks. Banks acquire financial instruments as well to manage their
 liquidity, generate returns from deposits and hedge risks. And central
 banks use them to control their monetary policy.
 
-# Types of financial instruments and asset classes
+## Types of financial instruments and asset classes
 
 Intro, stocks, bonds
 
@@ -127,16 +129,16 @@ Derivatives of crypto again are financial contracts
 
 Liquidity providers vs liquidity takers
 
-# Market structures
+## Market structures
 
-# Equity market structure
+## Equity market structure
 
-# Fixed income market structure
+## Fixed income market structure
 
-# FX market structure
+## FX market structure
 
-# Crypto market structure
+## Crypto market structure
 
-# Regulation of financial markets
+## Regulation of financial markets
 
-# Exercises
+## Exercises

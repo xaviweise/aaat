@@ -1,3 +1,5 @@
-# Introduction
+# Mean reversion strategies
 
-# Exercises
+## Introduction
+
+## Exercises

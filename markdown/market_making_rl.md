@@ -1,3 +1,5 @@
-# Introduction
+# Reinforcement Learning and Market Making
 
-# Exercises
+## Introduction
+
+## Exercises

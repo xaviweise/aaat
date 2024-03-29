@@ -1,13 +1,15 @@
-# Introduction
+# The Avellaneda and Stoikov Framework
 
-# The single trade model
+## Introduction
 
-# The Avellaneda and Stoikov models
+## The single trade model
 
-# Asymptotic approximations
+## The Avellaneda and Stoikov models
 
-# The mean reversion argument
+## Asymptotic approximations
 
-# Applications to LOBs and RfQs
+## The mean reversion argument
 
-# Exercises
+## Applications to LOBs and RfQs
+
+## Exercises

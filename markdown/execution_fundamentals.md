@@ -1,13 +1,15 @@
-# Introduction
+# Execution fundamentals
 
-# The execution business objective
+## Introduction
 
-# Execution Risks and Tradeoffs
+## The execution business objective
 
-# Execution Benchmarks
+## Execution Risks and Tradeoffs
 
-# Execution strategies and execution tactics
+## Execution Benchmarks
 
-# Transaction Cost Analysis
+## Execution strategies and execution tactics
 
-# Exercises
+## Transaction Cost Analysis
+
+## Exercises

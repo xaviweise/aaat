@@ -1,3 +1,5 @@
-# Introduction
+# Quantitative investment fundamentals
 
-# Exercises
+## Introduction
+
+## Exercises

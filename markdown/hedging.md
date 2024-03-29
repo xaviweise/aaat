@@ -1,13 +1,19 @@
-# Introduction
+# Hedging strategies
 
-# Factor models
+## Introduction
 
-# Hedging with transaction costs
+## Mininum Variance Hedging
 
-# Prehedging
+## Factor models
 
-# Skew vs hedge in the Avellaneda-Stoikov framework
+### Principal Component Analysis
 
-# Non linear hedges
+## Hedging with transaction costs
 
-# Exercises
+## Pre-hedging
+
+## Skew vs hedge in the Avellaneda-Stoikov framework
+
+## Non linear hedges
+
+## Exercises

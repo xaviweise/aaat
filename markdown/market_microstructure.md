@@ -1,9 +1,11 @@
-# Introduction
+# Market microstructure
 
-# Types of market microstructure
+## Introduction
 
-# The Limit Order Book
+## Types of market microstructure
 
-# The Request for Quote
+## The Limit Order Book
 
-# Exercises
+## The Request for Quote
+
+## Exercises
