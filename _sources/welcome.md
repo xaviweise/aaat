@@ -1,7 +1,6 @@
 # Welcome
 
-Welcome to the online version
-[Advanced Analytics and Algorithmic Trading]
+Welcome to the online book Advanced Analytics and Algorithmic Trading. This book is currently a work in progress and I will be updating it with more content regularly. The aim is to cover the full table of contents generated so far. 
 
 ```{figure} jupyter_book/img/Cover.jpg
 ---
@@ -10,16 +9,11 @@ name: Book Cover
 ---
 ```
 
-This site contains an online version of the book and all the code used to produce the book.
-This includes the visible code, and all code used to generate figures, tables, etc.
-
-
 ## Citation
 
-If you use the online or printed versions of this book in your own work, please cite us using
+If you use the content of this book in your own work, please cite us using
 
-Sabio Gonzalez, J
-Advanced Analytics and Algorithmic Trading
+Sabio Gonzalez, Javier, "Advanced Analytics and Algorithmic Trading", 2024. URL https://xaviweise.github.io/aaat/welcome.html
 
 Here is the citation in BibTeX format
 
@@ -32,21 +26,11 @@ Here is the citation in BibTeX format
 }
 ```
 
-## See a mistake? 
-File an [issue](https://github.com/aaat/issues) if you notice anything broken so we can fix it.
-
-## Environment installation
-To run the code you will need to install the correct packages in a computational environment.
-We have provided instructions below for common options.
-
-
-### Colab
-The book code can also be run using Google Colab.
-https://colab.research.google.com
+## See a mistake or want to make a suggestion? 
+File an [issue](https://github.com/xaviweise/aaat/issues) if you notice anything broken so we can fix it. I also welcome suggestions on which contents to prioritise.
 
 
 ### License
-
 ```{image} https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png
 :alt: by-nc-sa
 :width: 150px
