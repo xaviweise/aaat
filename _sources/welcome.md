@@ -1,10 +1,10 @@
-## Advanced Analytics and Algorithmic Trading
+# Welcome
 
 Welcome to the online book Advanced Analytics and Algorithmic Trading. This book is currently a work in progress and I will be updating it with more content regularly. The aim is to cover the proposed table of contents. 
 
 ```{figure} img/cover.jpg
 ---
-height: 400px
+height: 600px
 name: Book Cover
 ---
 ```
