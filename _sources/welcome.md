@@ -1,5 +1,4 @@
-# Advanced Analytics and Algorithmic Trading
-### Building algorithmic trading strategies with mathematical optimization and machine learning
+## Advanced Analytics and Algorithmic Trading
 
 Welcome to the online book Advanced Analytics and Algorithmic Trading. This book is currently a work in progress and I will be updating it with more content regularly. The aim is to cover the proposed table of contents. 
 
