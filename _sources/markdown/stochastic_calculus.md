@@ -551,7 +551,7 @@ $$d S_t = \mu_t dt + \sigma_t d W_t$$
 Here we are essentially shifting and rescaling the Wiener process to describe dynamical systems whose stochastic fluctuations have a deterministic non-zero mean $mu_t$
 (drift) and arbitrary variance, the latter controlled by the so-called volatility $\sigma_t$. In practice, this is the process to use for any real application of stochastic calculus to model random time-series, since the simple Wiener process is simply too restrictive to describe
 any real process. The name Brownian motion comes actually from the early application of this kind of process to describe the random fluctuations of pollen suspended in water observed by English botanist Robert Brown
-in 1827. The actual modelling of this process would be pioneered by Albert Einstein [@EinsteinBrownian], in one of the four papers published in 1905, his \"annus mirabilis\", each of them transformative of its
+in 1827. The actual modelling of this process would be pioneered by Albert Einstein {cite:p}`EinsteinBrownian`, in one of the four papers published in 1905, his \"annus mirabilis\", each of them transformative of its
 respective field.
 
 The distribution of $dS_t$ is easily derived by using the property that multiplying and summing scalars to a Gaussian random variable ($dW_t$) yields another Gaussian variable. Hence since $dW_t \sim N(0, t)$ then
@@ -852,14 +852,14 @@ $$\begin{aligned}
 
 The result fits well our expectation of such process:
 for $t = 0$ and $t = T$, the process has no variance, since those points correspond to the constraints where the process is set to zero. Given those constraints, and the symmetry of the Brownian bridge with respect
-to the transformation $t \rightarrow T-t$, we expect the maximum variance to be at the half-point $T/2$, which is indeed the maximum of the function $t(1-- \frac{t}{T})$
+to the transformation $t \rightarrow T-t$, we expect the maximum variance to be at the half-point $T/2$, which is indeed the maximum of the function $t(1-\frac{t}{T})$
 
 #### Connection to Gaussian processes
 
 The Brownian bridge is also a Gaussian process, with the following kernel: 
 
 $$\begin{aligned}
-k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ min(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = min(t_1, t_2) - \frac{t_1 t_2}{T}
+k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ \textrm{min}(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = \textrm{min}(t_1, t_2) - \frac{t_1 t_2}{T}
 \end{aligned}$$
 
 #### Simulation

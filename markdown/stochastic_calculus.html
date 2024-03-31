@@ -166,6 +166,7 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="releases.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dedication.html">Dedication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="symbollist.html">Symbols</a></li>
@@ -436,7 +437,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.4. Basic stochastic processes</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.4.1. Brownian motion with drift</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">6.4.1.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">6.4.1.1. Connection to Gaussian processes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">6.4.1.2. Simulation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation">6.4.1.3. Estimation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dimensional-analysis">6.4.1.4. Dimensional analysis</a></li>
@@ -450,9 +451,9 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.4.5. Brownian bridge</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">6.4.5.1. Connection to Gaussian processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.4.5.2. Simulation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.4.5.3. Applications</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.4.5.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.4.5.2. Simulation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">6.4.5.3. Applications</a></li>
 </ul>
 </li>
 </ul>
@@ -807,7 +808,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 <div class="math notranslate nohighlight">
 \[I_{1t} = \lim_{\Delta \rightarrow 0} \sum_{i=0}^{N-1} f(u_i) (W_{u_{i+1}} - W_{u_i})\]</div>
 <p>where <span class="math notranslate nohighlight">\(\Delta = t / N\)</span>, <span class="math notranslate nohighlight">\(u_i = \Delta i\)</span>. This is a sum of independent Gaussian random variables, since by definition the increments of the Wiener process are independent. Therefore its distribution is itself
-Gaussian <a class="footnote-reference brackets" href="#id9" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. Its mean is easily computed as:</p>
+Gaussian <a class="footnote-reference brackets" href="#id10" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. Its mean is easily computed as:</p>
 <div class="math notranslate nohighlight">
 \[\mathbb{E}[I_{1t}|F_0] = \lim_{\Delta \rightarrow 0}  \sum_{i=0}^{N-1} f(u_i) \mathbb{E}[(W_{u_{i+1}} - W_{u_i})|F_0] =\]</div>
 <p>For the variance, we could simply use the result that the variance of independent variables is the sum of variances, but it is instructive to compute it directly over the discrete expression:</p>
@@ -928,7 +929,7 @@ d W_{2t} &amp;=&amp; \rho d \hat{W}_{1t} + \sqrt{1-\rho^2}  d \hat{W}_{2t}
 <p>Here we are essentially shifting and rescaling the Wiener process to describe dynamical systems whose stochastic fluctuations have a deterministic non-zero mean <span class="math notranslate nohighlight">\(mu_t\)</span>
 (drift) and arbitrary variance, the latter controlled by the so-called volatility <span class="math notranslate nohighlight">\(\sigma_t\)</span>. In practice, this is the process to use for any real application of stochastic calculus to model random time-series, since the simple Wiener process is simply too restrictive to describe
 any real process. The name Brownian motion comes actually from the early application of this kind of process to describe the random fluctuations of pollen suspended in water observed by English botanist Robert Brown
-in 1827. The actual modelling of this process would be pioneered by Albert Einstein [&#64;EinsteinBrownian], in one of the four papers published in 1905, his “annus mirabilis”, each of them transformative of its
+in 1827. The actual modelling of this process would be pioneered by Albert Einstein <span id="id4">[<a class="reference internal" href="references.html#id6" title="A. Einstein. Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen. Annalen der Physik, 322(8):549-560, January 1905. doi:10.1002/andp.19053220806.">4</a>]</span>, in one of the four papers published in 1905, his “annus mirabilis”, each of them transformative of its
 respective field.</p>
 <p>The distribution of <span class="math notranslate nohighlight">\(dS_t\)</span> is easily derived by using the property that multiplying and summing scalars to a Gaussian random variable (<span class="math notranslate nohighlight">\(dW_t\)</span>) yields another Gaussian variable. Hence since <span class="math notranslate nohighlight">\(dW_t \sim N(0, t)\)</span> then
 we have:</p>
@@ -941,8 +942,8 @@ we have:</p>
 <div class="math notranslate nohighlight">
 \[S_t \sim N(S_0 + \int_0^t \mu_u du, \int_0^t \sigma_u^2 du)\]</div>
 <p>where we have used the properties of the stochastic integral discussed in section <a class="reference internal" href="#integrals-wiener"><span class="std std-ref">Integrals of the Wiener process</span></a>.</p>
-<section id="id4">
-<h4><span class="section-number">6.4.1.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h4>
+<section id="id5">
+<h4><span class="section-number">6.4.1.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
 <p>The Brownian motion is also a Gaussian process, since any finite set <span class="math notranslate nohighlight">\(X_{†_1}, X_{t_2}, X_{t_3}, ..., X_{t_n}\)</span> follows a multivariate Gaussian process. The kernel of the Brownian process is simply to
 derive:</p>
 <div class="math notranslate nohighlight">
@@ -1032,7 +1033,7 @@ have:</p>
 \mathbb{E}[\sigma^2 \Delta|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
 \end{aligned}\end{split}\]</div>
 <p>which are the maximum likelihood estimators (MLE) of the
-mean and the variance of a Gaussian distribution <a class="footnote-reference brackets" href="#id10" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, which is expected for a non-informative prior since 1) for a Gaussian distribution the mean and the mode coincide, 2) maximizing the posterior with the
+mean and the variance of a Gaussian distribution <a class="footnote-reference brackets" href="#id11" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, which is expected for a non-informative prior since 1) for a Gaussian distribution the mean and the mode coincide, 2) maximizing the posterior with the
 non-informative prior is equivalent to maximizing the likelihood. MLE estimators are the standard approach to learn the parameters of stochastic processes in many practical situations, since the Bayesian
 estimations might become intractable for more complex processes as the Brownian motion. However, we must keep in mind their limitations, particularly that they neglect any prior information that might be useful in certain setups, and that they throw away the rest of the
 information contained in the posterior distribution.</p>
@@ -1182,21 +1183,21 @@ having an extra constraint, namely that <span class="math notranslate nohighligh
 \end{aligned}\end{split}\]</div>
 <p>The result fits well our expectation of such process:
 for <span class="math notranslate nohighlight">\(t = 0\)</span> and <span class="math notranslate nohighlight">\(t = T\)</span>, the process has no variance, since those points correspond to the constraints where the process is set to zero. Given those constraints, and the symmetry of the Brownian bridge with respect
-to the transformation <span class="math notranslate nohighlight">\(t \rightarrow T-t\)</span>, we expect the maximum variance to be at the half-point <span class="math notranslate nohighlight">\(T/2\)</span>, which is indeed the maximum of the function <span class="math notranslate nohighlight">\(t(1-- \frac{t}{T})\)</span></p>
-<section id="id6">
-<h4><span class="section-number">6.4.5.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
+to the transformation <span class="math notranslate nohighlight">\(t \rightarrow T-t\)</span>, we expect the maximum variance to be at the half-point <span class="math notranslate nohighlight">\(T/2\)</span>, which is indeed the maximum of the function <span class="math notranslate nohighlight">\(t(1-\frac{t}{T})\)</span></p>
+<section id="id7">
+<h4><span class="section-number">6.4.5.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
 <p>The Brownian bridge is also a Gaussian process, with the following kernel:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ min(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = min(t_1, t_2) - \frac{t_1 t_2}{T}
+k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ \textrm{min}(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = \textrm{min}(t_1, t_2) - \frac{t_1 t_2}{T}
 \end{aligned}\end{split}\]</div>
 </section>
-<section id="id7">
-<h4><span class="section-number">6.4.5.2. </span>Simulation<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
+<section id="id8">
+<h4><span class="section-number">6.4.5.2. </span>Simulation<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
 <p>TO DO</p>
 </section>
-<section id="id8">
-<h4><span class="section-number">6.4.5.3. </span>Applications<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
+<section id="id9">
+<h4><span class="section-number">6.4.5.3. </span>Applications<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h4>
 <p>Brownian bridges or more realistic but similarly constructed processes (e.g. using the Brownian motion as the primitive instead of the Wiener process, or specifying fixed but non-zero boundaries), can be used to
 model situations where there is no uncertainty about the final value of a stochastic process. This is for instance the case of financial instruments like bonds, in particular zero-coupon bonds, which are bonds
 that simply return their principal at maturity without paying a coupon. They are also known to be more suitable for simulation than the underlying Wiener process, which can be written as a function of the
@@ -1224,12 +1225,12 @@ Brownian bridge simply as:</p>
 </li>
 </ol>
 <hr class="footnotes docutils" />
-<aside class="footnote brackets" id="id9" role="note">
+<aside class="footnote brackets" id="id10" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
 <p>The demonstration is relatively straight-forward by computing the characteristic function of a sum of independent random Gaussian variables</p>
 </aside>
-<aside class="footnote brackets" id="id10" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">2</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id11" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">2</a><span class="fn-bracket">]</span></span>
 <p>Actually the bias corrected one, which can be achieved by the factor <span class="math notranslate nohighlight">\(N/(N-1)\)</span> as it is well known that the MLE estimator of the variance of a Gaussian distribution is biased, i.e. <span class="math notranslate nohighlight">\(\mathbb{E}[\sigma_{MLE}^2] = \frac{N-1}{N} \sigma^2\)</span>. The Bayesian derivation in this regard is more consistent than the MLE estimation. Notice that the MLE estimator actually corresponds to <span class="math notranslate nohighlight">\(\beta_N/\alpha_N\)</span> in the case of a non-informative prior</p>
 </aside>
 </section>
@@ -1324,7 +1325,7 @@ Brownian bridge simply as:</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.4. Basic stochastic processes</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.4.1. Brownian motion with drift</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">6.4.1.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">6.4.1.1. Connection to Gaussian processes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">6.4.1.2. Simulation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation">6.4.1.3. Estimation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dimensional-analysis">6.4.1.4. Dimensional analysis</a></li>
@@ -1338,9 +1339,9 @@ Brownian bridge simply as:</p>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.4.5. Brownian bridge</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">6.4.5.1. Connection to Gaussian processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.4.5.2. Simulation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.4.5.3. Applications</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.4.5.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.4.5.2. Simulation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">6.4.5.3. Applications</a></li>
 </ul>
 </li>
 </ul>
