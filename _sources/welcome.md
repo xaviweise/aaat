@@ -4,7 +4,7 @@ Welcome to the online book Advanced Analytics and Algorithmic Trading. This book
 
 ```{figure} img/cover.jpg
 ---
-height: 600px
+height: 500px
 name: Book Cover
 ---
 ```
