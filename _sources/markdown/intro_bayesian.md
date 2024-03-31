@@ -1,3 +1,4 @@
+(intro_bayesian)=
 # Introduction to Bayesian Modelling
 
 ## Bayesian probability vs frequentist statistics
