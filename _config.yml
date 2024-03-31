@@ -3,7 +3,6 @@
 
 title: Advanced Analytics and Algorithmic Trading
 author: Javier Sabio González
-logo: logo.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -20,8 +19,11 @@ bibtex_bibfiles:
   - references.bib
 
 # Information about where the book exists on the web
+repository_provider:
+  url: https://www.datasciencealgotrading.com  
+
 repository:
-  url: https://github.com/xaviweise/aaat  # Online location of your book
+  url: https://github.com/xaviweise/aaat   # Online location of your book
   path_to_book: docs  # Optional path to your book, relative to the repository root
   branch: master  # Which branch of the repository should be used when creating links (optional)
 

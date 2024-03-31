@@ -4,6 +4,7 @@ parts:
 - caption: Introduction
   numbered: false
   chapters:
+    - file: markdown/releases.md
     - file: markdown/dedication.md
     - file: markdown/preface.md
     - file: markdown/symbollist.md
