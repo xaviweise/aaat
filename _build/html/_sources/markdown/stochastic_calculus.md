@@ -264,14 +264,14 @@ $t$, with the following particular properties:
 ### Connection to Gaussian Processes
 
 The specific properties of the Wiener process make it part of the family of Gaussian processes, which are stochastic processes with the property that any finite set of them, $X_{t_1}, ..., X_{t_n}$ follow a joined
-multivariate Gaussian distribution. The Gaussian process can be described then by a mean function $\mu_t = E[X_t]$ and a covariance function $k(t_1, t_2) = cov[X_{t_1}, X_{t_2}]$ that is usually referred as the kernel function of the Gaussian process.
+multivariate Gaussian distribution. The Gaussian process can be described then by a mean function $\mu_t = \mathbb{E}[X_t]$ and a covariance function $k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}]$ that is usually referred as the kernel function of the Gaussian process.
 
 The index for the stochastic process does not need to refer to time, another typical indexing is space, for instance. When using time as an
 index, we talk about Gaussian Processes for time-series modelling. This is the case for the Wiener process, which is a Gaussian process with
 mean $\mu_t = 0$ and kernel: 
 
 $$\begin{aligned}
-k(t_1, t_2) = cov[W_{t_1}, W_{t_2}] = E[W_{t_1} W_{t_2}] = \nonumber \\ \left(E[(W_{t_1} - W_{t_2}) W_{t_2}] + E[W_{t_2}^2]\right)1_{t_1 > t_2} + \nonumber \\ \left(E[W_{t_1}(W_{t_2} - W_{t_1})] + E[W_{t_1}^2]\right)1_{t_1 \leq t_2} = \nonumber \\
+k(t_1, t_2) = \textrm{cov}[W_{t_1}, W_{t_2}] = \mathbb{E}[W_{t_1} W_{t_2}] = \nonumber \\ \left(\mathbb{E}[(W_{t_1} - W_{t_2}) W_{t_2}] + \mathbb{E}[W_{t_2}^2]\right)1_{t_1 > t_2} +  \left(\mathbb{E}[W_{t_1}(W_{t_2} - W_{t_1})] + \mathbb{E}[W_{t_1}^2]\right)1_{t_1 \leq t_2} = \nonumber \\
 t_2 1_{t_1 > t_2} + t_1 1_{t_1 \leq t_2} = min(t_1,t_2)
 \end{aligned}$$ 
 
@@ -282,18 +282,18 @@ models. Such toolkit can be useful when building models for dynamical systems us
 
 The Wiener process satisfies the Martingale property, meaning that if we have a series of observations of the process $W_{t_1}, W_{t_2}, ... W_{t_n}$ then the expected value of an observation $t_{n+1} > t_n > ... > t_1$ conditioned to the previous observations only depends on the last observation:
 
-$$E[W_{t_{n+1}}|W_{t_1}, W_{t_2}, ... W_{t_n}] = W_{t_n}$$ 
+$$\mathbb{E}[W_{t_{n+1}}|W_{t_1}, W_{t_2}, ... W_{t_n}] = W_{t_n}$$ 
 
 i.e., the information from previous observations is irrelevant. We can generalize the martingale property by introducing the notion of filtration $F_t$ at
 time $t$, which contains all the information set available until time $t$. We can rewrite the Martingale property using the filtration as:
 
-$$E[W_{t_{n+1}}|F_{t_n}] = W_{t_n}$$ 
+$$\mathbb{E}[W_{t_{n+1}}|F_{t_n}] = W_{t_n}$$ 
 
 We can prove the Martingale property using the defining properties of the Wiener process:
 
 $$\begin{aligned}
-E[W_{t_{n+1}}|F_{t_n}] = E[W_{t_{n+1}} - W_{t_n} + W_{t_n}|F_{t_n}] = \nonumber \\
- E[W_{t_{n+1}} - W_{t_n}|F_{t_n}]+ E[W_{t_n}|F_{t_n}] = W_{t_n}
+\mathbb{E}[W_{t_{n+1}}|F_{t_n}] = \mathbb{E}[W_{t_{n+1}} - W_{t_n} + W_{t_n}|F_{t_n}] = \nonumber \\
+ \mathbb{E}[W_{t_{n+1}} - W_{t_n}|F_{t_n}]+ \mathbb{E}[W_{t_n}|F_{t_n}] = W_{t_n}
 \end{aligned}$$ 
 
 where we have used that the increments of the Wiener
@@ -303,17 +303,18 @@ process have zero mean.
 
 A useful property that exploits the concept of filtration in many applications is the so-called Law of Iterated Expectations or Tower Law. It simply states that for any random variable Y, if $t_m > t_n$:
 
-$$E[E[Y|F_{t_m}]|F_{t_n}] = E[Y|F_{t_n}]$$ 
+$$\mathbb{E}[\mathbb{E}[Y|F_{t_m}]|F_{t_n}] = \mathbb{E}[Y|F_{t_n}]$$ 
 
 This is a useful property to compute expectations using a divide and conquer philosophy: maybe the
-full expectation $E[Y|F_{t_n}]$ is not obviously tractable, but by conditioning it at intermediate filtrations
-$E[E[E[...E[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t_{n+1}}|F_{t_n}]$ we can
+full expectation $\mathbb{E}[Y|F_{t_n}]$ is not obviously tractable, but by conditioning it at intermediate filtrations
+$\mathbb{E}[\mathbb{E}[\mathbb{E}[...\mathbb{E}[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t_{n+1}}|F_{t_n}]$ we can
 work out the solution. We will see examples later on.
 
 ### The Feynman - Kac Theorem
 
 WIP
 
+(multivariate_wiener)=
 ### Multivariate Wiener process 
 
 We can construct a multivariate Wiener process as a vector
@@ -327,8 +328,8 @@ ${\bf W}_t= (W_{1t}, W_{2t}, ..., W_{Nt})$ with the following properties:
 
 -   Each of the components of ${\bf W}_t$ has continuous trajectories
 
+(itos_lemma)=
 ### Ito's Lemma
-
 We have seen that given the trajectory of a deterministic dynamical system, $y_t = f(t, {X_t})$, its behaviour over a infinitesimal time-step is described by the following differential equation:
 
 $$dy = \frac{\partial f}{\partial t}dt + \sum_{n=1}^N \frac{\partial f}{\partial X_{i,t}} d X_{i,t}$$
@@ -347,16 +348,16 @@ and take the expected value of this differential conditional to the
 filtration at t: 
 
 $$\begin{aligned}
-E[dy|F_t] = \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial W_t} E[dW_t|F_t] +  \frac{1}{2}\frac{\partial^2 f}{\partial t^2}dt^2 \nonumber \\ + \frac{1}{2} \frac{\partial^2 f}{\partial W_t^2} E[dW_t^2|F_t] + \frac{\partial^2 f}{\partial t \partial W_t}dt E[dW_t|F_t] 
+\mathbb{E}[dy|F_t] = \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial W_t} \mathbb{E}[dW_t|F_t] +  \frac{1}{2}\frac{\partial^2 f}{\partial t^2}dt^2 \nonumber \\ + \frac{1}{2} \frac{\partial^2 f}{\partial W_t^2} \mathbb{E}[dW_t^2|F_t] + \frac{\partial^2 f}{\partial t \partial W_t}dt \mathbb{E}[dW_t|F_t] 
 \end{aligned}$$ 
 
-The key for the argument is that whereas $E[dW_t|F_t] = 0$, we have $E[dW_t^2|F_t] = dt$, getting:
+The key for the argument is that whereas $\mathbb{E}[dW_t|F_t] = 0$, we have $\mathbb{E}[dW_t^2|F_t] = dt$, getting:
 
-$$E[dy|F_t] = \frac{\partial f}{\partial t}dt + \frac{1}{2}\frac{\partial^2 f}{\partial t^2}dt^2 + \frac{1}{2} \frac{\partial^2 f}{\partial W_t^2} dt$$
+$$\mathbb{E}[dy|F_t] = \frac{\partial f}{\partial t}dt + \frac{1}{2}\frac{\partial^2 f}{\partial t^2}dt^2 + \frac{1}{2} \frac{\partial^2 f}{\partial W_t^2} dt$$
 
 so if we keep only terms at first order in the expansion:
 
-$$E[dy|F_t] = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W_t^2})dt + O(dt^2)$$
+$$\mathbb{E}[dy|F_t] = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W_t^2})dt + O(dt^2)$$
 we have an extra term coming from the variance of the Wiener process, whose expected value is linear in $dt$. This motivates us to propose the following expression for the differential of a function of the Wiener
 process, the so-called Ito's lemma: 
 
@@ -379,14 +380,13 @@ Now, using the expected value argument and keeping only
 terms $O(dt)$: 
 
 $$\begin{aligned}
-E[dy|F_t] = \frac{\partial f}{\partial t}dt + \frac{1}{2} \frac{\partial^2 f}{\partial W_{1t}^2} dt + 
+\mathbb{E}[dy|F_t] = \frac{\partial f}{\partial t}dt + \frac{1}{2} \frac{\partial^2 f}{\partial W_{1t}^2} dt + 
 \frac{1}{2} \frac{\partial^2 f}{\partial W_{2t}^2} dt +
 \frac{\partial^2 f}{\partial W_{1t} \partial W_{2t}} \rho_{12} dt
 \end{aligned}$$ 
 
 where we have used
-$E[d W_{1t} dW_{2t} |F_t] = \rho_{12} dt$ as discussed in section [3.5](#MultivariateWiener){reference-type="ref"
-reference="MultivariateWiener"}. This motivates the expression for the two-dimensional Ito's lemma: 
+$\mathbb{E}[d W_{1t} dW_{2t} |F_t] = \rho_{12} dt$ as discussed in section {ref}`multivariate_wiener`. This motivates the expression for the two-dimensional Ito's lemma: 
 
 $$\begin{aligned}
 d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W_{1t}^2} + 
@@ -394,6 +394,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 \frac{\partial^2 f}{\partial W_{1t} \partial W_{2t}} \rho_{12}) d t  \nonumber \\ + \frac{\partial f}{\partial W_{1t}} d W_{1t} +  \frac{\partial f}{\partial W_{2t}} d W_{2t}
 \end{aligned}$$
 
+(integrals_Wiener)=
 ### Integrals of the Wiener process 
 
 A firs relevant integral of the Wiener process is:
@@ -407,20 +408,20 @@ $$I_{1t} = \lim_{\Delta \rightarrow 0} \sum_{i=0}^{N-1} f(u_i) (W_{u_{i+1}} - W_
 where $\Delta = t / N$, $u_i = \Delta i$. This is a sum of independent Gaussian random variables, since by definition the increments of the Wiener process are independent. Therefore its distribution is itself
 Gaussian [^1]. Its mean is easily computed as:
 
-$$E[I_{1t}|F_0] = \lim_{\Delta \rightarrow 0}  \sum_{i=0}^{N-1} f(u_i) E[(W_{u_{i+1}} - W_{u_i})|F_0] =$$
+$$\mathbb{E}[I_{1t}|F_0] = \lim_{\Delta \rightarrow 0}  \sum_{i=0}^{N-1} f(u_i) \mathbb{E}[(W_{u_{i+1}} - W_{u_i})|F_0] =$$
 
 For the variance, we could simply use the result that the variance of independent variables is the sum of variances, but it is instructive to compute it directly over the discrete expression:
 
-$$E[I_{1t}^2|F_0] = \lim_{\Delta \rightarrow 0} \sum_{i=0}^{N-1}  \sum_{j=0}^{N-1}   f(u_i)  f(u_j) E[(W_{u_{i+1}} - W_{u_i})(W_{u_{j+1}} - W_{u_j})|F_0]$$
+$$\mathbb{E}[I_{1t}^2|F_0] = \lim_{\Delta \rightarrow 0} \sum_{i=0}^{N-1}  \sum_{j=0}^{N-1}   f(u_i)  f(u_j) \mathbb{E}[(W_{u_{i+1}} - W_{u_i})(W_{u_{j+1}} - W_{u_j})|F_0]$$
 
-The computation of $E[(W_{u_{i+1}} - W_{u_i})(W_{u_{j+1}} - W_{u_j})|F_0]$ needs to consider two cases. When $i \neq j$ the expectation is zero, since increments of the Wiener process are independent. This is no longer the
-case of $i = j$, for which we have $E[(W_{u_{i+1}} - W_{u_i})^2|F_0] = u_{i+1} - u_i = \Delta$. Therefore:
+The computation of $\mathbb{E}[(W_{u_{i+1}} - W_{u_i})(W_{u_{j+1}} - W_{u_j})|F_0]$ needs to consider two cases. When $i \neq j$ the expectation is zero, since increments of the Wiener process are independent. This is no longer the
+case of $i = j$, for which we have $\mathbb{E}[(W_{u_{i+1}} - W_{u_i})^2|F_0] = u_{i+1} - u_i = \Delta$. Therefore:
 
-$$E[(W_{u_{i+1}} - W_{u_i})(W_{u_{j+1}} - W_{u_j})|F_0] = \delta_{i,j} \Delta$$
+$$\mathbb{E}[(W_{u_{i+1}} - W_{u_i})(W_{u_{j+1}} - W_{u_j})|F_0] = \delta_{i,j} \Delta$$
 
 Plugging this into the previous equation:
 
-$$E[I_{1t}^2|F_0] = \lim_{\Delta \rightarrow 0} \Delta \sum_{i=0}^{N-1}  f^2(u_i) = \int_0^t f^2(u) du$$
+$$\mathbb{E}[I_{1t}^2|F_0] = \lim_{\Delta \rightarrow 0} \Delta \sum_{i=0}^{N-1}  f^2(u_i) = \int_0^t f^2(u) du$$
 
 Therefore, the distribution of $I_{1t}$ is given by:
 
@@ -429,7 +430,7 @@ $$I_{1t} \sim N(0, \int_0^t du f^2(u))$$
 Notice that once we have motivated the solution by using a discretization of the equation, we can directly skip it and use the continuous version, for instance:
 
 $$\begin{aligned}
-E[I_{1t}^2|F_0] = \int_0^t \int_0^t f(u) f(u') E[dW_u dW_{u'}] \nonumber \\ = \int_0^t \int_0^t du du' f(u) f(u') \delta(u-u') du = \int_0^t f^2(u) du
+\mathbb{E}[I_{1t}^2|F_0] = \int_0^t \int_0^t f(u) f(u') \mathbb{E}[dW_u dW_{u'}] \nonumber \\ = \int_0^t \int_0^t du du' f(u) f(u') \delta(u-u') du = \int_0^t f^2(u) du
 \end{aligned}$$ 
 
 Let us now move into the second relevant integral of the
@@ -463,6 +464,7 @@ $$\int_0^t W_u du \sim N(0, \frac{t^3}{3})$$
 
 where we have used $\int_0^t (t-u)^2 du = \frac{t^3}{3}$
 
+(simulation_wiener)=
 ### Simulation of the Wiener process
 
 #### Univariate processes
@@ -494,10 +496,10 @@ where $L$ is a lower triangular matrix. If we now we have a vector of N uncorrel
 $d \hat{{\bf W_t}}$, we can obtain the correlated process by using $L$ such as $d {\bf W_t} = L d \hat{{\bf W_t}}$. We can see that this vector has the distribution of the multivariate Wiener process increment:
 
 $$\begin{aligned}
-E[d {\bf W_t} d {\bf W_t}^T] = E[L d \hat{{\bf W}}_{t} d \hat{{\bf W}}_{t}^T L^T]  \nonumber \\ = L E[d \hat{{\bf W}}_{t} d \hat{{\bf W}}_{t}^T] L = L L^T dt = \Sigma dt
+\mathbb{E}[d {\bf W_t} d {\bf W_t}^T] = \mathbb{E}[L d \hat{{\bf W}}_{t} d \hat{{\bf W}}_{t}^T L^T]  \nonumber \\ = L \mathbb{E}[d \hat{{\bf W}}_{t} d \hat{{\bf W}}_{t}^T] L = L L^T dt = \Sigma dt
 \end{aligned}$$ 
 
-where we have used $E[d \hat{{\bf W}}_{t} d \hat{{\bf W}}_{t}^T] = I dt$ where $I$ is the identity matrix.
+where we have used $\mathbb{E}[d \hat{{\bf W}}_{t} d \hat{{\bf W}}_{t}^T] = I dt$ where $I$ is the identity matrix.
 
 It is illustrative to show the case for a two-dimensional multivariate Wiener process. The correlation matrix reads: 
 
@@ -565,9 +567,7 @@ which again follows a Gaussian distribution:
 
 $$S_t \sim N(S_0 + \int_0^t \mu_u du, \int_0^t \sigma_u^2 du)$$ 
 
-where we have used the properties of the stochastic integral discussed in section
-[3.6.1](#IntegralWiener){reference-type="ref"
-reference="IntegralWiener"}.
+where we have used the properties of the stochastic integral discussed in section {ref}`integrals_wiener`.
 
 #### Connection to Gaussian processes
 
@@ -575,12 +575,12 @@ The Brownian motion is also a Gaussian process, since any finite set $X_{†_1},
 derive: 
 
 $$\begin{aligned}
-k(t_1, t_2) = cov[X_{t_1}, X_{t_2}] = E[\int_0^{t_1} \sigma_u dW_u \int_0^{t_2} \sigma_v dW_v] = \int_0^{min(t_1, t_2}  \sigma_u^2 du
+k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}] = \mathbb{E}[\int_0^{t_1} \sigma_u dW_u \int_0^{t_2} \sigma_v dW_v] = \int_0^{min(t_1, t_2}  \sigma_u^2 du
 \end{aligned}$$ 
 
 If $\sigma_t = \sigma$, i.e. is a constant, we hav simply:
 
-$$\begin{aligned} k(t_1, t_2) = \sigma^2 min(t_1, t_2)
+$$\begin{aligned} k(t_1, t_2) = \sigma^2 \textrm{min}(t_1, t_2)
 \end{aligned}$$ 
 
 which is the kernel of the Wiener process rescaled by
@@ -623,8 +623,7 @@ inference of the parameters is carried out by computing the posterior distributi
 
 Since as shown in the previous section we can write the process between observations as
 $S_{t_{i+1}} - S_{t_i} = \mu \Delta + \sigma \sqrt{\Delta} Z$ with $Z\sim N(0,1)$, this is equivalent to fitting a Bayesian linear regression model om $S_{t_{i+1}} - S_{t_i}$ with an intercept $\mu \Delta$ and a noise term $\epsilon \sim N(0, \sigma^2 \Delta)$. As
-we shown in chapter [\[ch:Bayesian\]](#ch:Bayesian){reference-type="ref"
-reference="ch:Bayesian"}, if we model the prior distributions of the parameters as a Normal Inverse Gamma (NIG), meaning that:
+we shown in chapter {ref}`intro_bayesian`, if we model the prior distributions of the parameters as a Normal Inverse Gamma (NIG), meaning that:
 
 $$\begin{aligned}
     \mu \Delta | \sigma^2 \Delta \sim N(\mu_0 \Delta, \sigma^2 \Delta V_0) \\
@@ -658,17 +657,16 @@ $$\mu \Delta |D \sim T(\mu_N \Delta, \frac{\beta_N}{\alpha_N} V_N, 2 \alpha_N)$$
 
 where $T$ is the Student's distribution.
 
-Following our discussion in chapter [\[ch:Bayesian\]](#ch:Bayesian){reference-type="ref"
-reference="ch:Bayesian"}, the best estimator of parameters extracted from the posterior in a mean squared error minimizing sense is to compute the mean of the posterior marginals. For $\sigma^2 \Delta$, we
+Following our discussion in chapter {ref}`intro_bayesian`, the best estimator of parameters extracted from the posterior in a mean squared error minimizing sense is to compute the mean of the posterior marginals. For $\sigma^2 \Delta$, we
 have: 
 
 $$\begin{aligned}
-E[\sigma^2 \Delta |D, I_P] = \frac{\beta_N}{\alpha_N-1}=  \frac{\beta_0}{\alpha_0 -1 + N/2} + \nonumber \\ \frac{1}{2 \alpha_0 + N -1}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2+\mu_0^2 \Delta^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right) 
+\mathbb{E}[\sigma^2 \Delta |D, I_P] = \frac{\beta_N}{\alpha_N-1}=  \frac{\beta_0}{\alpha_0 -1 + N/2} + \nonumber \\ \frac{1}{2 \alpha_0 + N -1}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2+\mu_0^2 \Delta^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right) 
 \end{aligned}$$ 
 
 whereas for $\mu$ we have:
 
-$$E[\mu \Delta|D, I_P] = \mu_N \Delta = \mu_0 \Delta \frac{V_0}{V_N} + \frac{1}{V_0^{-1} + N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}}))$$
+$$\mathbb{E}[\mu \Delta|D, I_P] = \mu_N \Delta = \mu_0 \Delta \frac{V_0}{V_N} + \frac{1}{V_0^{-1} + N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}}))$$
 
 A special case deserved our attention: if we take the limit in the prior distribution $V_0\rightarrow\infty$ and
 $\alpha_0, \beta_0 \rightarrow 0$, the prior distribution becomes a non-informative or Jeffrey's prior, with
@@ -676,8 +674,8 @@ $p(\sigma^2 \Delta) \sim 1/(\sigma^2 \Delta)$, and
 $p(\mu\Delta|\sigma^2\Delta)$ becoming a flat prior. Jeffrey's prior is considered the best choice to describe non-informative priors of scale parameters as is the case of $\sigma^2 \Delta$. In this situation:
 
 $$\begin{aligned}
-E[\mu \Delta|D, I_P] \rightarrow \mu_{MLE}\Delta = \frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\ 
-E[\sigma^2 \Delta|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
+\mathbb{E}[\mu \Delta|D, I_P] \rightarrow \mu_{MLE}\Delta = \frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\ 
+\mathbb{E}[\sigma^2 \Delta|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
 \end{aligned}$$ 
 
 which are the maximum likelihood estimators (MLE) of the
@@ -706,19 +704,22 @@ of two terms: the first one coming from the intrinsic noise of the Brownian proc
 #### Dimensional analysis
 
 In order to reason about stochastic processes it is important to keep track or the units of their parameters. This can also be useful as a consistency check on the estimators derived, for instance. We will use a
-brackets notation for dimensional analysis. For the case of the Brownian motion we write: $$= [\mu_t] [dt] + [\sigma_t] [dW_t]$$ In here, we know that $[dt]$ has time units, for instance seconds, hours, or days. We
-denote them generically as $[t]$ The Wiener process being distributed as $dW_t \sim N(0, dt)$ has therefore units of $[t]^{1/2}$, i.e. the square root of time. Therefore, the parameters have the following units:
+brackets notation for dimensional analysis. For the case of the Brownian motion we write: 
+
+$$[dS_t]= [\mu_t] [dt] + [\sigma_t] [dW_t]$$ 
+
+In here, we know that $[dt]$ has time units, for instance seconds, hours, or days. We denote them generically as $[t]$ The Wiener process being distributed as $dW_t \sim N(0, dt)$ has therefore units of $[t]^{1/2}$, i.e. the square root of time. Therefore, the parameters have the following units:
 
 $$\begin{aligned}
-= [S] / [t] //
-    [\sigma_t] = [S] / [t]^{1/2}
+[\mu_t ] &=& [S] / [t] \\
+[\sigma_t] &=& [S] / [t]^{1/2}
 \end{aligned}$$ 
 
 where we have denoted generically $[S]$ as the units of
 the process. If for instance $S$ is modelling a price of a financial instrument in a given currency like dollars, the units are dollars: $[dS_t] = \$$. If additionally we are using seconds as time units, $[t] = s$. then we have $[\mu_t] = \$ / s$ and $[\sigma_t] = \$ / s^{1/2}$. We can see that these units are consistent with the Gaussian distribution for the evolution of $S_t$: the argument
 of the exponential should be a-dimensional. Applying the previous units to the expression we can see that it is indeed the case:
 
-$$= ([S] - [\mu_t] [t])^2 / ([\sigma_t]^2 [t]^2) = 1$$
+$$([S] - [\mu_t] [t])^2 / ([\sigma_t]^2 [t]^2) = 1$$
 
 #### Applications
 
@@ -762,13 +763,13 @@ $$S_t = S_0 \exp(\int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \int_0^t \sigma
 
 An interesting property of the Log-normal distribution is the simple solution for its moments: $$\begin{aligned}
 X \sim LN(\mu, \sigma^2) \nonumber \\
-E[X^n] = e^{n \mu + \frac{1}{2} n^2 \sigma^2}
+\mathbb{E}[X^n] = e^{n \mu + \frac{1}{2} n^2 \sigma^2}
 \end{aligned}$$ 
 
 In particular, the mean of the distribution is
-$E[X] = e^{\mu + \sigma^2/2}$ which we will use in multiple applications. This means, coming back to the Geometric Brownian Motion, that:
+$\mathbb{E}[X] = e^{\mu + \sigma^2/2}$ which we will use in multiple applications. This means, coming back to the Geometric Brownian Motion, that:
 
-$$E[S_t] = S_0 e^{\int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \frac{1}{2} \int_0^t \sigma_u^2 du} = S_0 e^{\int_0^t \mu_u du}$$
+$$\mathbb{E}[S_t] = S_0 e^{\int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \frac{1}{2} \int_0^t \sigma_u^2 du} = S_0 e^{\int_0^t \mu_u du}$$
 
 ### Arithmetic Average of the Brownian motion
 
@@ -845,8 +846,8 @@ $$B_t \sim N(0, t(1 - \frac{t}{T}))$$
 where we have used:
 
 $$\begin{aligned}
-E[(1-\frac{t}{T})W_t|F_0]  - E[\frac{t}{T}(W_T - W_t)|F_0] = 0 \\
-E[((1-\frac{t}{T})W_t)^2|F_0]  + E[(\frac{t}{T}(W_T - W_t))^2|F_0] = \nonumber \\ (1-\frac{t}{T})^2 t + (\frac{t}{T})^2 (T-t) = t(1 - \frac{t}{T})
+\mathbb{E}[(1-\frac{t}{T})W_t|F_0]  - \mathbb{E}[\frac{t}{T}(W_T - W_t)|F_0] = 0 \\
+\mathbb{E}[((1-\frac{t}{T})W_t)^2|F_0]  + \mathbb{E}[(\frac{t}{T}(W_T - W_t))^2|F_0] = \nonumber \\ (1-\frac{t}{T})^2 t + (\frac{t}{T})^2 (T-t) = t(1 - \frac{t}{T})
 \end{aligned}$$ 
 
 The result fits well our expectation of such process:
@@ -858,7 +859,7 @@ to the transformation $t \rightarrow T-t$, we expect the maximum variance to be 
 The Brownian bridge is also a Gaussian process, with the following kernel: 
 
 $$\begin{aligned}
-k(t_1,t_2) = cov[B_{t_1} B_{t_2}] = E[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ min(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = min(t_1, t_2) - \frac{t_1 t_2}{T}
+k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ min(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = min(t_1, t_2) - \frac{t_1 t_2}{T}
 \end{aligned}$$
 
 #### Simulation
@@ -894,4 +895,4 @@ WIP
 
 [^1]: The demonstration is relatively straight-forward by computing the characteristic function of a sum of independent random Gaussian variables
 
-[^2]: Actually the bias corrected one, which can be achieved by the factor $N/(N-1)$ as it is well known that the MLE estimator of the variance of a Gaussian distribution is biased, i.e. $E[\sigma_{MLE}^2] = \frac{N-1}{N} \sigma^2$. The Bayesian derivation in this regard is more consistent than the MLE estimation. Notice that the MLE estimator actually corresponds to $\beta_N/\alpha_N$ in the case of a non-informative prior
+[^2]: Actually the bias corrected one, which can be achieved by the factor $N/(N-1)$ as it is well known that the MLE estimator of the variance of a Gaussian distribution is biased, i.e. $\mathbb{E}[\sigma_{MLE}^2] = \frac{N-1}{N} \sigma^2$. The Bayesian derivation in this regard is more consistent than the MLE estimation. Notice that the MLE estimator actually corresponds to $\beta_N/\alpha_N$ in the case of a non-informative prior

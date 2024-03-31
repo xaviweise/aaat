@@ -1,10 +1,10 @@
 # Welcome
 
-Welcome to the online book Advanced Analytics and Algorithmic Trading. This book is currently a work in progress and I will be updating it with more content regularly. The aim is to cover the full table of contents generated so far. 
+Welcome to the online book Advanced Analytics and Algorithmic Trading. This book is currently a work in progress and I will be updating it with more content regularly. The aim is to cover the proposed table of contents. 
 
-```{figure} jupyter_book/img/Cover.jpg
+```{figure} img/cover.jpg
 ---
-height: 400px
+height: 600px
 name: Book Cover
 ---
 ```
@@ -13,7 +13,7 @@ name: Book Cover
 
 If you use the content of this book in your own work, please cite us using
 
-Sabio Gonzalez, Javier, "Advanced Analytics and Algorithmic Trading", 2024. URL https://xaviweise.github.io/aaat/welcome.html
+Sabio Gonzalez, Javier, "Advanced Analytics and Algorithmic Trading", 2024. URL: www.datasciencealgotrading.com
 
 Here is the citation in BibTeX format
 
@@ -22,7 +22,7 @@ Here is the citation in BibTeX format
   title = {{Advanced Analytics and Algorithmic Trading}},
   author = {Sabio Gonzalez, Javier},
   year = {2024},
-  url = "https://xaviweise.github.io/aaat/welcome.html"
+  url = "www.datasciencealgotrading.com"
 }
 ```
 
