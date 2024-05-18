@@ -429,7 +429,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-pricing">14.3. Derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-pricing-of-derivatives">14.3.1. Statistical pricing of derivatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-utility-indifference-theory-of-derivatives-pricing">14.3.1. The utility indifference theory of derivatives pricing</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pricing-of-a-simple-contingent-claim">14.3.1.1. Example: pricing of a simple contingent claim</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.2. Example: European Call Options</a></li>
 </ul>
@@ -506,8 +506,8 @@ observation of the second instrument on the first one: $<span class="math notran
 <h2><span class="section-number">14.3. </span>Derivatives pricing<a class="headerlink" href="#derivatives-pricing" title="Permalink to this heading">#</a></h2>
 <p>Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name “derivative”. It is therefore logic to assume that their pricing should be somehow restricted by that of the underlying. Of course if a derivative trades in relatively liquid markets, to compute its fair price we can simply resort to the techniques discussed above, unless we are trying to identify arbitrage opportunities so we aim at challenging those market prices. Of course, precisely because of the existence of investors that seek to capitalize on those opportunities, one could expect that in those cases markets tend to reflect, at least on average, prices that are consistent with such “relative pricing models”. In the absence of liquidity, though, such models become critical to be able to quote prices of derivatives to clients.</p>
 <p>A comprehensive description of techniques for derivatives pricing is out of the scope of this book. Let us concentrate on some of the most popular and liquid contracts, which are more relevant for algorithmic trading</p>
-<section id="statistical-pricing-of-derivatives">
-<h3><span class="section-number">14.3.1. </span>Statistical pricing of derivatives<a class="headerlink" href="#statistical-pricing-of-derivatives" title="Permalink to this heading">#</a></h3>
+<section id="the-utility-indifference-theory-of-derivatives-pricing">
+<h3><span class="section-number">14.3.1. </span>The utility indifference theory of derivatives pricing<a class="headerlink" href="#the-utility-indifference-theory-of-derivatives-pricing" title="Permalink to this heading">#</a></h3>
 <p>Let us consider a simple derivative contract that pays off <span class="math notranslate nohighlight">\(P_T = f(S_T)\)</span> at a given expiry date <span class="math notranslate nohighlight">\(T &gt; t\)</span>, being <span class="math notranslate nohighlight">\(t\)</span> the present time. For ease of exposition, we consider <span class="math notranslate nohighlight">\(T\)</span> to be determinist, but it could also be contingent to a certain event detailed in the derivative’s contract. The pay-off function <span class="math notranslate nohighlight">\(P_T\)</span> depends on the value of the underlying <span class="math notranslate nohighlight">\(S_T\)</span> at the expiry time <span class="math notranslate nohighlight">\(T\)</span>. It can also depend on other parameters that are deterministic. For instance, for an European call option we have <span class="math notranslate nohighlight">\(P_T = C_T = (S_T-K)^+\)</span>, where <span class="math notranslate nohighlight">\(K\)</span> is the strike.</p>
 <p>The derivative pays in the future a quantity that is contigent to the future value of the underlying, whose value is known today but is uncertain in the future. Therefore, the future pay-off is uncertain, so  which the price would a rational investor be willing to accept to get into this contract, the so-called premium of the derivative? To get an estimation, we need to use probability theory to put some bounds to our uncertainty, so we characterize <span class="math notranslate nohighlight">\(S_T\)</span> by a random distribution function <span class="math notranslate nohighlight">\(g(S_T)\)</span>. As we saw in chapter <a class="reference internal" href="stochastic_calculus.html#stochastic-calculus"><span class="std std-ref">Stochastic Calculus</span></a>, a popular model that allows us to compute such future distribution is a random walk model or a geometric random walk, the latter being a natural choice for prices that cannot be negative. In those cases the future distribution can be computed, being a normal distribution in the first case, and a log-normal distribution in the second, e.g. in the case of stocks. Although for short expiries the random walk can also be a good model for stocks. These models allow us to get sometimes closed-form solutions, but more realistic models that capture better empirical distributions of prices can be used.</p>
 <p>We can now use the theory of a rational risk-averse investor to compute the value of the premium. We consider that investors might be risk averse, meaning that they need to be compensated increasingly more to take extra risk. In chapter XXX we saw that such behaviour is described by utility functions. And since the derivative’s payoff is uncertain before the expiry, we need to compute expected utilities to characterize the value that the investor places on the contract. Using exponential utility, this means:</p>
@@ -556,10 +556,10 @@ observation of the second instrument on the first one: $<span class="math notran
 \[ f(S_T) = (S_T - K)^+ \]</div>
 <p>where <span class="math notranslate nohighlight">\(K\)</span> is the strike of the option. The risk-averse investor will be willing to pay the dealer a maximum premium of:</p>
 <div class="math notranslate nohighlight">
-\[ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}(S_T-K)^+\right)} \\]</div>
+\[ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}(S_T-K)^+\right)} \]</div>
 <p>In the limit of a risk-neutral investor, the premium is:</p>
 <div class="math notranslate nohighlight">
-\[ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)} (S_T-K)^+ \\]</div>
+\[ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)} (S_T-K)^+ \]</div>
 <p>Let us consider the case of a non-dividend paying stock, which we model as Geometrical Brownian Motion to ensure non-negative prices are allowed:</p>
 <div class="math notranslate nohighlight">
 \[d S_t = \mu S_t dt + \sigma S_t d W_t\]</div>
@@ -600,7 +600,7 @@ observation of the second instrument on the first one: $<span class="math notran
 </ul>
 <p>We plot those dependencies in the following picture:</p>
 <figure class="align-default" id="fig-option-indifference-premium">
-<a class="reference internal image-reference" href="../_images/option_indifference_premium.png"><img alt="../_images/option_indifference_premium.png" src="../_images/option_indifference_premium.png" style="width: 4in;" /></a>
+<a class="reference internal image-reference" href="../_images/option_indifference_premium.png"><img alt="../_images/option_indifference_premium.png" src="../_images/option_indifference_premium.png" style="width: 8in;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 14.1 </span><span class="caption-text">Dependencies of a call option premium for a risk neutral investor, derived as the maximum premium the investor is willing to pay (reservation or indifference price). We use the parameters <span class="math notranslate nohighlight">\(S_t=100\)</span>, <span class="math notranslate nohighlight">\(K =100\)</span>, <span class="math notranslate nohighlight">\(T-t = 1\)</span> in years, <span class="math notranslate nohighlight">\(r = 0.05\)</span>, <span class="math notranslate nohighlight">\(\mu = 0.1\)</span>, <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span>.</span><a class="headerlink" href="#fig-option-indifference-premium" title="Permalink to this image">#</a></p>
 </figcaption>
@@ -697,7 +697,7 @@ observation of the second instrument on the first one: $<span class="math notran
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-pricing">14.3. Derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-pricing-of-derivatives">14.3.1. Statistical pricing of derivatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-utility-indifference-theory-of-derivatives-pricing">14.3.1. The utility indifference theory of derivatives pricing</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pricing-of-a-simple-contingent-claim">14.3.1.1. Example: pricing of a simple contingent claim</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.2. Example: European Call Options</a></li>
 </ul>

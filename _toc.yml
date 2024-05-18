@@ -61,3 +61,10 @@ parts:
   chapters:
     - file: markdown/glossary.md
     - file: markdown/references.md
+
+
+  - caption: Notebooks
+  numbered: false
+  chapters:
+    - file: notebooks/fair_price_estimation.ipynb
+    
