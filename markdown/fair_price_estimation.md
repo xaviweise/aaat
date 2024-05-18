@@ -52,7 +52,7 @@ Derivatives are financial instruments whose value depends on the price of an und
 
 A comprehensive description of techniques for derivatives pricing is out of the scope of this book. Let us concentrate on some of the most popular and liquid contracts, which are more relevant for algorithmic trading
 
-### Statistical pricing of derivatives
+### The utility indifference theory of derivatives pricing 
 
 Let us consider a simple derivative contract that pays off $P_T = f(S_T)$ at a given expiry date $T > t$, being $t$ the present time. For ease of exposition, we consider $T$ to be determinist, but it could also be contingent to a certain event detailed in the derivative's contract. The pay-off function $P_T$ depends on the value of the underlying $S_T$ at the expiry time $T$. It can also depend on other parameters that are deterministic. For instance, for an European call option we have $P_T = C_T = (S_T-K)^+$, where $K$ is the strike.
 
@@ -119,11 +119,11 @@ $$ f(S_T) = (S_T - K)^+ $$
 
 where $K$ is the strike of the option. The risk-averse investor will be willing to pay the dealer a maximum premium of:
 
-$$ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}(S_T-K)^+\right)} \$$ 
+$$ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}(S_T-K)^+\right)} $$ 
 
 In the limit of a risk-neutral investor, the premium is:
 
-$$ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)} (S_T-K)^+ \$$ 
+$$ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)} (S_T-K)^+ $$ 
 
 Let us consider the case of a non-dividend paying stock, which we model as Geometrical Brownian Motion to ensure non-negative prices are allowed:
 
@@ -179,7 +179,7 @@ We plot those dependencies in the following picture:
 
 ```{figure} figures/option_indifference_premium.png
 :name: fig:option_indifference_premium
-:width: 4in
+:width: 8in
 Dependencies of a call option premium for a risk neutral investor, derived as the maximum premium the investor is willing to pay (reservation or indifference price). We use the parameters $S_t=100$, $K =100$, $T-t = 1$ in years, $r = 0.05$, $\mu = 0.1$, $\sigma = 0.2$.
 ```
 
