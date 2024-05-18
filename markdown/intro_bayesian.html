@@ -215,7 +215,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html">28. References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
     </div>
@@ -412,7 +412,10 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-probability-vs-frequentist-statistics">4.1. Bayesian probability vs frequentist statistics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">4.2. Example: estimating the probability of heads in a coin toss experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">4.2. Example: estimating the probability of heads in a coin toss experiment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kalman-filter">4.2.1. Kalman Filter</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -497,6 +500,10 @@ as frequencies.</p>
 probability of getting heads or tails in a simulated coin, modelled as a Bernoulli random variable. Every time we get heads (H) we score 1 and for tails (T) we score 0.</p>
 <p>ADD DISCUSSION BEST POINT ESTIMATION POSTERIOR MEAN VS MODE VS MEDIAN
 FROM JAYNES</p>
+<section id="kalman-filter">
+<h3><span class="section-number">4.2.1. </span>Kalman Filter<a class="headerlink" href="#kalman-filter" title="Permalink to this heading">#</a></h3>
+<p>A Kalman filter is a particular instance of a filtering algorithm first proposed by Rudolf E. Kalman in 1960 in his seminal paper “A New Approach to Linear Filtering and Prediction Problems” <span id="id4">[<a class="reference internal" href="references.html#id7" title="Rudolf Emil Kalman. A new approach to linear filtering and prediction problems. Journal of Basic Engineering, 82(1):35–45, 1960.">4</a>]</span>. It is widely used in multiple applications from telecomunications, robotics and of course finance as we will focus here. Its popularity resides on its mathematical tractability since it is based on Gaussian models for the evolution of the signal to be filtered as well as the error sources that make observations noisy.</p>
+</section>
 </section>
 </section>
 
@@ -564,7 +571,10 @@ FROM JAYNES</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-probability-vs-frequentist-statistics">4.1. Bayesian probability vs frequentist statistics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">4.2. Example: estimating the probability of heads in a coin toss experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">4.2. Example: estimating the probability of heads in a coin toss experiment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kalman-filter">4.2.1. Kalman Filter</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

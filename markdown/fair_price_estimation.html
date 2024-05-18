@@ -215,7 +215,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html">28. References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
     </div>
@@ -429,7 +429,12 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-pricing">14.3. Derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-model">14.3.1. The Black Scholes model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-pricing-of-derivatives">14.3.1. Statistical pricing of derivatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pricing-of-a-simple-contingent-claim">14.3.1.1. Example: pricing of a simple contingent claim</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.2. Example: European Call Options</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-model">14.3.2. The Black &amp; Scholes model</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">14.4. Exercises</a></li>
@@ -451,10 +456,15 @@ document.write(`
 </section>
 <section id="pricing-of-flow-products">
 <h2><span class="section-number">14.2. </span>Pricing of flow products<a class="headerlink" href="#pricing-of-flow-products" title="Permalink to this heading">#</a></h2>
+<p>For flow products that are relatively liquid, we can aim at extracting all the pricing information from price indications and trades in the market, without having to resort to economic theories of fair value. In this setup, we consider their price the one that market participants are willing to pay for.</p>
+<p>The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair price, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair price is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide of liquidity is thin in the first levels, such estimation is not necessary very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability.</p>
+<p>These makes all these price observations noisy estimates of the fair price, so if we want to estimate a fair price out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what a Kalman filter does.</p>
 <section id="the-kalman-filter-model-for-pricing">
 <h3><span class="section-number">14.2.1. </span>The Kalman Filter model for pricing<a class="headerlink" href="#the-kalman-filter-model-for-pricing" title="Permalink to this heading">#</a></h3>
+<p>The Kalman filter was introduced in chapter …</p>
 <section id="two-correlated-instruments">
 <h4><span class="section-number">14.2.1.1. </span>Two correlated instruments<a class="headerlink" href="#two-correlated-instruments" title="Permalink to this heading">#</a></h4>
+<p>In this case, the Kalman gain has the following structure:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
 K_t = \frac{1}{(\sigma_{v,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{v,2}^2 + (\sigma_{2,t}^{t-1})^2) -  (\rho_t^{t-1}\sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1})^2} \nonumber \\
@@ -494,8 +504,111 @@ observation of the second instrument on the first one: $<span class="math notran
 </section>
 <section id="derivatives-pricing">
 <h2><span class="section-number">14.3. </span>Derivatives pricing<a class="headerlink" href="#derivatives-pricing" title="Permalink to this heading">#</a></h2>
+<p>Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name “derivative”. It is therefore logic to assume that their pricing should be somehow restricted by that of the underlying. Of course if a derivative trades in relatively liquid markets, to compute its fair price we can simply resort to the techniques discussed above, unless we are trying to identify arbitrage opportunities so we aim at challenging those market prices. Of course, precisely because of the existence of investors that seek to capitalize on those opportunities, one could expect that in those cases markets tend to reflect, at least on average, prices that are consistent with such “relative pricing models”. In the absence of liquidity, though, such models become critical to be able to quote prices of derivatives to clients.</p>
+<p>A comprehensive description of techniques for derivatives pricing is out of the scope of this book. Let us concentrate on some of the most popular and liquid contracts, which are more relevant for algorithmic trading</p>
+<section id="statistical-pricing-of-derivatives">
+<h3><span class="section-number">14.3.1. </span>Statistical pricing of derivatives<a class="headerlink" href="#statistical-pricing-of-derivatives" title="Permalink to this heading">#</a></h3>
+<p>Let us consider a simple derivative contract that pays off <span class="math notranslate nohighlight">\(P_T = f(S_T)\)</span> at a given expiry date <span class="math notranslate nohighlight">\(T &gt; t\)</span>, being <span class="math notranslate nohighlight">\(t\)</span> the present time. For ease of exposition, we consider <span class="math notranslate nohighlight">\(T\)</span> to be determinist, but it could also be contingent to a certain event detailed in the derivative’s contract. The pay-off function <span class="math notranslate nohighlight">\(P_T\)</span> depends on the value of the underlying <span class="math notranslate nohighlight">\(S_T\)</span> at the expiry time <span class="math notranslate nohighlight">\(T\)</span>. It can also depend on other parameters that are deterministic. For instance, for an European call option we have <span class="math notranslate nohighlight">\(P_T = C_T = (S_T-K)^+\)</span>, where <span class="math notranslate nohighlight">\(K\)</span> is the strike.</p>
+<p>The derivative pays in the future a quantity that is contigent to the future value of the underlying, whose value is known today but is uncertain in the future. Therefore, the future pay-off is uncertain, so  which the price would a rational investor be willing to accept to get into this contract, the so-called premium of the derivative? To get an estimation, we need to use probability theory to put some bounds to our uncertainty, so we characterize <span class="math notranslate nohighlight">\(S_T\)</span> by a random distribution function <span class="math notranslate nohighlight">\(g(S_T)\)</span>. As we saw in chapter <a class="reference internal" href="stochastic_calculus.html#stochastic-calculus"><span class="std std-ref">Stochastic Calculus</span></a>, a popular model that allows us to compute such future distribution is a random walk model or a geometric random walk, the latter being a natural choice for prices that cannot be negative. In those cases the future distribution can be computed, being a normal distribution in the first case, and a log-normal distribution in the second, e.g. in the case of stocks. Although for short expiries the random walk can also be a good model for stocks. These models allow us to get sometimes closed-form solutions, but more realistic models that capture better empirical distributions of prices can be used.</p>
+<p>We can now use the theory of a rational risk-averse investor to compute the value of the premium. We consider that investors might be risk averse, meaning that they need to be compensated increasingly more to take extra risk. In chapter XXX we saw that such behaviour is described by utility functions. And since the derivative’s payoff is uncertain before the expiry, we need to compute expected utilities to characterize the value that the investor places on the contract. Using exponential utility, this means:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}[U] = 1- \mathbb{E}[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)}] \]</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma_i\)</span> is the risk aversion coefficient of the investor. We have discounted the payoff at <span class="math notranslate nohighlight">\(T\)</span> by the discount factor <span class="math notranslate nohighlight">\(e^{-r(T-t)}\)</span> in order to consider the opportunity cost of holding the cash in a deposit or money-market fund. For simplicity, we have considered the interest rate <span class="math notranslate nohighlight">\(r\)</span> as constant and determinist up to <span class="math notranslate nohighlight">\(T\)</span>, but the model can be extended to cover non-deterministic interest rates.</p>
+<p>If the investor needs to pay (or be paid) a premium <span class="math notranslate nohighlight">\(P_t\)</span> to enter into the derivative’s contract today, the utility calculation changes, since it needs to take into account the premium:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}[U] = 1- \mathbb{E}[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T) -P_t\right)}] \]</div>
+<p>When modelling rational risk-averse agents with utility functions, we model their decisions as those that maximize the expected utility. However, in this case this cannot be used to compute the premium, since naturally the premium that maximizes utility is <span class="math notranslate nohighlight">\(P_t = -\infty\)</span>!. The problem is, of course, that it does not take into account the utility maximization of the dealer selling the derivative, who would not enter into the contract at this premium. Of course, the same framework could be used to model the dealer’s payoff, which is the reverse from the investor, albeit with a different dealer’s risk aversion, <span class="math notranslate nohighlight">\(\gamma_d\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}[U] = 1- \mathbb{E}[e^{-\gamma_d \left(P_t - e^{-r(T-t)}f(S_T) \right)}] \]</div>
+<p>but even introducing the dealer’s utility function, how could we compute the value of the premium?</p>
+<p>For the answer, we need first to frame the problem in other terms: what is the maximum premium that the investor would be willing to pay to enter into the contract? Since the alternative to not entering into the contract implies a zero payoff with total certainty, whose expected utility in this framework is <span class="math notranslate nohighlight">\(\mathbb{E}[U_0] = 0\)</span>, we can argue that the investor would be willing to buy the derivative as far as the premium makes him/her better off, i.e. <span class="math notranslate nohighlight">\(E[U] &gt; 0\)</span>. For a value of the premium such that <span class="math notranslate nohighlight">\(\mathbb{E}[U] = 0 = \mathbb{E}[U_0]\)</span>, the investor is indifferent to buy or not buy. This value of the premium is called the <em>reservation price</em> or the <em>utility indifference price</em> of the investor. Of course the same computation could be done for the dealer, obtaining a different reservation price. An agreement will only happen if the maximum premium that the investor is willing to pay is above the minimum premium that the dealer is willing to receive.</p>
+<p>Let us first see the problem from the dealer’s point of view. In real situations, it is typically the investor who comes to the dealer and request a price for the derivative. The minimum premium that the dealer would be willing to accept to provide the contract as a reference for derivatives pricing, i.e. the reservation price of the dealer, is the one that solves:</p>
+<div class="math notranslate nohighlight">
+\[ 1- \mathbb{E}[e^{-\gamma_d \left(P_t - e^{-r(T-t)}f(S_T) \right)}] = 0\]</div>
+<p>We can now obtain a general expression for the premium:</p>
+<div class="math notranslate nohighlight">
+\[ P_t^d =  \frac{1}{\gamma_d} \log \mathbb{E}[e^{\gamma_d \left(e^{-r(T-t)}f(S_T)\right)}] = \frac{1}{\gamma_d} \log \int dS_T g(S_T) e^{\gamma_d \left(e^{-r(T-t)}f(S_T)\right)} \]</div>
+<p>For those dealers that have zero risk aversion, i.e. they are <em>risk neutral</em>, by taking the limit <span class="math notranslate nohighlight">\(\gamma_d \rightarrow 0\)</span> we get:</p>
+<div class="math notranslate nohighlight">
+\[ P_{0,t} = \mathbb{E}[ e^{-r(T-t)}f(S_T)] = \int dS_T g(S_T) e^{-r(T-t)}f(S_T)\]</div>
+<p>And for small, but positive risk aversion:</p>
+<div class="math notranslate nohighlight">
+\[ P_t^d = P_{0,t} +  \frac{\gamma_d}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_d^2)\]</div>
+<p>We can derive the same expression for a investor we get:</p>
+<div class="math notranslate nohighlight">
+\[ P_t^i =  -\frac{1}{\gamma_i} \log \mathbb{E}[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)}] = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)} \]</div>
+<p>If the investor has a small but positive risk aversion:</p>
+<div class="math notranslate nohighlight">
+\[ P_t^i = P_{0,t} - \frac{\gamma_i}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_i^2)\]</div>
+<p>We see immediately that <span class="math notranslate nohighlight">\(P_t^i \leq P_d^i\)</span>, so there is only agreement if both investor and dealer are risk neutral, or at least one is risk prone, which is not a normal situation. Therefore, according to this theory of pricing, there would not be trading of derivatives! However, we know empirically that it is not the case. So what was wrong in our theory? We will see that the dealer is not simply taking the opposite bet than the investor, and therefore we need to modify this analysis. Before that, though, let us see particular examples of the computation of the premium for investors.</p>
+<section id="example-pricing-of-a-simple-contingent-claim">
+<h4><span class="section-number">14.3.1.1. </span>Example: pricing of a simple contingent claim<a class="headerlink" href="#example-pricing-of-a-simple-contingent-claim" title="Permalink to this heading">#</a></h4>
+<p>A contingent claim is a contract that pays off only under the realization of an uncertain event. Many derivatives contracts like options are contigent claims. The most simple contingent claim pays 1$ under the realization of a specific uncertain event, and zero in all other cases. These contingent claims are called Arrow-Debreu securities, and have a theoretical interest since we could in principle decompose any contingent claim as a linear combination of these securities. Therefore, if we know the prices (premiums) of Arrow-Debreu securities, we could price any contingent claim.</p>
+<p>For our purposes, though, we just want to discuss a simple example of reservation prices. Let us consider a contingent claim in which the dealer pays the investor 1<span class="math notranslate nohighlight">\( if we get heads when tossing a fair coin in the present. In our framework, the underlying now is the side of the coin, heads or tails, with probabilities \)</span>p_H = p_T = 1/2<span class="math notranslate nohighlight">\(. We also make \)</span>T = t$ since we toss the coin in the present. The value of the reservation price for the investor reads then:</p>
+<div class="math notranslate nohighlight">
+\[ P_t^i = -\frac{1}{\gamma_i} \log \left(\frac{1}{2}e^{-\gamma_i} + \frac{1}{2} \right) = \frac{1}{2} - \frac{1}{\gamma_i}\log \cosh \left(\frac{\gamma_i}{2}\right)\]</div>
+<p>For a risk-neutral investor, by making <span class="math notranslate nohighlight">\(\gamma_i \rightarrow 0\)</span>, we get simply <span class="math notranslate nohighlight">\(P_t^i = 1/2\)</span>, which makes sense: the investor is willing to pay 0.5<span class="math notranslate nohighlight">\( to make the game &lt;em&gt;fair&lt;/em&gt;. Or in other terms, to make the expected value of the game zero. A fully risk averse investor for whom \)</span>\gamma_i \rightarrow \infty<span class="math notranslate nohighlight">\( has \)</span>P_t = 0<span class="math notranslate nohighlight">\(, i.e. only is willing to buy the contract when there is guarantee of no losses under any scenario. In the middle, the premium lies between those two values: the investor will be willing to pay more than 0\)</span> to trade, as far as the payoff is skewed in its favor.</p>
+</section>
+<section id="example-european-call-options">
+<h4><span class="section-number">14.3.1.2. </span>Example: European Call Options<a class="headerlink" href="#example-european-call-options" title="Permalink to this heading">#</a></h4>
+<p>Let us now focus in a more realistic case, and find the premium for an European Call option on a stock, which has the payoff:</p>
+<div class="math notranslate nohighlight">
+\[ f(S_T) = (S_T - K)^+ \]</div>
+<p>where <span class="math notranslate nohighlight">\(K\)</span> is the strike of the option. The risk-averse investor will be willing to pay the dealer a maximum premium of:</p>
+<div class="math notranslate nohighlight">
+\[ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}(S_T-K)^+\right)} \\]</div>
+<p>In the limit of a risk-neutral investor, the premium is:</p>
+<div class="math notranslate nohighlight">
+\[ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)} (S_T-K)^+ \\]</div>
+<p>Let us consider the case of a non-dividend paying stock, which we model as Geometrical Brownian Motion to ensure non-negative prices are allowed:</p>
+<div class="math notranslate nohighlight">
+\[d S_t = \mu S_t dt + \sigma S_t d W_t\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> are the drift and volatility of the stock, respectively, and <span class="math notranslate nohighlight">\(W_t\)</span> a Wiener process. Integrating this SDE up to T:</p>
+<div class="math notranslate nohighlight">
+\[ S_T = S_t e^{(\mu - \frac{\sigma^2}{2})(T-t) + \sigma \sqrt{T-t} Z} \]</div>
+<p>where <span class="math notranslate nohighlight">\(Z \sim N(0,1)\)</span>. We can further decompose the expression of the premimum as:</p>
+<div class="math notranslate nohighlight">
+\[ P_{0,t}^i = \int_0^\infty dS_T g(S_T) e^{-r(T-t)}  (S_T-K)^+ = \int_K^\infty dS_T g(S_T) e^{-r(T-t)}  (S_T - K) \]</div>
+<div class="math notranslate nohighlight">
+\[= e^{-r(T-t)} \left(\int_K^\infty dS_T g(S_T) S_T - K \int_K^\infty dS_T g(S_T)\right) \]</div>
+<p>Let us now change variables from <span class="math notranslate nohighlight">\(S_T\)</span> to <span class="math notranslate nohighlight">\(Z\)</span> in the integration. The first integral becomes:</p>
+<div class="math notranslate nohighlight">
+\[ \int_K^\infty dS_T g(S_T) S_T = S_t \int_{\frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{K}{S_t} - (\mu - \frac{\sigma^2}{2})(T-t)\right)}^\infty \frac{dZ}{\sqrt{2\pi}} e^{-\frac{Z^2}{2}} e^{(\mu - \frac{\sigma^2}{2})(T-t) + \sigma \sqrt{T-t} Z}\]</div>
+<div class="math notranslate nohighlight">
+\[ = S_t e^{(\mu - \frac{\sigma^2}{2})(T-t)} \int_{-d_2(\mu)}^\infty \frac{dZ}{\sqrt{2\pi}} e^{-\frac{Z^2}{2}} e^{ \sigma \sqrt{T-t} Z} = S_t e^{\mu (T-t)} \int_{-d_2(\mu)-\sigma\sqrt{T-t}}^\infty \frac{dZ}{\sqrt{2\pi}} e^{-\frac{(Z-\sigma \sqrt{T-t})^2}{2}}\]</div>
+<div class="math notranslate nohighlight">
+\[ = S_t e^{\mu (T-t)} \left(1-N(-d_1(\mu))\right)\]</div>
+<p>where we have defined the functions:</p>
+<div class="math notranslate nohighlight">
+\[d_1(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (\mu - \frac{\sigma^2}{2})(T-t)\right) \]</div>
+<div class="math notranslate nohighlight">
+\[d_2(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (\mu + \frac{\sigma^2}{2})(T-t)\right) \]</div>
+<p>and <span class="math notranslate nohighlight">\(N(x)\)</span> is the cumulative distribution function of the standard normal distribution. The second integral is then:</p>
+<div class="math notranslate nohighlight">
+\[ \int_K^\infty dS_T g(S_T) = \int_{-d_2(\mu)}^\infty \frac{1}{\sqrt{2 \pi}} e^{-\frac{Z^2}{2}} = 1-N(-d_2(\mu))\]</div>
+<p>Wrapping up all we get:</p>
+<div class="math notranslate nohighlight">
+\[P_{0,t}^i=S_t e^{(\mu-r)(T-t)}N(d_1(\mu))-K e^{-r(T-t)} N(d_2(\mu)) \]</div>
+<p>where we have used the property <span class="math notranslate nohighlight">\(1-N(-x) = N(x)\)</span>. Let us analyze this formula, which recall is the maximum premium that a investor is willing to pay for the call option. It depends on the following parameters:</p>
+<ul class="simple">
+<li><p>Current stock price <span class="math notranslate nohighlight">\(S_t\)</span>: as the current stock price increases, the premium increases. This is because the call option gives the right to buy the stock at the strike price, so a higher current stock price makes this option more valuable.</p></li>
+<li><p>Strike price <span class="math notranslate nohighlight">\(K\)</span>: as the strike price increases, the premium decreases. A higher strike price makes the option less valuable since it would cost more to exercise the option.</p></li>
+<li><p>Time to maturity <span class="math notranslate nohighlight">\(T-t\)</span>: as the time to maturity increases, the premium  increases. More time to maturity means more opportunity for the stock price to move favorably.</p></li>
+<li><p>Risk-free interest rate <span class="math notranslate nohighlight">\(r\)</span>: as the risk-free interest rate increases, the premium decreases. A higher risk-free rate reduces the present value of the option payoff, making the option less attractive.</p></li>
+<li><p>Stock drift <span class="math notranslate nohighlight">\(\mu\)</span>: as the stock drift increases, the premium increases, since it is more likely that the option will be exercised.</p></li>
+<li><p>Volatility <span class="math notranslate nohighlight">\(\sigma\)</span>: as volatility increases, the premium increases. Higher volatility increases the probability of the stock price moving significantly, which benefits the option holder.</p></li>
+</ul>
+<p>We plot those dependencies in the following picture:</p>
+<figure class="align-default" id="fig-option-indifference-premium">
+<a class="reference internal image-reference" href="../_images/option_indifference_premium.png"><img alt="../_images/option_indifference_premium.png" src="../_images/option_indifference_premium.png" style="width: 4in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 14.1 </span><span class="caption-text">Dependencies of a call option premium for a risk neutral investor, derived as the maximum premium the investor is willing to pay (reservation or indifference price). We use the parameters <span class="math notranslate nohighlight">\(S_t=100\)</span>, <span class="math notranslate nohighlight">\(K =100\)</span>, <span class="math notranslate nohighlight">\(T-t = 1\)</span> in years, <span class="math notranslate nohighlight">\(r = 0.05\)</span>, <span class="math notranslate nohighlight">\(\mu = 0.1\)</span>, <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span>.</span><a class="headerlink" href="#fig-option-indifference-premium" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
 <section id="the-black-scholes-model">
-<h3><span class="section-number">14.3.1. </span>The Black Scholes model<a class="headerlink" href="#the-black-scholes-model" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">14.3.2. </span>The Black &amp; Scholes model<a class="headerlink" href="#the-black-scholes-model" title="Permalink to this heading">#</a></h3>
 </section>
 </section>
 <section id="exercises">
@@ -584,7 +697,12 @@ observation of the second instrument on the first one: $<span class="math notran
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-pricing">14.3. Derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-model">14.3.1. The Black Scholes model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-pricing-of-derivatives">14.3.1. Statistical pricing of derivatives</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pricing-of-a-simple-contingent-claim">14.3.1.1. Example: pricing of a simple contingent claim</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.2. Example: European Call Options</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-model">14.3.2. The Black &amp; Scholes model</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">14.4. Exercises</a></li>

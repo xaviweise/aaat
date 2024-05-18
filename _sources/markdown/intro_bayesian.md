@@ -89,3 +89,7 @@ probability of getting heads or tails in a simulated coin, modelled as a Bernoul
 
 ADD DISCUSSION BEST POINT ESTIMATION POSTERIOR MEAN VS MODE VS MEDIAN
 FROM JAYNES
+
+### Kalman Filter
+
+A Kalman filter is a particular instance of a filtering algorithm first proposed by Rudolf E. Kalman in 1960 in his seminal paper "A New Approach to Linear Filtering and Prediction Problems" {cite:p}`kalman1960`. It is widely used in multiple applications from telecomunications, robotics and of course finance as we will focus here. Its popularity resides on its mathematical tractability since it is based on Gaussian models for the evolution of the signal to be filtered as well as the error sources that make observations noisy. 

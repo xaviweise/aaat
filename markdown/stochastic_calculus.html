@@ -215,7 +215,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html">28. References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
     </div>
@@ -411,7 +411,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-dynamical-systems">6.1. Modelling dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-modelling-dynamical-systems">6.1. Introduction: modelling dynamical systems</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">6.2. Deterministic dynamical systems</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-newton-s-laws">6.2.1. Example: Newton’s Laws</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-simple-inflation-targeting-model">6.2.2. Example: simple inflation targeting model</a></li>
@@ -424,42 +424,43 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-to-gaussian-processes">6.3.2. Connection to Gaussian Processes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filtrations-and-the-martingale-property">6.3.3. Filtrations and the Martingale Property</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tower-law">6.3.4. The Tower Law</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.3.5. The Feynman - Kac Theorem</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-wiener-process">6.3.6. Multivariate Wiener process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ito-s-lemma">6.3.7. Ito’s Lemma</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integrals-of-the-wiener-process">6.3.8. Integrals of the Wiener process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-the-wiener-process">6.3.9. Simulation of the Wiener process</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-processes">6.3.9.1. Univariate processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-processes">6.3.9.2. Multivariate processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-wiener-process">6.3.5. Multivariate Wiener process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ito-s-lemma">6.3.6. Ito’s Lemma</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integrals-of-the-wiener-process">6.3.7. Integrals of the Wiener process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-the-wiener-process">6.3.8. Simulation of the Wiener process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-processes">6.3.8.1. Univariate processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-processes">6.3.8.2. Multivariate processes</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.4. Basic stochastic processes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.4.1. Brownian motion with drift</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">6.4.1.1. Connection to Gaussian processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">6.4.1.2. Simulation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation">6.4.1.3. Estimation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dimensional-analysis">6.4.1.4. Dimensional analysis</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">6.4.1.5. Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-differential-equations">6.4. Stochastic differential equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.5. The Feynman - Kac Theorem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.6. Basic stochastic processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.6.1. Brownian motion with drift</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">6.6.1.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">6.6.1.2. Simulation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation">6.6.1.3. Estimation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dimensional-analysis">6.6.1.4. Dimensional analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">6.6.1.5. Applications</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.4.2. Geometric Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.4.3. Arithmetic Average of the Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.4.4. Orstein-Uhlenbeck process</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-mean-reverting-processes">6.4.4.1. Other mean reverting processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.6.2. Geometric Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.6.3. Arithmetic Average of the Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.6.4. Orstein-Uhlenbeck process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-mean-reverting-processes">6.6.4.1. Other mean reverting processes</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.4.5. Brownian bridge</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.4.5.1. Connection to Gaussian processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.4.5.2. Simulation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">6.4.5.3. Applications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.6.5. Brownian bridge</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">6.6.5.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.6.5.2. Simulation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.6.5.3. Applications</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.5. Jump processes</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.6. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.7. Jump processes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.8. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -473,8 +474,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="stochastic-calculus">
 <span id="id1"></span><h1><span class="section-number">6. </span>Stochastic Calculus<a class="headerlink" href="#stochastic-calculus" title="Permalink to this heading">#</a></h1>
-<section id="modelling-dynamical-systems">
-<span id="id2"></span><h2><span class="section-number">6.1. </span>Modelling dynamical systems<a class="headerlink" href="#modelling-dynamical-systems" title="Permalink to this heading">#</a></h2>
+<section id="introduction-modelling-dynamical-systems">
+<span id="modelling-dynamical-systems"></span><h2><span class="section-number">6.1. </span>Introduction: modelling dynamical systems<a class="headerlink" href="#introduction-modelling-dynamical-systems" title="Permalink to this heading">#</a></h2>
 <p>A dynamical system is a set of variables that follow a time dynamics law</p>
 <div class="math notranslate nohighlight">
 \[y = f(t,{X_t})\]</div>
@@ -489,9 +490,9 @@ document.write(`
 <div class="math notranslate nohighlight">
 \[dy = \frac{\partial f}{\partial t}dt + \sum_{n=1}^N \frac{\partial f}{\partial X_{i,t}} d X_{i,t}\]</div>
 <p>Modelization can be done empirically or using fundamental laws if available, we will see examples in next section</p>
-<p>The dynamics of the system might not be deterministic. We can also model the dynamics of a stochastic system in the same way. For instance, a system without external drivers can be described by the following so-called stochastic differential equation:</p>
+<p>The dynamics of the system might not be deterministic. We can also model the dynamics of a stochastic system in the same way. In this case we need to model the source of randomness in the dynamical system, for which we use  stochastic differential equations (SDE) of the form:</p>
 <div class="math notranslate nohighlight">
-\[dy = g(t) dt + k(t) d W_t\]</div>
+\[d X_t = \mu(X_t, t) dt + \sigma (X_t, t) d W_t\]</div>
 <p>where <span class="math notranslate nohighlight">\(d W_t\)</span> is the Wiener process (Brownian motion) that will be introduced later.</p>
 </section>
 <section id="deterministic-dynamical-systems">
@@ -726,12 +727,8 @@ full expectation <span class="math notranslate nohighlight">\(\mathbb{E}[Y|F_{t_
 <span class="math notranslate nohighlight">\(\mathbb{E}[\mathbb{E}[\mathbb{E}[...\mathbb{E}[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t_{n+1}}|F_{t_n}]\)</span> we can
 work out the solution. We will see examples later on.</p>
 </section>
-<section id="the-feynman-kac-theorem">
-<h3><span class="section-number">6.3.5. </span>The Feynman - Kac Theorem<a class="headerlink" href="#the-feynman-kac-theorem" title="Permalink to this heading">#</a></h3>
-<p>WIP</p>
-</section>
 <section id="multivariate-wiener-process">
-<span id="multivariate-wiener"></span><h3><span class="section-number">6.3.6. </span>Multivariate Wiener process<a class="headerlink" href="#multivariate-wiener-process" title="Permalink to this heading">#</a></h3>
+<span id="multivariate-wiener"></span><h3><span class="section-number">6.3.5. </span>Multivariate Wiener process<a class="headerlink" href="#multivariate-wiener-process" title="Permalink to this heading">#</a></h3>
 <p>We can construct a multivariate Wiener process as a vector
 <span class="math notranslate nohighlight">\({\bf W}_t= (W_{1t}, W_{2t}, ..., W_{Nt})\)</span> with the following properties:</p>
 <ul class="simple">
@@ -742,7 +739,7 @@ work out the solution. We will see examples later on.</p>
 </ul>
 </section>
 <section id="ito-s-lemma">
-<span id="itos-lemma"></span><h3><span class="section-number">6.3.7. </span>Ito’s Lemma<a class="headerlink" href="#ito-s-lemma" title="Permalink to this heading">#</a></h3>
+<span id="itos-lemma"></span><h3><span class="section-number">6.3.6. </span>Ito’s Lemma<a class="headerlink" href="#ito-s-lemma" title="Permalink to this heading">#</a></h3>
 <p>We have seen that given the trajectory of a deterministic dynamical system, <span class="math notranslate nohighlight">\(y_t = f(t, {X_t})\)</span>, its behaviour over a infinitesimal time-step is described by the following differential equation:</p>
 <div class="math notranslate nohighlight">
 \[dy = \frac{\partial f}{\partial t}dt + \sum_{n=1}^N \frac{\partial f}{\partial X_{i,t}} d X_{i,t}\]</div>
@@ -800,7 +797,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 \end{aligned}\end{split}\]</div>
 </section>
 <section id="integrals-of-the-wiener-process">
-<span id="integrals-wiener"></span><h3><span class="section-number">6.3.8. </span>Integrals of the Wiener process<a class="headerlink" href="#integrals-of-the-wiener-process" title="Permalink to this heading">#</a></h3>
+<span id="integrals-wiener"></span><h3><span class="section-number">6.3.7. </span>Integrals of the Wiener process<a class="headerlink" href="#integrals-of-the-wiener-process" title="Permalink to this heading">#</a></h3>
 <p>A firs relevant integral of the Wiener process is:</p>
 <div class="math notranslate nohighlight">
 \[I_{1t} = \int_0^t f(u) dW_u\]</div>
@@ -808,7 +805,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 <div class="math notranslate nohighlight">
 \[I_{1t} = \lim_{\Delta \rightarrow 0} \sum_{i=0}^{N-1} f(u_i) (W_{u_{i+1}} - W_{u_i})\]</div>
 <p>where <span class="math notranslate nohighlight">\(\Delta = t / N\)</span>, <span class="math notranslate nohighlight">\(u_i = \Delta i\)</span>. This is a sum of independent Gaussian random variables, since by definition the increments of the Wiener process are independent. Therefore its distribution is itself
-Gaussian <a class="footnote-reference brackets" href="#id10" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. Its mean is easily computed as:</p>
+Gaussian <a class="footnote-reference brackets" href="#id9" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. Its mean is easily computed as:</p>
 <div class="math notranslate nohighlight">
 \[\mathbb{E}[I_{1t}|F_0] = \lim_{\Delta \rightarrow 0}  \sum_{i=0}^{N-1} f(u_i) \mathbb{E}[(W_{u_{i+1}} - W_{u_i})|F_0] =\]</div>
 <p>For the variance, we could simply use the result that the variance of independent variables is the sum of variances, but it is instructive to compute it directly over the discrete expression:</p>
@@ -854,9 +851,9 @@ Wiener process, namely:</p>
 <p>where we have used <span class="math notranslate nohighlight">\(\int_0^t (t-u)^2 du = \frac{t^3}{3}\)</span></p>
 </section>
 <section id="simulation-of-the-wiener-process">
-<span id="simulation-wiener"></span><h3><span class="section-number">6.3.9. </span>Simulation of the Wiener process<a class="headerlink" href="#simulation-of-the-wiener-process" title="Permalink to this heading">#</a></h3>
+<span id="simulation-wiener"></span><h3><span class="section-number">6.3.8. </span>Simulation of the Wiener process<a class="headerlink" href="#simulation-of-the-wiener-process" title="Permalink to this heading">#</a></h3>
 <section id="univariate-processes">
-<h4><span class="section-number">6.3.9.1. </span>Univariate processes<a class="headerlink" href="#univariate-processes" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">6.3.8.1. </span>Univariate processes<a class="headerlink" href="#univariate-processes" title="Permalink to this heading">#</a></h4>
 <p>We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid <span class="math notranslate nohighlight">\(t_i = t_0 + \Delta * i\)</span>, <span class="math notranslate nohighlight">\(i = 0, .., N\)</span>, where <span class="math notranslate nohighlight">\(\Delta = \frac{t_1 - t_0}{N}\)</span>, we can exploit directly the Wiener process properties to get:</p>
 <div class="math notranslate nohighlight">
 \[dW_t \rightarrow W_{t_{i+1}} - W_{t_i} \sim N(0, \Delta)\]</div>
@@ -869,7 +866,7 @@ Wiener process, namely:</p>
 <p>SIMULATION GAUSSIAN PROCESS</p>
 </section>
 <section id="multivariate-processes">
-<h4><span class="section-number">6.3.9.2. </span>Multivariate processes<a class="headerlink" href="#multivariate-processes" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">6.3.8.2. </span>Multivariate processes<a class="headerlink" href="#multivariate-processes" title="Permalink to this heading">#</a></h4>
 <p>Let us now simulate a multivariate Wiener process of dimension N. The strategy in this case is to start simulating N independent Wiener processes and then use them to generate the correlated paths. This can
 be done using the Cholesky decomposition of the correlation matrix <span class="math notranslate nohighlight">\(\Sigma\)</span>. Since <span class="math notranslate nohighlight">\(\Sigma\)</span> is symmetric and positive define, the decomposition reads:</p>
 <div class="math notranslate nohighlight">
@@ -919,17 +916,57 @@ d W_{2t} &amp;=&amp; \rho d \hat{W}_{1t} + \sqrt{1-\rho^2}  d \hat{W}_{2t}
 </section>
 </section>
 </section>
+<section id="stochastic-differential-equations">
+<span id="sde"></span><h2><span class="section-number">6.4. </span>Stochastic differential equations<a class="headerlink" href="#stochastic-differential-equations" title="Permalink to this heading">#</a></h2>
+<p>As pointed out in the introduction to the chapter, after studying the Wiener process now we have the tools to model the dynamics of a random or stochastic process <span class="math notranslate nohighlight">\(X_t\)</span> using stochastic differential equations (SDEs) of the general form:</p>
+<div class="math notranslate nohighlight">
+\[ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t\]</div>
+<p>which generalizes the deterministic differential equation adding a noise term modelled using the Wiener process. Solving a SDEs means working out the distribution of <span class="math notranslate nohighlight">\(X_t\)</span> at arbitraty times given some initial conditions, which for arbitrary choices of <span class="math notranslate nohighlight">\(\mu(X_t, t)\)</span> and <span class="math notranslate nohighlight">\(\sigma(X_t,t)\)</span> can only be solved numerically, for instance using Monte-Carlo sampling techniques. In the next section we will see particular SDEs that are analytically tractable.</p>
+</section>
+<section id="the-feynman-kac-theorem">
+<span id="feynman-kac"></span><h2><span class="section-number">6.5. </span>The Feynman - Kac Theorem<a class="headerlink" href="#the-feynman-kac-theorem" title="Permalink to this heading">#</a></h2>
+<p>The Feynman-Kac theorem provides a link between partial differential equations and stochastic processes, specifically, between certain types of PDEs and expectations of integrals of the Wiener process. Its usefulness extends to subjects like physics and finance, where it is used to introduce statistical interpretations of solutions to deterministic systems.</p>
+<p>Specifically, the Feynman - Kac theorem it relates the solution <span class="math notranslate nohighlight">\(u(x,t)\)</span> of the PDE</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial u}{\partial t} + \mu(x,t) \frac{\partial u}{\partial x} + \frac{1}{2} \sigma^2(x,t) \frac{\partial^2 u}{\partial x^2} - r(x,t)u = 0\]</div>
+<p>with the boundary condition <span class="math notranslate nohighlight">\(u(x,T) = f(x)\)</span>, to the expected value</p>
+<div class="math notranslate nohighlight">
+\[u(x,t) = \mathbb{E}\left[ e^{-\int_t^T r(X_s,s) ds} f(X_T) \Big| X_t = x \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(X_t\)</span> satisfies the general SDE introduced in section  {ref}` stochastic differential equation (SDE):</p>
+<div class="math notranslate nohighlight">
+\[ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t\]</div>
+<p>To prove it we use Ito’s lemma to compute the differential of the ansatz <span class="math notranslate nohighlight">\(Y_s = e^{-\int_t^s r(X_v,v) dv} u(X_s, s)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+d Y_s = -r(X_s,s) e^{-\int_t^s r(X_v,v) ds}  u(X_s, s) ds \\ + e^{-\int_t^u r(X_v,v) dv} \left(\frac{\partial u}{\partial s} d s + \frac{\partial u}{\partial  X_s} dX_s + \frac{1}{2} \frac{\partial ^2 u}{\partial X_s^2} \sigma^2(X_s,s) ds\right) 
+\end{aligned}\end{split}\]</div>
+<p>which we can rewrite as
+$<span class="math notranslate nohighlight">\(\begin{aligned}
+d Y_s = e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s) dW_s + \\
+ e^{-\int_t^s r(X_v,v) dv} \left(-r(X_s, s) u + \frac{\partial u}{\partial  s} + \frac{\partial u}{\partial  X_s} \mu(X_s,s)+ \frac{1}{2} \frac{\partial ^2 u}{\partial X_s^2} \sigma^2(X_s,s)  \right) ds = \\ 
+  e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s) dW_s
+\end{aligned}\)</span>$</p>
+<p>where we have used that <span class="math notranslate nohighlight">\(u\)</span> is the solution to the above PDE to make the term in parenthesis zero. We can now integrate this equation from t to T:</p>
+<div class="math notranslate nohighlight">
+\[\begin{aligned}
+\int_t^T d Y_s = Y_T - Y_t = \int_t^T e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s) dW_s 
+\end{aligned}\]</div>
+<p>If we take now expectations, the right hand term is zero by using the properties of the integral of the Wiener process show in previous sections. Therefore:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}[Y_T|X_t = x] = Y_t\]</div>
+<p>i.e. <span class="math notranslate nohighlight">\(Y_t\)</span> is a martingale. But this is actually the Feynman - Kac solution if we replace <span class="math notranslate nohighlight">\(Y_t\)</span> by its definition, since <span class="math notranslate nohighlight">\(u(X_T, T) = f(X_T)\)</span>, which completes the proof.</p>
+</section>
 <section id="basic-stochastic-processes">
-<h2><span class="section-number">6.4. </span>Basic stochastic processes<a class="headerlink" href="#basic-stochastic-processes" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">6.6. </span>Basic stochastic processes<a class="headerlink" href="#basic-stochastic-processes" title="Permalink to this heading">#</a></h2>
 <section id="brownian-motion-with-drift">
-<h3><span class="section-number">6.4.1. </span>Brownian motion with drift<a class="headerlink" href="#brownian-motion-with-drift" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.6.1. </span>Brownian motion with drift<a class="headerlink" href="#brownian-motion-with-drift" title="Permalink to this heading">#</a></h3>
 <p>The most simple stochastic process using the Wiener process as a building block is the Brownian motion with drift:</p>
 <div class="math notranslate nohighlight">
 \[d S_t = \mu_t dt + \sigma_t d W_t\]</div>
 <p>Here we are essentially shifting and rescaling the Wiener process to describe dynamical systems whose stochastic fluctuations have a deterministic non-zero mean <span class="math notranslate nohighlight">\(mu_t\)</span>
 (drift) and arbitrary variance, the latter controlled by the so-called volatility <span class="math notranslate nohighlight">\(\sigma_t\)</span>. In practice, this is the process to use for any real application of stochastic calculus to model random time-series, since the simple Wiener process is simply too restrictive to describe
 any real process. The name Brownian motion comes actually from the early application of this kind of process to describe the random fluctuations of pollen suspended in water observed by English botanist Robert Brown
-in 1827. The actual modelling of this process would be pioneered by Albert Einstein <span id="id4">[<a class="reference internal" href="references.html#id6" title="A. Einstein. Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen. Annalen der Physik, 322(8):549-560, January 1905. doi:10.1002/andp.19053220806.">4</a>]</span>, in one of the four papers published in 1905, his “annus mirabilis”, each of them transformative of its
+in 1827. The actual modelling of this process would be pioneered by Albert Einstein <span id="id3">[<a class="reference internal" href="references.html#id6" title="A. Einstein. Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen. Annalen der Physik, 322(8):549-560, January 1905. doi:10.1002/andp.19053220806.">5</a>]</span>, in one of the four papers published in 1905, his “annus mirabilis”, each of them transformative of its
 respective field.</p>
 <p>The distribution of <span class="math notranslate nohighlight">\(dS_t\)</span> is easily derived by using the property that multiplying and summing scalars to a Gaussian random variable (<span class="math notranslate nohighlight">\(dW_t\)</span>) yields another Gaussian variable. Hence since <span class="math notranslate nohighlight">\(dW_t \sim N(0, t)\)</span> then
 we have:</p>
@@ -941,9 +978,9 @@ we have:</p>
 <p>which again follows a Gaussian distribution:</p>
 <div class="math notranslate nohighlight">
 \[S_t \sim N(S_0 + \int_0^t \mu_u du, \int_0^t \sigma_u^2 du)\]</div>
-<p>where we have used the properties of the stochastic integral discussed in section <a class="reference internal" href="#integrals-wiener"><span class="std std-ref">Integrals of the Wiener process</span></a>.</p>
-<section id="id5">
-<h4><span class="section-number">6.4.1.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
+<p>where we have used the properties of the stochastic integral discussed in section <a class="reference internal" href="#sde"><span class="std std-ref">Stochastic differential equations</span></a>:</p>
+<section id="id4">
+<h4><span class="section-number">6.6.1.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h4>
 <p>The Brownian motion is also a Gaussian process, since any finite set <span class="math notranslate nohighlight">\(X_{†_1}, X_{t_2}, X_{t_3}, ..., X_{t_n}\)</span> follows a multivariate Gaussian process. The kernel of the Brownian process is simply to
 derive:</p>
 <div class="math notranslate nohighlight">
@@ -958,7 +995,7 @@ k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}] = \mathbb{E}[\int_0^{t_1} \sigma_u 
 <span class="math notranslate nohighlight">\(\sigma^2\)</span>, as expected given the construction of the Brownian process.</p>
 </section>
 <section id="simulation">
-<h4><span class="section-number">6.4.1.2. </span>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">6.6.1.2. </span>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading">#</a></h4>
 <p>Similarly to the Wiener process, simulation can be carried out using a discretization scheme. To improve numerical stability and convergence it is convenient to integrate first the distribution between points in the
 simulation grid <span class="math notranslate nohighlight">\(t_0, ..., t_N\)</span>, <span class="math notranslate nohighlight">\(t_{i+1} = t_i + \Delta\)</span>, namely:</p>
 <div class="math notranslate nohighlight">
@@ -977,7 +1014,7 @@ simulation grid <span class="math notranslate nohighlight">\(t_0, ..., t_N\)</sp
 <p>SIMULATION GAUSSIAN</p>
 </section>
 <section id="estimation">
-<h4><span class="section-number">6.4.1.3. </span>Estimation<a class="headerlink" href="#estimation" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">6.6.1.3. </span>Estimation<a class="headerlink" href="#estimation" title="Permalink to this heading">#</a></h4>
 <p>If we have a set of observations of a process <span class="math notranslate nohighlight">\(D = \{S_{t_0}, ..., S_{t_N}\}\)</span> that we want to model as a Brownian
 motion, we need to find the value of the parameters of the process that best fit the data.</p>
 <p>Let us consider for simplicity that <span class="math notranslate nohighlight">\(\mu_t = \mu\)</span> and
@@ -1033,7 +1070,7 @@ have:</p>
 \mathbb{E}[\sigma^2 \Delta|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
 \end{aligned}\end{split}\]</div>
 <p>which are the maximum likelihood estimators (MLE) of the
-mean and the variance of a Gaussian distribution <a class="footnote-reference brackets" href="#id11" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, which is expected for a non-informative prior since 1) for a Gaussian distribution the mean and the mode coincide, 2) maximizing the posterior with the
+mean and the variance of a Gaussian distribution <a class="footnote-reference brackets" href="#id10" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, which is expected for a non-informative prior since 1) for a Gaussian distribution the mean and the mode coincide, 2) maximizing the posterior with the
 non-informative prior is equivalent to maximizing the likelihood. MLE estimators are the standard approach to learn the parameters of stochastic processes in many practical situations, since the Bayesian
 estimations might become intractable for more complex processes as the Brownian motion. However, we must keep in mind their limitations, particularly that they neglect any prior information that might be useful in certain setups, and that they throw away the rest of the
 information contained in the posterior distribution.</p>
@@ -1052,7 +1089,7 @@ the estimation error. Only in the case of having a very large data-set <span cla
 of two terms: the first one coming from the intrinsic noise of the Brownian process, and the second one, the <span class="math notranslate nohighlight">\(1/N\)</span> correction, coming from the estimation uncertainty.</p>
 </section>
 <section id="dimensional-analysis">
-<h4><span class="section-number">6.4.1.4. </span>Dimensional analysis<a class="headerlink" href="#dimensional-analysis" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">6.6.1.4. </span>Dimensional analysis<a class="headerlink" href="#dimensional-analysis" title="Permalink to this heading">#</a></h4>
 <p>In order to reason about stochastic processes it is important to keep track or the units of their parameters. This can also be useful as a consistency check on the estimators derived, for instance. We will use a
 brackets notation for dimensional analysis. For the case of the Brownian motion we write:</p>
 <div class="math notranslate nohighlight">
@@ -1070,7 +1107,7 @@ of the exponential should be a-dimensional. Applying the previous units to the e
 \[([S] - [\mu_t] [t])^2 / ([\sigma_t]^2 [t]^2) = 1\]</div>
 </section>
 <section id="applications">
-<h4><span class="section-number">6.4.1.5. </span>Applications<a class="headerlink" href="#applications" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">6.6.1.5. </span>Applications<a class="headerlink" href="#applications" title="Permalink to this heading">#</a></h4>
 <p>The Brownian motion model has plenty of applications. In the financial domain it can be used to model financial or economical indicators for which there is no clear pattern in the time-series beyond potentially a drift to motivate a more sophisticated modelling, i.e. the time-series
 is mostly unpredictable. Notice that the Brownian motion has a domain that extends from <span class="math notranslate nohighlight">\((-\infty, \infty)\)</span>, so indicators that have a more restrictive domain might not be suitable for being modelled using the
 Brownian motion process. A typical example are prices of financial instruments, which cannot on general grounds be negative. However, there might be exceptions to this rule, for instance if we are modelling
@@ -1078,7 +1115,7 @@ prices in a time - domain such as the probability of reaching negative values is
 </section>
 </section>
 <section id="geometric-brownian-motion">
-<h3><span class="section-number">6.4.2. </span>Geometric Brownian motion<a class="headerlink" href="#geometric-brownian-motion" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.6.2. </span>Geometric Brownian motion<a class="headerlink" href="#geometric-brownian-motion" title="Permalink to this heading">#</a></h3>
 <p>The geometric Brownian motion is a simple extension of the Brownian motion that introduces a constraint in the domain of the process, allowing only positive values. The stochastic differential equation is
 the following one:</p>
 <div class="math notranslate nohighlight">
@@ -1114,7 +1151,7 @@ X \sim LN(\mu, \sigma^2) \nonumber \\
 \[\mathbb{E}[S_t] = S_0 e^{\int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \frac{1}{2} \int_0^t \sigma_u^2 du} = S_0 e^{\int_0^t \mu_u du}\]</div>
 </section>
 <section id="arithmetic-average-of-the-brownian-motion">
-<h3><span class="section-number">6.4.3. </span>Arithmetic Average of the Brownian motion<a class="headerlink" href="#arithmetic-average-of-the-brownian-motion" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.6.3. </span>Arithmetic Average of the Brownian motion<a class="headerlink" href="#arithmetic-average-of-the-brownian-motion" title="Permalink to this heading">#</a></h3>
 <p>As the name suggests, this is a derived process from the standard Brownian motion in which the latter is averaged continuously up to a certain time <span class="math notranslate nohighlight">\(T\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{aligned}
@@ -1137,7 +1174,7 @@ $<span class="math notranslate nohighlight">\(\int_t^T (\frac{T-u}{T-t})^2 du = 
 the process.</p>
 </section>
 <section id="orstein-uhlenbeck-process">
-<h3><span class="section-number">6.4.4. </span>Orstein-Uhlenbeck process<a class="headerlink" href="#orstein-uhlenbeck-process" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.6.4. </span>Orstein-Uhlenbeck process<a class="headerlink" href="#orstein-uhlenbeck-process" title="Permalink to this heading">#</a></h3>
 <p>The Orstein - Uhlenbeck process is an extension of the Brownian motion process in which the drift term is modified to prevent large deviations from the mean <span class="math notranslate nohighlight">\(\mu\)</span>. This is achieved by making the drift penalize those
 deviations:</p>
 <div class="math notranslate nohighlight">
@@ -1159,12 +1196,12 @@ e^{-\theta t} S_t - S_0 = - (e^{-\theta t} - 1) \mu + \int_0^t e^{-\theta u} \si
 <div class="math notranslate nohighlight">
 \[S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}) + \int_0^t e^{\theta (t-u)} \sigma_u dW_u\]</div>
 <section id="other-mean-reverting-processes">
-<h4><span class="section-number">6.4.4.1. </span>Other mean reverting processes<a class="headerlink" href="#other-mean-reverting-processes" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">6.6.4.1. </span>Other mean reverting processes<a class="headerlink" href="#other-mean-reverting-processes" title="Permalink to this heading">#</a></h4>
 <p>CIR $<span class="math notranslate nohighlight">\(d S_t = \theta (S_t - \mu_t) dt + \sigma_t S_t^{1/2} d W_t\)</span>$</p>
 </section>
 </section>
 <section id="brownian-bridge">
-<h3><span class="section-number">6.4.5. </span>Brownian bridge<a class="headerlink" href="#brownian-bridge" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.6.5. </span>Brownian bridge<a class="headerlink" href="#brownian-bridge" title="Permalink to this heading">#</a></h3>
 <p>Another simple extension of the Wiener process is the Brownian bridge, that we denote as <span class="math notranslate nohighlight">\(B_t\)</span>. It defines a stochastic process within a time interval <span class="math notranslate nohighlight">\([0,T]\)</span> that behaves as a Wiener process with the exception of
 having an extra constraint, namely that <span class="math notranslate nohighlight">\(B_T = 0\)</span> (in addition to <span class="math notranslate nohighlight">\(B_0 = 0\)</span> as in the Wiener process). Such process can be constructed from a single Wiener process <span class="math notranslate nohighlight">\(W_t\)</span> as follows:</p>
 <div class="math notranslate nohighlight">
@@ -1184,20 +1221,20 @@ having an extra constraint, namely that <span class="math notranslate nohighligh
 <p>The result fits well our expectation of such process:
 for <span class="math notranslate nohighlight">\(t = 0\)</span> and <span class="math notranslate nohighlight">\(t = T\)</span>, the process has no variance, since those points correspond to the constraints where the process is set to zero. Given those constraints, and the symmetry of the Brownian bridge with respect
 to the transformation <span class="math notranslate nohighlight">\(t \rightarrow T-t\)</span>, we expect the maximum variance to be at the half-point <span class="math notranslate nohighlight">\(T/2\)</span>, which is indeed the maximum of the function <span class="math notranslate nohighlight">\(t(1-\frac{t}{T})\)</span></p>
-<section id="id7">
-<h4><span class="section-number">6.4.5.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
+<section id="id6">
+<h4><span class="section-number">6.6.5.1. </span>Connection to Gaussian processes<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
 <p>The Brownian bridge is also a Gaussian process, with the following kernel:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
 k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ \textrm{min}(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = \textrm{min}(t_1, t_2) - \frac{t_1 t_2}{T}
 \end{aligned}\end{split}\]</div>
 </section>
-<section id="id8">
-<h4><span class="section-number">6.4.5.2. </span>Simulation<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
+<section id="id7">
+<h4><span class="section-number">6.6.5.2. </span>Simulation<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
 <p>TO DO</p>
 </section>
-<section id="id9">
-<h4><span class="section-number">6.4.5.3. </span>Applications<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h4>
+<section id="id8">
+<h4><span class="section-number">6.6.5.3. </span>Applications<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
 <p>Brownian bridges or more realistic but similarly constructed processes (e.g. using the Brownian motion as the primitive instead of the Wiener process, or specifying fixed but non-zero boundaries), can be used to
 model situations where there is no uncertainty about the final value of a stochastic process. This is for instance the case of financial instruments like bonds, in particular zero-coupon bonds, which are bonds
 that simply return their principal at maturity without paying a coupon. They are also known to be more suitable for simulation than the underlying Wiener process, which can be written as a function of the
@@ -1209,11 +1246,11 @@ Brownian bridge simply as:</p>
 </section>
 </section>
 <section id="jump-processes">
-<h2><span class="section-number">6.5. </span>Jump processes<a class="headerlink" href="#jump-processes" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">6.7. </span>Jump processes<a class="headerlink" href="#jump-processes" title="Permalink to this heading">#</a></h2>
 <p>WIP</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">6.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">6.8. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Derive the Crank - Nikolson scheme discretization of the inflation targeting model. Simulate it numerically and compare with the exact solution</p></li>
 <li><p>Use Ito’s lemma to derive the differential of:</p>
@@ -1225,12 +1262,12 @@ Brownian bridge simply as:</p>
 </li>
 </ol>
 <hr class="footnotes docutils" />
-<aside class="footnote brackets" id="id10" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id9" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
 <p>The demonstration is relatively straight-forward by computing the characteristic function of a sum of independent random Gaussian variables</p>
 </aside>
-<aside class="footnote brackets" id="id11" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">2</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id10" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">2</a><span class="fn-bracket">]</span></span>
 <p>Actually the bias corrected one, which can be achieved by the factor <span class="math notranslate nohighlight">\(N/(N-1)\)</span> as it is well known that the MLE estimator of the variance of a Gaussian distribution is biased, i.e. <span class="math notranslate nohighlight">\(\mathbb{E}[\sigma_{MLE}^2] = \frac{N-1}{N} \sigma^2\)</span>. The Bayesian derivation in this regard is more consistent than the MLE estimation. Notice that the MLE estimator actually corresponds to <span class="math notranslate nohighlight">\(\beta_N/\alpha_N\)</span> in the case of a non-informative prior</p>
 </aside>
 </section>
@@ -1299,7 +1336,7 @@ Brownian bridge simply as:</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-dynamical-systems">6.1. Modelling dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-modelling-dynamical-systems">6.1. Introduction: modelling dynamical systems</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">6.2. Deterministic dynamical systems</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-newton-s-laws">6.2.1. Example: Newton’s Laws</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-simple-inflation-targeting-model">6.2.2. Example: simple inflation targeting model</a></li>
@@ -1312,42 +1349,43 @@ Brownian bridge simply as:</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-to-gaussian-processes">6.3.2. Connection to Gaussian Processes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filtrations-and-the-martingale-property">6.3.3. Filtrations and the Martingale Property</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tower-law">6.3.4. The Tower Law</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.3.5. The Feynman - Kac Theorem</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-wiener-process">6.3.6. Multivariate Wiener process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ito-s-lemma">6.3.7. Ito’s Lemma</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integrals-of-the-wiener-process">6.3.8. Integrals of the Wiener process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-the-wiener-process">6.3.9. Simulation of the Wiener process</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-processes">6.3.9.1. Univariate processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-processes">6.3.9.2. Multivariate processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-wiener-process">6.3.5. Multivariate Wiener process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ito-s-lemma">6.3.6. Ito’s Lemma</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integrals-of-the-wiener-process">6.3.7. Integrals of the Wiener process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-the-wiener-process">6.3.8. Simulation of the Wiener process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-processes">6.3.8.1. Univariate processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-processes">6.3.8.2. Multivariate processes</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.4. Basic stochastic processes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.4.1. Brownian motion with drift</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">6.4.1.1. Connection to Gaussian processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">6.4.1.2. Simulation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation">6.4.1.3. Estimation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dimensional-analysis">6.4.1.4. Dimensional analysis</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">6.4.1.5. Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-differential-equations">6.4. Stochastic differential equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.5. The Feynman - Kac Theorem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.6. Basic stochastic processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.6.1. Brownian motion with drift</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">6.6.1.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation">6.6.1.2. Simulation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation">6.6.1.3. Estimation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dimensional-analysis">6.6.1.4. Dimensional analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#applications">6.6.1.5. Applications</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.4.2. Geometric Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.4.3. Arithmetic Average of the Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.4.4. Orstein-Uhlenbeck process</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-mean-reverting-processes">6.4.4.1. Other mean reverting processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.6.2. Geometric Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.6.3. Arithmetic Average of the Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.6.4. Orstein-Uhlenbeck process</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-mean-reverting-processes">6.6.4.1. Other mean reverting processes</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.4.5. Brownian bridge</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.4.5.1. Connection to Gaussian processes</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.4.5.2. Simulation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">6.4.5.3. Applications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.6.5. Brownian bridge</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">6.6.5.1. Connection to Gaussian processes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">6.6.5.2. Simulation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">6.6.5.3. Applications</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.5. Jump processes</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.6. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.7. Jump processes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.8. Exercises</a></li>
 </ul>
   </nav></div>
 

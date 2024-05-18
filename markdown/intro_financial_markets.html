@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'markdown/intro_financial_markets';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -213,7 +215,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html">28. References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
     </div>
@@ -421,9 +423,15 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.6. Equity market structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.7. Fixed income market structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.8. FX market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.9. Crypto market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.10. Regulation of financial markets</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.11. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-markets">1.9. Derivatives markets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-derivatives">1.9.1. Introduction to derivatives</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-derivatives-fowards-futures-and-etfs">1.9.2. Linear derivatives: Fowards, Futures and ETFs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options">1.9.3. Options</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.10. Crypto market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.11. Regulation of financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.12. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -566,14 +574,36 @@ Derivatives of crypto again are financial contracts</p>
 <section id="fx-market-structure">
 <h2><span class="section-number">1.8. </span>FX market structure<a class="headerlink" href="#fx-market-structure" title="Permalink to this heading">#</a></h2>
 </section>
+<section id="derivatives-markets">
+<h2><span class="section-number">1.9. </span>Derivatives markets<a class="headerlink" href="#derivatives-markets" title="Permalink to this heading">#</a></h2>
+<section id="introduction-to-derivatives">
+<h3><span class="section-number">1.9.1. </span>Introduction to derivatives<a class="headerlink" href="#introduction-to-derivatives" title="Permalink to this heading">#</a></h3>
+<p>Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name “derivative”.</p>
+<p>Note: Focus on derivatives traded in markets in contrast to OTC</p>
+</section>
+<section id="linear-derivatives-fowards-futures-and-etfs">
+<h3><span class="section-number">1.9.2. </span>Linear derivatives: Fowards, Futures and ETFs<a class="headerlink" href="#linear-derivatives-fowards-futures-and-etfs" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="options">
+<h3><span class="section-number">1.9.3. </span>Options<a class="headerlink" href="#options" title="Permalink to this heading">#</a></h3>
+<p>Options are derivatives contracts that grant the holder the  the option (hence the name) to buy or sell (depending on the option) a given financial instrument (the underlying) at a price at time contingent to the clauses of the contract. The most simple option, the European option, pre-specifies a given time <span class="math notranslate nohighlight">\(T\)</span>, the expire, and price <span class="math notranslate nohighlight">\(K\)</span>, to exercise this option. But there are many other variations in the market. An option to buy a financial instrument is referred as a call option, and an option to sell is a put option.</p>
+<p>Let us consider european options of stocks. If the market price of the stock at the exprity is <span class="math notranslate nohighlight">\(S_T\)</span>, a call option will be exercised by a rational investor only if the price is higher than the strike <span class="math notranslate nohighlight">\(K\)</span>, making a profit of <span class="math notranslate nohighlight">\(S_T-K\)</span>, which in some cases is directly paid in cash, in others the actual stock is received, but of course it could be directly sold in the market at a favourable price. Therefore, the payoff of a call option can be written as:</p>
+<div class="math notranslate nohighlight">
+\[C_T = (S_T-K)^+\]</div>
+<p>where <span class="math notranslate nohighlight">\((.)^+\)</span> denotes the positive part of the argument. On the contrary, a put option will only be exercised if the market price is below the strike, hence the payoff is:</p>
+<div class="math notranslate nohighlight">
+\[P_T = (K-S_T)^+\]</div>
+<p>Options can be traded in regulated markets or be quoted by bank dealers. Since the investor that holds the option cannot lose money from it, such option does not come for free, and the question is how much is worth such option, which is called the premium of the option. At expiry, the price is naturally the payoff function. What at at time <span class="math notranslate nohighlight">\(t &lt; T\)</span> there is still  uncertainty about the price <span class="math notranslate nohighlight">\(S_T\)</span> which will determine the final profit (if any), so the premium will be different. But how much? That is the subject of the theory of option pricing.</p>
+</section>
+</section>
 <section id="crypto-market-structure">
-<h2><span class="section-number">1.9. </span>Crypto market structure<a class="headerlink" href="#crypto-market-structure" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.10. </span>Crypto market structure<a class="headerlink" href="#crypto-market-structure" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="regulation-of-financial-markets">
-<h2><span class="section-number">1.10. </span>Regulation of financial markets<a class="headerlink" href="#regulation-of-financial-markets" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.11. </span>Regulation of financial markets<a class="headerlink" href="#regulation-of-financial-markets" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="exercises">
-<h2><span class="section-number">1.11. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.12. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 </section>
 </section>
 
@@ -652,9 +682,15 @@ Derivatives of crypto again are financial contracts</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.6. Equity market structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.7. Fixed income market structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.8. FX market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.9. Crypto market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.10. Regulation of financial markets</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.11. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-markets">1.9. Derivatives markets</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-derivatives">1.9.1. Introduction to derivatives</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-derivatives-fowards-futures-and-etfs">1.9.2. Linear derivatives: Fowards, Futures and ETFs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options">1.9.3. Options</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.10. Crypto market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.11. Regulation of financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.12. Exercises</a></li>
 </ul>
   </nav></div>
 
