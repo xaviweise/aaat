@@ -2,7 +2,7 @@
 # Stochastic Calculus
 
 (modelling_dynamical_systems)=
-## Modelling dynamical systems
+## Introduction: modelling dynamical systems
 
 A dynamical system is a set of variables that follow a time dynamics law
 
@@ -24,9 +24,9 @@ $$dy = \frac{\partial f}{\partial t}dt + \sum_{n=1}^N \frac{\partial f}{\partial
 
 Modelization can be done empirically or using fundamental laws if available, we will see examples in next section
 
-The dynamics of the system might not be deterministic. We can also model the dynamics of a stochastic system in the same way. For instance, a system without external drivers can be described by the following so-called stochastic differential equation:
+The dynamics of the system might not be deterministic. We can also model the dynamics of a stochastic system in the same way. In this case we need to model the source of randomness in the dynamical system, for which we use  stochastic differential equations (SDE) of the form:
 
-$$dy = g(t) dt + k(t) d W_t$$ 
+$$d X_t = \mu(X_t, t) dt + \sigma (X_t, t) d W_t$$ 
 
 where $d W_t$ is the Wiener process (Brownian motion) that will be introduced later.
 
@@ -310,10 +310,6 @@ full expectation $\mathbb{E}[Y|F_{t_n}]$ is not obviously tractable, but by cond
 $\mathbb{E}[\mathbb{E}[\mathbb{E}[...\mathbb{E}[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t_{n+1}}|F_{t_n}]$ we can
 work out the solution. We will see examples later on.
 
-### The Feynman - Kac Theorem
-
-WIP
-
 (multivariate_wiener)=
 ### Multivariate Wiener process 
 
@@ -540,6 +536,58 @@ d W_{1t} &=& d \hat{W}_{1t} \nonumber \\
 d W_{2t} &=& \rho d \hat{W}_{1t} + \sqrt{1-\rho^2}  d \hat{W}_{2t}
 \end{aligned}$$
 
+(sde)=
+## Stochastic differential equations
+
+As pointed out in the introduction to the chapter, after studying the Wiener process now we have the tools to model the dynamics of a random or stochastic process $X_t$ using stochastic differential equations (SDEs) of the general form:
+
+$$ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t$$
+
+which generalizes the deterministic differential equation adding a noise term modelled using the Wiener process. Solving a SDEs means working out the distribution of $X_t$ at arbitraty times given some initial conditions, which for arbitrary choices of $\mu(X_t, t)$ and $\sigma(X_t,t)$ can only be solved numerically, for instance using Monte-Carlo sampling techniques. In the next section we will see particular SDEs that are analytically tractable.
+
+
+(feynman_kac)=
+## The Feynman - Kac Theorem
+
+The Feynman-Kac theorem provides a link between partial differential equations and stochastic processes, specifically, between certain types of PDEs and expectations of integrals of the Wiener process. Its usefulness extends to subjects like physics and finance, where it is used to introduce statistical interpretations of solutions to deterministic systems. 
+
+Specifically, the Feynman - Kac theorem it relates the solution $u(x,t)$ of the PDE
+
+$$\frac{\partial u}{\partial t} + \mu(x,t) \frac{\partial u}{\partial x} + \frac{1}{2} \sigma^2(x,t) \frac{\partial^2 u}{\partial x^2} - r(x,t)u = 0$$
+
+with the boundary condition $u(x,T) = f(x)$, to the expected value
+
+$$u(x,t) = \mathbb{E}\left[ e^{-\int_t^T r(X_s,s) ds} f(X_T) \Big| X_t = x \right]$$
+
+where $X_t$ satisfies the general SDE introduced in section  {ref}` stochastic differential equation (SDE):
+
+$$ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t$$
+
+To prove it we use Ito's lemma to compute the differential of the ansatz $Y_s = e^{-\int_t^s r(X_v,v) dv} u(X_s, s)$:
+
+$$\begin{aligned}
+d Y_s = -r(X_s,s) e^{-\int_t^s r(X_v,v) ds}  u(X_s, s) ds \\ + e^{-\int_t^u r(X_v,v) dv} \left(\frac{\partial u}{\partial s} d s + \frac{\partial u}{\partial  X_s} dX_s + \frac{1}{2} \frac{\partial ^2 u}{\partial X_s^2} \sigma^2(X_s,s) ds\right) 
+\end{aligned}$$
+
+which we can rewrite as
+$$\begin{aligned}
+d Y_s = e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s) dW_s + \\
+ e^{-\int_t^s r(X_v,v) dv} \left(-r(X_s, s) u + \frac{\partial u}{\partial  s} + \frac{\partial u}{\partial  X_s} \mu(X_s,s)+ \frac{1}{2} \frac{\partial ^2 u}{\partial X_s^2} \sigma^2(X_s,s)  \right) ds = \\ 
+  e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s) dW_s
+\end{aligned}$$
+
+where we have used that $u$ is the solution to the above PDE to make the term in parenthesis zero. We can now integrate this equation from t to T:
+
+$$\begin{aligned}
+\int_t^T d Y_s = Y_T - Y_t = \int_t^T e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s) dW_s 
+\end{aligned}$$
+
+If we take now expectations, the right hand term is zero by using the properties of the integral of the Wiener process show in previous sections. Therefore:
+
+$$\mathbb{E}[Y_T|X_t = x] = Y_t$$
+
+i.e. $Y_t$ is a martingale. But this is actually the Feynman - Kac solution if we replace $Y_t$ by its definition, since $u(X_T, T) = f(X_T)$, which completes the proof. 
+
 ## Basic stochastic processes
 
 ### Brownian motion with drift
@@ -567,7 +615,7 @@ which again follows a Gaussian distribution:
 
 $$S_t \sim N(S_0 + \int_0^t \mu_u du, \int_0^t \sigma_u^2 du)$$ 
 
-where we have used the properties of the stochastic integral discussed in section {ref}`integrals_wiener`.
+where we have used the properties of the stochastic integral discussed in section {ref}`sde`:
 
 #### Connection to Gaussian processes
 
