@@ -57,7 +57,7 @@ parts:
     - file: markdown/optimal_portfolios.md
 
 - caption: Glossary and References
-  numbered: true
+  numbered: false
   chapters:
     - file: markdown/glossary.md
     - file: markdown/references.md

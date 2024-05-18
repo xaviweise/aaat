@@ -12,13 +12,11 @@ This definition was suitable for situations like dice games where 1) the outcome
 
 This limitation would motivate several thinkers to consider alternative ways to compute probabilities. One emerging school lead by the work of Bernoulli would explore the link between probabilities of events and the
 relative frequency of observation of this event in repeatead observations. This would be the foundation of the so-called frequentist school of probability and statistics, which eventually would motivate
-philosophers like Venn or statisticians like Fisher to make frequencies the definition of probabilities. Such a departure was slightly at odds with Bernoulli, who simply proposed that frequencies could be a way to compute probabilities in specific set-ups. However, the appeal of
-frequencies to define probability laid in their apparent objectivity, which was in contrast with a parallel school of thought started by reverend Bayes also in the 18th century, and formalized and extended by Laplace, where probabilities were considered degrees of belief, and
-therefore always had an element of subjectivity from the observer. The advantage of such Bayesian way of thinking about probability is that it would make it available to many other setups apart from games of chance
-or repeated experiments, reconciling it with the intuitive way our brains think about uncertainty, where probability can be perfectly defined for events that only happen once, as tomorrow's weather or a
-candidate winning an election, or scientific hypothesis that are validated using observational data but cannot be repeated in a controlled lab setup, as happens in astronomical science.
+philosophers like Venn or statisticians like Fisher to make frequencies the definition of probabilities. 
 
-Precisely is in the scientific contexts where some of the first obvious issues with the frequentist approach would become apparent. Take for instance an example discussed in [@SilviaBayesian] in detail, entailing
+Such a departure was slightly at odds with Bernoulli, who simply proposed that frequencies could be a way to compute probabilities in specific set-ups. However, the appeal offrequencies to define probability laid in their apparent objectivity, which was in contrast with a parallel school of thought started by reverend Bayes also in the 18th century, and formalized and extended by Laplace, where probabilities were considered degrees of belief, and therefore always had an element of subjectivity from the observer. The advantage of such Bayesian way of thinking about probability is that it would make it available to many other setups apart from games of chance or repeated experiments, reconciling it with the intuitive way our brains think about uncertainty, where probability can be perfectly defined for events that only happen once, as tomorrow's weather or a candidate winning an election, or scientific hypothesis that are validated using observational data but cannot be repeated in a controlled lab setup, as happens in astronomical science.
+
+Precisely is in the scientific contexts where some of the first obvious issues with the frequentist approach would become apparent. Take for instance an example discussed in {cite:p}`SilviaBayesian` in detail, entailing
 the estimation of the mass of Saturn. The mass of Saturn is not a random variable, it is (at our time measurement scales) a constant. The frequentist definition cannot be used directly on the mass of Saturn,
 but still some sort of \"statistical\" estimation is needed since the observations from orbital data are noisy. Laplace would precisely use Bayesian probability to make a (surprisingly good) estimation of this
 quantity.
@@ -58,6 +56,7 @@ we can write the product rule either way in terms of X or Y:
 $$P(X,Y) = P(X|Y) P(Y) = P(Y|X) P(X)$$ 
 
 Then:
+
 $$P(X|Y) = \frac{P(Y|X) P(X)}{P(Y)}$$ 
 
 which is Bayes's theorem. We also could derive the marginalization rule: 
@@ -75,7 +74,7 @@ $$P(X|I)$$
 If two different rational observers agree on the information set available, then their
 quantification of probability should match. As we will see, such information set typically makes it way into the computation of probabilities via so-called prior probabilities.
 
-For a more extensive discussion on the frequentist vs bayesian debate, reference [@ClaytonBernoulli] is a good starting point. The very book from Jaynes [@Jaynes] is also a good reference who has inspired a generation of Bayesian thinkers, but is less suitable as an introduction
+For a more extensive discussion on the frequentist vs bayesian debate, reference {cite:p}`ClaytonBernoulli` is a good starting point. The very book from Jaynes {cite:p}`Jaynes` is also a good reference who has inspired a generation of Bayesian thinkers, but is less suitable as an introduction
 to the topic. As pointed out in these books, in the end the Bayesian definition of probability is the more general one, and definitions based on counting outcomes or measuring frequencies can be seen as specific
 cases of the formula applicable to particular set-ups. Still, those definitions hold only under certain assumptions made by the person computing the odds or making the observations, assumptions that the
 Bayesian paradigm make explicit instead of hiding them to provide an illusion of objectivity. For example, when we repeatedly throw a coin an measure relative frequencies of heads and tails, we are assuming that
