@@ -217,6 +217,11 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
+</ul>
 
     </div>
 </nav></div>
@@ -656,7 +661,20 @@ better convergence properties (speed, accuracy).</p>
 <div class="math notranslate nohighlight">
 \[\pi_{t_{i+1}} = \frac{\pi_{t_i} + \Delta \theta \hat{\pi}}{1 - \Delta \theta }\]</div>
 <p>We leave as an exercise the solution of the Crank Nicholson scheme for this equation.</p>
-<p>NUMERICAL EXAMPLE COMPARING SCHEMES AND EXACT</p>
+<p>Let us now solve these equations analytically and numerically for particular values, using the forward and backward schemes. First we choose a set of parameters and grid size where both schemes yield accurate results, matching the analytical solution:</p>
+<figure class="align-default" id="fig-num-inflation-targetting-normal">
+<a class="reference internal image-reference" href="../_images/num_inflation_targetting_normal.png"><img alt="../_images/num_inflation_targetting_normal.png" src="../_images/num_inflation_targetting_normal.png" style="width: 5in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6.1 </span><span class="caption-text">Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where both methods approximate well the analytical solution: <span class="math notranslate nohighlight">\(\theta = 0.1, \Delta = 0.1, \hat{\pi} = 2.0, \pi_0 = 5.0\)</span></span><a class="headerlink" href="#fig-num-inflation-targetting-normal" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Let us now increase the grid size and choose another set of parameters to make the numerical approximation more challenging. We can see how the forward scheme deviates substantially from the analytical solution, whereas the backward scheme remains more robust:</p>
+<figure class="align-default" id="fig-num-inflation-targetting-challenging">
+<a class="reference internal image-reference" href="../_images/num_inflation_targetting_challenging.png"><img alt="../_images/num_inflation_targetting_challenging.png" src="../_images/num_inflation_targetting_challenging.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6.2 </span><span class="caption-text">Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where a numerical approximation is more challenging, to show the advantages of the backward scheme: <span class="math notranslate nohighlight">\(\theta = 1, \Delta = 1, \hat{\pi} = 2.0, \pi_0 = 5.0\)</span></span><a class="headerlink" href="#fig-num-inflation-targetting-challenging" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 <section id="the-wiener-process">
@@ -854,16 +872,26 @@ Wiener process, namely:</p>
 <span id="simulation-wiener"></span><h3><span class="section-number">6.3.8. </span>Simulation of the Wiener process<a class="headerlink" href="#simulation-of-the-wiener-process" title="Permalink to this heading">#</a></h3>
 <section id="univariate-processes">
 <h4><span class="section-number">6.3.8.1. </span>Univariate processes<a class="headerlink" href="#univariate-processes" title="Permalink to this heading">#</a></h4>
-<p>We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid <span class="math notranslate nohighlight">\(t_i = t_0 + \Delta * i\)</span>, <span class="math notranslate nohighlight">\(i = 0, .., N\)</span>, where <span class="math notranslate nohighlight">\(\Delta = \frac{t_1 - t_0}{N}\)</span>, we can exploit directly the Wiener process properties to get:</p>
+<p>We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid <span class="math notranslate nohighlight">\(t_i = t_0 + \Delta * i\)</span>, <span class="math notranslate nohighlight">\(i = 0, .., N\)</span>, where <span class="math notranslate nohighlight">\(\Delta = \frac{t_N - t_0}{N}\)</span>, we can exploit directly the Wiener process properties to get:</p>
 <div class="math notranslate nohighlight">
 \[dW_t \rightarrow W_{t_{i+1}} - W_{t_i} \sim N(0, \Delta)\]</div>
 <p>So we can simulate numerically the Wiener process simply as:</p>
 <div class="math notranslate nohighlight">
 \[W_{t_{i+1}} =  W_{t_i} + \sqrt{\Delta} Z\]</div>
-<p>where <span class="math notranslate nohighlight">\(Z\)</span> is a standard normal distribution.</p>
-<p>SIMULATION DISCRETE</p>
+<p>where <span class="math notranslate nohighlight">\(Z\)</span> is a standard normal distribution. The following plot simulates the Wiener process numerically for a few different paths:</p>
+<figure class="align-default" id="fig-wiener-univariate">
+<a class="reference internal image-reference" href="../_images/wiener_univariate.png"><img alt="../_images/wiener_univariate.png" src="../_images/wiener_univariate.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6.3 </span><span class="caption-text">Simulation of five different paths of the the Wiener process using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 100\)</span>, <span class="math notranslate nohighlight">\(W_0 = 0\)</span></span><a class="headerlink" href="#fig-wiener-univariate" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <p>Alternatively, we can simulate complete paths of the Wiener process by exploiting its connection to Gaussian processes. Using a Gaussian process framework we get the following results:</p>
-<p>SIMULATION GAUSSIAN PROCESS</p>
+<figure class="align-default" id="fig-wiener-gp">
+<a class="reference internal image-reference" href="markdown/figures/wiener_gp.png"><img alt="markdown/figures/wiener_gp.png" src="markdown/figures/wiener_gp.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6.4 </span><span class="caption-text">Simulation of five different paths of the the Wiener process using the same parameters, but sampling from a Gaussian process with a Wiener <span class="math notranslate nohighlight">\(min(t_1, t_2)\)</span> kernel</span><a class="headerlink" href="#fig-wiener-gp" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="multivariate-processes">
 <h4><span class="section-number">6.3.8.2. </span>Multivariate processes<a class="headerlink" href="#multivariate-processes" title="Permalink to this heading">#</a></h4>
