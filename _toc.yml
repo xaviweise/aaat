@@ -65,5 +65,6 @@ parts:
 - caption: Notebooks
   numbered: false
   chapters:
+    - file: notebooks/stochastic_calculus.ipynb
     - file: notebooks/fair_price_estimation.ipynb
     
