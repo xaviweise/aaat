@@ -242,7 +242,7 @@ Let us now increase the grid size and choose another set of parameters to make t
 ```{figure} figures/num_inflation_targetting_challenging.png
 :name: fig:num_inflation_targetting_challenging
 :width: 5in
-Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where a numerical approximation is more challenging, to show the advantages of the backward scheme: $\theta = 1, \Delta = 1, \hat{\pi} = 2.0, \pi_0 = 5.0$
+Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where a numerical approximation is more challenging, to show the advantages of the backward scheme: $\theta = 10, \Delta = 0.1, \hat{\pi} = 2.0, \pi_0 = 5.0$
 ```
 
 
