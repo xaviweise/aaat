@@ -229,7 +229,22 @@ $$\pi_{t_{i+1}} = \frac{\pi_{t_i} + \Delta \theta \hat{\pi}}{1 - \Delta \theta }
 
 We leave as an exercise the solution of the Crank Nicholson scheme for this equation.
 
-NUMERICAL EXAMPLE COMPARING SCHEMES AND EXACT
+Let us now solve these equations analytically and numerically for particular values, using the forward and backward schemes. First we choose a set of parameters and grid size where both schemes yield accurate results, matching the analytical solution:
+
+```{figure} figures/num_inflation_targetting_normal.png
+:name: fig:num_inflation_targetting_normal
+:width: 5in
+Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where both methods approximate well the analytical solution: $\theta = 0.1, \Delta = 0.1, \hat{\pi} = 2.0, \pi_0 = 5.0$
+```
+
+Let us now increase the grid size and choose another set of parameters to make the numerical approximation more challenging. We can see how the forward scheme deviates substantially from the analytical solution, whereas the backward scheme remains more robust:
+
+```{figure} figures/num_inflation_targetting_challenging.png
+:name: fig:num_inflation_targetting_challenging
+:width: 8in
+Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where a numerical approximation is more challenging, to show the advantages of the backward scheme: $\theta = 1, \Delta = 1, \hat{\pi} = 2.0, \pi_0 = 5.0$
+```
+
 
 ## The Wiener Process
 
@@ -465,7 +480,7 @@ where we have used $\int_0^t (t-u)^2 du = \frac{t^3}{3}$
 
 #### Univariate processes
 
-We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid $t_i = t_0 + \Delta * i$, $i = 0, .., N$, where $\Delta = \frac{t_1 - t_0}{N}$, we can exploit directly the Wiener process properties to get:
+We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid $t_i = t_0 + \Delta * i$, $i = 0, .., N$, where $\Delta = \frac{t_N - t_0}{N}$, we can exploit directly the Wiener process properties to get:
 
 $$dW_t \rightarrow W_{t_{i+1}} - W_{t_i} \sim N(0, \Delta)$$ 
 
@@ -473,13 +488,20 @@ So we can simulate numerically the Wiener process simply as:
 
 $$W_{t_{i+1}} =  W_{t_i} + \sqrt{\Delta} Z$$ 
 
-where $Z$ is a standard normal distribution.
+where $Z$ is a standard normal distribution. The following plot simulates the Wiener process numerically for a few different paths:
 
-SIMULATION DISCRETE
-
+```{figure} figures/wiener_univariate.png
+:name: fig:wiener_univariate
+:width: 8in
+Simulation of five different paths of the the Wiener process using $t_0=0$ $t_N=1$, $N = 100$, $W_0 = 0$
+```
 Alternatively, we can simulate complete paths of the Wiener process by exploiting its connection to Gaussian processes. Using a Gaussian process framework we get the following results:
 
-SIMULATION GAUSSIAN PROCESS
+```{figure} figures/wiener_gp.png
+:name: fig:wiener_gp
+:width: 8in
+Simulation of five different paths of the the Wiener process using the same parameters, but sampling from a Gaussian process with a Wiener $min(t_1, t_2)$ kernel
+```
 
 #### Multivariate processes
 
