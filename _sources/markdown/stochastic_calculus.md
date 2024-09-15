@@ -233,7 +233,7 @@ Let us now solve these equations analytically and numerically for particular val
 
 ```{figure} figures/num_inflation_targetting_normal.png
 :name: fig:num_inflation_targetting_normal
-:width: 5in
+:width: 8in
 Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where both methods approximate well the analytical solution: $\theta = 0.1, \Delta = 0.1, \hat{\pi} = 2.0, \pi_0 = 5.0$
 ```
 
@@ -241,7 +241,7 @@ Let us now increase the grid size and choose another set of parameters to make t
 
 ```{figure} figures/num_inflation_targetting_challenging.png
 :name: fig:num_inflation_targetting_challenging
-:width: 5in
+:width: 8in
 Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where a numerical approximation is more challenging, to show the advantages of the backward scheme: $\theta = 10, \Delta = 0.1, \hat{\pi} = 2.0, \pi_0 = 5.0$
 ```
 
@@ -966,3 +966,5 @@ WIP
 [^1]: The demonstration is relatively straight-forward by computing the characteristic function of a sum of independent random Gaussian variables
 
 [^2]: Actually the bias corrected one, which can be achieved by the factor $N/(N-1)$ as it is well known that the MLE estimator of the variance of a Gaussian distribution is biased, i.e. $\mathbb{E}[\sigma_{MLE}^2] = \frac{N-1}{N} \sigma^2$. The Bayesian derivation in this regard is more consistent than the MLE estimation. Notice that the MLE estimator actually corresponds to $\beta_N/\alpha_N$ in the case of a non-informative prior
+
+

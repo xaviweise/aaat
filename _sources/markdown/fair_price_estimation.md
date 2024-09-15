@@ -10,6 +10,23 @@ The issue, though, is that price indications and trades cannot be considered the
 
 These makes all these price observations noisy estimates of the fair price, so if we want to estimate a fair price out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what a Kalman filter does. 
 
+### Pricing sources and models
+
+#### LOB traded
+
+
+#### RfQ traded
+
+##### Composites
+
+##### RfQs
+
+##### Trades
+
+##### HitMiss
+
+#### Correlated instruments
+
 ### The Kalman Filter model for pricing
 
 The Kalman filter was introduced in chapter ... 
@@ -32,19 +49,7 @@ observation of the second instrument on the first one: $$\begin{aligned}
 \hat{P}^{t}_{1,t} = \hat{P}^{t-1}_{1,t} + \frac{1}{1-(\rho_t^{t-1})^2 + (\frac{\sigma_{v,1}}{\sigma_{1,t}^{t-1}})^2}\left((1-(\rho_t^{t-1})^2)(O_{1,t} - \hat{P}^{t}_{1,t}) + \rho_t^{t-1} \frac{\sigma_{v,1}^2}{\sigma_{1,t}^{t-1} \sigma_{2,t}^{t-1}}(O_{2,t} - \hat{P}^{t}_{2,t})  \right)  \nonumber \\
 \end{aligned}$$
 
-### Pricing sources and models
 
-#### Composites
-
-#### RfQs
-
-#### Trades
-
-#### LOBs
-
-#### HitMiss
-
-#### Correlated instruments
 
 ## Derivatives pricing
 
@@ -111,15 +116,36 @@ $$ P_t^i = -\frac{1}{\gamma_i} \log \left(\frac{1}{2}e^{-\gamma_i} + \frac{1}{2}
 
 For a risk-neutral investor, by making $\gamma_i \rightarrow 0$, we get simply $P_t^i = 1/2$, which makes sense: the investor is willing to pay 0.5$ to make the game <em>fair</em>. Or in other terms, to make the expected value of the game zero. A fully risk averse investor for whom $\gamma_i \rightarrow \infty$ has $P_t = 0$, i.e. only is willing to buy the contract when there is guarantee of no losses under any scenario. In the middle, the premium lies between those two values: the investor will be willing to pay more than 0$ to trade, as far as the payoff is skewed in its favor. 
 
+#### Example: Forward on a non-dividend paying stock
+
+Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock \footnote{We consider non-dividend paying stocks for simplicity, the extension of the theory to dividend paying stocks is relatively straightforward}. The buyer of a forward has the obligation to buy a stock at the expire $T$ at a pre-agreed price $K$. Therefore, the payoff function reads:
+
+$$ f(S_T) = S_T - K$$
+
+The maximum premium that the investor is willing to pay reads then:
+
+$$ P_t^i = - \frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i e^{-r(T-t)}(S_T-K)} $$
+
+which in the case of a risk-neutral investor reduces to:
+
+$$ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)}(S_T-K) = e^{-r(T-t)}(E[S_T] - K) 
+$$
+
+i.e. the price is simply the discounted expected pay-off. The expectation represents the belief from the investor on the value of the stock at expiry, and it is model-free, i.e. we don't need to specify a model for the evolution of the stock to compute the maximum premium, although of course an investor could be using a model to compute it. The value of the premium has the following dependencies:
+* The larger the expected value of the stock at T, the more the investor is willing to pay for the forward
+* The larger the risk-free interest rate $r$, the lower the investor is willing to pay for the forward, since the present value of the payoff is reduced
+* The larger the strike, the less attractive is the forward purchase and therefore the less the investor is willing to pay for it.
+
+
 #### Example: European Call Options
 
-Let us now focus in a more realistic case, and find the premium for an European Call option on a stock, which has the payoff:
+The calculation for a forward was relatively tractable since the payoff of the derivative was linear on the stock. What about non-linear payoffs? This is the case for instance of an European Call option on a stock, which has the payoff:
 
 $$ f(S_T) = (S_T - K)^+ $$
 
 where $K$ is the strike of the option. The risk-averse investor will be willing to pay the dealer a maximum premium of:
 
-$$ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}(S_T-K)^+\right)} $$ 
+$$ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i e^{-r(T-t)}(S_T-K)^+} $$ 
 
 In the limit of a risk-neutral investor, the premium is:
 
@@ -171,9 +197,9 @@ where we have used the property $1-N(-x) = N(x)$. Let us analyze this formula, w
 
 * Risk-free interest rate $r$: as the risk-free interest rate increases, the premium decreases. A higher risk-free rate reduces the present value of the option payoff, making the option less attractive.
 
-* Stock drift $\mu$: as the stock drift increases, the premium increases, since it is more likely that the option will be exercised. 
+* Expected stock drift $\mu$: as the stock drift increases, the premium increases, since it is more likely that the option will be exercised. 
 
-* Volatility $\sigma$: as volatility increases, the premium increases. Higher volatility increases the probability of the stock price moving significantly, which benefits the option holder.
+* Expected volatility $\sigma$: as volatility increases, the premium increases. Higher volatility increases the probability of the stock price moving significantly, which benefits the option holder.
 
 We plot those dependencies in the following picture:
 
@@ -183,7 +209,190 @@ We plot those dependencies in the following picture:
 Dependencies of a call option premium for a risk neutral investor, derived as the maximum premium the investor is willing to pay (reservation or indifference price). We use the parameters $S_t=100$, $K =100$, $T-t = 1$ in years, $r = 0.05$, $\mu = 0.1$, $\sigma = 0.2$.
 ```
 
-### The Black & Scholes model
+### The arbitrage-free theory of derivatives pricing
+
+When we were applying the utility indifference theory of derivatives pricing to both parties agreeing in the transaction, the investor and the dealer, we found the issue that according to this theory, there would be a trade only if both of them are risk averse, since they are taking opposite sides of the bet on the payoff result. In reality, both dealers are investors are generally risk-averse and we observe transactions, so what are we missing in our theory?
+
+The answer, as we anticipated above, is that the dealer is not really simply taking the opposite of the bet. There are mainly two ways a dealer will conduct this business:
+* If the market on derivatives is relatively liquid in both sides, with plenty of investors willing to take the long or short position in the derivative over periods much shorter than the expiry, the dealer will act as a market-maker of the derivatives. In this case, the dealer will quote bid and asks prices for the derivatives that compensate it for the provision of liquidity with its own capital, incurring potential inventory risk or informatio asymmetry risk
+* If the market is one-sided and / or iliquid, in the sense of having a small number of potential transactions before the expiry of the contract, the dealer will try to hedge the risk using other financial instruments available.
+* In practice, a combination of both situations will also happen often
+
+As we discussed in the first part of this chapter, if we are in the first situation, we might not need a derivatives pricing model since we can extract the prices of derivatives directly from observations of trades or request for quotes that are not closed. It is the second case where we need a theory of derivatives pricing that takes into account potential hedging strategies that mitigate the risk of the dealer. We anticipate then that in this framework, the minimum price or premium that the dealer will accept to sell the derivative will be one that compensates it for the costs of hedging plus the residual risk.
+
+More interestingly, we will see that in some cases, under certain theoretical situations, a perfect hedging strategy might exist, so the minimum price will be exactly the cost of the hedging strategy, which in this setup is also called the perfect replication strategy (since a perfect hedging implies no risk, and therefore a replication of the payoff using other financial instruments). A consequence of the existence of such replication strategy is that dealers are forced to price derivatives consistently, otherwise they would be generating risk-free arbitrage opportunities where other dealers who price correctly the derivative trade with the one misspricing it, and pocket the difference without risk. Hence, this theory of derivatives pricing is also called the arbitrage-free theory of derivatives pricing.
+
+Let us revisit the case of forwards and options under this optic.
+
+#### Example: Forward on a non-dividend paying stock
+
+Under the modelling hypothesis used in the previous sections to value the premium of a forward, namely, that 1) the interest risk is locked during the period of the forward, 2) there is no counteparty risk, i.e. no risk that the investor will not satisfy its obligations, then there is actually a simple replication strategy that hedges all the risk of the contract. If the dealer is selling the forward to the investor, therefore guaranteeing a price $K$ to buy a share at time $T$, then:
+
+* Borrows $S_t$ dollars in the repo monetary markets at interest rate $r$ during the period of the forward. We assume that interest accrues daily but is settled at the expiry. The stock bought is used as colateral in the repo.
+* Buys the underlying stock with this money at inception, paying $S_t$
+* At the expiry of the forward it delivers the stock to the investor, receives $K$ and repays the loan plus remaining interests
+
+If we consider that daily accruing of interest can be well approximated by continuous accruing, then the investor needs to repay at $T$ an amount $S_t e^{r(T-t)}$. The payoff for the dealer at the expiry is therefore:
+
+$$ K - S_t e^{r(T-t)}$$
+
+which is deterministic under the hypotheses of the model. A rational dealer of course will not accept a determinist loss, so the minimum premium that will command for this contract is the discounted value of this payoff:
+
+$$P_{F,t} = K e^{-r(T-t)} - S_t$$
+
+In practice, forward markets work by quoting the strike such that the premium is zero, hence:
+
+$$ F_t \equiv K = S_t e^{r(T-t)} $$
+
+This is the arbitrage-free price of a forward contract. As mentioned above, it is called arbitrage-free since any other price would represent a risk-free arbitrage opportunity for other dealer. For example, let's assume this dealer quotes a $\bar{K}_t < K_t$. Another dealer could buy the forward from the dealer, and use the opposite replication strategy: 
+
+* Borrow the stock in repo and sell it in the market at price $S_t$ to fund the repo. 
+* At time $T$ close the repo with the stock delivered by the dealer selling the forward, receive $S_t e^{r(T-t)}$ in cash and pay $\bar{K}_t$. 
+
+The payoff for this dealer is then:
+
+$$  S_t e^{r(T-t)} - \bar{K}_t >  S_t e^{r(T-t)} - S_t e^{r(T-t)}  = 0$$
+
+i.e. a risk-free profit!
+
+### Example: European Call Options
+
+In the case of options there is no such obvious static replication strategy if we are only allowed to use the underlying stock and repo contracts. By static replication strategy we mean that we don't need to modify the positions of the replication portfolio (the stock and the repo) during the life of the forward. If we are able to trade other derivatives there is actually a static replication strategy. If the dealer sells the call option to an investor, then immediately
+* Buys to other dealer a put option with the same strike and expiry
+* Buys to another dealer a forward with the same strike and expiry
+
+The payoff at the expiry is:
+
+$$ -(S_T-K)^+ + (K-S_T)^+ + (S_T-K) = 0 $$
+
+meaning that the replication portfolio of a put and a forward replicates the call option. At inception, the dealer is paid for the call a premium $P_{C,t}$ and pays $P_{P,t}$ for the put and $P_{F,t}$ for the forward, hence the payoff at inception is:
+
+$$P_{C,t} - P_{F,t} - P_{F,t}$$
+
+In order to avoid losses, the minimum premium that must command is therefore:
+
+$$P_{C,t} = P_{F,t} + P_{F,t}$$
+
+which is called the put-call parity relationship. The premium for the forward can be derived as discussed in the previous section, however we are left with a sort of chicken and the egg problem with regards to the call and put premiums: given one, we can determine the other, but we don't have yet a replication strategy for the put to derive the call premium, and viceversa. 
+
+If no static replication is available, is it possible to find a dynamical one that reproduces the payoff without uncertainty? Or are we left with strategies that, though they might minimize uncertainty, they don't remove it and therefore we need to go back to our utility indifference theory?
+
+#### The Black - Scholes - Merton Mdodel
+
+Fisher Black and Myron Scholes [@black1973pricing], and separately Robert Merton [@merton1973theory] provided an answer to this question: under certain theoretical conditions, we can indeed find a dynamic replication strategy based on the underlying stock and a risk free account, that reproduces the payoff with no uncertainty. The main conditions are the following:
+* The stock price follows a Geometric Brownian Motion dynamics:
+
+$$ d S_t = \mu S_t dt + \sigma S_t d W_t $$ 
+
+<div style="margin-left: 40px;">
+We have considered the drift $\mu$ and volatility $\sigma$ constant, but the model can be generalized to time-dependent deterministic drifts and volatilities. Other dynamics can also be considered within the same framework. Also, we will consider a non-dividend paying stock, but the model can be adjusted to consider deterministic dividends. </div>
+
+* The replicating portfolio is composed of a position $\Delta_t$ in the underlying stock and a cash account $\beta_t$ from which we can borrow or lend money freely at a determinist risk-free rate $r$:
+
+$$\Pi_t = \Delta_t S_t + \beta_t $$
+
+<div style="margin-left: 40px;"> The model can be generalized easily to time-dependent risk-free interest rates. The original model considers a generic cash account, although in practice is more realistic to assume a repo on the stock is used for funding. </div>
+
+* The position in the stock can be adjusted continuously over the life of the option, without restriction like market trading hours, etc. There are also no transaction costs when buying or selling the stock. There are no restrictions on shorting the stock.
+
+* The replication portfolio is self-financing, meaning that no cash is added or withdrawn from the portfolio after the initial investment. Any proceeds from selling at immediately reinvested in the portfolio.  Mathematically, it means that:
+
+$$ d\Pi_t = \Delta_t d S_t + d \beta_t = \Delta_t d S_t + r \beta_t dt = \Delta_t d S_t + r (\Pi_t - \Delta_t S_t) dt $$
+
+<div style="margin-left: 40px;"> Notice that the position in the stock depends on time, but is always adjusted ex-post, i.e. after the market moves. </div>
+
+* There is no counterparty default risk, i.e. the investor and the dealer will pay whatever obligations they have at the end of the option
+
+If the portfolio $\Pi_t$ indeed replicates the option payoff at the maturity $T$ in any scenario, we must have $\Pi_T = C_T = (S_T - K)^+$, where we have considered a Call option but the argument applies to any other payoff function. But since by constructio the portfolio $\Pi_t$ is self-financing, then if such dynamic strategy exists we must have $\Pi_t = C_t$ for any time $t \leq T$. Otherwise, there would be a risk-free arbitrage opportunity, e.g. selling the option at price $C_t$ in the case $C_t > \Pi_t$, buying with the cash from the premium the replicating portfolio $\Pi_t$ and making an instantaenous gain of the difference $C_t - \Pi_t$. The same reasoning applies $C_t < \Pi_t$, only in this case we buy the option paying a discounted premium. Therefore, if we can find such strategy we immediately solve the problem of option pricing, since the premium is equal to the cost of replication by using the non-arbitrage opportunity argument. 
+
+The condition $\Pi_t = C_t$ is equivalent to $\Pi_T = C_T$ and $d \Pi_t = dC_t$. Additionally, this equality implies that $C_t = C(t, S_t)$, i.e. the premium of the option has to be a function of time and the contemporary value of the stock. We can then use Ito's lemma to further understand the requirements for such strategy to exist: 
+
+$$
+d C_t = \frac{\partial C_t}{\partial t} dt + \frac{\partial C_t}{\partial S_t} dS_t + \frac{1}{2}\frac{\partial^2 C_t}{\partial^2 S_t} \sigma^2 S_t^2 dt = d\Pi_t = \Delta_t d S_t + r\beta_t dt
+$$
+
+Grouping the terms dependent on $dt$ and $d S_t$ separately we have:
+
+$$
+\left(\frac{\partial C_t}{\partial t} + \frac{1}{2} \sigma^2 S_t^2 \frac{\partial^2 C_t}{\partial^2 S_t} +r\beta\right) dt  + \left(\frac{\partial C_t}{\partial S_t} - \Delta_t\right) dS_t = 0
+$$
+
+Since the equality must apply for any arbitrary $dt$ and $dS_t$, each term in parenthesis must cancel separately. Starting with the right hand term we have:
+
+$$\Delta_t = \frac{\partial C_t}{\partial S_t} $$
+
+which is call the delta-hedging condition, given its obvious connection with linear hedging strategies where we try to neutralize the exposure of a financial portfolio to a risk factor like the stock price in this case. Delta hedging the portfolio we ensure that its value is independent on the random dynamics of the stock, at least during an infinitesimal time. However, a strategy that delta-hedges at every time the portfolio is not necessarily self-financing, i.e. we might need to add extra cash during the life of the portfolio. The problem is that a priori the cash required for delta-hedging would depend on the path of the stock, making it a random variable. In that case the premium would also be a random quantity with a certain distribution. 
+
+In order to have a deterministic premium the portfolio has to be self-financing, which requires that the first term of the equality above is also zero, namely: 
+
+$$ \frac{\partial C_t}{\partial t} + \frac{1}{2} \sigma^2 S_t^2 \frac{\partial^2 C_t}{\partial^2 S_t} + r \frac{\partial C_t}{\partial S_t} = rC_t $$
+
+where we have used the self-financing condition $\beta_t = \Pi_t - \Delta_t S_t = C_t - \frac{\partial C_t}{\partial S_t} S_t$. The resulting equation is the celebrated Black-Scholes-Merton (BSM) partial differential equation. Solving this equation with the terminal condition $C_T = (S_T - K)^+$ allows us to compute the value of the premium for any time $t \leq T$ deterministically. Therefore, by virtue of the replicating portfolio and non-arbitrage opportunity arguments, if the Black-Scholes-Merton conditions are satisfied the price of an option is no longer a random quantity as in the utility indifference framework. 
+
+Before discussing the solution to this equation, we can get another insight simply by inspecting it: the option premium does not depend on the drift $\mu$ of the stock, only the volatility. In the utility indifference framework, the estimation of the drift plays a big role in the price that the investor is willing to pay for the option, since it affects the probability of exercising or not the option. However, for a dealer pricing the option, as far as the BSM framework holds, the directionality of the market is irrelevant since the strategy guarantees a replication of the payoff in any scenario by investing the premium into the BSM dynamic portfolio and implementing the dynamic strategy. 
+
+#### Solving the Black-Scholes-Merton equation
+
+There are different ways to solve the BSM equation. Most introductory textbooks on the topic (see for exammple [@joshi2003concepts], [@wilmott2007introduces]) follow the derivation used in the seminal paper that uses an ansatz for the solution that transforms the equation into the heat-equation, whose analytical solution is well-known [@evans2010partial]. Here, we will take a different approach and use the Feynman - Kac theorem introduced in Chapter (#stochastic_calculus), section (#feynman_kac). Recall that the Feynman - Kac theorem provides a general solution to a family of partial differential equations in term of an expected value. In the interest of the reader we review it again here: the solution to the PDE
+
+$$\frac{\partial u}{\partial t} + \mu(x,t) \frac{\partial u}{\partial x} + \frac{1}{2} \sigma^2(x,t) \frac{\partial^2 u}{\partial x^2} - r(x,t)u = 0$$
+
+with the boundary condition $u(x,T) = f(x)$, is the following expected value
+
+$$u(x,t) = \mathbb{E}\left[ e^{-\int_t^T r(X_s,s) ds} f(X_T) \Big| X_t = x \right]$$
+
+where $X_t$ satisfies the general stochastic differential equation:
+
+$$ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t$$
+
+The BSM equation is a specific case of this general PDE where $X_t \rightarrow S_t$, $u(x,t) \rightarrow C(s, t)$, $\mu(x,t) \rightarrow r$, $\sigma(x,t) \rightarrow \sigma$, $r(x,t) \rightarrow r$. The solution of the BSM equation can be expressed as:
+
+$$ C(s, t) = \mathbb{E}\left[ e^{-r(T-t)} (S_T - K)^+ \Big| S_t = s \right]$$
+
+where $S_t$ satisfies the SDE:
+
+$$ d S_t = r S_t dt + \sigma S_t dW_t$$
+
+The first crucial observation is that the solution is remarkably close to the one analyzed in the context of utility indifference pricing for a risk-neutral investor, with one caveat: the expected value is taken with respect to a SDE for the stock price that has the drift $\mu$ replaced by the risk-free interest $r$. In the former, the investor was taking the risk of the contract, but was indifferent to risk. In the latter, the dealer might be risk averse, but since the BSM dynamic hedging strategy neutralizes the risk (if the hypotheses are correct), there is no risk taken, only a deterministic cost to execute the hedging strategy, which is charged to the investor as the premium (plus potentially a margin for the service). In the jargon, the dealer prices the derivative as a risk-neutral investor if it computes probabilities in a different probability measure, where the drift is $r$. Such measure is usually called the risk-neutral measure. This framework for derivatives pricing can be generalized to other derivatives, allowing dealers to compute prices directly skipping the construction of the hedging portfolio and solving the PDE. It is appropiately referred as risk-neutral derivatives pricing. 
+
+From a financial point of view, though, it is convenient not to lose the connection to the dynamic hedging strategy, since the validity of this theory is linked to the validity of the hypotheses done to derive the PDE. If we are interested in introducing more realistic dynamics into the pricing, like non-continous hedging and transaction costs, we need to start again from the point of view of the replication portfolio and the hedging strategy. When those hypotheses are relaxed, though, we come back to a probability distribution to characterize the premium of the option instead of a deterministic one, the latter being one of the main remarkable results of the BSM theory. 
+
+The computation of the expectation value for the option premium can be reused from the one done in the context of utility indifference pricing, simply by substituting $\mu \rightarrow r$ in the expressions: 
+
+$$C(S_t,t)= S_t N(d_1(\mu))-K e^{-r(T-t)} N(d_2(\mu)) $$
+
+where:
+
+$$d_1(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r - \frac{\sigma^2}{2})(T-t)\right) $$
+
+$$d_2(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r + \frac{\sigma^2}{2})(T-t)\right) $$
+
+This is the infamous Black-Scholes-Merton option pricing formula. It provides dealers with option prices that depend on
+
+* the current stock price $S_t$
+* the expected volatility of the stock $\sigma$
+* the risk-free interest rate $r$
+* the time to maturity $T-t$ 
+*  the option strike $K$.
+
+ It does not depend on the stock drift $\mu$, i.e. the expected trend of the market. This is because in the BSM framework, the dealer uses the dynamic hedging strategy to make the portfolio risk-free and therefore shielded from any market trend. 
+ 
+ Again, we must emphasize that despite the similarity with the risk-neutral option premium computed in the utility indifference framework, in the BSM framework the dealer is not computing the premium based on real probability scenarios of stock prices. The connection between replicating strategies and expectation values provided by the Feynman - Kac theorem is a useful mathematical result that simplifies the computation of derivatives premia in the BSM framework. But they shall not be interpreted in the sense of real probabilities (or probabilities in the real probability measure, as they are also referred to).
+
+ The dependencies of the option formula for a European call option with respect to the parameters are similar to the ones seen in the context of utility indifference pricing, with the exception of the dependence with respect to the risk-free interest rate $r$, whose role in the formula goes now beyond cash-flow discounting. In the following picture we compare the premia derived with BSM versus utility indifference pricing:
+
+ ```{figure} figures/bsm_vs_indifference_option.png
+:name: fig:bsm_vs_indifference_option
+:width: 8in
+Option price premium calculated using the utility indifference pricing versus arbitrage-free theroy. The results are shown for an european call option with parameters $S_t=100$, $K =100$, $T-t = 1$ in years, $r = 0.05$, $\mu = 0.1$, $\sigma = 0.2$.
+```
+
+The first main differences is, as commented, the dependence with respect to the risk-free interest: in BSM theory, the premium is more valuable as interest rates increase, wheres in utility indifference pricing it was the other way around. In the latter, interest rates enter the formula to discount the value of future cash-flows. As interest rates grow, the opportunity cost of investing the premium for the future cash-flows of the options increases, since a risk-free deposit generates comparatively a larger yield. In other words, for an investor, the option becomes less attractive and is willing to pay less for it. However, in BSM theory used by dealers to price options, the opposite happens: bigger interest rates make funding the hedging strategy more costly, therefore requiring a larger compensation in terms of premium to execute the replication strategy.
+
+The second big difference is of course the dependence with respect to the expected market drift, since in the BSM theory the premium is independent of it. The resulting plot is interesting because it points out to the resolution of the question of why are options traded in practice, assuming both dealers and investors have the same view of the market. As mentioned before, if both were to value the option as an investment, there would be no agreement on the premium to pay, since they hold opposite sides in the trade. However, if the dealer uses BSM theory there is room for agreement, at least for those investors whose expections on market drifts make the premium requested by the dealer attractive. In the picture, such situation corresponds to those expected drifts that make the premium that an investor is willing to pay larger than the one commaned by the dealer. 
+
+
+#### Using the BSM framework in practice
 
 
 

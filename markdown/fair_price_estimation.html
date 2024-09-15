@@ -217,6 +217,11 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
+</ul>
 
     </div>
 </nav></div>
@@ -413,17 +418,20 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">14.1. Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-of-flow-products">14.2. Pricing of flow products</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter-model-for-pricing">14.2.1. The Kalman Filter model for pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#two-correlated-instruments">14.2.1.1. Two correlated instruments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-sources-and-models">14.2.1. Pricing sources and models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lob-traded">14.2.1.1. LOB traded</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rfq-traded">14.2.1.2. RfQ traded</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#composites">14.2.1.2.1. Composites</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#rfqs">14.2.1.2.2. RfQs</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">14.2.1.2.3. Trades</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#hitmiss">14.2.1.2.4. HitMiss</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-sources-and-models">14.2.2. Pricing sources and models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#composites">14.2.2.1. Composites</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rfqs">14.2.2.2. RfQs</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">14.2.2.3. Trades</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lobs">14.2.2.4. LOBs</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hitmiss">14.2.2.5. HitMiss</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlated-instruments">14.2.2.6. Correlated instruments</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlated-instruments">14.2.1.3. Correlated instruments</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter-model-for-pricing">14.2.2. The Kalman Filter model for pricing</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#two-correlated-instruments">14.2.2.1. Two correlated instruments</a></li>
 </ul>
 </li>
 </ul>
@@ -431,10 +439,20 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-pricing">14.3. Derivatives pricing</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-utility-indifference-theory-of-derivatives-pricing">14.3.1. The utility indifference theory of derivatives pricing</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pricing-of-a-simple-contingent-claim">14.3.1.1. Example: pricing of a simple contingent claim</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.2. Example: European Call Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-forward-on-a-non-dividend-paying-stock">14.3.1.2. Example: Forward on a non-dividend paying stock</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.3. Example: European Call Options</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-model">14.3.2. The Black &amp; Scholes model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-arbitrage-free-theory-of-derivatives-pricing">14.3.2. The arbitrage-free theory of derivatives pricing</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">14.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">14.3.3. Example: European Call Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-mdodel">14.3.3.1. The Black - Scholes - Merton Mdodel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">14.3.3.2. Solving the Black-Scholes-Merton equation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.3.3. Using the BSM framework in practice</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">14.4. Exercises</a></li>
@@ -459,11 +477,35 @@ document.write(`
 <p>For flow products that are relatively liquid, we can aim at extracting all the pricing information from price indications and trades in the market, without having to resort to economic theories of fair value. In this setup, we consider their price the one that market participants are willing to pay for.</p>
 <p>The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair price, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair price is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide of liquidity is thin in the first levels, such estimation is not necessary very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability.</p>
 <p>These makes all these price observations noisy estimates of the fair price, so if we want to estimate a fair price out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what a Kalman filter does.</p>
+<section id="pricing-sources-and-models">
+<h3><span class="section-number">14.2.1. </span>Pricing sources and models<a class="headerlink" href="#pricing-sources-and-models" title="Permalink to this heading">#</a></h3>
+<section id="lob-traded">
+<h4><span class="section-number">14.2.1.1. </span>LOB traded<a class="headerlink" href="#lob-traded" title="Permalink to this heading">#</a></h4>
+</section>
+<section id="rfq-traded">
+<h4><span class="section-number">14.2.1.2. </span>RfQ traded<a class="headerlink" href="#rfq-traded" title="Permalink to this heading">#</a></h4>
+<section id="composites">
+<h5><span class="section-number">14.2.1.2.1. </span>Composites<a class="headerlink" href="#composites" title="Permalink to this heading">#</a></h5>
+</section>
+<section id="rfqs">
+<h5><span class="section-number">14.2.1.2.2. </span>RfQs<a class="headerlink" href="#rfqs" title="Permalink to this heading">#</a></h5>
+</section>
+<section id="trades">
+<h5><span class="section-number">14.2.1.2.3. </span>Trades<a class="headerlink" href="#trades" title="Permalink to this heading">#</a></h5>
+</section>
+<section id="hitmiss">
+<h5><span class="section-number">14.2.1.2.4. </span>HitMiss<a class="headerlink" href="#hitmiss" title="Permalink to this heading">#</a></h5>
+</section>
+</section>
+<section id="correlated-instruments">
+<h4><span class="section-number">14.2.1.3. </span>Correlated instruments<a class="headerlink" href="#correlated-instruments" title="Permalink to this heading">#</a></h4>
+</section>
+</section>
 <section id="the-kalman-filter-model-for-pricing">
-<h3><span class="section-number">14.2.1. </span>The Kalman Filter model for pricing<a class="headerlink" href="#the-kalman-filter-model-for-pricing" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">14.2.2. </span>The Kalman Filter model for pricing<a class="headerlink" href="#the-kalman-filter-model-for-pricing" title="Permalink to this heading">#</a></h3>
 <p>The Kalman filter was introduced in chapter …</p>
 <section id="two-correlated-instruments">
-<h4><span class="section-number">14.2.1.1. </span>Two correlated instruments<a class="headerlink" href="#two-correlated-instruments" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">14.2.2.1. </span>Two correlated instruments<a class="headerlink" href="#two-correlated-instruments" title="Permalink to this heading">#</a></h4>
 <p>In this case, the Kalman gain has the following structure:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
@@ -478,27 +520,6 @@ K_t = \frac{1}{(\sigma_{v,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{v,2}^2 + (\sigm
 observation of the second instrument on the first one: $<span class="math notranslate nohighlight">\(\begin{aligned}
 \hat{P}^{t}_{1,t} = \hat{P}^{t-1}_{1,t} + \frac{1}{1-(\rho_t^{t-1})^2 + (\frac{\sigma_{v,1}}{\sigma_{1,t}^{t-1}})^2}\left((1-(\rho_t^{t-1})^2)(O_{1,t} - \hat{P}^{t}_{1,t}) + \rho_t^{t-1} \frac{\sigma_{v,1}^2}{\sigma_{1,t}^{t-1} \sigma_{2,t}^{t-1}}(O_{2,t} - \hat{P}^{t}_{2,t})  \right)  \nonumber \\
 \end{aligned}\)</span>$</p>
-</section>
-</section>
-<section id="pricing-sources-and-models">
-<h3><span class="section-number">14.2.2. </span>Pricing sources and models<a class="headerlink" href="#pricing-sources-and-models" title="Permalink to this heading">#</a></h3>
-<section id="composites">
-<h4><span class="section-number">14.2.2.1. </span>Composites<a class="headerlink" href="#composites" title="Permalink to this heading">#</a></h4>
-</section>
-<section id="rfqs">
-<h4><span class="section-number">14.2.2.2. </span>RfQs<a class="headerlink" href="#rfqs" title="Permalink to this heading">#</a></h4>
-</section>
-<section id="trades">
-<h4><span class="section-number">14.2.2.3. </span>Trades<a class="headerlink" href="#trades" title="Permalink to this heading">#</a></h4>
-</section>
-<section id="lobs">
-<h4><span class="section-number">14.2.2.4. </span>LOBs<a class="headerlink" href="#lobs" title="Permalink to this heading">#</a></h4>
-</section>
-<section id="hitmiss">
-<h4><span class="section-number">14.2.2.5. </span>HitMiss<a class="headerlink" href="#hitmiss" title="Permalink to this heading">#</a></h4>
-</section>
-<section id="correlated-instruments">
-<h4><span class="section-number">14.2.2.6. </span>Correlated instruments<a class="headerlink" href="#correlated-instruments" title="Permalink to this heading">#</a></h4>
 </section>
 </section>
 </section>
@@ -549,14 +570,33 @@ observation of the second instrument on the first one: $<span class="math notran
 \[ P_t^i = -\frac{1}{\gamma_i} \log \left(\frac{1}{2}e^{-\gamma_i} + \frac{1}{2} \right) = \frac{1}{2} - \frac{1}{\gamma_i}\log \cosh \left(\frac{\gamma_i}{2}\right)\]</div>
 <p>For a risk-neutral investor, by making <span class="math notranslate nohighlight">\(\gamma_i \rightarrow 0\)</span>, we get simply <span class="math notranslate nohighlight">\(P_t^i = 1/2\)</span>, which makes sense: the investor is willing to pay 0.5<span class="math notranslate nohighlight">\( to make the game &lt;em&gt;fair&lt;/em&gt;. Or in other terms, to make the expected value of the game zero. A fully risk averse investor for whom \)</span>\gamma_i \rightarrow \infty<span class="math notranslate nohighlight">\( has \)</span>P_t = 0<span class="math notranslate nohighlight">\(, i.e. only is willing to buy the contract when there is guarantee of no losses under any scenario. In the middle, the premium lies between those two values: the investor will be willing to pay more than 0\)</span> to trade, as far as the payoff is skewed in its favor.</p>
 </section>
+<section id="example-forward-on-a-non-dividend-paying-stock">
+<h4><span class="section-number">14.3.1.2. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#example-forward-on-a-non-dividend-paying-stock" title="Permalink to this heading">#</a></h4>
+<p>Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock \footnote{We consider non-dividend paying stocks for simplicity, the extension of the theory to dividend paying stocks is relatively straightforward}. The buyer of a forward has the obligation to buy a stock at the expire <span class="math notranslate nohighlight">\(T\)</span> at a pre-agreed price <span class="math notranslate nohighlight">\(K\)</span>. Therefore, the payoff function reads:</p>
+<div class="math notranslate nohighlight">
+\[ f(S_T) = S_T - K\]</div>
+<p>The maximum premium that the investor is willing to pay reads then:</p>
+<div class="math notranslate nohighlight">
+\[ P_t^i = - \frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i e^{-r(T-t)}(S_T-K)} \]</div>
+<p>which in the case of a risk-neutral investor reduces to:</p>
+<div class="math notranslate nohighlight">
+\[ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)}(S_T-K) = e^{-r(T-t)}(E[S_T] - K) 
+\]</div>
+<p>i.e. the price is simply the discounted expected pay-off. The expectation represents the belief from the investor on the value of the stock at expiry, and it is model-free, i.e. we don’t need to specify a model for the evolution of the stock to compute the maximum premium, although of course an investor could be using a model to compute it. The value of the premium has the following dependencies:</p>
+<ul class="simple">
+<li><p>The larger the expected value of the stock at T, the more the investor is willing to pay for the forward</p></li>
+<li><p>The larger the risk-free interest rate <span class="math notranslate nohighlight">\(r\)</span>, the lower the investor is willing to pay for the forward, since the present value of the payoff is reduced</p></li>
+<li><p>The larger the strike, the less attractive is the forward purchase and therefore the less the investor is willing to pay for it.</p></li>
+</ul>
+</section>
 <section id="example-european-call-options">
-<h4><span class="section-number">14.3.1.2. </span>Example: European Call Options<a class="headerlink" href="#example-european-call-options" title="Permalink to this heading">#</a></h4>
-<p>Let us now focus in a more realistic case, and find the premium for an European Call option on a stock, which has the payoff:</p>
+<h4><span class="section-number">14.3.1.3. </span>Example: European Call Options<a class="headerlink" href="#example-european-call-options" title="Permalink to this heading">#</a></h4>
+<p>The calculation for a forward was relatively tractable since the payoff of the derivative was linear on the stock. What about non-linear payoffs? This is the case for instance of an European Call option on a stock, which has the payoff:</p>
 <div class="math notranslate nohighlight">
 \[ f(S_T) = (S_T - K)^+ \]</div>
 <p>where <span class="math notranslate nohighlight">\(K\)</span> is the strike of the option. The risk-averse investor will be willing to pay the dealer a maximum premium of:</p>
 <div class="math notranslate nohighlight">
-\[ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}(S_T-K)^+\right)} \]</div>
+\[ P_t^i = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i e^{-r(T-t)}(S_T-K)^+} \]</div>
 <p>In the limit of a risk-neutral investor, the premium is:</p>
 <div class="math notranslate nohighlight">
 \[ P_{0,t}^i = \int dS_T g(S_T) e^{-r(T-t)} (S_T-K)^+ \]</div>
@@ -595,8 +635,8 @@ observation of the second instrument on the first one: $<span class="math notran
 <li><p>Strike price <span class="math notranslate nohighlight">\(K\)</span>: as the strike price increases, the premium decreases. A higher strike price makes the option less valuable since it would cost more to exercise the option.</p></li>
 <li><p>Time to maturity <span class="math notranslate nohighlight">\(T-t\)</span>: as the time to maturity increases, the premium  increases. More time to maturity means more opportunity for the stock price to move favorably.</p></li>
 <li><p>Risk-free interest rate <span class="math notranslate nohighlight">\(r\)</span>: as the risk-free interest rate increases, the premium decreases. A higher risk-free rate reduces the present value of the option payoff, making the option less attractive.</p></li>
-<li><p>Stock drift <span class="math notranslate nohighlight">\(\mu\)</span>: as the stock drift increases, the premium increases, since it is more likely that the option will be exercised.</p></li>
-<li><p>Volatility <span class="math notranslate nohighlight">\(\sigma\)</span>: as volatility increases, the premium increases. Higher volatility increases the probability of the stock price moving significantly, which benefits the option holder.</p></li>
+<li><p>Expected stock drift <span class="math notranslate nohighlight">\(\mu\)</span>: as the stock drift increases, the premium increases, since it is more likely that the option will be exercised.</p></li>
+<li><p>Expected volatility <span class="math notranslate nohighlight">\(\sigma\)</span>: as volatility increases, the premium increases. Higher volatility increases the probability of the stock price moving significantly, which benefits the option holder.</p></li>
 </ul>
 <p>We plot those dependencies in the following picture:</p>
 <figure class="align-default" id="fig-option-indifference-premium">
@@ -607,8 +647,161 @@ observation of the second instrument on the first one: $<span class="math notran
 </figure>
 </section>
 </section>
-<section id="the-black-scholes-model">
-<h3><span class="section-number">14.3.2. </span>The Black &amp; Scholes model<a class="headerlink" href="#the-black-scholes-model" title="Permalink to this heading">#</a></h3>
+<section id="the-arbitrage-free-theory-of-derivatives-pricing">
+<h3><span class="section-number">14.3.2. </span>The arbitrage-free theory of derivatives pricing<a class="headerlink" href="#the-arbitrage-free-theory-of-derivatives-pricing" title="Permalink to this heading">#</a></h3>
+<p>When we were applying the utility indifference theory of derivatives pricing to both parties agreeing in the transaction, the investor and the dealer, we found the issue that according to this theory, there would be a trade only if both of them are risk averse, since they are taking opposite sides of the bet on the payoff result. In reality, both dealers are investors are generally risk-averse and we observe transactions, so what are we missing in our theory?</p>
+<p>The answer, as we anticipated above, is that the dealer is not really simply taking the opposite of the bet. There are mainly two ways a dealer will conduct this business:</p>
+<ul class="simple">
+<li><p>If the market on derivatives is relatively liquid in both sides, with plenty of investors willing to take the long or short position in the derivative over periods much shorter than the expiry, the dealer will act as a market-maker of the derivatives. In this case, the dealer will quote bid and asks prices for the derivatives that compensate it for the provision of liquidity with its own capital, incurring potential inventory risk or informatio asymmetry risk</p></li>
+<li><p>If the market is one-sided and / or iliquid, in the sense of having a small number of potential transactions before the expiry of the contract, the dealer will try to hedge the risk using other financial instruments available.</p></li>
+<li><p>In practice, a combination of both situations will also happen often</p></li>
+</ul>
+<p>As we discussed in the first part of this chapter, if we are in the first situation, we might not need a derivatives pricing model since we can extract the prices of derivatives directly from observations of trades or request for quotes that are not closed. It is the second case where we need a theory of derivatives pricing that takes into account potential hedging strategies that mitigate the risk of the dealer. We anticipate then that in this framework, the minimum price or premium that the dealer will accept to sell the derivative will be one that compensates it for the costs of hedging plus the residual risk.</p>
+<p>More interestingly, we will see that in some cases, under certain theoretical situations, a perfect hedging strategy might exist, so the minimum price will be exactly the cost of the hedging strategy, which in this setup is also called the perfect replication strategy (since a perfect hedging implies no risk, and therefore a replication of the payoff using other financial instruments). A consequence of the existence of such replication strategy is that dealers are forced to price derivatives consistently, otherwise they would be generating risk-free arbitrage opportunities where other dealers who price correctly the derivative trade with the one misspricing it, and pocket the difference without risk. Hence, this theory of derivatives pricing is also called the arbitrage-free theory of derivatives pricing.</p>
+<p>Let us revisit the case of forwards and options under this optic.</p>
+<section id="id1">
+<h4><span class="section-number">14.3.2.1. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<p>Under the modelling hypothesis used in the previous sections to value the premium of a forward, namely, that 1) the interest risk is locked during the period of the forward, 2) there is no counteparty risk, i.e. no risk that the investor will not satisfy its obligations, then there is actually a simple replication strategy that hedges all the risk of the contract. If the dealer is selling the forward to the investor, therefore guaranteeing a price <span class="math notranslate nohighlight">\(K\)</span> to buy a share at time <span class="math notranslate nohighlight">\(T\)</span>, then:</p>
+<ul class="simple">
+<li><p>Borrows <span class="math notranslate nohighlight">\(S_t\)</span> dollars in the repo monetary markets at interest rate <span class="math notranslate nohighlight">\(r\)</span> during the period of the forward. We assume that interest accrues daily but is settled at the expiry. The stock bought is used as colateral in the repo.</p></li>
+<li><p>Buys the underlying stock with this money at inception, paying <span class="math notranslate nohighlight">\(S_t\)</span></p></li>
+<li><p>At the expiry of the forward it delivers the stock to the investor, receives <span class="math notranslate nohighlight">\(K\)</span> and repays the loan plus remaining interests</p></li>
+</ul>
+<p>If we consider that daily accruing of interest can be well approximated by continuous accruing, then the investor needs to repay at <span class="math notranslate nohighlight">\(T\)</span> an amount <span class="math notranslate nohighlight">\(S_t e^{r(T-t)}\)</span>. The payoff for the dealer at the expiry is therefore:</p>
+<div class="math notranslate nohighlight">
+\[ K - S_t e^{r(T-t)}\]</div>
+<p>which is deterministic under the hypotheses of the model. A rational dealer of course will not accept a determinist loss, so the minimum premium that will command for this contract is the discounted value of this payoff:</p>
+<div class="math notranslate nohighlight">
+\[P_{F,t} = K e^{-r(T-t)} - S_t\]</div>
+<p>In practice, forward markets work by quoting the strike such that the premium is zero, hence:</p>
+<div class="math notranslate nohighlight">
+\[ F_t \equiv K = S_t e^{r(T-t)} \]</div>
+<p>This is the arbitrage-free price of a forward contract. As mentioned above, it is called arbitrage-free since any other price would represent a risk-free arbitrage opportunity for other dealer. For example, let’s assume this dealer quotes a <span class="math notranslate nohighlight">\(\bar{K}_t &lt; K_t\)</span>. Another dealer could buy the forward from the dealer, and use the opposite replication strategy:</p>
+<ul class="simple">
+<li><p>Borrow the stock in repo and sell it in the market at price <span class="math notranslate nohighlight">\(S_t\)</span> to fund the repo.</p></li>
+<li><p>At time <span class="math notranslate nohighlight">\(T\)</span> close the repo with the stock delivered by the dealer selling the forward, receive <span class="math notranslate nohighlight">\(S_t e^{r(T-t)}\)</span> in cash and pay <span class="math notranslate nohighlight">\(\bar{K}_t\)</span>.</p></li>
+</ul>
+<p>The payoff for this dealer is then:</p>
+<div class="math notranslate nohighlight">
+\[  S_t e^{r(T-t)} - \bar{K}_t &gt;  S_t e^{r(T-t)} - S_t e^{r(T-t)}  = 0\]</div>
+<p>i.e. a risk-free profit!</p>
+</section>
+</section>
+<section id="id2">
+<h3><span class="section-number">14.3.3. </span>Example: European Call Options<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p>In the case of options there is no such obvious static replication strategy if we are only allowed to use the underlying stock and repo contracts. By static replication strategy we mean that we don’t need to modify the positions of the replication portfolio (the stock and the repo) during the life of the forward. If we are able to trade other derivatives there is actually a static replication strategy. If the dealer sells the call option to an investor, then immediately</p>
+<ul class="simple">
+<li><p>Buys to other dealer a put option with the same strike and expiry</p></li>
+<li><p>Buys to another dealer a forward with the same strike and expiry</p></li>
+</ul>
+<p>The payoff at the expiry is:</p>
+<div class="math notranslate nohighlight">
+\[ -(S_T-K)^+ + (K-S_T)^+ + (S_T-K) = 0 \]</div>
+<p>meaning that the replication portfolio of a put and a forward replicates the call option. At inception, the dealer is paid for the call a premium <span class="math notranslate nohighlight">\(P_{C,t}\)</span> and pays <span class="math notranslate nohighlight">\(P_{P,t}\)</span> for the put and <span class="math notranslate nohighlight">\(P_{F,t}\)</span> for the forward, hence the payoff at inception is:</p>
+<div class="math notranslate nohighlight">
+\[P_{C,t} - P_{F,t} - P_{F,t}\]</div>
+<p>In order to avoid losses, the minimum premium that must command is therefore:</p>
+<div class="math notranslate nohighlight">
+\[P_{C,t} = P_{F,t} + P_{F,t}\]</div>
+<p>which is called the put-call parity relationship. The premium for the forward can be derived as discussed in the previous section, however we are left with a sort of chicken and the egg problem with regards to the call and put premiums: given one, we can determine the other, but we don’t have yet a replication strategy for the put to derive the call premium, and viceversa.</p>
+<p>If no static replication is available, is it possible to find a dynamical one that reproduces the payoff without uncertainty? Or are we left with strategies that, though they might minimize uncertainty, they don’t remove it and therefore we need to go back to our utility indifference theory?</p>
+<section id="the-black-scholes-merton-mdodel">
+<h4><span class="section-number">14.3.3.1. </span>The Black - Scholes - Merton Mdodel<a class="headerlink" href="#the-black-scholes-merton-mdodel" title="Permalink to this heading">#</a></h4>
+<p>Fisher Black and Myron Scholes [&#64;black1973pricing], and separately Robert Merton [&#64;merton1973theory] provided an answer to this question: under certain theoretical conditions, we can indeed find a dynamic replication strategy based on the underlying stock and a risk free account, that reproduces the payoff with no uncertainty. The main conditions are the following:</p>
+<ul class="simple">
+<li><p>The stock price follows a Geometric Brownian Motion dynamics:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ d S_t = \mu S_t dt + \sigma S_t d W_t \]</div>
+<div style="margin-left: 40px;">
+We have considered the drift $\mu$ and volatility $\sigma$ constant, but the model can be generalized to time-dependent deterministic drifts and volatilities. Other dynamics can also be considered within the same framework. Also, we will consider a non-dividend paying stock, but the model can be adjusted to consider deterministic dividends. </div>
+<ul class="simple">
+<li><p>The replicating portfolio is composed of a position <span class="math notranslate nohighlight">\(\Delta_t\)</span> in the underlying stock and a cash account <span class="math notranslate nohighlight">\(\beta_t\)</span> from which we can borrow or lend money freely at a determinist risk-free rate <span class="math notranslate nohighlight">\(r\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\Pi_t = \Delta_t S_t + \beta_t \]</div>
+<div style="margin-left: 40px;"> The model can be generalized easily to time-dependent risk-free interest rates. The original model considers a generic cash account, although in practice is more realistic to assume a repo on the stock is used for funding. </div>
+<ul class="simple">
+<li><p>The position in the stock can be adjusted continuously over the life of the option, without restriction like market trading hours, etc. There are also no transaction costs when buying or selling the stock. There are no restrictions on shorting the stock.</p></li>
+<li><p>The replication portfolio is self-financing, meaning that no cash is added or withdrawn from the portfolio after the initial investment. Any proceeds from selling at immediately reinvested in the portfolio.  Mathematically, it means that:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ d\Pi_t = \Delta_t d S_t + d \beta_t = \Delta_t d S_t + r \beta_t dt = \Delta_t d S_t + r (\Pi_t - \Delta_t S_t) dt \]</div>
+<div style="margin-left: 40px;"> Notice that the position in the stock depends on time, but is always adjusted ex-post, i.e. after the market moves. </div>
+<ul class="simple">
+<li><p>There is no counterparty default risk, i.e. the investor and the dealer will pay whatever obligations they have at the end of the option</p></li>
+</ul>
+<p>If the portfolio <span class="math notranslate nohighlight">\(\Pi_t\)</span> indeed replicates the option payoff at the maturity <span class="math notranslate nohighlight">\(T\)</span> in any scenario, we must have <span class="math notranslate nohighlight">\(\Pi_T = C_T = (S_T - K)^+\)</span>, where we have considered a Call option but the argument applies to any other payoff function. But since by constructio the portfolio <span class="math notranslate nohighlight">\(\Pi_t\)</span> is self-financing, then if such dynamic strategy exists we must have <span class="math notranslate nohighlight">\(\Pi_t = C_t\)</span> for any time <span class="math notranslate nohighlight">\(t \leq T\)</span>. Otherwise, there would be a risk-free arbitrage opportunity, e.g. selling the option at price <span class="math notranslate nohighlight">\(C_t\)</span> in the case <span class="math notranslate nohighlight">\(C_t &gt; \Pi_t\)</span>, buying with the cash from the premium the replicating portfolio <span class="math notranslate nohighlight">\(\Pi_t\)</span> and making an instantaenous gain of the difference <span class="math notranslate nohighlight">\(C_t - \Pi_t\)</span>. The same reasoning applies <span class="math notranslate nohighlight">\(C_t &lt; \Pi_t\)</span>, only in this case we buy the option paying a discounted premium. Therefore, if we can find such strategy we immediately solve the problem of option pricing, since the premium is equal to the cost of replication by using the non-arbitrage opportunity argument.</p>
+<p>The condition <span class="math notranslate nohighlight">\(\Pi_t = C_t\)</span> is equivalent to <span class="math notranslate nohighlight">\(\Pi_T = C_T\)</span> and <span class="math notranslate nohighlight">\(d \Pi_t = dC_t\)</span>. Additionally, this equality implies that <span class="math notranslate nohighlight">\(C_t = C(t, S_t)\)</span>, i.e. the premium of the option has to be a function of time and the contemporary value of the stock. We can then use Ito’s lemma to further understand the requirements for such strategy to exist:</p>
+<div class="math notranslate nohighlight">
+\[
+d C_t = \frac{\partial C_t}{\partial t} dt + \frac{\partial C_t}{\partial S_t} dS_t + \frac{1}{2}\frac{\partial^2 C_t}{\partial^2 S_t} \sigma^2 S_t^2 dt = d\Pi_t = \Delta_t d S_t + r\beta_t dt
+\]</div>
+<p>Grouping the terms dependent on <span class="math notranslate nohighlight">\(dt\)</span> and <span class="math notranslate nohighlight">\(d S_t\)</span> separately we have:</p>
+<div class="math notranslate nohighlight">
+\[
+\left(\frac{\partial C_t}{\partial t} + \frac{1}{2} \sigma^2 S_t^2 \frac{\partial^2 C_t}{\partial^2 S_t} +r\beta\right) dt  + \left(\frac{\partial C_t}{\partial S_t} - \Delta_t\right) dS_t = 0
+\]</div>
+<p>Since the equality must apply for any arbitrary <span class="math notranslate nohighlight">\(dt\)</span> and <span class="math notranslate nohighlight">\(dS_t\)</span>, each term in parenthesis must cancel separately. Starting with the right hand term we have:</p>
+<div class="math notranslate nohighlight">
+\[\Delta_t = \frac{\partial C_t}{\partial S_t} \]</div>
+<p>which is call the delta-hedging condition, given its obvious connection with linear hedging strategies where we try to neutralize the exposure of a financial portfolio to a risk factor like the stock price in this case. Delta hedging the portfolio we ensure that its value is independent on the random dynamics of the stock, at least during an infinitesimal time. However, a strategy that delta-hedges at every time the portfolio is not necessarily self-financing, i.e. we might need to add extra cash during the life of the portfolio. The problem is that a priori the cash required for delta-hedging would depend on the path of the stock, making it a random variable. In that case the premium would also be a random quantity with a certain distribution.</p>
+<p>In order to have a deterministic premium the portfolio has to be self-financing, which requires that the first term of the equality above is also zero, namely:</p>
+<div class="math notranslate nohighlight">
+\[ \frac{\partial C_t}{\partial t} + \frac{1}{2} \sigma^2 S_t^2 \frac{\partial^2 C_t}{\partial^2 S_t} + r \frac{\partial C_t}{\partial S_t} = rC_t \]</div>
+<p>where we have used the self-financing condition <span class="math notranslate nohighlight">\(\beta_t = \Pi_t - \Delta_t S_t = C_t - \frac{\partial C_t}{\partial S_t} S_t\)</span>. The resulting equation is the celebrated Black-Scholes-Merton (BSM) partial differential equation. Solving this equation with the terminal condition <span class="math notranslate nohighlight">\(C_T = (S_T - K)^+\)</span> allows us to compute the value of the premium for any time <span class="math notranslate nohighlight">\(t \leq T\)</span> deterministically. Therefore, by virtue of the replicating portfolio and non-arbitrage opportunity arguments, if the Black-Scholes-Merton conditions are satisfied the price of an option is no longer a random quantity as in the utility indifference framework.</p>
+<p>Before discussing the solution to this equation, we can get another insight simply by inspecting it: the option premium does not depend on the drift <span class="math notranslate nohighlight">\(\mu\)</span> of the stock, only the volatility. In the utility indifference framework, the estimation of the drift plays a big role in the price that the investor is willing to pay for the option, since it affects the probability of exercising or not the option. However, for a dealer pricing the option, as far as the BSM framework holds, the directionality of the market is irrelevant since the strategy guarantees a replication of the payoff in any scenario by investing the premium into the BSM dynamic portfolio and implementing the dynamic strategy.</p>
+</section>
+<section id="solving-the-black-scholes-merton-equation">
+<h4><span class="section-number">14.3.3.2. </span>Solving the Black-Scholes-Merton equation<a class="headerlink" href="#solving-the-black-scholes-merton-equation" title="Permalink to this heading">#</a></h4>
+<p>There are different ways to solve the BSM equation. Most introductory textbooks on the topic (see for exammple [&#64;joshi2003concepts], [&#64;wilmott2007introduces]) follow the derivation used in the seminal paper that uses an ansatz for the solution that transforms the equation into the heat-equation, whose analytical solution is well-known [&#64;evans2010partial]. Here, we will take a different approach and use the Feynman - Kac theorem introduced in Chapter (#stochastic_calculus), section (#feynman_kac). Recall that the Feynman - Kac theorem provides a general solution to a family of partial differential equations in term of an expected value. In the interest of the reader we review it again here: the solution to the PDE</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial u}{\partial t} + \mu(x,t) \frac{\partial u}{\partial x} + \frac{1}{2} \sigma^2(x,t) \frac{\partial^2 u}{\partial x^2} - r(x,t)u = 0\]</div>
+<p>with the boundary condition <span class="math notranslate nohighlight">\(u(x,T) = f(x)\)</span>, is the following expected value</p>
+<div class="math notranslate nohighlight">
+\[u(x,t) = \mathbb{E}\left[ e^{-\int_t^T r(X_s,s) ds} f(X_T) \Big| X_t = x \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(X_t\)</span> satisfies the general stochastic differential equation:</p>
+<div class="math notranslate nohighlight">
+\[ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t\]</div>
+<p>The BSM equation is a specific case of this general PDE where <span class="math notranslate nohighlight">\(X_t \rightarrow S_t\)</span>, <span class="math notranslate nohighlight">\(u(x,t) \rightarrow C(s, t)\)</span>, <span class="math notranslate nohighlight">\(\mu(x,t) \rightarrow r\)</span>, <span class="math notranslate nohighlight">\(\sigma(x,t) \rightarrow \sigma\)</span>, <span class="math notranslate nohighlight">\(r(x,t) \rightarrow r\)</span>. The solution of the BSM equation can be expressed as:</p>
+<div class="math notranslate nohighlight">
+\[ C(s, t) = \mathbb{E}\left[ e^{-r(T-t)} (S_T - K)^+ \Big| S_t = s \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(S_t\)</span> satisfies the SDE:</p>
+<div class="math notranslate nohighlight">
+\[ d S_t = r S_t dt + \sigma S_t dW_t\]</div>
+<p>The first crucial observation is that the solution is remarkably close to the one analyzed in the context of utility indifference pricing for a risk-neutral investor, with one caveat: the expected value is taken with respect to a SDE for the stock price that has the drift <span class="math notranslate nohighlight">\(\mu\)</span> replaced by the risk-free interest <span class="math notranslate nohighlight">\(r\)</span>. In the former, the investor was taking the risk of the contract, but was indifferent to risk. In the latter, the dealer might be risk averse, but since the BSM dynamic hedging strategy neutralizes the risk (if the hypotheses are correct), there is no risk taken, only a deterministic cost to execute the hedging strategy, which is charged to the investor as the premium (plus potentially a margin for the service). In the jargon, the dealer prices the derivative as a risk-neutral investor if it computes probabilities in a different probability measure, where the drift is <span class="math notranslate nohighlight">\(r\)</span>. Such measure is usually called the risk-neutral measure. This framework for derivatives pricing can be generalized to other derivatives, allowing dealers to compute prices directly skipping the construction of the hedging portfolio and solving the PDE. It is appropiately referred as risk-neutral derivatives pricing.</p>
+<p>From a financial point of view, though, it is convenient not to lose the connection to the dynamic hedging strategy, since the validity of this theory is linked to the validity of the hypotheses done to derive the PDE. If we are interested in introducing more realistic dynamics into the pricing, like non-continous hedging and transaction costs, we need to start again from the point of view of the replication portfolio and the hedging strategy. When those hypotheses are relaxed, though, we come back to a probability distribution to characterize the premium of the option instead of a deterministic one, the latter being one of the main remarkable results of the BSM theory.</p>
+<p>The computation of the expectation value for the option premium can be reused from the one done in the context of utility indifference pricing, simply by substituting <span class="math notranslate nohighlight">\(\mu \rightarrow r\)</span> in the expressions:</p>
+<div class="math notranslate nohighlight">
+\[C(S_t,t)= S_t N(d_1(\mu))-K e^{-r(T-t)} N(d_2(\mu)) \]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[d_1(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r - \frac{\sigma^2}{2})(T-t)\right) \]</div>
+<div class="math notranslate nohighlight">
+\[d_2(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r + \frac{\sigma^2}{2})(T-t)\right) \]</div>
+<p>This is the infamous Black-Scholes-Merton option pricing formula. It provides dealers with option prices that depend on</p>
+<ul class="simple">
+<li><p>the current stock price <span class="math notranslate nohighlight">\(S_t\)</span></p></li>
+<li><p>the expected volatility of the stock <span class="math notranslate nohighlight">\(\sigma\)</span></p></li>
+<li><p>the risk-free interest rate <span class="math notranslate nohighlight">\(r\)</span></p></li>
+<li><p>the time to maturity <span class="math notranslate nohighlight">\(T-t\)</span></p></li>
+<li><p>the option strike <span class="math notranslate nohighlight">\(K\)</span>.</p></li>
+</ul>
+<p>It does not depend on the stock drift <span class="math notranslate nohighlight">\(\mu\)</span>, i.e. the expected trend of the market. This is because in the BSM framework, the dealer uses the dynamic hedging strategy to make the portfolio risk-free and therefore shielded from any market trend.</p>
+<p>Again, we must emphasize that despite the similarity with the risk-neutral option premium computed in the utility indifference framework, in the BSM framework the dealer is not computing the premium based on real probability scenarios of stock prices. The connection between replicating strategies and expectation values provided by the Feynman - Kac theorem is a useful mathematical result that simplifies the computation of derivatives premia in the BSM framework. But they shall not be interpreted in the sense of real probabilities (or probabilities in the real probability measure, as they are also referred to).</p>
+<p>The dependencies of the option formula for a European call option with respect to the parameters are similar to the ones seen in the context of utility indifference pricing, with the exception of the dependence with respect to the risk-free interest rate <span class="math notranslate nohighlight">\(r\)</span>, whose role in the formula goes now beyond cash-flow discounting. In the following picture we compare the premia derived with BSM versus utility indifference pricing:</p>
+<figure class="align-default" id="fig-bsm-vs-indifference-option">
+<a class="reference internal image-reference" href="../_images/bsm_vs_indifference_option.png"><img alt="../_images/bsm_vs_indifference_option.png" src="../_images/bsm_vs_indifference_option.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 14.2 </span><span class="caption-text">Option price premium calculated using the utility indifference pricing versus arbitrage-free theroy. The results are shown for an european call option with parameters <span class="math notranslate nohighlight">\(S_t=100\)</span>, <span class="math notranslate nohighlight">\(K =100\)</span>, <span class="math notranslate nohighlight">\(T-t = 1\)</span> in years, <span class="math notranslate nohighlight">\(r = 0.05\)</span>, <span class="math notranslate nohighlight">\(\mu = 0.1\)</span>, <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span>.</span><a class="headerlink" href="#fig-bsm-vs-indifference-option" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The first main differences is, as commented, the dependence with respect to the risk-free interest: in BSM theory, the premium is more valuable as interest rates increase, wheres in utility indifference pricing it was the other way around. In the latter, interest rates enter the formula to discount the value of future cash-flows. As interest rates grow, the opportunity cost of investing the premium for the future cash-flows of the options increases, since a risk-free deposit generates comparatively a larger yield. In other words, for an investor, the option becomes less attractive and is willing to pay less for it. However, in BSM theory used by dealers to price options, the opposite happens: bigger interest rates make funding the hedging strategy more costly, therefore requiring a larger compensation in terms of premium to execute the replication strategy.</p>
+<p>The second big difference is of course the dependence with respect to the expected market drift, since in the BSM theory the premium is independent of it. The resulting plot is interesting because it points out to the resolution of the question of why are options traded in practice, assuming both dealers and investors have the same view of the market. As mentioned before, if both were to value the option as an investment, there would be no agreement on the premium to pay, since they hold opposite sides in the trade. However, if the dealer uses BSM theory there is room for agreement, at least for those investors whose expections on market drifts make the premium requested by the dealer attractive. In the picture, such situation corresponds to those expected drifts that make the premium that an investor is willing to pay larger than the one commaned by the dealer.</p>
+</section>
+<section id="using-the-bsm-framework-in-practice">
+<h4><span class="section-number">14.3.3.3. </span>Using the BSM framework in practice<a class="headerlink" href="#using-the-bsm-framework-in-practice" title="Permalink to this heading">#</a></h4>
+</section>
 </section>
 </section>
 <section id="exercises">
@@ -681,17 +874,20 @@ observation of the second instrument on the first one: $<span class="math notran
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">14.1. Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-of-flow-products">14.2. Pricing of flow products</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter-model-for-pricing">14.2.1. The Kalman Filter model for pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#two-correlated-instruments">14.2.1.1. Two correlated instruments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-sources-and-models">14.2.1. Pricing sources and models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lob-traded">14.2.1.1. LOB traded</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rfq-traded">14.2.1.2. RfQ traded</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#composites">14.2.1.2.1. Composites</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#rfqs">14.2.1.2.2. RfQs</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">14.2.1.2.3. Trades</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#hitmiss">14.2.1.2.4. HitMiss</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-sources-and-models">14.2.2. Pricing sources and models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#composites">14.2.2.1. Composites</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rfqs">14.2.2.2. RfQs</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">14.2.2.3. Trades</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lobs">14.2.2.4. LOBs</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hitmiss">14.2.2.5. HitMiss</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlated-instruments">14.2.2.6. Correlated instruments</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlated-instruments">14.2.1.3. Correlated instruments</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter-model-for-pricing">14.2.2. The Kalman Filter model for pricing</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#two-correlated-instruments">14.2.2.1. Two correlated instruments</a></li>
 </ul>
 </li>
 </ul>
@@ -699,10 +895,20 @@ observation of the second instrument on the first one: $<span class="math notran
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-pricing">14.3. Derivatives pricing</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-utility-indifference-theory-of-derivatives-pricing">14.3.1. The utility indifference theory of derivatives pricing</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pricing-of-a-simple-contingent-claim">14.3.1.1. Example: pricing of a simple contingent claim</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.2. Example: European Call Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-forward-on-a-non-dividend-paying-stock">14.3.1.2. Example: Forward on a non-dividend paying stock</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-european-call-options">14.3.1.3. Example: European Call Options</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-model">14.3.2. The Black &amp; Scholes model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-arbitrage-free-theory-of-derivatives-pricing">14.3.2. The arbitrage-free theory of derivatives pricing</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">14.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">14.3.3. Example: European Call Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-mdodel">14.3.3.1. The Black - Scholes - Merton Mdodel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">14.3.3.2. Solving the Black-Scholes-Merton equation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.3.3. Using the BSM framework in practice</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">14.4. Exercises</a></li>
