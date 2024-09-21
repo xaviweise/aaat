@@ -444,10 +444,10 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-arbitrage-free-theory-of-derivatives-pricing">14.3.2. The arbitrage-free theory of derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">14.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">14.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">14.3.3. Example: European Call Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">14.3.3. Example: European Call Options</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-mdodel">14.3.3.1. The Black - Scholes - Merton Mdodel</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">14.3.3.2. Solving the Black-Scholes-Merton equation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.3.3. Using the BSM framework in practice</a></li>
@@ -572,7 +572,7 @@ observation of the second instrument on the first one: $<span class="math notran
 </section>
 <section id="example-forward-on-a-non-dividend-paying-stock">
 <h4><span class="section-number">14.3.1.2. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#example-forward-on-a-non-dividend-paying-stock" title="Permalink to this heading">#</a></h4>
-<p>Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock \footnote{We consider non-dividend paying stocks for simplicity, the extension of the theory to dividend paying stocks is relatively straightforward}. The buyer of a forward has the obligation to buy a stock at the expire <span class="math notranslate nohighlight">\(T\)</span> at a pre-agreed price <span class="math notranslate nohighlight">\(K\)</span>. Therefore, the payoff function reads:</p>
+<p>Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. The buyer of a forward has the obligation to buy a stock at the expire <span class="math notranslate nohighlight">\(T\)</span> at a pre-agreed price <span class="math notranslate nohighlight">\(K\)</span>. Therefore, the payoff function reads:</p>
 <div class="math notranslate nohighlight">
 \[ f(S_T) = S_T - K\]</div>
 <p>The maximum premium that the investor is willing to pay reads then:</p>
@@ -659,8 +659,8 @@ observation of the second instrument on the first one: $<span class="math notran
 <p>As we discussed in the first part of this chapter, if we are in the first situation, we might not need a derivatives pricing model since we can extract the prices of derivatives directly from observations of trades or request for quotes that are not closed. It is the second case where we need a theory of derivatives pricing that takes into account potential hedging strategies that mitigate the risk of the dealer. We anticipate then that in this framework, the minimum price or premium that the dealer will accept to sell the derivative will be one that compensates it for the costs of hedging plus the residual risk.</p>
 <p>More interestingly, we will see that in some cases, under certain theoretical situations, a perfect hedging strategy might exist, so the minimum price will be exactly the cost of the hedging strategy, which in this setup is also called the perfect replication strategy (since a perfect hedging implies no risk, and therefore a replication of the payoff using other financial instruments). A consequence of the existence of such replication strategy is that dealers are forced to price derivatives consistently, otherwise they would be generating risk-free arbitrage opportunities where other dealers who price correctly the derivative trade with the one misspricing it, and pocket the difference without risk. Hence, this theory of derivatives pricing is also called the arbitrage-free theory of derivatives pricing.</p>
 <p>Let us revisit the case of forwards and options under this optic.</p>
-<section id="id1">
-<h4><span class="section-number">14.3.2.1. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<section id="id2">
+<h4><span class="section-number">14.3.2.1. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h4>
 <p>Under the modelling hypothesis used in the previous sections to value the premium of a forward, namely, that 1) the interest risk is locked during the period of the forward, 2) there is no counteparty risk, i.e. no risk that the investor will not satisfy its obligations, then there is actually a simple replication strategy that hedges all the risk of the contract. If the dealer is selling the forward to the investor, therefore guaranteeing a price <span class="math notranslate nohighlight">\(K\)</span> to buy a share at time <span class="math notranslate nohighlight">\(T\)</span>, then:</p>
 <ul class="simple">
 <li><p>Borrows <span class="math notranslate nohighlight">\(S_t\)</span> dollars in the repo monetary markets at interest rate <span class="math notranslate nohighlight">\(r\)</span> during the period of the forward. We assume that interest accrues daily but is settled at the expiry. The stock bought is used as colateral in the repo.</p></li>
@@ -687,8 +687,8 @@ observation of the second instrument on the first one: $<span class="math notran
 <p>i.e. a risk-free profit!</p>
 </section>
 </section>
-<section id="id2">
-<h3><span class="section-number">14.3.3. </span>Example: European Call Options<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<section id="id3">
+<h3><span class="section-number">14.3.3. </span>Example: European Call Options<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
 <p>In the case of options there is no such obvious static replication strategy if we are only allowed to use the underlying stock and repo contracts. By static replication strategy we mean that we don’t need to modify the positions of the replication portfolio (the stock and the repo) during the life of the forward. If we are able to trade other derivatives there is actually a static replication strategy. If the dealer sells the call option to an investor, then immediately</p>
 <ul class="simple">
 <li><p>Buys to other dealer a put option with the same strike and expiry</p></li>
@@ -797,15 +797,38 @@ d C_t = \frac{\partial C_t}{\partial t} dt + \frac{\partial C_t}{\partial S_t} d
 </figcaption>
 </figure>
 <p>The first main differences is, as commented, the dependence with respect to the risk-free interest: in BSM theory, the premium is more valuable as interest rates increase, wheres in utility indifference pricing it was the other way around. In the latter, interest rates enter the formula to discount the value of future cash-flows. As interest rates grow, the opportunity cost of investing the premium for the future cash-flows of the options increases, since a risk-free deposit generates comparatively a larger yield. In other words, for an investor, the option becomes less attractive and is willing to pay less for it. However, in BSM theory used by dealers to price options, the opposite happens: bigger interest rates make funding the hedging strategy more costly, therefore requiring a larger compensation in terms of premium to execute the replication strategy.</p>
-<p>The second big difference is of course the dependence with respect to the expected market drift, since in the BSM theory the premium is independent of it. The resulting plot is interesting because it points out to the resolution of the question of why are options traded in practice, assuming both dealers and investors have the same view of the market. As mentioned before, if both were to value the option as an investment, there would be no agreement on the premium to pay, since they hold opposite sides in the trade. However, if the dealer uses BSM theory there is room for agreement, at least for those investors whose expections on market drifts make the premium requested by the dealer attractive. In the picture, such situation corresponds to those expected drifts that make the premium that an investor is willing to pay larger than the one commaned by the dealer.</p>
+<p>The second big difference is of course the dependence with respect to the expected market drift, since in the BSM theory the premium is independent of it. The resulting plot is interesting because it points out to the resolution of the question of why are options traded in practice, assuming both dealers and investors have the same view of the market. As mentioned before, if both were to value the option as an investment, there would be no agreement on the premium to pay, since they hold opposite sides in the trade. However, if the dealer uses BSM theory there is room for agreement, at least for those investors whose expections on market drifts make the premium requested by the dealer attractive. In the picture, such situation corresponds to those expected drifts that make the premium that an investor is willing to pay larger than the one commanded by the dealer.</p>
+<p>From a classical Economics point of view, those frameworks fit well together to explain the derivatives market in terms of demand and supply. Demand for options is driven by investors looking to generate returns on investment, whereas supply comes from dealers that “fabricate” those options using replication strategies. The BSM premium is essentially the cost of “fabricating” the option, in analogy to the language used in the production of goods.</p>
 </section>
 <section id="using-the-bsm-framework-in-practice">
 <h4><span class="section-number">14.3.3.3. </span>Using the BSM framework in practice<a class="headerlink" href="#using-the-bsm-framework-in-practice" title="Permalink to this heading">#</a></h4>
+<p>The Black - Scholes - Merton pricing theory supposed a change of paradigm for dealers creating liquidity in option markets. The theory allows for a consistent pricing of derivatives beyond options, providing not only a way to calculate the premium but a hedging strategy that neutralizes the risk of the derivative, or from a different angle, a recipe to synthesize those derivatives from liquid trabable instruments.</p>
+<p>However, the BSM theory is based on multiple hypothesis that are not necessarily realistic, so the dealer needs to take into account how relevant is for the pricing and hedging of derivatives that those hypothesis are not consistent with reality. For instance:</p>
+<ul class="simple">
+<li><p>The BSM theory does not take into account liquidity and transaction costs of the hedging instruments, which will increase the costs of the replication strategy in a non-deterministic way. The premium becomes dependent on specific market microstructure details of how the instruments of the hedging portfolio are traded, for instance if they are traded in limit order book based markets, the fees of orders, the bid-ask spread, the tick size, etc. How the dealer executes those trades becomes also relevant, for instance which types or orders are used, or if execution algorithms are to be used, in whose case the theory needs to incorporate an estimation of the cost of execution of those strategies, based on transaction cost analysis (TCA)</p></li>
+<li><p>The BSM theory assumes continuous hedging, which is not feasible in practice, both because of the costs mentioned in the previous point, and because markets in financial instruments usually are not open 24 hours per day. Even when they do, liquidity tends to vary widely across trading hours. In practice, dealers tend to hedge less frequently (e.g. daily), deviating from the pure BSM paradigm</p></li>
+<li><p>The BSM theory assumes a specific dynamics for the evolution of the underlyings, namely the Geometric Brownian Motion in the case of stocks (for underlyings that can become negative, like interest rates or inflation, a Brownian Motion is also typically used). Markets in practice follow more complicated dynamics, for instance they exhibit fatter tails in the distribution of returns or they might show sudden jumps, particularly in the overnight gap <a class="footnote-reference brackets" href="#id6" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
+<li><p>The original BSM theory assumes hedging strategies based on the underlying. The theory can be applied equally if we assume hedging with other derivatives as far as they share the same underlyings, or in a more fundamental level the same risk factors driving the underlyings. In practice, dealers might use liquid derivatives to hedge non-liquid ones. For instance, european options with non-standard strikes or maturities with respect to liquid ones traded in exchanges. As an exercise for the reader, we propose to prove that the Black-Scholes-Merton differential equation can be derived using a hedging portfolio where instead of the underlying we trade another option with a different strike.</p></li>
+</ul>
+<p>In general, these deviations from the assumptions make the premium no longer deterministic, since they introduce uncertainty in its estimation. Dealers typically will need to estimate how much do they need to increase the BSM premium to compensate for those risks.</p>
+<p>SHOW SIMULATIONS MONTE CARLO WHEN HYPOTHESES ARE NOT FULFILLED</p>
 </section>
 </section>
 </section>
 <section id="exercises">
 <h2><span class="section-number">14.4. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike <span class="math notranslate nohighlight">\(K_1\)</span> and maturity <span class="math notranslate nohighlight">\(T\)</span>, using another (liquid) option tradable in the market with strike <span class="math notranslate nohighlight">\(K_2\)</span> and same maturity <span class="math notranslate nohighlight">\(T\)</span>. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is <span class="math notranslate nohighlight">\(\Pi_t = \Delta_t C_2(S_t, t) + \beta_t\)</span>, with the terminal condition <span class="math notranslate nohighlight">\(\Pi_T = C_1(S_T, T)\)</span>.</p></li>
+</ul>
+<hr class="footnotes docutils" />
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>We consider non-dividend paying stocks for simplicity, the extension of the theory to dividend paying stocks is relatively straightforward</p>
+</aside>
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">2</a><span class="fn-bracket">]</span></span>
+<p>A well-known historical short-coming of the BSM framework is the implication that european options on the same underlying with different strikes and maturities should have the same implied volatility, equal to the expected volatility of the stock. The implied volatility is the one obtained by inverting the BSM formula given prices observed in the market, assuming for instance that there is a set of standard options that are traded in an exchange. In the first years of application of the BSM theory to price options, around the 1980s, this had the consequence of having very small premiums for options, particularly put options, with strikes very deep out-the-money (i.e. far from the underlying price at the time of quoting). This was a consequence of a Gaussian assumption on price returns, that predicted a very low probability of such options being exercised. In 1989, such prediction was contradicted when the market dramatically crashed, forcing dealers to readjust the prices with respect to the BSM formula. Multiple models such as local or stochastic volality models, or models with jumps in the dynamics, have been proposed later to address these issues. One point to bear in mind is that the logic applied in the BSM framework can be still applied when introducing these more complex dynamics, and deterministic premiums can be derived as far as we add extra instruments in the hedging portfolio that allows the dealer to neutralize those risks (stochastic volatility, jumps, etc)</p>
+</aside>
 </section>
 </section>
 
@@ -900,10 +923,10 @@ d C_t = \frac{\partial C_t}{\partial t} dt + \frac{\partial C_t}{\partial S_t} d
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-arbitrage-free-theory-of-derivatives-pricing">14.3.2. The arbitrage-free theory of derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">14.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">14.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">14.3.3. Example: European Call Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">14.3.3. Example: European Call Options</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-mdodel">14.3.3.1. The Black - Scholes - Merton Mdodel</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">14.3.3.2. Solving the Black-Scholes-Merton equation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.3.3. Using the BSM framework in practice</a></li>
