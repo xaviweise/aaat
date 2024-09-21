@@ -277,7 +277,7 @@ which is called the put-call parity relationship. The premium for the forward ca
 
 If no static replication is available, is it possible to find a dynamical one that reproduces the payoff without uncertainty? Or are we left with strategies that, though they might minimize uncertainty, they don't remove it and therefore we need to go back to our utility indifference theory?
 
-#### The Black - Scholes - Merton Model
+### The Black - Scholes - Merton Model
 
 Fisher Black and Myron Scholes [@black1973pricing], and separately Robert Merton [@merton1973theory] provided an answer to this question: under certain theoretical conditions, we can indeed find a dynamic replication strategy based on the underlying stock and a risk free account, that reproduces the payoff with no uncertainty. The main conditions are the following:
 * The stock price follows a Geometric Brownian Motion dynamics:
@@ -404,13 +404,27 @@ However, the BSM theory is based on multiple hypothesis that are not necessarily
 * The BSM theory assumes a specific dynamics for the evolution of the underlyings, namely the Geometric Brownian Motion in the case of stocks (for underlyings that can become negative, like interest rates or inflation, a Brownian Motion is also typically used). Markets in practice follow more complicated dynamics, for instance they exhibit fatter tails in the distribution of returns or they might show sudden jumps, particularly in the overnight gap [^2].
 * The original BSM theory assumes hedging strategies based on the underlying. The theory can be applied equally if we assume hedging with other derivatives as far as they share the same underlyings, or in a more fundamental level, the same risk factors driving the underlyings. In practice, dealers might use liquid derivatives to hedge non-liquid ones. For instance, european options with non-standard strikes or maturities with respect to liquid ones traded in exchanges. As an exercise for the reader, we propose to prove that the Black-Scholes-Merton differential equation can be derived using a hedging portfolio where instead of the underlying we trade another option with a different strike. 
 
- In general, these deviations from the assumptions make the premium no longer deterministic, since they introduce uncertainty in its estimation. Dealers typically will need to estimate how much do they need to increase the BSM premium to compensate for those risks. In the following plots we show the histogram of differences between the replication portfolio and the option payoff at maturity, when different assumptions of Black - Scholes - Merton theory are violated, namely 1) continuous re-hedging, 2) BSM volatility (the one used in the BSM formula) equals to market realized volatility, 3) constant volatility, 4) zero transaction costs. 
+ In general, these deviations from the assumptions make the premium no longer deterministic, since they introduce uncertainty in its estimation. Dealers typically will need to estimate how much do they need to increase the BSM premium to compensate for those risks. In the following plots we show the histogram of differences between the replication portfolio and the option payoff at maturity, when different assumptions of Black - Scholes - Merton theory are violated, namely:
+
+ * Continuous re-hedging, which can be violated by using increasingly smaller frequencies of re-hedging
+ * BSM volatility (the one used in the BSM pricing and hedging formulae) equals to market realized volatility
+ * Lognormal stock dynamics, which can be challenged using a different dynamics like for instance the Heston model, which considers that volatility of the log-normal process is also stochastic, with its variance (volatility squared) following a CIR mean-reverting process:
+
+
+$$d S_t = \mu S_t dt + \sqrt{V_t} S_t dW_{1,t} \\
+d V_t = \kappa (\theta - V_t) + \chi \sqrt{V_t} dW_{2,t} \\
+ \mathbb{E}\left[dW_{1,t}dW_{2,t}\right] = \rho dt $$
+ 
+ 
+  * Zero transaction costs, which can be violated for instance by assuming the dealer pays the half bid-ask spread of the market every time the underlying is bought or sold when rebalancing the portfolio. 
 
 ```{figure} figures/BSMreal.png
 :name: fig:BSMreal
 :width: 8in
-Histograms showing the difference between the replication portfolio using the BSM dynamic hedging strategy, and the actual payoff of an European call option. Each plot shows the impact of violating a different hypothesis of the BSM theory. We run 10000 simulations for each case. We use the parameters $S_t=100$, $K =100$, $T-t = 1$ in years, $r = 0.05$, $\mu = 0.1$, $\sigma = 0.2$.
+Histograms showing the difference between the replication portfolio using the BSM dynamic hedging strategy, and the actual payoff of an European call option. Each plot shows the impact of violating a different hypothesis of the BSM theory. We run 10000 simulations for each case. We use the parameters $S_t=100$, $K =100$, $T-t = 1$ in years, $r = 0.05$, $\mu = 0.1$, $\sigma = 0.2$ for the baseline scenario where we expect close to perfect replication when re-hedging continuously. To test the effect of different realized volatilities we use use $\sigma = 0.19$ and $\sigma = 0.21$, respectively. To test the effect of transaction cost we add a constant bid-ask half-spread of 0.005%. To test the effect of a different market dynamics we use a Heston model with parameters $\kappa = 20$ (mean reversion rate of the volatility squared), $\theta = 0.04$ (long-term volatility squared mean), $\xi = 0.2$ (volatility of volatility squared), $\rho = -0.7$ (correlation between stock and stochastic volatility risk factors).
 ```
+
+In the plots, we can see the different impacts that the violations produce on the distribution of the residuals. Whereas a less frequent re-hedging increases the dispersion of the residual, those are still unbiased and symmetrical. Other violations produce skewed distributions with non-zero mean. When introducing transaction costs, residuals have a negative mean, meaning that the BSM premium is insufficient to cover the actual costs of replication, as expected since the BSM derivation does not take into account such transaction costs. The effect of a different dynamics for the underlying is more nuanced: depending on the actual process, the distribution of residuals might have positive or negative mean, meaning that the BSM premium over-estimates or under-estimates, respectively, the costs of replication. For instance, if the realized volatility is lower than the one used for pricing and hedging in the BSM model, the mean of the residual is positive. This is, again, intuitive, since as we seen the premium of the option increases with volatility, so overestimating it means charging a larger premium than necessary for replication. Notice that this is not necessarily good for a dealer in competition, since if other dealers have a better estimation of market volatilities, they will be able to offer more competitive prices to clients and close more deals. 
 
 
 [^1]: We consider non-dividend paying stocks for simplicity, the extension of the theory to dividend paying stocks is relatively straightforward

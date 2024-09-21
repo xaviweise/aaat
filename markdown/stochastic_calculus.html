@@ -1206,23 +1206,23 @@ the process.</p>
 <p>The Orstein - Uhlenbeck process is an extension of the Brownian motion process in which the drift term is modified to prevent large deviations from the mean <span class="math notranslate nohighlight">\(\mu\)</span>. This is achieved by making the drift penalize those
 deviations:</p>
 <div class="math notranslate nohighlight">
-\[d S_t = \theta (S_t - \mu) dt + \sigma_t d W_t\]</div>
-<p>The strength of the penalty is controlled by a parameter <span class="math notranslate nohighlight">\(\theta \leq 0\)</span>, which is called the mean reversion speed: the larger this parameter, the faster the process <span class="math notranslate nohighlight">\(S_t\)</span> reverts to the mean. Such property of mean
+\[d S_t = \theta (\mu - S_t) dt + \sigma_t d W_t\]</div>
+<p>The strength of the penalty is controlled by a parameter <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span>, which is called the mean reversion speed: the larger this parameter, the faster the process <span class="math notranslate nohighlight">\(S_t\)</span> reverts to the mean. Such property of mean
 reversion is not unique to the Orstein - Uhlenbeck process, but the latter is probably the most simple way to achieve this effect in a stochastic differential equation, allowing for the computation of
 closed-form solutions for the probability distribution of the process. To derive it, we use the following ansatz:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-d(e^{-\theta t} S_t) = -\theta e^{-\theta t} S_t dt + e^{-\theta t} dS_t = \nonumber \\
-e^{-\theta t}(-\mu dt + \sigma_t dW_t)
+d(e^{\theta t} S_t) = \theta e^{\theta t} S_t dt + e^{\theta t} dS_t = \nonumber \\
+e^{\theta t}(\theta \mu dt + \sigma_t dW_t)
 \end{aligned}\end{split}\]</div>
 <p>Integrating this equation:</p>
 <div class="math notranslate nohighlight">
 \[\begin{aligned}
-e^{-\theta t} S_t - S_0 = - (e^{-\theta t} - 1) \mu + \int_0^t e^{-\theta u} \sigma_u dW_u
+e^{\theta t} S_t - S_0 = (e^{\theta t} - 1) \mu + \int_0^t e^{\theta u} \sigma_u dW_u
 \end{aligned}\]</div>
 <p>Finally:</p>
 <div class="math notranslate nohighlight">
-\[S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}) + \int_0^t e^{\theta (t-u)} \sigma_u dW_u\]</div>
+\[S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}) + \int_0^t e^{\theta (u-t)} \sigma_u dW_u\]</div>
 <section id="other-mean-reverting-processes">
 <h4><span class="section-number">6.6.4.1. </span>Other mean reverting processes<a class="headerlink" href="#other-mean-reverting-processes" title="Permalink to this heading">#</a></h4>
 <p>CIR $<span class="math notranslate nohighlight">\(d S_t = \theta (S_t - \mu_t) dt + \sigma_t S_t^{1/2} d W_t\)</span>$</p>
