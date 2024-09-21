@@ -949,7 +949,7 @@ d W_{2t} &amp;=&amp; \rho d \hat{W}_{1t} + \sqrt{1-\rho^2}  d \hat{W}_{2t}
 <p>As pointed out in the introduction to the chapter, after studying the Wiener process now we have the tools to model the dynamics of a random or stochastic process <span class="math notranslate nohighlight">\(X_t\)</span> using stochastic differential equations (SDEs) of the general form:</p>
 <div class="math notranslate nohighlight">
 \[ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t\]</div>
-<p>which generalizes the deterministic differential equation adding a noise term modelled using the Wiener process. Solving a SDEs means working out the distribution of <span class="math notranslate nohighlight">\(X_t\)</span> at arbitraty times given some initial conditions, which for arbitrary choices of <span class="math notranslate nohighlight">\(\mu(X_t, t)\)</span> and <span class="math notranslate nohighlight">\(\sigma(X_t,t)\)</span> can only be solved numerically, for instance using Monte-Carlo sampling techniques. In the next section we will see particular SDEs that are analytically tractable.</p>
+<p>which generalizes the deterministic differential equation adding a noise term modelled using the Wiener process. Solving a SDEs means working out the distribution of <span class="math notranslate nohighlight">\(X_t\)</span> at arbitrary times given some initial conditions, which for arbitrary choices of <span class="math notranslate nohighlight">\(\mu(X_t, t)\)</span> and <span class="math notranslate nohighlight">\(\sigma(X_t,t)\)</span> can only be solved numerically, for instance using Monte-Carlo sampling techniques. In the next section we will see particular SDEs that are analytically tractable.</p>
 </section>
 <section id="the-feynman-kac-theorem">
 <span id="feynman-kac"></span><h2><span class="section-number">6.5. </span>The Feynman - Kac Theorem<a class="headerlink" href="#the-feynman-kac-theorem" title="Permalink to this heading">#</a></h2>
@@ -1139,7 +1139,7 @@ of the exponential should be a-dimensional. Applying the previous units to the e
 <p>The Brownian motion model has plenty of applications. In the financial domain it can be used to model financial or economical indicators for which there is no clear pattern in the time-series beyond potentially a drift to motivate a more sophisticated modelling, i.e. the time-series
 is mostly unpredictable. Notice that the Brownian motion has a domain that extends from <span class="math notranslate nohighlight">\((-\infty, \infty)\)</span>, so indicators that have a more restrictive domain might not be suitable for being modelled using the
 Brownian motion process. A typical example are prices of financial instruments, which cannot on general grounds be negative. However, there might be exceptions to this rule, for instance if we are modelling
-prices in a time - domain such as the probability of reaching negative values is negligible, the model might be well suited. For instance, when modelling intraday prices.</p>
+prices in a time - domain such as the probability of reaching negative values is negligible, the model might be well suited. For instance, when modelling intra-day prices.</p>
 </section>
 </section>
 <section id="geometric-brownian-motion">

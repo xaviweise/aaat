@@ -565,7 +565,7 @@ As pointed out in the introduction to the chapter, after studying the Wiener pro
 
 $$ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t$$
 
-which generalizes the deterministic differential equation adding a noise term modelled using the Wiener process. Solving a SDEs means working out the distribution of $X_t$ at arbitraty times given some initial conditions, which for arbitrary choices of $\mu(X_t, t)$ and $\sigma(X_t,t)$ can only be solved numerically, for instance using Monte-Carlo sampling techniques. In the next section we will see particular SDEs that are analytically tractable.
+which generalizes the deterministic differential equation adding a noise term modelled using the Wiener process. Solving a SDEs means working out the distribution of $X_t$ at arbitrary times given some initial conditions, which for arbitrary choices of $\mu(X_t, t)$ and $\sigma(X_t,t)$ can only be solved numerically, for instance using Monte-Carlo sampling techniques. In the next section we will see particular SDEs that are analytically tractable.
 
 
 (feynman_kac)=
@@ -796,7 +796,7 @@ $$([S] - [\mu_t] [t])^2 / ([\sigma_t]^2 [t]^2) = 1$$
 The Brownian motion model has plenty of applications. In the financial domain it can be used to model financial or economical indicators for which there is no clear pattern in the time-series beyond potentially a drift to motivate a more sophisticated modelling, i.e. the time-series
 is mostly unpredictable. Notice that the Brownian motion has a domain that extends from $(-\infty, \infty)$, so indicators that have a more restrictive domain might not be suitable for being modelled using the
 Brownian motion process. A typical example are prices of financial instruments, which cannot on general grounds be negative. However, there might be exceptions to this rule, for instance if we are modelling
-prices in a time - domain such as the probability of reaching negative values is negligible, the model might be well suited. For instance, when modelling intraday prices.
+prices in a time - domain such as the probability of reaching negative values is negligible, the model might be well suited. For instance, when modelling intra-day prices.
 
 ### Geometric Brownian motion
 
