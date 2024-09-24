@@ -224,7 +224,7 @@ More interestingly, we will see that in some cases, under certain theoretical si
 
 Let us revisit the case of forwards and options under this optic.
 
-#### Example: Forward on a non-dividend paying stock {-}
+#### Example: Forward on a non-dividend paying stock {.unnumbered}
 
 Under the modelling hypothesis used in the previous sections to value the premium of a forward, namely, that 1) the interest risk is locked during the period of the forward, 2) there is no counter-party risk, i.e. no risk that the investor will not satisfy its obligations, then there is actually a simple replication strategy that hedges all the risk of the contract. If the dealer is selling the forward to the investor, therefore guaranteeing a price $K$ to buy a share at time $T$, then:
 
@@ -255,7 +255,7 @@ $$  S_t e^{r(T-t)} - \bar{K}_t >  S_t e^{r(T-t)} - S_t e^{r(T-t)}  = 0$$
 
 i.e. a risk-free profit!
 
-#### Example: European Call Options {-}
+#### Example: European Call Options {.unnumbered}
 
 In the case of options there is no such obvious static replication strategy if we are only allowed to use the underlying stock and repo contracts. By static replication strategy we mean that we don't need to modify the positions of the replication portfolio (the stock and the repo) during the life of the forward. If we are able to trade other derivatives there is actually a static replication strategy. If the dealer sells the call option to an investor, then immediately
 * Buys to other dealer a put option with the same strike and expiry
@@ -277,7 +277,7 @@ which is called the put-call parity relationship. The premium for the forward ca
 
 If no static replication is available, is it possible to find a dynamical one that reproduces the payoff without uncertainty? Or are we left with strategies that, though they might minimize uncertainty, they don't remove it and therefore we need to go back to our utility indifference theory?
 
-#### The Black - Scholes - Merton Model {-}
+#### The Black - Scholes - Merton Model {.unnumbered}
 
 Fisher Black and Myron Scholes [@black1973pricing], and separately Robert Merton [@merton1973theory] provided an answer to this question: under certain theoretical conditions, we can indeed find a dynamic replication strategy based on the underlying stock and a risk free account, that reproduces the payoff with no uncertainty. The main conditions are the following:
 * The stock price follows a Geometric Brownian Motion dynamics:
@@ -331,7 +331,7 @@ where we have used the self-financing condition $\beta_t = \Pi_t - \Delta_t S_t 
 
 Before discussing the solution to this equation, we can get another insight simply by inspecting it: the option premium does not depend on the drift $\mu$ of the stock, only the volatility. In the utility indifference framework, the estimation of the drift plays a big role in the price that the investor is willing to pay for the option, since it affects the probability of exercising or not the option. However, for a dealer pricing the option, as far as the BSM framework holds, the directionality of the market is irrelevant since the strategy guarantees a replication of the payoff in any scenario by investing the premium into the BSM dynamic portfolio and implementing the dynamic strategy. 
 
-#### Solving the Black-Scholes-Merton equation {-}
+#### Solving the Black-Scholes-Merton equation {.unnumbered}
 
 There are different ways to solve the BSM equation. Most introductory textbooks on the topic (see for example [@joshi2003concepts], [@wilmott2007introduces]) follow the derivation used in the seminal paper that uses an ansatz for the solution that transforms the equation into the heat-equation, whose analytical solution is well-known [@evans2010partial]. Here, we will take a different approach and use the Feynman - Kac theorem introduced in Chapter (#stochastic_calculus), section (#feynman_kac). Recall that the Feynman - Kac theorem provides a general solution to a family of partial differential equations in term of an expected value. In the interest of the reader we review it again here: the solution to the PDE
 
@@ -394,7 +394,7 @@ The second big difference is of course the dependence with respect to the expect
  From a classical Economics point of view, those frameworks fit well together to explain the derivatives market in terms of demand and supply. Demand for options is driven by investors looking to generate returns on investment, whereas supply comes from dealers that "fabricate" those options using replication strategies. The BSM premium is essentially the cost of "fabricating" the option, in analogy to the language used in the production of goods.  
 
 
-#### Using the BSM framework in practice
+#### Using the BSM framework in practice {.unnumbered}
 
 The Black - Scholes - Merton pricing theory supposed a change of paradigm for dealers creating liquidity in option markets. The theory allows for a consistent pricing of derivatives beyond options, providing not only a way to calculate the premium but a hedging strategy that neutralizes the risk of the derivative, or from a different angle, a recipe to synthesize those derivatives from liquid tradable instruments. 
 
