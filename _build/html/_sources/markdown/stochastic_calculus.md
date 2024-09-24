@@ -873,26 +873,26 @@ the process.
 The Orstein - Uhlenbeck process is an extension of the Brownian motion process in which the drift term is modified to prevent large deviations from the mean $\mu$. This is achieved by making the drift penalize those
 deviations: 
 
-$$d S_t = \theta (S_t - \mu) dt + \sigma_t d W_t$$ 
+$$d S_t = \theta (\mu - S_t) dt + \sigma_t d W_t$$ 
 
-The strength of the penalty is controlled by a parameter $\theta \leq 0$, which is called the mean reversion speed: the larger this parameter, the faster the process $S_t$ reverts to the mean. Such property of mean
+The strength of the penalty is controlled by a parameter $\theta > 0$, which is called the mean reversion speed: the larger this parameter, the faster the process $S_t$ reverts to the mean. Such property of mean
 reversion is not unique to the Orstein - Uhlenbeck process, but the latter is probably the most simple way to achieve this effect in a stochastic differential equation, allowing for the computation of
 closed-form solutions for the probability distribution of the process. To derive it, we use the following ansatz: 
 
 $$\begin{aligned}
-d(e^{-\theta t} S_t) = -\theta e^{-\theta t} S_t dt + e^{-\theta t} dS_t = \nonumber \\
-e^{-\theta t}(-\mu dt + \sigma_t dW_t)
+d(e^{\theta t} S_t) = \theta e^{\theta t} S_t dt + e^{\theta t} dS_t = \nonumber \\
+e^{\theta t}(\theta \mu dt + \sigma_t dW_t)
 \end{aligned}$$ 
 
 Integrating this equation: 
 
 $$\begin{aligned}
-e^{-\theta t} S_t - S_0 = - (e^{-\theta t} - 1) \mu + \int_0^t e^{-\theta u} \sigma_u dW_u
+e^{\theta t} S_t - S_0 = (e^{\theta t} - 1) \mu + \int_0^t e^{\theta u} \sigma_u dW_u
 \end{aligned}$$ 
 
 Finally: 
 
-$$S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}) + \int_0^t e^{\theta (t-u)} \sigma_u dW_u$$
+$$S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}) + \int_0^t e^{\theta (u-t)} \sigma_u dW_u$$
 
 #### Other mean reverting processes
 

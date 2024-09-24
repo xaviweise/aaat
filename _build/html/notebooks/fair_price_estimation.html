@@ -721,7 +721,7 @@ document.write(`
         <span class="n">variances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_steps</span> <span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_paths</span><span class="p">))</span>
         <span class="n">variances</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">V0</span>
         
-        <span class="c1"># Precompute correlation</span>
+        <span class="c1"># Precompute correlation matrix and Cholesky decomposition</span>
         <span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">rho</span><span class="p">],</span>
                                <span class="p">[</span><span class="n">rho</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov_matrix</span><span class="p">)</span>
@@ -751,7 +751,7 @@ document.write(`
     <span class="k">return</span> <span class="n">paths</span>
 
 <span class="k">def</span> <span class="nf">dynamic_hedging</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">option_type</span><span class="o">=</span><span class="s1">&#39;call&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">252</span><span class="p">,</span>
-                   <span class="n">rehedge_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">half_spread</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma_sim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                   <span class="n">rehedge_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">half_spread</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sigma_sim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implement dynamic hedging strategy.</span>
 <span class="sd">    </span>
@@ -764,7 +764,7 @@ document.write(`
 <span class="sd">    - sigma_bs: volatility used in BS model</span>
 <span class="sd">    - option_type: &#39;call&#39; or &#39;put&#39;</span>
 <span class="sd">    - dt: time step size</span>
-<span class="sd">    - rehedge_freq: frequency of rehedging in terms of number of steps. If None, rebalance every step.</span>
+<span class="sd">    - rehedge_freq: frequency of rehedging in terms of number of steps. If 1, rebalance every step.</span>
 <span class="sd">    - half_spread: transaction cost as a fraction of price (half spread for buying and selling)</span>
 <span class="sd">    - sigma_sim: volatility used in simulation (if different from sigma_bs)</span>
 <span class="sd">    </span>
@@ -784,11 +784,8 @@ document.write(`
     <span class="c1"># Time steps</span>
     <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">n_steps</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span>
     
-    <span class="c1"># For adjusting rehedging frequency</span>
-    <span class="k">if</span> <span class="n">rehedge_freq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rehedge_steps</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">rehedge_steps</span> <span class="o">=</span> <span class="n">rehedge_freq</span>
+    <span class="c1"># Rehedge steps</span>
+    <span class="n">rehedge_steps</span> <span class="o">=</span> <span class="n">rehedge_freq</span>
     
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_steps</span> <span class="o">+</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">tau</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">times</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
@@ -835,54 +832,65 @@ document.write(`
     <span class="n">K</span> <span class="o">=</span> <span class="mi">100</span>           <span class="c1"># Strike price</span>
     <span class="n">T</span> <span class="o">=</span> <span class="mf">1.0</span>           <span class="c1"># 1 year</span>
     <span class="n">r</span> <span class="o">=</span> <span class="mf">0.05</span>          <span class="c1"># 5% risk-free rate</span>
-    <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.2</span>       <span class="c1"># 20% volatility</span>
+    <span class="n">sigma_bs</span> <span class="o">=</span> <span class="mf">0.20</span>   <span class="c1"># 20% volatility used in Black-Scholes model</span>
     <span class="n">mu</span> <span class="o">=</span> <span class="mf">0.1</span>          <span class="c1"># 10% drift</span>
     <span class="n">option_type</span> <span class="o">=</span> <span class="s1">&#39;call&#39;</span>
     <span class="n">n_paths</span> <span class="o">=</span> <span class="mi">10000</span>   <span class="c1"># Number of simulation paths</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10000</span>      <span class="c1"># Fixed small time step for accurate approximation</span>
     
-    <span class="c1"># Perfect setup with different time steps</span>
-    <span class="n">dt_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="mi">252</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">10000</span><span class="p">]</span>  <span class="c1"># Daily, finer, and very fine steps</span>
-    <span class="n">differences_perfect_varied_dt</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># Perfect setup with varying rehedging frequency</span>
+    <span class="n">rehedge_freq_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>  <span class="c1"># Rebalance every 1, 10, 100 steps</span>
+    <span class="n">differences_rehedge_freq</span> <span class="o">=</span> <span class="p">{}</span>
     
-    <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">dt_values</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulating Perfect Setup with dt = </span><span class="si">{</span><span class="n">dt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">paths_perfect</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">differences</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_perfect</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
-        <span class="n">differences_perfect_varied_dt</span><span class="p">[</span><span class="n">dt</span><span class="p">]</span> <span class="o">=</span> <span class="n">differences</span>
+    <span class="c1"># Simulate perfect hedging with varying rehedging frequencies</span>
+    <span class="k">for</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">rehedge_freq_values</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulating Perfect Setup with Rehedging Frequency: Every </span><span class="si">{</span><span class="n">freq</span><span class="si">}</span><span class="s2"> steps&quot;</span><span class="p">)</span>
+        <span class="n">paths_perfect</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">differences</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_perfect</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> 
+                                     <span class="n">rehedge_freq</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> <span class="n">half_spread</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">differences_rehedge_freq</span><span class="p">[</span><span class="n">freq</span><span class="p">]</span> <span class="o">=</span> <span class="n">differences</span>
+    
+    <span class="c1"># Baseline residuals (Rebalance every step)</span>
+    <span class="n">residuals_perfect</span> <span class="o">=</span> <span class="n">differences_rehedge_freq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     
     <span class="c1"># Violations</span>
-    <span class="c1"># 1. Different volatility for simulation</span>
-    <span class="n">sigma_sim</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># 25% instead of 20%</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulating Different Volatility in Simulation&quot;</span><span class="p">)</span>
-    <span class="n">paths_diff_vol</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma_sim</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">differences_diff_vol</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_diff_vol</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># 1. Different volatility for simulation (sigma_sim = 0.19 and 0.21)</span>
+    <span class="n">sigma_sim_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.19</span><span class="p">,</span> <span class="mf">0.21</span><span class="p">]</span>
+    <span class="n">differences_sigma_sim</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">sigma_sim</span> <span class="ow">in</span> <span class="n">sigma_sim_values</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulating Different Volatility in Simulation: sigma_sim = </span><span class="si">{</span><span class="n">sigma_sim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">paths_diff_vol</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma_sim</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">differences</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_diff_vol</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> 
+                                     <span class="n">rehedge_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">half_spread</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">differences_sigma_sim</span><span class="p">[</span><span class="n">sigma_sim</span><span class="p">]</span> <span class="o">=</span> <span class="n">differences</span>
     
     <span class="c1"># 2. Stochastic Volatility (Heston Model)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulating Stochastic Volatility (Heston Model)&quot;</span><span class="p">)</span>
-    <span class="n">paths_stoch_vol</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                        <span class="n">kappa</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">xi</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rho</span><span class="o">=-</span><span class="mf">0.7</span><span class="p">)</span>
-    <span class="n">differences_stoch_vol</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_stoch_vol</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">paths_stoch_vol</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                        <span class="n">kappa</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">xi</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">rho</span><span class="o">=-</span><span class="mf">0.7</span><span class="p">)</span>
+    <span class="n">differences_stoch_vol</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_stoch_vol</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> 
+                                           <span class="n">rehedge_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">half_spread</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
     
-    <span class="c1"># 3. Transaction Costs (Bid-Ask Spread)</span>
-    <span class="n">bid_ask_spread</span> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># 0.1%</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulating With Bid-Ask Spread&quot;</span><span class="p">)</span>
-    <span class="n">paths_bid_ask</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">differences_bid_ask</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_bid_ask</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
-                                         <span class="n">half_spread</span><span class="o">=</span><span class="n">bid_ask_spread</span><span class="p">)</span>
+    <span class="c1"># 3. Transaction Costs (Half Spread = 0.005%)</span>
+    <span class="n">half_spread</span> <span class="o">=</span> <span class="mf">0.00005</span>  <span class="c1"># 0.005%</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulating With Transaction Costs (Half Spread = 0.005%)&quot;</span><span class="p">)</span>
+    <span class="n">paths_half_spread</span> <span class="o">=</span> <span class="n">simulate_gbm_paths</span><span class="p">(</span><span class="n">S0</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">n_paths</span><span class="p">,</span> <span class="n">stochastic_vol</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">differences_half_spread</span> <span class="o">=</span> <span class="n">dynamic_hedging</span><span class="p">(</span><span class="n">paths_half_spread</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">sigma_bs</span><span class="p">,</span> <span class="n">option_type</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> 
+                                             <span class="n">rehedge_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">half_spread</span><span class="o">=</span><span class="n">half_spread</span><span class="p">)</span>
     
-    <span class="c1"># Plot histograms for Perfect Setup with varied dt in a single subplot</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="c1"># Plot histograms in a 2x2 grid</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>
     
-    <span class="c1"># Subplot 1: Perfect Setup with varying dt</span>
+    <span class="c1"># Subplot 1: Effect of Re-Hedging Frequency on Hedging Residuals</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">]</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;dt = </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">dt_values</span><span class="p">]</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Rebalance Every </span><span class="si">{</span><span class="n">freq</span><span class="si">}</span><span class="s1"> Steps&#39;</span> <span class="k">for</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">rehedge_freq_values</span><span class="p">]</span>
     
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dt_values</span><span class="p">):</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_perfect_varied_dt</span><span class="p">[</span><span class="n">dt</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rehedge_freq_values</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_rehedge_freq</span><span class="p">[</span><span class="n">freq</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
                  <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Perfect Setup with Varying Time Steps&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Effect of Re-Hedging Frequency on Hedging Residuals&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Portfolio - Payoff&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
@@ -890,50 +898,76 @@ document.write(`
     
     <span class="c1"># Subplot 2: Different Volatility in Simulation</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_diff_vol</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">colors_sigma</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">]</span>
+    <span class="n">labels_sigma</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;sigma_sim = </span><span class="si">{</span><span class="n">sigma_sim</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">sigma_sim</span> <span class="ow">in</span> <span class="n">sigma_sim_values</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sigma_sim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sigma_sim_values</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_sigma_sim</span><span class="p">[</span><span class="n">sigma_sim</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+                 <span class="n">color</span><span class="o">=</span><span class="n">colors_sigma</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels_sigma</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="c1"># Add baseline</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">residuals_perfect</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Perfect Replication&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Different Volatility in Simulation&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Portfolio - Payoff&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     
     <span class="c1"># Subplot 3: Stochastic Volatility (Heston Model)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_stoch_vol</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_stoch_vol</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Stochastic Volatility&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Add baseline</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">residuals_perfect</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Perfect Replication&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Stochastic Volatility (Heston Model)&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Portfolio - Payoff&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     
-    <span class="c1"># Subplot 4: Transaction Costs (Bid-Ask Spread)</span>
+    <span class="c1"># Subplot 4: Transaction Costs (Half Spread)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_bid_ask</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Transaction Costs (Bid-Ask Spread)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">differences_half_spread</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Half Spread = 0.005%&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Add baseline</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">residuals_perfect</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Perfect Replication&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Transaction Costs (Half Spread = 0.005%)&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Portfolio - Payoff&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
     
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     
-    <span class="c1"># Summary statistics for Perfect Setup with varied dt</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summary Statistics for Perfect Setup with Varied Time Steps:&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">dt</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">differences_perfect_varied_dt</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dt = </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">: Mean = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">, Std Dev = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+    <span class="c1"># Summary statistics for Perfect Setup with varied rehedging frequency</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summary Statistics for Perfect Setup with Varied Re-Hedging Frequency:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">freq</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">differences_rehedge_freq</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rebalance Every </span><span class="si">{</span><span class="n">freq</span><span class="si">}</span><span class="s2"> Steps: Mean = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">, Std Dev = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
     
     <span class="c1"># Summary statistics for Violations</span>
-    <span class="n">setups</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;Different Volatility in Simulation&#39;</span><span class="p">:</span> <span class="n">differences_diff_vol</span><span class="p">,</span>
-        <span class="s1">&#39;Stochastic Volatility (Heston Model)&#39;</span><span class="p">:</span> <span class="n">differences_stoch_vol</span><span class="p">,</span>
-        <span class="s1">&#39;Transaction Costs (Bid-Ask Spread)&#39;</span><span class="p">:</span> <span class="n">differences_bid_ask</span>
-    <span class="p">}</span>
-    
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summary Statistics for Violations:&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">setups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># 1. Different Volatility in Simulation</span>
+    <span class="k">for</span> <span class="n">sigma_sim</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">differences_sigma_sim</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Different Volatility in Simulation (sigma_sim = </span><span class="si">{</span><span class="n">sigma_sim</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Mean difference: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Std Dev of difference: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span><span class="p">)</span>
+    
+    <span class="c1"># 2. Stochastic Volatility (Heston Model)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stochastic Volatility (Heston Model):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Mean difference: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">differences_stoch_vol</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Std Dev of difference: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">differences_stoch_vol</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># 3. Transaction Costs (Half Spread)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transaction Costs (Half Spread = 0.005%):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Mean difference: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">differences_half_spread</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Std Dev of difference: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">differences_half_spread</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">run_simulation</span><span class="p">()</span>
@@ -941,32 +975,34 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Simulating Perfect Setup with dt = 0.003968253968253968
-Simulating Perfect Setup with dt = 0.001
-Simulating Perfect Setup with dt = 0.0001
-Simulating Different Volatility in Simulation
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Simulating Perfect Setup with Rehedging Frequency: Every 1 steps
+Simulating Perfect Setup with Rehedging Frequency: Every 10 steps
+Simulating Perfect Setup with Rehedging Frequency: Every 100 steps
+Simulating Different Volatility in Simulation: sigma_sim = 0.19
+Simulating Different Volatility in Simulation: sigma_sim = 0.21
 Simulating Stochastic Volatility (Heston Model)
-Simulating With Bid-Ask Spread
+Simulating With Transaction Costs (Half Spread = 0.005%)
 </pre></div>
 </div>
-<img alt="../_images/bac3874379b06045498fdf504f364a5bc3e4cd22c36cb5b10be6b010e3e73309.png" src="../_images/bac3874379b06045498fdf504f364a5bc3e4cd22c36cb5b10be6b010e3e73309.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Summary Statistics for Perfect Setup with Varied Time Steps:
-dt = 0.00397: Mean = -0.003837, Std Dev = 0.418154
-dt = 0.00100: Mean = -0.002410, Std Dev = 0.217416
-dt = 0.00010: Mean = 0.000211, Std Dev = 0.068425
---------------------------------------------------
+<img alt="../_images/9ddce287678d78ef3beb619ee4bfd6618fbac4ab700bd68401637f0dae2341a2.png" src="../_images/9ddce287678d78ef3beb619ee4bfd6618fbac4ab700bd68401637f0dae2341a2.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Summary Statistics for Perfect Setup with Varied Re-Hedging Frequency:
+Rebalance Every 1 Steps: Mean = 0.000827, Std Dev = 0.068216
+Rebalance Every 10 Steps: Mean = 0.003540, Std Dev = 0.214217
+Rebalance Every 100 Steps: Mean = -0.011300, Std Dev = 0.690467
+------------------------------------------------------------
 Summary Statistics for Violations:
-Different Volatility in Simulation:
-  Mean difference: -1.955048
-  Std Dev of difference: 1.014625
-----------------------------------------
+Different Volatility in Simulation (sigma_sim = 0.19):
+  Mean difference: 0.381420
+  Std Dev of difference: 0.164161
+Different Volatility in Simulation (sigma_sim = 0.21):
+  Mean difference: -0.381580
+  Std Dev of difference: 0.172823
 Stochastic Volatility (Heston Model):
-  Mean difference: -0.118154
-  Std Dev of difference: 1.099000
-----------------------------------------
-Transaction Costs (Bid-Ask Spread):
-  Mean difference: -0.471760
-  Std Dev of difference: 0.467184
+  Mean difference: -0.032125
+  Std Dev of difference: 0.193527
+Transaction Costs (Half Spread = 0.005%):
+  Mean difference: -0.152493
+  Std Dev of difference: 0.092860
 ----------------------------------------
 </pre></div>
 </div>
