@@ -35,7 +35,7 @@ where $d W_t$ is the Wiener process (Brownian motion) that will be introduced la
 Let us review some relevant deterministic differential equations that
 come across in the modelization of dynamical systems.
 
-### Example: Newton's Laws 
+**Example: Newton's Laws**
 
 A first example comes from Newton's laws applied to the dynamics of particles in a gravitational field. The second law of Newton states:
 
@@ -68,7 +68,7 @@ which can be simply integrated step by step by defining intermediate variables, 
 
 $$z \equiv \frac{d^{n-1} y}{d t^{n-1}} \rightarrow \frac{d z}{dt} = f(t) \rightarrow z(t) = z(0) + \int_{t_0}^{t_1} f(t) dt$$
 
-### Example: simple inflation targeting model 
+**Example: simple inflation targeting model**
 
 A simple model of the dynamics of inflation takes into account Central Bank interventions using monetary policy in order to adjust inflation to a given target. When inflation deviates from the target, monetary policy
 is used to bring it back to the target. This can be modelled using the following differential equation:
@@ -100,7 +100,7 @@ inflation that decays to the target. The time scale for decay is independent of 
 can be described by a similar equation, we can define a half-life $\tau$, or time in which the gap is closed by half, as: $\tau = \frac{\log }{\theta}$ Alternatively, $1/\theta$ is the time it
 takes to close the gap to $1/e \approx 0.369$
 
-### Example: Free fall with friction 
+**Example: Free fall with friction**
 
 We can again resort to Newton's laws to model the dynamics of an object in free fall in the atmosphere, where the air introduces an opposite resistance to the action of gravity. A simple model of such friction is
 a force proportional to the speed of the object, namely $F = \eta v$, where $\eta$ is a coefficient that depends on the properties of the atmosphere. Using Newton's law, we have now: 
@@ -248,7 +248,7 @@ Solution of the inflation targetting differential equation  comparing the analyt
 
 ## The Wiener Process
 
-### Definition
+**Definition**
 
 So far we have discussed models where we neglect any uncertainty in the trajectories of the dynamical systems we are modelling. However, in many situations, randomness is a dominant characteristic of the process and
 we need tools to model such stochastic systems.
@@ -276,7 +276,7 @@ $t$, with the following particular properties:
 
 -   $W_t$ has continuous trajectories
 
-### Connection to Gaussian Processes
+**Connection to Gaussian Processes**
 
 The specific properties of the Wiener process make it part of the family of Gaussian processes, which are stochastic processes with the property that any finite set of them, $X_{t_1}, ..., X_{t_n}$ follow a joined
 multivariate Gaussian distribution. The Gaussian process can be described then by a mean function $\mu_t = \mathbb{E}[X_t]$ and a covariance function $k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}]$ that is usually referred as the kernel function of the Gaussian process.
@@ -293,7 +293,7 @@ t_2 1_{t_1 > t_2} + t_1 1_{t_1 \leq t_2} = min(t_1,t_2)
 In which sense it is useful to introduce this relationship? The theory of Gaussian processes has been pushed in the last years within the Machine Learning community, and there are multiple tools available for building, training and making inferences with these
 models. Such toolkit can be useful when building models for dynamical systems using stochastic processes.
 
-### Filtrations and the Martingale Property
+**Filtrations and the Martingale Property**
 
 The Wiener process satisfies the Martingale property, meaning that if we have a series of observations of the process $W_{t_1}, W_{t_2}, ... W_{t_n}$ then the expected value of an observation $t_{n+1} > t_n > ... > t_1$ conditioned to the previous observations only depends on the last observation:
 
@@ -314,7 +314,7 @@ $$\begin{aligned}
 where we have used that the increments of the Wiener
 process have zero mean.
 
-### The Tower Law
+**The Tower Law**
 
 A useful property that exploits the concept of filtration in many applications is the so-called Law of Iterated Expectations or Tower Law. It simply states that for any random variable Y, if $t_m > t_n$:
 
@@ -326,7 +326,7 @@ $\mathbb{E}[\mathbb{E}[\mathbb{E}[...\mathbb{E}[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t
 work out the solution. We will see examples later on.
 
 (multivariate_wiener)=
-### Multivariate Wiener process 
+**Multivariate Wiener process**
 
 We can construct a multivariate Wiener process as a vector
 ${\bf W}_t= (W_{1t}, W_{2t}, ..., W_{Nt})$ with the following properties:
@@ -340,8 +340,8 @@ ${\bf W}_t= (W_{1t}, W_{2t}, ..., W_{Nt})$ with the following properties:
 -   Each of the components of ${\bf W}_t$ has continuous trajectories
 
 (itos_lemma)=
-### Ito's Lemma
-We have seen that given the trajectory of a deterministic dynamical system, $y_t = f(t, {X_t})$, its behaviour over a infinitesimal time-step is described by the following differential equation:
+**Ito's Lemma**
+We have seen that given the trajectory of a deterministic dynamical system, $y_t = f(t, {X_t})$, its behavior over a infinitesimal time-step is described by the following differential equation:
 
 $$dy = \frac{\partial f}{\partial t}dt + \sum_{n=1}^N \frac{\partial f}{\partial X_{i,t}} d X_{i,t}$$
 
@@ -406,7 +406,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 \end{aligned}$$
 
 (integrals_Wiener)=
-### Integrals of the Wiener process 
+**Integrals of the Wiener process**
 
 A firs relevant integral of the Wiener process is:
 
@@ -476,9 +476,7 @@ $$\int_0^t W_u du \sim N(0, \frac{t^3}{3})$$
 where we have used $\int_0^t (t-u)^2 du = \frac{t^3}{3}$
 
 (simulation_wiener)=
-### Simulation of the Wiener process
-
-#### Univariate processes
+**Simulation of the Wiener process**
 
 We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid $t_i = t_0 + \Delta * i$, $i = 0, .., N$, where $\Delta = \frac{t_N - t_0}{N}$, we can exploit directly the Wiener process properties to get:
 
@@ -503,7 +501,7 @@ Alternatively, we can simulate complete paths of the Wiener process by exploitin
 Simulation of five different paths of the the Wiener process using the same parameters, but sampling from a Gaussian process with a Wiener $min(t_1, t_2)$ kernel
 ```
 
-#### Multivariate processes
+**Multivariate processes**
 
 Let us now simulate a multivariate Wiener process of dimension N. The strategy in this case is to start simulating N independent Wiener processes and then use them to generate the correlated paths. This can
 be done using the Cholesky decomposition of the correlation matrix $\Sigma$. Since $\Sigma$ is symmetric and positive define, the decomposition reads: 
@@ -639,16 +637,16 @@ $$S_t \sim N(S_0 + \int_0^t \mu_u du, \int_0^t \sigma_u^2 du)$$
 
 where we have used the properties of the stochastic integral discussed in section {ref}`sde`:
 
-#### Connection to Gaussian processes
+**Connection to Gaussian processes**
 
-The Brownian motion is also a Gaussian process, since any finite set $X_{†_1}, X_{t_2}, X_{t_3}, ..., X_{t_n}$ follows a multivariate Gaussian process. The kernel of the Brownian process is simply to
+The Brownian motion is also a Gaussian process, since any finite set $S_{†_1}, S_{t_2}, S_{t_3}, ..., S_{t_n}$ follows a multivariate Gaussian process. The kernel of the Brownian process is simply to
 derive: 
 
 $$\begin{aligned}
-k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}] = \mathbb{E}[\int_0^{t_1} \sigma_u dW_u \int_0^{t_2} \sigma_v dW_v] = \int_0^{min(t_1, t_2}  \sigma_u^2 du
+k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}] = \mathbb{E}[\int_0^{t_1} \sigma_u dW_u \int_0^{t_2} \sigma_v dW_v] = \int_0^{min(t_1, t_2)}  \sigma_u^2 du
 \end{aligned}$$ 
 
-If $\sigma_t = \sigma$, i.e. is a constant, we hav simply:
+If $\sigma_t = \sigma$, i.e. is a constant, we have simply:
 
 $$\begin{aligned} k(t_1, t_2) = \sigma^2 \textrm{min}(t_1, t_2)
 \end{aligned}$$ 
@@ -656,7 +654,12 @@ $$\begin{aligned} k(t_1, t_2) = \sigma^2 \textrm{min}(t_1, t_2)
 which is the kernel of the Wiener process rescaled by
 $\sigma^2$, as expected given the construction of the Brownian process.
 
-#### Simulation
+To complete the specification we need to add a mean function, which is simply:
+
+$$\mu_t^{GP}= S_0 + \int_0^t \mu_u du$$
+
+
+**Simulation**
 
 Similarly to the Wiener process, simulation can be carried out using a discretization scheme. To improve numerical stability and convergence it is convenient to integrate first the distribution between points in the
 simulation grid $t_0, ..., t_N$, $t_{i+1} = t_i + \Delta$, namely:
@@ -675,13 +678,17 @@ or simply:
 
 $$S_{t_{i+1}} = S_{t_i} + \mu_{t_i} \Delta + \sigma_{t_i} \sqrt{\Delta} Z$$
 
-SIMULATION DISCRETE
+The following graph shows samples of the Brownian motion for specific values of drift and volatility:
 
-Alternatively, we can use the connection to Gaussian processes to perform the simulations using standard packages:
+```{figure} figures/BM_simulation.png
+:name: fig:BM_simulation
+:width: 8in
+Simulation of five different paths of the the Brownian Motion with drift process using $t_0=0$ $t_N=1$, $N = 100$, $W_0 = 0$, $\mu = 5$, $\sigma = 2$.
+```
 
-SIMULATION GAUSSIAN
+Alternatively, we could use the connection to Gaussian processes to perform the simulations using standard packages. We leave it as an exercise for the reader.
 
-#### Estimation
+**Estimation**
 
 If we have a set of observations of a process $D = \{S_{t_0}, ..., S_{t_N}\}$ that we want to model as a Brownian
 motion, we need to find the value of the parameters of the process that best fit the data.
@@ -749,7 +756,7 @@ $$\begin{aligned}
 \end{aligned}$$ 
 
 which are the maximum likelihood estimators (MLE) of the
-mean and the variance of a Gaussian distribution [^2], which is expected for a non-informative prior since 1) for a Gaussian distribution the mean and the mode coincide, 2) maximizing the posterior with the
+mean and the variance of a Gaussian distribution, which is expected for a non-informative prior since 1) for a Gaussian distribution the mean and the mode coincide, 2) maximizing the posterior with the
 non-informative prior is equivalent to maximizing the likelihood. MLE estimators are the standard approach to learn the parameters of stochastic processes in many practical situations, since the Bayesian
 estimations might become intractable for more complex processes as the Brownian motion. However, we must keep in mind their limitations, particularly that they neglect any prior information that might be useful in certain setups, and that they throw away the rest of the
 information contained in the posterior distribution.
@@ -771,7 +778,7 @@ The mean and the mode of both distributions is the same, namely $\mu_{MLE} \Delt
 the estimation error. Only in the case of having a very large data-set $N\rightarrow \infty$, both distributions converge, as in this limit the Student distribution becomes a Gaussian $N(\mu_{MLE} \Delta, \sigma_{MLE} \Delta)$. Another way of seeing this is to interpret the variance term of the Student distribution as the sum
 of two terms: the first one coming from the intrinsic noise of the Brownian process, and the second one, the $1/N$ correction, coming from the estimation uncertainty.
 
-#### Dimensional analysis
+**Dimensional analysis**
 
 In order to reason about stochastic processes it is important to keep track or the units of their parameters. This can also be useful as a consistency check on the estimators derived, for instance. We will use a
 brackets notation for dimensional analysis. For the case of the Brownian motion we write: 
@@ -791,7 +798,7 @@ of the exponential should be a-dimensional. Applying the previous units to the e
 
 $$([S] - [\mu_t] [t])^2 / ([\sigma_t]^2 [t]^2) = 1$$
 
-#### Applications
+**Applications**
 
 The Brownian motion model has plenty of applications. In the financial domain it can be used to model financial or economical indicators for which there is no clear pattern in the time-series beyond potentially a drift to motivate a more sophisticated modelling, i.e. the time-series
 is mostly unpredictable. Notice that the Brownian motion has a domain that extends from $(-\infty, \infty)$, so indicators that have a more restrictive domain might not be suitable for being modelled using the
@@ -841,6 +848,35 @@ $\mathbb{E}[X] = e^{\mu + \sigma^2/2}$ which we will use in multiple application
 
 $$\mathbb{E}[S_t] = S_0 e^{\int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2) +  \frac{1}{2} \int_0^t \sigma_u^2 du} = S_0 e^{\int_0^t \mu_u du}$$
 
+**Connection to Gaussian processes**
+
+The Geometric Brownian Motion (GBM) is also closely related to Gaussian processes, as its logarithm follows a Brownian motion with drift. 
+Therefore, any finite set $\log(S_{t_1}), \log(S_{t_2}), \log(S_{t_3}), ..., \log(S_{t_n}) $ follows a multivariate Gaussian distribution.
+
+The covariance kernel of the logarithmic process can be derived as:
+
+$$ k(t_1, t_2) = \text{cov}[\log(S_{t_1}), \log(S_{t_2})] = \mathbb{E}\left[\int_0^{t_1} \sigma dW_u \int_0^{t_2} \sigma dW_v\right] = \int_0^{\min(t_1, t_2)} \sigma_u^2 du $$
+
+which for constant volatility $\sigma_u = \sigma$ simplifies to:
+
+$$ k(t_1, t_2) = \sigma^2 \min(t_1, t_2) $$
+
+This is the same covariance kernel as that of a standard Brownian motion, but applied to the logarithm of the process, reflecting the Gaussian nature of the logarithmic returns of the GBM. 
+
+It only remains to add the mean process to the specification, which we have already calculated. Since we are working with the logarithm of the process, this is: 
+
+$$\mu_t^{GP}= \log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2)$$
+
+
+**Simulation**
+
+
+**Estimation**
+
+
+**Applications**
+
+
 ### Arithmetic Average of the Brownian motion
 
 As the name suggests, this is a derived process from the standard Brownian motion in which the latter is averaged continuously up to a certain time $T$: 
@@ -853,27 +889,54 @@ To derive its distribution we integrate by parts the
 Brownian process: 
 
 $$\begin{aligned}
-M_t = \frac{T S_T - t S_t}{T-t} - \frac{1}{T-t}\int_t^T u d S_u = \nonumber 
+M_t = \frac{T S_T - t S_t}{T-t} - \frac{1}{T-t}\int_t^T u d S_u  
 = S_t + \int_t^T \frac{T-u}{T-t} dS_u
 \end{aligned}$$ 
 
 The result is the sum of two different parts, one is the
 evolution of the Brownian motion up to time $t$, where averaging starts. The second averages the variations of the Brownian motion. Since both terms are independent and Gaussian their distribution is simply:
 
-$$M_t \sim N(S_0, t +  \frac{1}{3} (T-t))$$ 
+$$M_t \sim N(S_0 + \int_0^t \mu_u du, \sigma^2(t +  \frac{1}{3} (T-t)))$$ 
 
 where we have used:
 $$\int_t^T (\frac{T-u}{T-t})^2 du = \frac{1}{3} (T-t)$$ 
 
-Notice that the variance of the averaged part is smaller than the variance up to t. This makes sense, since taking averages smooths out the random behaviour of
-the process.
+and assumed a constant volatility $\sigma_u = \sigma$. Notice that the variance of the averaged part is smaller than the variance up to t. This makes sense, since taking averages smooths out the random behavior of the process.
+
+**Connection to Gaussian Processes**
+
+The arithmetic mean of Brownian motion is closely connected to Gaussian processes. Since the underlying process, $S_t$, is itself a Gaussian process, the arithmetic mean $M_t$, being a linear transformation of the Brownian motion, also follows a Gaussian process. 
+
+For any finite set of times $ M_{t_1}, M_{t_2}, \dots, M_{t_n} $, the joint distribution of these variables is multivariate Gaussian. The covariance structure of the arithmetic mean process can be derived as follows:
+
+$$ \text{cov}(M_{t_1}, M_{t_2}) = \mathbb{E}\left[ \int_{t_1}^T \frac{T-u}{T-t_1} dS_u \cdot \int_{t_2}^T \frac{T-v}{T-t_2} dS_v\right] $$
+
+Since $S_u $ is a Brownian motion, the covariance simplifies to:
+
+$$ \text{cov}(M_{t_1}, M_{t_2}) = \frac{1}{(T-t_1)(T-t_2)} \int_{\max(t_1,t_2)}^T \sigma^2 (T-u)^2 du \nonumber \\ = \frac{(T-\max(t_1, t_2))^3}{3(T-t_1)(T-t_2)} = k(t_1, t_2)$$
+
+This integral yields a covariance structure that reflects the smoothing effect of averaging over the time intervals, reducing the variance and creating a dependency between the values of the arithmetic mean process at different times. 
+
+As in the previous processes, if we are starting from a non-zero mean and / or the Brownian motion has drift, we need to add the mean:
+
+$$\mu_t^{GP} = S_0 + \int_0^t \mu_u du$$
+
+**Simulation**
+
+
+
+
+**Estimation**
+
+
+**Applications**
 
 ### Orstein-Uhlenbeck process
 
 The Orstein - Uhlenbeck process is an extension of the Brownian motion process in which the drift term is modified to prevent large deviations from the mean $\mu$. This is achieved by making the drift penalize those
 deviations: 
 
-$$d S_t = \theta (\mu - S_t) dt + \sigma_t d W_t$$ 
+$$d S_t = \theta (\mu - S_t) dt + \sigma d W_t$$ 
 
 The strength of the penalty is controlled by a parameter $\theta > 0$, which is called the mean reversion speed: the larger this parameter, the faster the process $S_t$ reverts to the mean. Such property of mean
 reversion is not unique to the Orstein - Uhlenbeck process, but the latter is probably the most simple way to achieve this effect in a stochastic differential equation, allowing for the computation of
@@ -881,22 +944,61 @@ closed-form solutions for the probability distribution of the process. To derive
 
 $$\begin{aligned}
 d(e^{\theta t} S_t) = \theta e^{\theta t} S_t dt + e^{\theta t} dS_t = \nonumber \\
-e^{\theta t}(\theta \mu dt + \sigma_t dW_t)
+e^{\theta t}(\theta \mu dt + \sigma dW_t)
 \end{aligned}$$ 
 
 Integrating this equation: 
 
 $$\begin{aligned}
-e^{\theta t} S_t - S_0 = (e^{\theta t} - 1) \mu + \int_0^t e^{\theta u} \sigma_u dW_u
+e^{\theta t} S_t - S_0 = (e^{\theta t} - 1) \mu + \sigma \int_0^t e^{\theta u} dW_u
 \end{aligned}$$ 
 
 Finally: 
 
-$$S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}) + \int_0^t e^{\theta (u-t)} \sigma_u dW_u$$
+$$S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}) + \sigma \int_0^t e^{\theta (u-t)} dW_u$$
 
-#### Other mean reverting processes
+Therefore, the Orstein - Uhlenbeck process follows a Gaussian distribution with time dependent drifts and variances:
 
-CIR $$d S_t = \theta (S_t - \mu_t) dt + \sigma_t S_t^{1/2} d W_t$$
+$$ S_t \sim N(S_0 e^{-\theta t} + \mu (1 - e^{-\theta t}), \frac{\sigma^2}{2\theta} (1 - e^{-2\theta t})) $$
+
+The process has a natural time-scale, the mean reversion time, $\tau \equiv 1/\theta$. For times $t \gg \tau$ the distribution becomes stationary around the long-term mean:
+
+$$ S_t \sim N(\mu, \frac{\sigma^2}{2\theta}) $$
+
+The variance of the stationary distribution is no longer time - dependent, as in the Brownian motion process. Due to the pull-back effect that the mean reversion induces in the process around the long-term mean, the process remains bounded and stable over time.
+
+**Connection to Gaussian Processes**
+
+Given the previous analysis on the distribution of the Orstein - Uhlenbeck process, which is Gaussian, we can readily see that for any finite set of times, the joint distribution of $ S_{t_1}, S_{t_2}, \dots, S_{t_n} $, is multivariate Gaussian. The Orstein - Uhlenbeck is therefore a Gaussian Process with kernel given by:
+
+$$ k(t_1, t_2) = \textrm{cov}[S_{t_1} S_{t_2}] = \sigma^2 \int_0^{\min(t_1,t_2)} e^{-\theta(t_1-u)} e^{-\theta(t_2 -u)}du \nonumber \\ = \sigma^2 e^{-\theta (t_1 + t_2) }\left( \frac{e^{2 \theta \min(t_1,t_2)}-1}{2\theta}\right) = \frac{\sigma^2}{2\theta} e^{-\theta |t_1 - t_2| }\left( 1-e^{2 \theta \min(t_1,t_2)}\right)$$
+
+where we have used that $t_1 + t_2 - 2 \min(t_1, t_2) = |t_1 - t_2|$ to simplify the expression.
+
+The specification so far only describes the mean-reverting fluctuations around the mean. To complete the mapping to a Gaussian process of the full Orstein - Uhlenbeck process we need to add the mean to the specification:
+
+$$\mu_t^{GP} = S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t})$$
+
+
+**Estimation**
+
+
+**Applications**
+
+
+**Other mean reverting processes**
+
+The Cox-Ingersoll-Ross (CIR) process is another mean-reverting stochastic process. It can be considered a variation of the Orstein-Uhlenbeck process, but with the added feature that the volatility term depends on the square root of the process itself, ensuring that the process remains positive.
+
+The CIR process is given by:
+
+$$d S_t = \theta (S_t - \mu_t) dt + \sigma_t S_t^{1/2} d W_t$$
+
+Again, $\theta > 0$ controls the speed of mean reversion, $\mu$ represents the long-term mean level, and $\sigma$ is the volatility. Unlike the Orstein-Uhlenbeck process, where the volatility is constant, the CIR model introduces a state-dependent volatility term $\sqrt{S_t}$, which ensures that $S_t$ stays positive (as the volatility goes to zero when $S_t$ approaches zero). 
+
+Though no closed-form solution exists for the CIR process as simple as the one for the Orstein-Uhlenbeck process, it is often analyzed through numerical methods or approximations. The Fokker-Planck equation corresponding to the CIR process can be solved to obtain the transition probability density, which follows a non-central chi-squared distribution.
+
+The CIR process is widely used in financial applications, such as in the modeling of short-term interest rates and in the Heston model for stochastic volatility, due to its ability to capture mean reversion and maintain non-negativity.
 
 ### Brownian bridge
 
@@ -924,7 +1026,7 @@ The result fits well our expectation of such process:
 for $t = 0$ and $t = T$, the process has no variance, since those points correspond to the constraints where the process is set to zero. Given those constraints, and the symmetry of the Brownian bridge with respect
 to the transformation $t \rightarrow T-t$, we expect the maximum variance to be at the half-point $T/2$, which is indeed the maximum of the function $t(1-\frac{t}{T})$
 
-#### Connection to Gaussian processes
+**Connection to Gaussian processes**
 
 The Brownian bridge is also a Gaussian process, with the following kernel: 
 
@@ -932,24 +1034,303 @@ $$\begin{aligned}
 k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T} W_T])(W_{t_2} - \frac{t_2}{T} W_T)] = \nonumber \\ \textrm{min}(t_1, t_2) -  \frac{t_2}{T} t_1 -  \frac{t_2}{T} t_1 + \frac{t_1 t_2}{T} = \textrm{min}(t_1, t_2) - \frac{t_1 t_2}{T}
 \end{aligned}$$
 
-#### Simulation
+The kernel has two terms: the first one corresponds to the kernel of a Wiener process, whereas the second one is a correction that reflects the boundary conditions of the Brownian bridge, i.e. the increasing certainty as we approach $t \rightarrow T$. Mathematically, we have $k(0,0) = 0$ as in the Brownian motions, but the additional constraint $k(T, T) = 0$, specific from the Brownian motion.
 
-TO DO
+**Simulation**
 
-#### Applications
+As usual, we can simulate the process either discretizing the stochastic differential equations or exploiting the Gaussian processes connection. If we want to approach the problem using discretization, the most simple way to do it is to simulate a discrete Wiener process which is then plugged into the Brownian Bridge expression.
+
+In the following picture we follow the other path and simulate the Brownian Bridge using Gaussian Processes:
+
+```{figure} figures/BB_gps.png
+:name: fig:BB_gps
+:width: 8in
+Simulation of five different paths of the the Brownian Bridge using $t_0=0$ $t_N=1$, $N = 100$.
+```
+**Applications**
 
 Brownian bridges or more realistic but similarly constructed processes (e.g. using the Brownian motion as the primitive instead of the Wiener process, or specifying fixed but non-zero boundaries), can be used to
 model situations where there is no uncertainty about the final value of a stochastic process. This is for instance the case of financial instruments like bonds, in particular zero-coupon bonds, which are bonds
-that simply return their principal at maturity without paying a coupon. They are also known to be more suitable for simulation than the underlying Wiener process, which can be written as a function of the
-Brownian bridge simply as: 
-
-$$W_t = B_t + \frac{t}{T} W_T$$ 
-
-By simulating the Brownian bridge and a single standard Gaussian variable $Z\sim N(0,1)$, so that $W_T = \sqrt{T}Z$, we can generate samples of the Wiener process.
+that simply return their principal at maturity without paying a coupon. 
 
 ## Jump processes
 
-WIP
+So far we have described a family of continuous stochastic processes, with the Wiener process as the primitive to model different behaviors that can be useful to describe multiple phenomena. However, in many real situations we observe discrete jumps that are not rigorously described by these stochastic models, for which the probability of a jump of any size tends to zero as $dt \rightarrow 0$. 
+
+Of course, one could argue that a continuous model is in general wrong in many applications, and it is only used in practice because of tha mathematical tractability. Take for instance price series of financial instruments. At some time-scale determined by the infrastructure of the exchange, prices simply move discretely tick by tick, and a continuous model is no longer a good description of the times-series at this time-scale.  
+
+As mentioned, though, continuous models are in fact a good description of financial price-series at time-scales of interests for many trading models, continuity being a natural reflection of investors taking the last price traded as the reference for successive valuations. However, even in those time-scales we observe sometimes price movements in a short period of a magnitude that a continuous model cannot account for. Examples are for example 2010's flash-crash in the US market when using a time resolution of minutes, or October 1989's Black Friday when using end of day prices. 
+
+This is not because the distributions derived in the continuous stochastic processes studied so far don't allow those scenarios. Think for instance that the Gaussian distribution has non-zero probability density over the entire domain, and in real applications one could argue that the jump does not happen instantaneously if short enough time-scales are observed. But they are so unlikely under the model that any real application built upon them will not take into account those scenarios in practice, introducing potential risks. In other words, they are not good generative models of the phenomenon at hand, since such scenarios will not in practice expected when sampling or simulating from them.
+
+Given that we still want to exploit the mathematical simplicity of continuous stochastic processes, we would like to introduce mathematical tools that allow us to incorporate discrete jumps with a meaningful probability in these models. The motivation is again that of mathematical simplicity, since one could argue that more complex continuous models could be built to describe those situations, as far as we agree that at a short enough time - scale what we observe as a jump can be described as a rapidly series of continuous changes. For instance, a model with regime switches in volatility. However, such complexity would penalize the applications of the model, hence the interest in modelling jumps in continuous time. 
+
+In the following section we will motivate such model, that we will formalize later on.
+
+### Poisson processes 
+
+**Motivation: a simple model for jumps in continuous time**
+
+We want to develop a model that allows for jumps of a given size $J$ to happen instantaneously in continuous time. We denote by $N_t$the number of jumps that have accumulated in the time interval $[0, t]$. We make the hypothesis that a jump between time $t$ and $t + dt$ happens with a probability that is independent of the number of jumps so far:
+
+$$ P(N_{t+dt} = n \mid N_t = n-1) = \lambda dt $$
+
+where $\lambda$ is a constant. This means, on the other hand, that:
+
+$$P(N_{t+dt} = n \mid N_t = n) = 1 - \lambda \, dt,$$
+
+since we are keeping terms up to $O(dt)$.
+
+Applying the rules of probability, we can express the probability of having $n$ jumps up to time $t + dt$ as:
+
+$$ P(N_{t+dt} = n) = P(N_{t+dt} = n \mid N_t = n) P(N_t = n) + P(N_{t+dt} = n \mid N_t = n-1) P(N_t = n -1) \lambda dt \nonumber \\ 
+= P(N_t = n) \left( 1 - \lambda dt \right) + P(N_t = n-1) \lambda dt $$
+
+Reorganizing the equation we get: 
+
+$$\frac{P(N_{t+dt} = n) - P(N_t = n)}{dt} = -\lambda P(N_t = n) + \lambda P(N_t = n - 1)$$
+
+Taking the limit as $dt \rightarrow 0$, this becomes a differential equation:
+
+$$
+\frac{d}{dt} P(N_t = n) = -\lambda P(N_t = n) + \lambda P(N_t = n - 1)
+$$
+
+For $n = 0$, this equation simplifies to:
+
+$$ \frac{d}{dt} P(N_t = 0) = -\lambda P(N_t = 0) $$
+
+whose solution is, with the initial condition $P(N_0 = 0) = 1$:
+
+$$P(N_t = 0) = e^{-\lambda t}$$
+
+which is called the first jump probability. For $n = 1$ we have:
+
+$$
+\frac{d}{dt} P(N_t = 1) = -\lambda P(N_t = 1) + \lambda P(N_t = 0) = -\lambda P(N_t = 1) + \lambda e^{-\lambda t}
+$$
+
+We can rewrite the equation as:
+$$
+e^{\lambda t} \frac{d}{dt} P(N_t = 1) + \lambda e^{\lambda t} P(N_t = 1) = \lambda \\ 
+\rightarrow \frac{d}{dt}\left(e^{\lambda t} P(N_t = 1)\right) = \lambda
+$$
+
+Therefore the solution that satisfies the initial condition is $P(N_t = 1) = e^{\lambda t} \lambda t$. Continuing with $n = 2$ we have the differential equation:
+
+$$
+\frac{d}{dt} P(N_t = 2) + \lambda P(N_t = 2) = \lambda^2 t e^{-\lambda t}
+$$
+
+which can be again rewritten as: 
+
+$$ \frac{d}{dt}\left(e^{\lambda t} P(N_t = 1)\right) = \lambda^2 t$$
+
+And the solution is now $P(N_t = 2) = \frac{(\lambda t)^2}{2} e^{-\lambda t}$. 
+
+At this point a patterns starts to be clear in the recursive solution as to apply the inductive step and propose a solution of the following form that generalizes the previous solutions:
+
+$$P(N_t = n) = \frac{(\lambda t)^{n}}{n!} e^{- \lambda t }$$
+
+Which we can see that satisfies the recursive differential equation:
+
+$$ \frac{d}{dt}P(N_t = n) = -\lambda P(N_t = n) + \frac{n \lambda (\lambda t)^{n-1}}{n!} e^{- \lambda t } \nonumber \\ = -\lambda P(N_t = n) + \lambda P(N_t = n-1) $$
+
+We recognize this expression as the Poisson distribution function with an intensity $\lambda$. Therefore this is called a homogeneous Poisson process, in contrast to non-homogeneous Poisson processes where the intensity is a deterministic function of time $\lambda_t$. 
+
+The previous demonstration can be easily reproduced in this case. The differential equation reads now:
+
+$$\frac{P(N_{t+dt} = n) - P(N_t = n)}{dt} = -\lambda_t P(N_t = n) + \lambda_t P(N_t = n - 1)$$
+
+with the following solution, that can also be constructed inductively:
+
+$$
+P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
+$$
+
+There are other two related processes that is worth to mention: we have a self-exciting or Hawkes process when the intensity is a function of previous number of jumps, namely:
+
+$$\lambda_t = \mu_t + \sum_{i, \tau_i < t} \nu(t-\tau_i)$$
+
+where $\mu_t$ is a deterministic function (the background intensity). $\tau_i$ is the time at which jump $i$ happened, and $\nu$ is the excitation function, a deterministic function that controls the clustering of jumps. A popular choice is an exponential shape: $\mu(t - \tau_i) = \alpha e^{-\beta(t- \tau_i)}$. 
+
+Finally, if the intensity is itself a stochastic process, we have a Cox process.
+
+
+**Definition and general properties**
+
+A counting process $N_t$ is called a Poisson process with rate $\lambda > 0$ if it satisfies the following properties:
+
+1. **$N_0 = 0$**: the process starts with zero events at time zero.
+
+2. **Independent increments:** The numbers of events occurring in disjoint time intervals are independent. That is, for any $ 0 \leq s < t $, the number of events in $[s, t]$ is independent of the events before time $s$.
+
+3. **Stationary increments:** The probability distribution of the number of events occurring in any time interval depends only on the length of the interval, not on its position on the time axis. Specifically, for a homogeneous Poisson process, the number of events in an interval of length $t$ follows a Poisson distribution with parameter $\lambda$:
+
+   $$
+   P(N_{t + s} - N_s = n) = \frac{(\lambda t)^n}{n!} e^{-\lambda t}
+   $$
+
+4. **No simultaneous events:** The probability of more than one event occurring in an infinitesimally small interval $dt$ is negligible, specifically of order $O(dt)$.
+
+An important property of the Poisson process is that the times between consecutive events, known as **inter-arrival times**, are independently and identically distributed (i.i.d.) exponential random variables with parameter $\lambda$:
+
+$$P(T_i > t) = e^{-\lambda t}, \quad t \geq 0$$
+
+where $T_i$ is the time between the (i-1)-th and the i-th event.
+
+The exponential distribution of inter-arrival times implies the memoryless property: the probability that an event occurs in the next $t$ units of time is independent of how much time has already elapsed since the last event.
+
+**Mean and variance:**
+
+For a Poisson process with rate $\lambda$, both the expected value and the variance of $N_t$ are linear in time:
+
+$$E[N_t] = \lambda t, \quad Var(N_t) = \lambda t$$
+
+This reflects that the mean number of events grows linearly with time, and the variance equals the mean.
+
+**Superposition and decomposition:**
+
+- **Superposition:** If $N_t^{(1)}$ and $N_t^{(2)}$ are independent Poisson processes with rates $\lambda_1$ and $\lambda_2$, respectively, then their sum $N_t = N_t^{(1)} + N_t^{(2)}$ is also a Poisson process with rate $\lambda = \lambda_1 + \lambda_2$.
+
+- **Decomposition:** Conversely, a Poisson process with rate $\lambda$ can be split into two independent Poisson processes with rates $p \lambda$ and $(1 - p) \lambda$, where $p \in [0,1]$, by assigning each event independently to one of the processes with probability $p$ and $1 - p$.
+
+**Estimation**
+
+The estimation of Poisson processes is relatively straightforward since they are characterized by a single parameter $\lambda$, which is directly linked with the mean of the process $E[N_t] = \lambda t$. Therefore, by computing the average number of jumps in a given time interval we can quickly estimate this parameter.
+
+**Simulation**
+
+Simulating Poisson processes is relatively simple by discretizing time in a grid with time-step $\Delta t$. Then we can approximate:
+
+$$ P(N_{t_i+\Delta t} = n \mid N_{t_i} = n-1) \simeq \lambda \Delta t$$
+
+$$ P(N_{t_i+\Delta t} = n \mid N_{t_i} = n) \simeq 1-\lambda \Delta t$$
+
+which is a random binary variable with probability $\Delta t$. Therefore, starting at $t = 0$, we can build paths of the Poisson process by using samples of this binary variable. At every time-step $t_i$ we keep or increase the counter $N_{t_i}$ depending on the result. The following plot shows such simulation of a Poisson process.
+
+```{figure} figures/poisson_process.png
+:name: fig:poisson_process
+:width: 8in
+Simulation of a Poisson process in a discrete grid with 50 time-steps and intensity $\lambda = 0.2$
+```
+
+The same method can be used for more complex jump processes. For example, the following plot has been generated for a Hawkes process using a exponential excitation function. In this case, jumps tend to cluster together in comparison with the behaviour of the Poisson process.
+
+```{figure} figures/hawkes_process.png
+:name: fig:hawkes_process
+:width: 8in
+Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again $\mu = 0.2$. The excitation function is an exponential with $\alpha = 0.5$ and $\beta = 1$. 
+```
+
+**Applications:**
+
+Poisson processes are widely used to model random events in various fields, like queueing theory or telecommunications. In finance, they are typically used to model the arrival of orders (RfQs, limit or market orders), or to simulate defaults of companies, in which case only a single jump is allowed (jump to default). 
+
+They can also model jumps in financial prices, for instance in end of day time series, that incorporate the effect of unexpected news. For this application, though, these processes need to be generalized to incorporate random jumps (compound Poisson processes) and be included in Brownian price diffusions that model the evolution of prices in normal situations (jump diffusion processes).
+
+### Compound Poisson processes
+
+In many applications, events not only occur randomly over time but also have random magnitudes or impacts. A compound Poisson process extends the Poisson process by allowing for random jump sizes.
+
+A compound Poisson process $X_t$ is defined as:
+
+$$X_t = \sum_{i=1}^{N_t} Y_i,$$
+
+where:
+
+- $N_t$ is a Poisson process with rate $\lambda$.
+- $\{ Y_i \}$ are i.i.d. random variables representing the sizes of the jumps occurring at event times.
+- The $Y_i$ are independent of the Poisson process $N_t$.
+
+Compound Poisson processes have the following properties:
+
+- **Independent increments:** The increments $X_{t + s} - X_s$ over non-overlapping intervals are independent.
+- **Stationary increments:** For a homogeneous Poisson process, the statistical properties of increments depend only on the length of the interval, not its position.
+- **Distribution of $X_t$:** The distribution of $X_t$ is determined by both the distribution of $N_t$ and the distribution of the jump sizes $Y_i$.
+
+**Mean and variance:**
+
+The mean and variance of a compound Poisson process can be calculated using Wald's equation, which states that the mean of the sum of real-valued, independent and identically distributed random variables $x_i$, of which there are a random number of them $N \geq 0$, is:
+
+$$\mathbb{E}[x_1 + ... + x_N] = \mathbb{E}[N] \mathbb{E}[x_1]$$
+
+This result can be proven simply by conditioning the expected value on $N$:
+
+$$\mathbb{E}[x_1 + ... + x_N] = \sum_{n=0}^\infty P(N=n) \mathbb{E}[x_1 + ... + x_N|N]  \nonumber \\ = \sum_{n=0}^\infty P(N=n) N \mathbb{E}[x_1] = \mathbb{E}[N] \mathbb{E}[x_1]$$
+where we have used that $\mathbb{E}[x_1]$ is independent of $N$. Coming back to the definition of compound Poisson process: 
+
+$$\mathbb{E}[X_t] = \mathbb{E}[N_t] \mathbb{E}[Y_i] = \lambda t \mathbb{E}[Y_i]$$
+
+A similar reasoning can be applied to the variance: 
+
+$$
+\mathbb{Var}(X_t) = \mathbb{E}[N_t] \mathbb{Var}(Y_i) + \mathbb{Var}(N_t) \left( \mathbb{E}[Y_i] \right)^2 = \lambda t \left( \mathbb{Var}(Y_i) + \left( \mathbb{E}[Y_i] \right)^2 \right)
+$$
+
+
+**Simulation:**
+
+To simulate a compound Poisson process we simulate first  the number of events $N_t$ occurring up to time $t$ using a Poisson distribution with parameter $\lambda t$. Then, for each event $i = 1, \dots, N_t$, we sample a jump size $Y_i$ from the specified distribution. Finally, we sum the jump sizes to obtain $X_t = \sum_{i=1}^{N_t} Y_i$.
+
+A result of such simulation is shown in the following figure, with jumps being driven by an exponential model.
+
+```{figure} figures/compound_poisson.png
+:name: fig:compound_poisson
+:width: 8in
+Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is $\mu = 0.2$. For the distribution of jumps we use a exponential distribution with rate $\eta = 2.5$. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process. 
+```
+
+### Jump Diffusion Processes
+
+So far we have discussed jump processes that simulate discrete random events. But we would like to combine them with the continuous stochastic processes we studied in the previous part of this chapter, in order to generate richer dynamics to model real phenomena. 
+
+A jump diffusion process $X_t$ is a stochastic process that combines a standard diffusion process with a jump component. It can be defined by the stochastic differential equation (SDE):
+
+$$dX_t = \mu(X_{t^-}, t) \, dt + \sigma(X_{t^-}, t) \, dW_t + dJ_t$$
+
+where:
+
+- $\mu(X_{t^-}, t)$ is the drift coefficient, representing the deterministic trend.
+- $\sigma(X_{t^-}, t)$ is the diffusion coefficient, representing the volatility.
+- $W_t$ is a Wiener process
+- $dJ_t$ represents the jump component.
+- $X_{t^-}$ denotes the value of $X_t$ just before time $t$, accounting for any discontinuities at $t$.
+
+The jump component $dJ_t$ is often modeled using a compound Poisson process:
+
+$$dJ_t = J \, dN_t = \sum_{i=1}^{N_t} Y_i$$
+
+where as before $N_t$ is a Poisson process with intensity $\lambda$, $Y_i$ are i.i.d. random variables representing the jump sizes, and we have $J = Y_i$ when a jump occurs at time $t$.
+
+**Ito's Lemma with Jumps**
+
+To analyze functions of jump diffusion processes, we need to extend the classical Ito's lemma to account for jumps. The Ito's lemma with jumps provides a framework for calculating the differential of a function applied to a process that includes both continuous and jump components.
+
+Let $X_t$ be a jump diffusion process defined above, and let $f(X_t, t)$ be a twice continuously differentiable function in $x$ and once differentiable in $t$. Then, the differential $df(X_t, t)$ is given by:
+
+$$
+\begin{align*}
+df(X_t, t) &= \left( \frac{\partial f}{\partial t} + \mu(X_{t^-}, t) \frac{\partial f}{\partial x} + \frac{1}{2} \sigma^2(X_{t^-}, t) \frac{\partial^2 f}{\partial x^2} \right) dt \\
+&\quad + \sigma(X_{t^-}, t) \frac{\partial f}{\partial x} \, dW_t + \left[ f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t) \right] dN_t,
+\end{align*}
+$$
+
+where $\Delta X_t = X_t - X_{t^-} = J$ is the jump size at time $t$.
+
+JUSTIFY DERIVATION  
+
+**Applications**
+
+As mentioned above, one of the main applications of these models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously. 
+One famous instance of such models incorporating jumps is Merton's jump diffusion model {cite:p}`mertonJumps1976`, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price $S_t$ is:
+
+$$dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (J - 1) \, dN_t,$$
+
+where $\mu$ is the expected return rate, $\sigma$ is the volatility, $J$ is a random variable representing the jump multiplier, and $dN_t$ indicates the occurrence of a jump, modeled by a Poisson process with intensity $\lambda$.
+
+For more theory or applications of jump diffusion processes, a good reference is that or Cont & Tankov {cite:p}`cont2004financial`. 
+
 
 ## Exercises
 
@@ -962,6 +1343,8 @@ WIP
     -   $f(W_t) = t W_t$
 
     -   $f(W_t) = \exp(W_t)$
+
+3. Simulate a Brownian motion with drift using the connection to Gaussian Processes. 
 
 [^1]: The demonstration is relatively straight-forward by computing the characteristic function of a sum of independent random Gaussian variables
 
