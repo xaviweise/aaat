@@ -448,7 +448,8 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">14.3.2.2. Example: European Call Options</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-model">14.3.2.3. The Black - Scholes - Merton Model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">14.3.2.4. Solving the Black-Scholes-Merton equation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.2.5. Using the BSM framework in practice</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#an-alternative-derivation-the-market-price-of-risk">14.3.2.5. An alternative derivation: the market price of risk</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.2.6. Using the BSM framework in practice</a></li>
 </ul>
 </li>
 </ul>
@@ -798,8 +799,20 @@ d C_t = \frac{\partial C_t}{\partial t} dt + \frac{\partial C_t}{\partial S_t} d
 <p>The second big difference is of course the dependence with respect to the expected market drift, since in the BSM theory the premium is independent of it. The resulting plot is interesting because it points out to the resolution of the question of why are options traded in practice, assuming both dealers and investors have the same view of the market. As mentioned before, if both were to value the option as an investment, there would be no agreement on the premium to pay, since they hold opposite sides in the trade. However, if the dealer uses BSM theory there is room for agreement, at least for those investors whose expectations on market drifts make the premium requested by the dealer attractive. In the picture, such situation corresponds to those expected drifts that make the premium that an investor is willing to pay larger than the one commanded by the dealer.</p>
 <p>From a classical Economics point of view, those frameworks fit well together to explain the derivatives market in terms of demand and supply. Demand for options is driven by investors looking to generate returns on investment, whereas supply comes from dealers that “fabricate” those options using replication strategies. The BSM premium is essentially the cost of “fabricating” the option, in analogy to the language used in the production of goods.</p>
 </section>
+<section id="an-alternative-derivation-the-market-price-of-risk">
+<h4><span class="section-number">14.3.2.5. </span>An alternative derivation: the market price of risk<a class="headerlink" href="#an-alternative-derivation-the-market-price-of-risk" title="Permalink to this heading">#</a></h4>
+<p>An alternative derivation of the BSM equation that can be helpful to gain intuition on the theory uses the financial concept of market price of risk. The market price of risk is essentially a Sharpe ratio, commonly used in the theory of investment. The Sharpe ratio computes the excess returns of an investment, i.e. the expected returns devoted fom the risk-free interest, over their risk defined as the volatility of the returns. For the stock that is the underlying of the option, and using continuos time, this is:</p>
+<div class="math notranslate nohighlight">
+\[\lambda_{S} = \frac{ \mathbb{E}[\frac{dS_t}{S_t}]- rdt}{\sqrt{Var[\frac{dS_t}{S_t}]}} = \frac{\mu_t - r}{\sigma}\sqrt{dt}\]</div>
+<p>CHECK AND CITE REBONATO</p>
+<p>We can now use Ito’s formula to compute the market price of risk of the option:</p>
+<div class="math notranslate nohighlight">
+\[\lambda_{C} = \frac{ \mathbb{E}[\frac{dC}{C}]- rdt}{\sqrt{Var[\frac{dC}{C}]}} = \frac{\frac{\partial C}{\partial t}+ \mu_t S_t\frac{\partial C}{\partial S_t}+\frac{1}{2}\sigma^2 S_t^2 \frac{\partial^2 C}{\partial S_t^2} - rC}{\sigma S_t \frac{\partial C}{\partial S_t}} \sqrt{dt}\]</div>
+<p>We can now apply a different version of the arbitrage-free theory. Since the value of the option is essentially derived from the underlying stock, which the only risk factor affecting the option price in the BSM theory, then as investment opportunities both should have the same Sharpe ratio or market price of risk, i.e. <span class="math notranslate nohighlight">\(\lambda_S = \lambda_C\)</span>. Otherwise, investors would bid up the price of the one with the largest Sharpe ratio until both of them equalize. Applying this equality the terms proportional to the drift <span class="math notranslate nohighlight">\(\mu_t\)</span> cancel and we get back to the BSM differential equation.</p>
+<p>One could of course have used the argument in reverse, reorganizing the BSM equation in terms of market prices of risk to prove that the equality of those is a consequence of the arbitrate-free argument used when building the replication portfolio.</p>
+</section>
 <section id="using-the-bsm-framework-in-practice">
-<h4><span class="section-number">14.3.2.5. </span>Using the BSM framework in practice<a class="headerlink" href="#using-the-bsm-framework-in-practice" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">14.3.2.6. </span>Using the BSM framework in practice<a class="headerlink" href="#using-the-bsm-framework-in-practice" title="Permalink to this heading">#</a></h4>
 <p>The Black - Scholes - Merton pricing theory supposed a change of paradigm for dealers creating liquidity in option markets. The theory allows for a consistent pricing of derivatives beyond options, providing not only a way to calculate the premium but a hedging strategy that neutralizes the risk of the derivative, or from a different angle, a recipe to synthesize those derivatives from liquid tradable instruments.</p>
 <p>However, the BSM theory is based on multiple hypothesis that are not necessarily realistic, so the dealer needs to take into account how relevant is for the pricing and hedging of derivatives that those hypothesis are not consistent with reality. For instance:</p>
 <ul class="simple">
@@ -834,7 +847,7 @@ d V_t = \kappa (\theta - V_t) + \chi \sqrt{V_t} dW_{2,t} \\
 <section id="exercises">
 <h2><span class="section-number">14.4. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike <span class="math notranslate nohighlight">\(K_1\)</span> and maturity <span class="math notranslate nohighlight">\(T\)</span>, using another (liquid) option tradable in the market with strike <span class="math notranslate nohighlight">\(K_2\)</span> and same maturity <span class="math notranslate nohighlight">\(T\)</span>. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is <span class="math notranslate nohighlight">\(\Pi_t = \Delta_t C_2(S_t, t) + \beta_t\)</span>, with the terminal condition <span class="math notranslate nohighlight">\(\Pi_T = C_1(S_T, T)\)</span>.</p></li>
+<li><p>Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike <span class="math notranslate nohighlight">\(K_1\)</span> and maturity <span class="math notranslate nohighlight">\(T\)</span>, using another (liquid) option tradable in the market with strike <span class="math notranslate nohighlight">\(K_2\)</span> and same maturity <span class="math notranslate nohighlight">\(T\)</span>. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is <span class="math notranslate nohighlight">\(\Pi_t = \Delta_t C_2(S_t, t) + \beta_t\)</span>, with the terminal condition <span class="math notranslate nohighlight">\(\Pi_T = C_1(S_T, T)\)</span>. Hint: link the result with the market price of risk for options introduced in this chapter.</p></li>
 </ul>
 <hr class="footnotes docutils" />
 <aside class="footnote brackets" id="id5" role="note">
@@ -943,7 +956,8 @@ d V_t = \kappa (\theta - V_t) + \chi \sqrt{V_t} dW_{2,t} \\
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">14.3.2.2. Example: European Call Options</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-model">14.3.2.3. The Black - Scholes - Merton Model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">14.3.2.4. Solving the Black-Scholes-Merton equation</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.2.5. Using the BSM framework in practice</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#an-alternative-derivation-the-market-price-of-risk">14.3.2.5. An alternative derivation: the market price of risk</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-bsm-framework-in-practice">14.3.2.6. Using the BSM framework in practice</a></li>
 </ul>
 </li>
 </ul>

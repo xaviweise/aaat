@@ -394,6 +394,23 @@ The second big difference is of course the dependence with respect to the expect
  From a classical Economics point of view, those frameworks fit well together to explain the derivatives market in terms of demand and supply. Demand for options is driven by investors looking to generate returns on investment, whereas supply comes from dealers that "fabricate" those options using replication strategies. The BSM premium is essentially the cost of "fabricating" the option, in analogy to the language used in the production of goods.  
 
 
+#### An alternative derivation: the market price of risk
+
+An alternative derivation of the BSM equation that can be helpful to gain intuition on the theory uses the financial concept of market price of risk. The market price of risk is essentially a Sharpe ratio, commonly used in the theory of investment. The Sharpe ratio computes the excess returns of an investment, i.e. the expected returns devoted fom the risk-free interest, over their risk defined as the volatility of the returns. For the stock that is the underlying of the option, and using continuos time, this is:
+
+$$\lambda_{S} = \frac{ \mathbb{E}[\frac{dS_t}{S_t}]- rdt}{\sqrt{Var[\frac{dS_t}{S_t}]}} = \frac{\mu_t - r}{\sigma}\sqrt{dt}$$
+
+CHECK AND CITE REBONATO
+
+We can now use Ito's formula to compute the market price of risk of the option:
+
+$$\lambda_{C} = \frac{ \mathbb{E}[\frac{dC}{C}]- rdt}{\sqrt{Var[\frac{dC}{C}]}} = \frac{\frac{\partial C}{\partial t}+ \mu_t S_t\frac{\partial C}{\partial S_t}+\frac{1}{2}\sigma^2 S_t^2 \frac{\partial^2 C}{\partial S_t^2} - rC}{\sigma S_t \frac{\partial C}{\partial S_t}} \sqrt{dt}$$
+
+We can now apply a different version of the arbitrage-free theory. Since the value of the option is essentially derived from the underlying stock, which the only risk factor affecting the option price in the BSM theory, then as investment opportunities both should have the same Sharpe ratio or market price of risk, i.e. $\lambda_S = \lambda_C$. Otherwise, investors would bid up the price of the one with the largest Sharpe ratio until both of them equalize. Applying this equality the terms proportional to the drift $\mu_t$ cancel and we get back to the BSM differential equation.
+
+One could of course have used the argument in reverse, reorganizing the BSM equation in terms of market prices of risk to prove that the equality of those is a consequence of the arbitrate-free argument used when building the replication portfolio. 
+
+
 #### Using the BSM framework in practice
 
 The Black - Scholes - Merton pricing theory supposed a change of paradigm for dealers creating liquidity in option markets. The theory allows for a consistent pricing of derivatives beyond options, providing not only a way to calculate the premium but a hedging strategy that neutralizes the risk of the derivative, or from a different angle, a recipe to synthesize those derivatives from liquid tradable instruments. 
@@ -433,4 +450,4 @@ In the plots, we can see the different impacts that the violations produce on th
 
 ## Exercises
 
-* Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike $K_1$ and maturity $T$, using another (liquid) option tradable in the market with strike $K_2$ and same maturity $T$. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is $\Pi_t = \Delta_t C_2(S_t, t) + \beta_t$, with the terminal condition $\Pi_T = C_1(S_T, T)$.
+* Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike $K_1$ and maturity $T$, using another (liquid) option tradable in the market with strike $K_2$ and same maturity $T$. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is $\Pi_t = \Delta_t C_2(S_t, t) + \beta_t$, with the terminal condition $\Pi_T = C_1(S_T, T)$. Hint: link the result with the market price of risk for options introduced in this chapter.
