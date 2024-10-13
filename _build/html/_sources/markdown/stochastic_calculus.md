@@ -325,7 +325,6 @@ full expectation $\mathbb{E}[Y|F_{t_n}]$ is not obviously tractable, but by cond
 $\mathbb{E}[\mathbb{E}[\mathbb{E}[...\mathbb{E}[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t_{n+1}}|F_{t_n}]$ we can
 work out the solution. We will see examples later on.
 
-(multivariate_wiener)=
 **Multivariate Wiener process**
 
 We can construct a multivariate Wiener process as a vector
@@ -397,7 +396,7 @@ $$\begin{aligned}
 \end{aligned}$$ 
 
 where we have used
-$\mathbb{E}[d W_{1t} dW_{2t} |F_t] = \rho_{12} dt$ as discussed in section {ref}`multivariate_wiener`. This motivates the expression for the two-dimensional Ito's lemma: 
+$\mathbb{E}[d W_{1t} dW_{2t} |F_t] = \rho_{12} dt$ as discussed in the section on multivariate Wiener processes. This motivates the expression for the two-dimensional Ito's lemma: 
 
 $$\begin{aligned}
 d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W_{1t}^2} + 

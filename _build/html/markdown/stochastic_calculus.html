@@ -704,7 +704,7 @@ process have zero mean.</p>
 full expectation <span class="math notranslate nohighlight">\(\mathbb{E}[Y|F_{t_n}]\)</span> is not obviously tractable, but by conditioning it at intermediate filtrations
 <span class="math notranslate nohighlight">\(\mathbb{E}[\mathbb{E}[\mathbb{E}[...\mathbb{E}[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t_{n+1}}|F_{t_n}]\)</span> we can
 work out the solution. We will see examples later on.</p>
-<p id="multivariate-wiener"><strong>Multivariate Wiener process</strong></p>
+<p><strong>Multivariate Wiener process</strong></p>
 <p>We can construct a multivariate Wiener process as a vector
 <span class="math notranslate nohighlight">\({\bf W}_t= (W_{1t}, W_{2t}, ..., W_{Nt})\)</span> with the following properties:</p>
 <ul class="simple">
@@ -762,7 +762,7 @@ terms <span class="math notranslate nohighlight">\(O(dt)\)</span>:</p>
 \frac{\partial^2 f}{\partial W_{1t} \partial W_{2t}} \rho_{12} dt
 \end{aligned}\]</div>
 <p>where we have used
-<span class="math notranslate nohighlight">\(\mathbb{E}[d W_{1t} dW_{2t} |F_t] = \rho_{12} dt\)</span> as discussed in section <span class="xref std std-ref">multivariate_wiener</span>. This motivates the expression for the two-dimensional Ito’s lemma:</p>
+<span class="math notranslate nohighlight">\(\mathbb{E}[d W_{1t} dW_{2t} |F_t] = \rho_{12} dt\)</span> as discussed in the section on multivariate Wiener processes. This motivates the expression for the two-dimensional Ito’s lemma:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
 d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W_{1t}^2} + 
