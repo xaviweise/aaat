@@ -417,28 +417,26 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-modelling-dynamical-systems">6.1. Introduction: modelling dynamical systems</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">6.2. Deterministic dynamical systems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solutions-of-dynamical-systems">6.2.1. Numerical solutions of dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">6.2. Deterministic dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solutions-of-dynamical-systems">6.3. Numerical solutions of dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-wiener-process">6.4. The Wiener Process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-differential-equations">6.5. Stochastic differential equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.6. The Feynman - Kac Theorem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.7. Basic stochastic processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.7.1. Brownian motion with drift</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.7.2. Geometric Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.7.3. Arithmetic Average of the Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.7.4. Orstein-Uhlenbeck process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.7.5. Brownian bridge</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-wiener-process">6.3. The Wiener Process</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-differential-equations">6.4. Stochastic differential equations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.5. The Feynman - Kac Theorem</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.6. Basic stochastic processes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.6.1. Brownian motion with drift</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.6.2. Geometric Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.6.3. Arithmetic Average of the Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.6.4. Orstein-Uhlenbeck process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.6.5. Brownian bridge</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.8. Jump processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson-processes">6.8.1. Poisson processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compound-poisson-processes">6.8.2. Compound Poisson processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-diffusion-processes">6.8.3. Jump Diffusion Processes</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.7. Jump processes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson-processes">6.7.1. Poisson processes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compound-poisson-processes">6.7.2. Compound Poisson processes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-diffusion-processes">6.7.3. Jump Diffusion Processes</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.8. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.9. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -593,8 +591,9 @@ the full equation is:</p>
 <span class="math notranslate nohighlight">\(v_\infty = \frac{m g}{\eta}\)</span>, which is called the terminal velocity. At this speed, the friction force equates the gravitational pull and the
 object no longer accelerates, therefore reaching a constant velocity. Another interesting observation is that the speed equation has also the
 form of a mean reverting equation, in this case the mean being the terminal velocity, and the time-scale for mean reversion proportional to <span class="math notranslate nohighlight">\(m/\eta\)</span>.</p>
+</section>
 <section id="numerical-solutions-of-dynamical-systems">
-<h3><span class="section-number">6.2.1. </span>Numerical solutions of dynamical systems<a class="headerlink" href="#numerical-solutions-of-dynamical-systems" title="Permalink to this heading">#</a></h3>
+<h2><span class="section-number">6.3. </span>Numerical solutions of dynamical systems<a class="headerlink" href="#numerical-solutions-of-dynamical-systems" title="Permalink to this heading">#</a></h2>
 <p>When closed form solutions are not available, one can resort to numerical schemes to simulate dynamical systems. The most popular one is the Euler method. First we discretize the time domain using a grid
 <span class="math notranslate nohighlight">\(t_i = t_0 + \Delta * i\)</span>, <span class="math notranslate nohighlight">\(i = 0, .., N\)</span>, where
 <span class="math notranslate nohighlight">\(\Delta = \frac{t_1 - t_0}{N}\)</span>. The differentials can be discretized over the grid as follows:</p>
@@ -643,9 +642,8 @@ better convergence properties (speed, accuracy).</p>
 </figcaption>
 </figure>
 </section>
-</section>
 <section id="the-wiener-process">
-<h2><span class="section-number">6.3. </span>The Wiener Process<a class="headerlink" href="#the-wiener-process" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">6.4. </span>The Wiener Process<a class="headerlink" href="#the-wiener-process" title="Permalink to this heading">#</a></h2>
 <p><strong>Definition</strong></p>
 <p>So far we have discussed models where we neglect any uncertainty in the trajectories of the dynamical systems we are modelling. However, in many situations, randomness is a dominant characteristic of the process and
 we need tools to model such stochastic systems.</p>
@@ -891,14 +889,14 @@ d W_{2t} &amp;=&amp; \rho d \hat{W}_{1t} + \sqrt{1-\rho^2}  d \hat{W}_{2t}
 \end{aligned}\end{split}\]</div>
 </section>
 <section id="stochastic-differential-equations">
-<span id="sde"></span><h2><span class="section-number">6.4. </span>Stochastic differential equations<a class="headerlink" href="#stochastic-differential-equations" title="Permalink to this heading">#</a></h2>
+<span id="sde"></span><h2><span class="section-number">6.5. </span>Stochastic differential equations<a class="headerlink" href="#stochastic-differential-equations" title="Permalink to this heading">#</a></h2>
 <p>As pointed out in the introduction to the chapter, after studying the Wiener process now we have the tools to model the dynamics of a random or stochastic process <span class="math notranslate nohighlight">\(X_t\)</span> using stochastic differential equations (SDEs) of the general form:</p>
 <div class="math notranslate nohighlight">
 \[ d X_t = \mu(X_t, t) dt + \sigma(X_t, t) dW_t\]</div>
 <p>which generalizes the deterministic differential equation adding a noise term modelled using the Wiener process. Solving a SDEs means working out the distribution of <span class="math notranslate nohighlight">\(X_t\)</span> at arbitrary times given some initial conditions, which for arbitrary choices of <span class="math notranslate nohighlight">\(\mu(X_t, t)\)</span> and <span class="math notranslate nohighlight">\(\sigma(X_t,t)\)</span> can only be solved numerically, for instance using Monte-Carlo sampling techniques. In the next section we will see particular SDEs that are analytically tractable.</p>
 </section>
 <section id="the-feynman-kac-theorem">
-<span id="feynman-kac"></span><h2><span class="section-number">6.5. </span>The Feynman - Kac Theorem<a class="headerlink" href="#the-feynman-kac-theorem" title="Permalink to this heading">#</a></h2>
+<span id="feynman-kac"></span><h2><span class="section-number">6.6. </span>The Feynman - Kac Theorem<a class="headerlink" href="#the-feynman-kac-theorem" title="Permalink to this heading">#</a></h2>
 <p>The Feynman-Kac theorem provides a link between partial differential equations and stochastic processes, specifically, between certain types of PDEs and expectations of integrals of the Wiener process. Its usefulness extends to subjects like physics and finance, where it is used to introduce statistical interpretations of solutions to deterministic systems.</p>
 <p>Specifically, the Feynman - Kac theorem it relates the solution <span class="math notranslate nohighlight">\(u(x,t)\)</span> of the PDE</p>
 <div class="math notranslate nohighlight">
@@ -931,9 +929,9 @@ d Y_s = e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s
 <p>i.e. <span class="math notranslate nohighlight">\(Y_t\)</span> is a martingale. But this is actually the Feynman - Kac solution if we replace <span class="math notranslate nohighlight">\(Y_t\)</span> by its definition, since <span class="math notranslate nohighlight">\(u(X_T, T) = f(X_T)\)</span>, which completes the proof.</p>
 </section>
 <section id="basic-stochastic-processes">
-<h2><span class="section-number">6.6. </span>Basic stochastic processes<a class="headerlink" href="#basic-stochastic-processes" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">6.7. </span>Basic stochastic processes<a class="headerlink" href="#basic-stochastic-processes" title="Permalink to this heading">#</a></h2>
 <section id="brownian-motion-with-drift">
-<h3><span class="section-number">6.6.1. </span>Brownian motion with drift<a class="headerlink" href="#brownian-motion-with-drift" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.7.1. </span>Brownian motion with drift<a class="headerlink" href="#brownian-motion-with-drift" title="Permalink to this heading">#</a></h3>
 <p>The most simple stochastic process using the Wiener process as a building block is the Brownian motion with drift:</p>
 <div class="math notranslate nohighlight">
 \[d S_t = \mu_t dt + \sigma_t d W_t\]</div>
@@ -1087,7 +1085,7 @@ Brownian motion process. A typical example are prices of financial instruments, 
 prices in a time - domain such as the probability of reaching negative values is negligible, the model might be well suited. For instance, when modelling intra-day prices.</p>
 </section>
 <section id="geometric-brownian-motion">
-<h3><span class="section-number">6.6.2. </span>Geometric Brownian motion<a class="headerlink" href="#geometric-brownian-motion" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.7.2. </span>Geometric Brownian motion<a class="headerlink" href="#geometric-brownian-motion" title="Permalink to this heading">#</a></h3>
 <p>The geometric Brownian motion is a simple extension of the Brownian motion that introduces a constraint in the domain of the process, allowing only positive values. The stochastic differential equation is
 the following one:</p>
 <div class="math notranslate nohighlight">
@@ -1139,7 +1137,7 @@ Therefore, any finite set <span class="math notranslate nohighlight">\(\log(S_{t
 <p><strong>Applications</strong></p>
 </section>
 <section id="arithmetic-average-of-the-brownian-motion">
-<h3><span class="section-number">6.6.3. </span>Arithmetic Average of the Brownian motion<a class="headerlink" href="#arithmetic-average-of-the-brownian-motion" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.7.3. </span>Arithmetic Average of the Brownian motion<a class="headerlink" href="#arithmetic-average-of-the-brownian-motion" title="Permalink to this heading">#</a></h3>
 <p>As the name suggests, this is a derived process from the standard Brownian motion in which the latter is averaged continuously up to a certain time <span class="math notranslate nohighlight">\(T\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{aligned}
@@ -1176,7 +1174,7 @@ $<span class="math notranslate nohighlight">\(\int_t^T (\frac{T-u}{T-t})^2 du = 
 <p><strong>Applications</strong></p>
 </section>
 <section id="orstein-uhlenbeck-process">
-<h3><span class="section-number">6.6.4. </span>Orstein-Uhlenbeck process<a class="headerlink" href="#orstein-uhlenbeck-process" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.7.4. </span>Orstein-Uhlenbeck process<a class="headerlink" href="#orstein-uhlenbeck-process" title="Permalink to this heading">#</a></h3>
 <p>The Orstein - Uhlenbeck process is an extension of the Brownian motion process in which the drift term is modified to prevent large deviations from the mean <span class="math notranslate nohighlight">\(\mu\)</span>. This is achieved by making the drift penalize those
 deviations:</p>
 <div class="math notranslate nohighlight">
@@ -1224,7 +1222,7 @@ e^{\theta t} S_t - S_0 = (e^{\theta t} - 1) \mu + \sigma \int_0^t e^{\theta u} d
 <p>The CIR process is widely used in financial applications, such as in the modeling of short-term interest rates and in the Heston model for stochastic volatility, due to its ability to capture mean reversion and maintain non-negativity.</p>
 </section>
 <section id="brownian-bridge">
-<h3><span class="section-number">6.6.5. </span>Brownian bridge<a class="headerlink" href="#brownian-bridge" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.7.5. </span>Brownian bridge<a class="headerlink" href="#brownian-bridge" title="Permalink to this heading">#</a></h3>
 <p>Another simple extension of the Wiener process is the Brownian bridge, that we denote as <span class="math notranslate nohighlight">\(B_t\)</span>. It defines a stochastic process within a time interval <span class="math notranslate nohighlight">\([0,T]\)</span> that behaves as a Wiener process with the exception of
 having an extra constraint, namely that <span class="math notranslate nohighlight">\(B_T = 0\)</span> (in addition to <span class="math notranslate nohighlight">\(B_0 = 0\)</span> as in the Wiener process). Such process can be constructed from a single Wiener process <span class="math notranslate nohighlight">\(W_t\)</span> as follows:</p>
 <div class="math notranslate nohighlight">
@@ -1267,7 +1265,7 @@ that simply return their principal at maturity without paying a coupon.</p>
 </section>
 </section>
 <section id="jump-processes">
-<h2><span class="section-number">6.7. </span>Jump processes<a class="headerlink" href="#jump-processes" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">6.8. </span>Jump processes<a class="headerlink" href="#jump-processes" title="Permalink to this heading">#</a></h2>
 <p>So far we have described a family of continuous stochastic processes, with the Wiener process as the primitive to model different behaviors that can be useful to describe multiple phenomena. However, in many real situations we observe discrete jumps that are not rigorously described by these stochastic models, for which the probability of a jump of any size tends to zero as <span class="math notranslate nohighlight">\(dt \rightarrow 0\)</span>.</p>
 <p>Of course, one could argue that a continuous model is in general wrong in many applications, and it is only used in practice because of tha mathematical tractability. Take for instance price series of financial instruments. At some time-scale determined by the infrastructure of the exchange, prices simply move discretely tick by tick, and a continuous model is no longer a good description of the times-series at this time-scale.</p>
 <p>As mentioned, though, continuous models are in fact a good description of financial price-series at time-scales of interests for many trading models, continuity being a natural reflection of investors taking the last price traded as the reference for successive valuations. However, even in those time-scales we observe sometimes price movements in a short period of a magnitude that a continuous model cannot account for. Examples are for example 2010’s flash-crash in the US market when using a time resolution of minutes, or October 1989’s Black Friday when using end of day prices.</p>
@@ -1275,7 +1273,7 @@ that simply return their principal at maturity without paying a coupon.</p>
 <p>Given that we still want to exploit the mathematical simplicity of continuous stochastic processes, we would like to introduce mathematical tools that allow us to incorporate discrete jumps with a meaningful probability in these models. The motivation is again that of mathematical simplicity, since one could argue that more complex continuous models could be built to describe those situations, as far as we agree that at a short enough time - scale what we observe as a jump can be described as a rapidly series of continuous changes. For instance, a model with regime switches in volatility. However, such complexity would penalize the applications of the model, hence the interest in modelling jumps in continuous time.</p>
 <p>In the following section we will motivate such model, that we will formalize later on.</p>
 <section id="poisson-processes">
-<h3><span class="section-number">6.7.1. </span>Poisson processes<a class="headerlink" href="#poisson-processes" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.8.1. </span>Poisson processes<a class="headerlink" href="#poisson-processes" title="Permalink to this heading">#</a></h3>
 <p><strong>Motivation: a simple model for jumps in continuous time</strong></p>
 <p>We want to develop a model that allows for jumps of a given size <span class="math notranslate nohighlight">\(J\)</span> to happen instantaneously in continuous time. We denote by <span class="math notranslate nohighlight">\(N_t\)</span>the number of jumps that have accumulated in the time interval <span class="math notranslate nohighlight">\([0, t]\)</span>. We make the hypothesis that a jump between time <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(t + dt\)</span> happens with a probability that is independent of the number of jumps so far:</p>
 <div class="math notranslate nohighlight">
@@ -1388,7 +1386,7 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <figure class="align-default" id="fig-hawkes-process">
 <a class="reference internal image-reference" href="../_images/hawkes_process.png"><img alt="../_images/hawkes_process.png" src="../_images/hawkes_process.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 6.8 </span><span class="caption-text">Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again <span class="math notranslate nohighlight">\(\mu = 0.2\)</span>. The excitation function is an exponential with <span class="math notranslate nohighlight">\(\alpha = 0.5\)</span> and <span class="math notranslate nohighlight">\(\beta = 1\)</span>.</span><a class="headerlink" href="#fig-hawkes-process" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6.8 </span><span class="caption-text">Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. The excitation function is an exponential with <span class="math notranslate nohighlight">\(\alpha = 0.5\)</span> and <span class="math notranslate nohighlight">\(\beta = 1\)</span>.</span><a class="headerlink" href="#fig-hawkes-process" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Applications:</strong></p>
@@ -1396,7 +1394,7 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <p>They can also model jumps in financial prices, for instance in end of day time series, that incorporate the effect of unexpected news. For this application, though, these processes need to be generalized to incorporate random jumps (compound Poisson processes) and be included in Brownian price diffusions that model the evolution of prices in normal situations (jump diffusion processes).</p>
 </section>
 <section id="compound-poisson-processes">
-<h3><span class="section-number">6.7.2. </span>Compound Poisson processes<a class="headerlink" href="#compound-poisson-processes" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.8.2. </span>Compound Poisson processes<a class="headerlink" href="#compound-poisson-processes" title="Permalink to this heading">#</a></h3>
 <p>In many applications, events not only occur randomly over time but also have random magnitudes or impacts. A compound Poisson process extends the Poisson process by allowing for random jump sizes.</p>
 <p>A compound Poisson process <span class="math notranslate nohighlight">\(X_t\)</span> is defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1434,12 +1432,12 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <figure class="align-default" id="fig-compound-poisson">
 <a class="reference internal image-reference" href="../_images/compound_poisson.png"><img alt="../_images/compound_poisson.png" src="../_images/compound_poisson.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 6.9 </span><span class="caption-text">Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\mu = 0.2\)</span>. For the distribution of jumps we use a exponential distribution with rate <span class="math notranslate nohighlight">\(\eta = 2.5\)</span>. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process.</span><a class="headerlink" href="#fig-compound-poisson" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6.9 </span><span class="caption-text">Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. For the distribution of jumps we use a exponential distribution with rate <span class="math notranslate nohighlight">\(\eta = 2.5\)</span>. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process.</span><a class="headerlink" href="#fig-compound-poisson" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
 <section id="jump-diffusion-processes">
-<h3><span class="section-number">6.7.3. </span>Jump Diffusion Processes<a class="headerlink" href="#jump-diffusion-processes" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.8.3. </span>Jump Diffusion Processes<a class="headerlink" href="#jump-diffusion-processes" title="Permalink to this heading">#</a></h3>
 <p>So far we have discussed jump processes that simulate discrete random events. But we would like to combine them with the continuous stochastic processes we studied in the previous part of this chapter, in order to generate richer dynamics to model real phenomena.</p>
 <p>A jump diffusion process <span class="math notranslate nohighlight">\(X_t\)</span> is a stochastic process that combines a standard diffusion process with a jump component. It can be defined by the stochastic differential equation (SDE):</p>
 <div class="math notranslate nohighlight">
@@ -1467,18 +1465,27 @@ df(X_t, t) &amp;= \left( \frac{\partial f}{\partial t} + \mu(X_{t^-}, t) \frac{\
 \end{align*}
 \end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\Delta X_t = X_t - X_{t^-} = J\)</span> is the jump size at time <span class="math notranslate nohighlight">\(t\)</span>.</p>
-<p>JUSTIFY DERIVATION</p>
-<p><strong>Applications</strong></p>
-<p>As mentioned above, one of the main applications of these models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously.
+<p>As we argued in the case of a Wiener process, the derivation can be motivated using a Taylor series expansion on the function for the continuous part, only adding the jump process, which is orthogonal to the continuous stochastic dynamics. When adding the jump component, the function <span class="math notranslate nohighlight">\(f(X_t,t)\)</span> changes discretely, hence the term <span class="math notranslate nohighlight">\(f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t)\)</span> instead of the derivative. We only keep in this case the expansion up to <span class="math notranslate nohighlight">\(dN_t\)</span> since <span class="math notranslate nohighlight">\(\mathbb{E}[dN_t] = \lambda dt\)</span> which is already of order <span class="math notranslate nohighlight">\(O(dN_t)\)</span>, so any extra term in the expansion will have a higher order.</p>
+<p><strong>Simulation</strong></p>
+<p>As mentioned above, one of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously.
 One famous instance of such models incorporating jumps is Merton’s jump diffusion model <span id="id4">[<a class="reference internal" href="references.html#id13" title="Robert Merton. Option pricing when underlying stock returns are discontinuous. Journal of Financial Economics, 3(1-2):125-144, 1976.">6</a>]</span>, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price <span class="math notranslate nohighlight">\(S_t\)</span> is:</p>
 <div class="math notranslate nohighlight">
 \[dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (J - 1) \, dN_t,\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the expected return rate, <span class="math notranslate nohighlight">\(\sigma\)</span> is the volatility, <span class="math notranslate nohighlight">\(J\)</span> is a random variable representing the jump multiplier, and <span class="math notranslate nohighlight">\(dN_t\)</span> indicates the occurrence of a jump, modeled by a Poisson process with intensity <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+<p>A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, <span class="math notranslate nohighlight">\(\log J \sim \mathcal{N}(k, \delta^2)\)</span>. The following simulation of the Merton model has been generated using such model.</p>
+<figure class="align-default" id="fig-jump-diffusion">
+<a class="reference internal image-reference" href="../_images/jump_diffusion.png"><img alt="../_images/jump_diffusion.png" src="../_images/jump_diffusion.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6.10 </span><span class="caption-text">Simulation of five paths of a jump diffusion process in a discrete grid with 1000 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 1\)</span>. The Geometric Brownian Motion has drift <span class="math notranslate nohighlight">\(\mu = 0.1\)</span> and volatility <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span> For the distribution of jumps we use a log-normal distribution with mean <span class="math notranslate nohighlight">\(k = -0.1\)</span> and standard deviation <span class="math notranslate nohighlight">\(\delta = 0.1\)</span>.</span><a class="headerlink" href="#fig-jump-diffusion" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p><strong>Applications</strong></p>
+<p>As mentioned, one of the main applications of these models in financial modeling is simulating price series with jumps that might happen due to unexpected news or other disruptions in markets like sudden drops of liquidity. These models can be used to improve pricing and risk management of derivatives, or optimal market-making models. We discussed above that another typical application is modeling the jump to default of a corporation or government. Jump diffusion models are then used to model the impact in traded instruments influenced by credit risk, like bonds issued by those entities or credit default swaps linked to them.</p>
 <p>For more theory or applications of jump diffusion processes, a good reference is that or Cont &amp; Tankov <span id="id5">[<a class="reference internal" href="references.html#id14" title="Rama Cont and Peter Tankov. Financial Modelling with Jump Processes. Chapman &amp; Hall/CRC, 2004.">7</a>]</span>.</p>
 </section>
 </section>
 <section id="exercises">
-<h2><span class="section-number">6.8. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">6.9. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Derive the Crank - Nikolson scheme discretization of the inflation targeting model. Simulate it numerically and compare with the exact solution</p></li>
 <li><p>Use Ito’s lemma to derive the differential of:</p>
@@ -1562,28 +1569,26 @@ One famous instance of such models incorporating jumps is Merton’s jump diffus
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-modelling-dynamical-systems">6.1. Introduction: modelling dynamical systems</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">6.2. Deterministic dynamical systems</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solutions-of-dynamical-systems">6.2.1. Numerical solutions of dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">6.2. Deterministic dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solutions-of-dynamical-systems">6.3. Numerical solutions of dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-wiener-process">6.4. The Wiener Process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-differential-equations">6.5. Stochastic differential equations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.6. The Feynman - Kac Theorem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.7. Basic stochastic processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.7.1. Brownian motion with drift</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.7.2. Geometric Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.7.3. Arithmetic Average of the Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.7.4. Orstein-Uhlenbeck process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.7.5. Brownian bridge</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-wiener-process">6.3. The Wiener Process</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-differential-equations">6.4. Stochastic differential equations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feynman-kac-theorem">6.5. The Feynman - Kac Theorem</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">6.6. Basic stochastic processes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">6.6.1. Brownian motion with drift</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">6.6.2. Geometric Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">6.6.3. Arithmetic Average of the Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">6.6.4. Orstein-Uhlenbeck process</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">6.6.5. Brownian bridge</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.8. Jump processes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson-processes">6.8.1. Poisson processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compound-poisson-processes">6.8.2. Compound Poisson processes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-diffusion-processes">6.8.3. Jump Diffusion Processes</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-processes">6.7. Jump processes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson-processes">6.7.1. Poisson processes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compound-poisson-processes">6.7.2. Compound Poisson processes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#jump-diffusion-processes">6.7.3. Jump Diffusion Processes</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.8. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">6.9. Exercises</a></li>
 </ul>
   </nav></div>
 
