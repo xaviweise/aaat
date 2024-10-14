@@ -32,8 +32,7 @@ where $d W_t$ is the Wiener process (Brownian motion) that will be introduced la
 
 ## Deterministic dynamical systems
 
-Let us review some relevant deterministic differential equations that
-come across in the modelization of dynamical systems.
+Let us review some relevant deterministic differential equations that come across in the modelization of dynamical systems.
 
 **Example: Newton's Laws**
 
@@ -185,7 +184,7 @@ $v_\infty = \frac{m g}{\eta}$, which is called the terminal velocity. At this sp
 object no longer accelerates, therefore reaching a constant velocity. Another interesting observation is that the speed equation has also the
 form of a mean reverting equation, in this case the mean being the terminal velocity, and the time-scale for mean reversion proportional to $m/\eta$.
 
-## Numerical solutions of dynamical systems 
+### Numerical solutions of dynamical systems 
 
 When closed form solutions are not available, one can resort to numerical schemes to simulate dynamical systems. The most popular one is the Euler method. First we discretize the time domain using a grid
 $t_i = t_0 + \Delta * i$, $i = 0, .., N$, where
@@ -245,10 +244,9 @@ Let us now increase the grid size and choose another set of parameters to make t
 Solution of the inflation targetting differential equation  comparing the analytical solution with the forward and backward schemes. We choose a set of parameters and grid size where a numerical approximation is more challenging, to show the advantages of the backward scheme: $\theta = 10, \Delta = 0.1, \hat{\pi} = 2.0, \pi_0 = 5.0$
 ```
 
-
 ## The Wiener Process
 
-**Definition**
+### Definition
 
 So far we have discussed models where we neglect any uncertainty in the trajectories of the dynamical systems we are modelling. However, in many situations, randomness is a dominant characteristic of the process and
 we need tools to model such stochastic systems.
@@ -276,7 +274,7 @@ $t$, with the following particular properties:
 
 -   $W_t$ has continuous trajectories
 
-**Connection to Gaussian Processes**
+### Connection to Gaussian Processes
 
 The specific properties of the Wiener process make it part of the family of Gaussian processes, which are stochastic processes with the property that any finite set of them, $X_{t_1}, ..., X_{t_n}$ follow a joined
 multivariate Gaussian distribution. The Gaussian process can be described then by a mean function $\mu_t = \mathbb{E}[X_t]$ and a covariance function $k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}]$ that is usually referred as the kernel function of the Gaussian process.
@@ -293,7 +291,7 @@ t_2 1_{t_1 > t_2} + t_1 1_{t_1 \leq t_2} = min(t_1,t_2)
 In which sense it is useful to introduce this relationship? The theory of Gaussian processes has been pushed in the last years within the Machine Learning community, and there are multiple tools available for building, training and making inferences with these
 models. Such toolkit can be useful when building models for dynamical systems using stochastic processes.
 
-**Filtrations and the Martingale Property**
+### Filtrations and the Martingale Property
 
 The Wiener process satisfies the Martingale property, meaning that if we have a series of observations of the process $W_{t_1}, W_{t_2}, ... W_{t_n}$ then the expected value of an observation $t_{n+1} > t_n > ... > t_1$ conditioned to the previous observations only depends on the last observation:
 
@@ -314,7 +312,7 @@ $$\begin{aligned}
 where we have used that the increments of the Wiener
 process have zero mean.
 
-**The Tower Law**
+### The Tower Law
 
 A useful property that exploits the concept of filtration in many applications is the so-called Law of Iterated Expectations or Tower Law. It simply states that for any random variable Y, if $t_m > t_n$:
 
@@ -325,7 +323,7 @@ full expectation $\mathbb{E}[Y|F_{t_n}]$ is not obviously tractable, but by cond
 $\mathbb{E}[\mathbb{E}[\mathbb{E}[...\mathbb{E}[Y|F_{t_m}] ... |F_{t_{n+2}}|F_{t_{n+1}}|F_{t_n}]$ we can
 work out the solution. We will see examples later on.
 
-**Multivariate Wiener process**
+### Multivariate Wiener process
 
 We can construct a multivariate Wiener process as a vector
 ${\bf W}_t= (W_{1t}, W_{2t}, ..., W_{Nt})$ with the following properties:
@@ -405,7 +403,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 \end{aligned}$$
 
 (integrals_Wiener)=
-**Integrals of the Wiener process**
+###Integrals of the Wiener process
 
 A firs relevant integral of the Wiener process is:
 
@@ -475,7 +473,7 @@ $$\int_0^t W_u du \sim N(0, \frac{t^3}{3})$$
 where we have used $\int_0^t (t-u)^2 du = \frac{t^3}{3}$
 
 (simulation_wiener)=
-**Simulation of the Wiener process**
+###Simulation of the Wiener process
 
 We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid $t_i = t_0 + \Delta * i$, $i = 0, .., N$, where $\Delta = \frac{t_N - t_0}{N}$, we can exploit directly the Wiener process properties to get:
 
@@ -1110,10 +1108,9 @@ $$
 $$
 
 We can rewrite the equation as:
-$$
-e^{\lambda t} \frac{d}{dt} P(N_t = 1) + \lambda e^{\lambda t} P(N_t = 1) = \lambda \\ 
-\rightarrow \frac{d}{dt}\left(e^{\lambda t} P(N_t = 1)\right) = \lambda
-$$
+
+$$e^{\lambda t} \frac{d}{dt} P(N_t = 1) + \lambda e^{\lambda t} P(N_t = 1) = \lambda \\ 
+\rightarrow \frac{d}{dt}\left(e^{\lambda t} P(N_t = 1)\right) = \lambda$$
 
 Therefore the solution that satisfies the initial condition is $P(N_t = 1) = e^{\lambda t} \lambda t$. Continuing with $n = 2$ we have the differential equation:
 
@@ -1187,12 +1184,6 @@ For a Poisson process with rate $\lambda$, both the expected value and the varia
 $$E[N_t] = \lambda t, \quad Var(N_t) = \lambda t$$
 
 This reflects that the mean number of events grows linearly with time, and the variance equals the mean.
-
-**Superposition and decomposition:**
-
-- **Superposition:** If $N_t^{(1)}$ and $N_t^{(2)}$ are independent Poisson processes with rates $\lambda_1$ and $\lambda_2$, respectively, then their sum $N_t = N_t^{(1)} + N_t^{(2)}$ is also a Poisson process with rate $\lambda = \lambda_1 + \lambda_2$.
-
-- **Decomposition:** Conversely, a Poisson process with rate $\lambda$ can be split into two independent Poisson processes with rates $p \lambda$ and $(1 - p) \lambda$, where $p \in [0,1]$, by assigning each event independently to one of the processes with probability $p$ and $1 - p$.
 
 **Estimation**
 

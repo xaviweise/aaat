@@ -185,7 +185,7 @@ $v_\infty = \frac{m g}{\eta}$, which is called the terminal velocity. At this sp
 object no longer accelerates, therefore reaching a constant velocity. Another interesting observation is that the speed equation has also the
 form of a mean reverting equation, in this case the mean being the terminal velocity, and the time-scale for mean reversion proportional to $m/\eta$.
 
-### Numerical solutions of dynamical systems 
+## Numerical solutions of dynamical systems 
 
 When closed form solutions are not available, one can resort to numerical schemes to simulate dynamical systems. The most popular one is the Euler method. First we discretize the time domain using a grid
 $t_i = t_0 + \Delta * i$, $i = 0, .., N$, where
@@ -1219,7 +1219,7 @@ The same method can be used for more complex jump processes. For example, the fo
 ```{figure} figures/hawkes_process.png
 :name: fig:hawkes_process
 :width: 8in
-Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again $\mu = 0.2$. The excitation function is an exponential with $\alpha = 0.5$ and $\beta = 1$. 
+Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again $\lambda = 0.2$. The excitation function is an exponential with $\alpha = 0.5$ and $\beta = 1$. 
 ```
 
 **Applications:**
@@ -1277,7 +1277,7 @@ A result of such simulation is shown in the following figure, with jumps being d
 ```{figure} figures/compound_poisson.png
 :name: fig:compound_poisson
 :width: 8in
-Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is $\mu = 0.2$. For the distribution of jumps we use a exponential distribution with rate $\eta = 2.5$. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process. 
+Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is $\lambda = 0.2$. For the distribution of jumps we use a exponential distribution with rate $\eta = 2.5$. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process. 
 ```
 
 ### Jump Diffusion Processes
@@ -1317,16 +1317,28 @@ $$
 
 where $\Delta X_t = X_t - X_{t^-} = J$ is the jump size at time $t$.
 
-JUSTIFY DERIVATION  
+As we argued in the case of a Wiener process, the derivation can be motivated using a Taylor series expansion on the function for the continuous part, only adding the jump process, which is orthogonal to the continuous stochastic dynamics. When adding the jump component, the function $f(X_t,t)$ changes discretely, hence the term $f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t)$ instead of the derivative. We only keep in this case the expansion up to $dN_t$ since $\mathbb{E}[dN_t] = \lambda dt$ which is already of order $O(dN_t)$, so any extra term in the expansion will have a higher order. 
 
-**Applications**
+**Simulation**
 
-As mentioned above, one of the main applications of these models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously. 
+As mentioned above, one of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously. 
 One famous instance of such models incorporating jumps is Merton's jump diffusion model {cite:p}`mertonJumps1976`, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price $S_t$ is:
 
 $$dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (J - 1) \, dN_t,$$
 
 where $\mu$ is the expected return rate, $\sigma$ is the volatility, $J$ is a random variable representing the jump multiplier, and $dN_t$ indicates the occurrence of a jump, modeled by a Poisson process with intensity $\lambda$.
+
+A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, $\log J \sim \mathcal{N}(k, \delta^2)$. The following simulation of the Merton model has been generated using such model.
+
+```{figure} figures/jump_diffusion.png
+:name: fig:jump_diffusion
+:width: 8in
+Simulation of five paths of a jump diffusion process in a discrete grid with 1000 time-steps. The baseline intensity is $\lambda = 1$. The Geometric Brownian Motion has drift $\mu = 0.1$ and volatility $\sigma = 0.2$ For the distribution of jumps we use a log-normal distribution with mean $k = -0.1$ and standard deviation $\delta = 0.1$. 
+```
+
+**Applications**
+
+As mentioned, one of the main applications of these models in financial modeling is simulating price series with jumps that might happen due to unexpected news or other disruptions in markets like sudden drops of liquidity. These models can be used to improve pricing and risk management of derivatives, or optimal market-making models. We discussed above that another typical application is modeling the jump to default of a corporation or government. Jump diffusion models are then used to model the impact in traded instruments influenced by credit risk, like bonds issued by those entities or credit default swaps linked to them.
 
 For more theory or applications of jump diffusion processes, a good reference is that or Cont & Tankov {cite:p}`cont2004financial`. 
 
