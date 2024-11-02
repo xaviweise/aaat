@@ -11,7 +11,7 @@ name: Book Cover
 
 ## Notebooks
 
-All the code used for the examples in the book is available in the repo. URL: https://github.com/xaviweise/aaat/tree/main/notebooks
+All the code used for the examples in the book is available in the final section of the book. 
 
 ## Citation
 

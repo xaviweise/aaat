@@ -96,9 +96,11 @@ The choice of trading frequency and timing mechanism reflects the unique charact
 
 Order-driven markets are a fundamental type of financial market structure where prices and liquidity are determined directly by the orders placed by market participants, without the need for intermediaries such as dealers. In these markets, investors interact through a **central limit order book (CLOB)**, a system that aggregates and displays buy and sell orders in real time. The CLOB organizes these orders based on price, ensuring that the best available prices are always visible to participants, making the system transparent and efficient.
 
-CLOBs don't allow orders at arbitrary prices, instead enforcing minimum price increments known as tick sizes, which define the smallest allowable difference between order prices. The tick size choice traditionally falls to the market owner, who aims to balance liquidity by setting smaller tick sizes, encouraging tighter spreads and more precise pricing. However, overly small tick sizes can also penalize liquidity providers who maintain constant bid and ask orders in the CLOB, as they may face more frequent price competition and increased order cancellations.
+CLOBs don't allow orders at arbitrary prices, instead enforcing minimum price increments known as **tick sizes**, which define the smallest allowable difference between order prices. The tick size choice traditionally falls to the market owner, who aims to balance liquidity by setting smaller tick sizes, encouraging tighter spreads and more precise pricing. However, overly small tick sizes can also penalize liquidity providers who maintain constant bid and ask orders in the CLOB, as they may face more frequent price competition and increased order cancellations.
 
 In recent years, regulatory bodies in some markets have implemented restrictions on tick sizes to stabilize order book structures and reduce excessive market noise. For instance, in the European Union, MiFID II introduced a tick size regime based on price levels and average daily number of trades for specific instruments, limiting the ability of markets to set overly fine increments. Similarly, in the U.S., tick size pilot programs have explored tick adjustments for smaller-cap stocks to assess impacts on liquidity and execution quality. Such regulatory measures aim to ensure fairer conditions for both liquidity providers and market participants, while supporting orderly and efficient markets.
+
+Additionally to tick sizes, markets typically impose restrictions on the the quantities that can be traded, known as **lot sizes**.
 
 #### The Structure of the Central Limit Order Book (CLOB)
 
@@ -132,7 +134,7 @@ Market Depth visualization of a Central Limit Order Book, with orders sorted by 
 
 Market participants in order-driven markets can use a variety of order types, each serving different trading objectives:
 
-1. **Market Orders**: These orders instruct the system to buy or sell immediately at the best available price. Market orders are executed quickly, but they carry the risk of paying a higher price or receiving a lower price than expected if there is insufficient liquidity at the best bid or ask. In this case, the order may "walk the book," executing across multiple price levels and resulting in a higher average price (for buys) or lower average price (for sells). The execution price of an order that consumes liquidity across various levels is computed using the volume weighted average price (VWAP):
+1. **Market Orders**: These orders instruct the system to buy or sell immediately at the best available price, consuming always the liquidity available at best prices (**price priority**). Market orders are executed quickly, but they carry the risk of paying a higher price or receiving a lower price than expected if there is insufficient liquidity at the best bid or ask. In this case, the order may "walk the book," executing across multiple price levels and resulting in a higher average price (for buys) or lower average price (for sells). The execution price of an order that consumes liquidity across various levels is computed using the **volume weighted average price (VWAP)**:
 
 $$ P_{exec} = \frac{\sum_i v_i P_i}{\sum_i v_i} $$
 
@@ -145,9 +147,9 @@ Effect of a buy market order of size 500 in the Central Limit Order Book.
 ```
 
 
-2. **Limit Orders**: These specify a price at which the trader is willing to buy or sell. If the limit price is not immediately available to trade, the order remains in the order book until a matching counterparty arrives or the order is canceled. Limit orders allow traders to control the price at which they execute but come with the risk that the order may not be executed if the market price moves away from the limit.
+2. **Limit Orders**: These specify a price at which the trader is willing to buy or sell. If the limit price is not immediately available to trade, the order remains in the order book until a matching counter-party arrives or the order is canceled. Limit orders allow traders to control the price at which they execute but come with the risk that the order may not be executed if the market price moves away from the limit.
 
-When an order is added to a level with existing liquidity, there is the question of which order has the priority when a matching order arrives at the CLOB. Most markets use a time priority or first in first out (FIFO) rule, in which orders that arrived earlier are consumed first. It is not the only rule, though. For instance some markets use a pro-rata rule, in which all existing orders are consumed proportionally to their size. 
+When an order is added to a level with existing liquidity, there is the question of which order has the priority when a matching order arrives at the CLOB. Most markets use a **time priority** or first in first out (FIFO) rule, in which orders that arrived earlier are consumed first. It is not the only rule, though. For instance some markets use a **pro-rata rule**, in which all existing orders are consumed proportionally to their size. 
 
    **Example 1**: Using again the previous order book, suppose and investor wants to buy the 500 shares but instead of sending a market order, it uses a limit order at price 98. Since there are order existing at that price level, the order sits at the bottom of the level. If this is a market with a time priority rule, this means this order will be the last to be consumed at the level. After placing the order, the mid-price and the spread does not change, but the imbalance is affected, see figure below.
 
@@ -176,16 +178,6 @@ When an order is added to a level with existing liquidity, there is the question
    - **Fill-Or-Kill**: The order is either executed in full immediately or not at all.
    - **All-Or-None**: Similar to Fill-Or-Kill, but the order may remain active if it cannot be immediately executed.
    - **Stop Orders**: Triggered when a specified price is reached, turning into a market or limit order based on conditions.
-
-#### Trading Protocols in CLOB-Based Markets
-
-The execution of orders in a CLOB is governed by specific rules and protocols:
-
-- **Price Priority**: Orders are executed based on the best available price. If two orders have the same price, they are prioritized by time of submission.
-
-- **Time Priority**: Orders submitted earlier are executed first when they share the same price. Some markets also use a **pro-rata rule**, where larger orders are filled proportionally based on their size relative to other orders at the same price level.
-
-- **Tick Size and Lot Sizes**: Each market may define a minimum **tick size** (the smallest allowed price increment) and **lot size** (the smallest quantity that can be traded). These restrictions can vary depending on the asset or instrument being traded.
 
 ### Trading Fees
 
