@@ -67,5 +67,7 @@ parts:
   numbered: false
   chapters:
     - file: notebooks/stochastic_calculus.ipynb
+    - file: notebooks/market_microstructure.ipynb
     - file: notebooks/fair_price_estimation.ipynb
+
     
