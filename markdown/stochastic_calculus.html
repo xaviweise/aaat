@@ -174,7 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Markets Fundamentals</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro_financial_markets.html">1. Financial Markets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro_financial_instruments.html">2. Overview of Financial Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_financial_instruments.html">2. Financial Instruments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="market_microstructure.html">3. Market microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithmic_trading.html">4. Algorithmic Trading</a></li>
 </ul>
@@ -221,6 +221,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/market_microstructure.html">Market Microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
 </ul>
 
@@ -988,18 +989,18 @@ k(t_1, t_2) = \textrm{cov}[X_{t_1}, X_{t_2}] = \mathbb{E}[\int_0^{t_1} \sigma_u 
 \[\mu_t^{GP}= S_0 + \int_0^t \mu_u du\]</div>
 <p><strong>Simulation</strong></p>
 <p>Similarly to the Wiener process, simulation can be carried out using a discretization scheme. To improve numerical stability and convergence it is convenient to integrate first the distribution between points in the
-simulation grid <span class="math notranslate nohighlight">\(t_0, ..., t_N\)</span>, <span class="math notranslate nohighlight">\(t_{i+1} = t_i + \Delta\)</span>, namely:</p>
+simulation grid <span class="math notranslate nohighlight">\(t_0, ..., t_N\)</span>, <span class="math notranslate nohighlight">\(t_{i+1} = t_i + \Delta t_i\)</span>, namely:</p>
 <div class="math notranslate nohighlight">
 \[S_{t_{i+1}} |F_{t_n} \sim N(S_{t_i} + \int_{t_i}^{t_{i+1}} \mu_u du, \int_{t_i}^{t_{i+1}} \sigma^2_u du)\]</div>
 <p>If we have a generator of standard Gaussian random numbers <span class="math notranslate nohighlight">\(Z\)</span>, we can perform the simulation using:</p>
 <div class="math notranslate nohighlight">
 \[S_{t_{i+1}} = S_{t_i} + \int_{t_i}^{t_{i+1}} \mu_u du + \left(\int_{t_i}^{t_{i+1}} \sigma^2_u du \right)^{1/2} Z\]</div>
-<p>If <span class="math notranslate nohighlight">\(\mu_u\)</span> and <span class="math notranslate nohighlight">\(\sigma_u\)</span> are smooth functions of time and <span class="math notranslate nohighlight">\(\Delta\)</span> is small enough such that the variation in the interval is negligible, we can approximate the integrals:</p>
+<p>If <span class="math notranslate nohighlight">\(\mu_u\)</span> and <span class="math notranslate nohighlight">\(\sigma_u\)</span> are smooth functions of time and <span class="math notranslate nohighlight">\(\Delta t_i\)</span> is small enough such that the variation in the interval is negligible, we can approximate the integrals:</p>
 <div class="math notranslate nohighlight">
-\[S_{t_{i+1}} |F_{t_n} \sim N(S_{t_i} + \mu_{t_i} \Delta,  \sigma^2_{t_i} \Delta)\]</div>
+\[S_{t_{i+1}} |F_{t_n} \sim N(S_{t_i} + \mu_{t_i} \Delta t_i,  \sigma^2_{t_i} \Delta)\]</div>
 <p>or simply:</p>
 <div class="math notranslate nohighlight">
-\[S_{t_{i+1}} = S_{t_i} + \mu_{t_i} \Delta + \sigma_{t_i} \sqrt{\Delta} Z\]</div>
+\[S_{t_{i+1}} = S_{t_i} + \mu_{t_i} \Delta t_i + \sigma_{t_i} \sqrt{\Delta} Z\]</div>
 <p>The following graph shows samples of the Brownian motion for specific values of drift and volatility:</p>
 <figure class="align-default" id="fig-bm-simulation">
 <a class="reference internal image-reference" href="../_images/BM_simulation.png"><img alt="../_images/BM_simulation.png" src="../_images/BM_simulation.png" style="width: 8in;" /></a>
@@ -1011,57 +1012,57 @@ simulation grid <span class="math notranslate nohighlight">\(t_0, ..., t_N\)</sp
 <p><strong>Estimation</strong></p>
 <p>If we have a set of observations of a process <span class="math notranslate nohighlight">\(D = \{S_{t_0}, ..., S_{t_N}\}\)</span> that we want to model as a Brownian
 motion, we need to find the value of the parameters of the process that best fit the data.</p>
-<p>Let us consider for simplicity that <span class="math notranslate nohighlight">\(\mu_t = \mu\)</span> and
-<span class="math notranslate nohighlight">\(\sigma_u = \sigma\)</span>. As discussed in the context of Bayesian models, a general estimation process models the parameters as random variables that capture our uncertainty about their exact values, which comes from
+<p>Let us consider for simplicity that <span class="math notranslate nohighlight">\(\mu_t = \mu\)</span>,
+<span class="math notranslate nohighlight">\(\sigma_u = \sigma\)</span> and <span class="math notranslate nohighlight">\(\Delta t_i = \Delta t\)</span> . As discussed in the context of Bayesian models, a general estimation process models the parameters as random variables that capture our uncertainty about their exact values, which comes from
 the fact that the sample is finite, or also in general because the data generation process will not necessarily be the one we are proposing, being models a simplification of reality. In this setup, the best
 inference of the parameters is carried out by computing the posterior distribution <span class="math notranslate nohighlight">\(P(\mu, \sigma^2|D, I_P)\)</span> where <span class="math notranslate nohighlight">\(I_P\)</span> represents the prior information about the parameters.</p>
 <p>Since as shown in the previous section we can write the process between observations as
-<span class="math notranslate nohighlight">\(S_{t_{i+1}} - S_{t_i} = \mu \Delta + \sigma \sqrt{\Delta} Z\)</span> with <span class="math notranslate nohighlight">\(Z\sim N(0,1)\)</span>, this is equivalent to fitting a Bayesian linear regression model om <span class="math notranslate nohighlight">\(S_{t_{i+1}} - S_{t_i}\)</span> with an intercept <span class="math notranslate nohighlight">\(\mu \Delta\)</span> and a noise term <span class="math notranslate nohighlight">\(\epsilon \sim N(0, \sigma^2 \Delta)\)</span>. As
+<span class="math notranslate nohighlight">\(S_{t_{i+1}} - S_{t_i} = \mu \Delta t + \sigma \sqrt{\Delta t_i} Z\)</span> with <span class="math notranslate nohighlight">\(Z\sim N(0,1)\)</span>, this is equivalent to fitting a Bayesian linear regression model om <span class="math notranslate nohighlight">\(S_{t_{i+1}} - S_{t_i}\)</span> with an intercept <span class="math notranslate nohighlight">\(\mu \Delta t\)</span> and a noise term <span class="math notranslate nohighlight">\(\epsilon \sim N(0, \sigma^2 \Delta t)\)</span>. As
 we shown in chapter <a class="reference internal" href="intro_bayesian.html#intro-bayesian"><span class="std std-ref">Introduction to Bayesian Modelling</span></a>, if we model the prior distributions of the parameters as a Normal Inverse Gamma (NIG), meaning that:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-    \mu \Delta | \sigma^2 \Delta \sim N(\mu_0 \Delta, \sigma^2 \Delta V_0) \\
-    \sigma^2 \Delta \sim IG(\alpha_0, \beta_0)
+    \mu \Delta | \sigma^2 \Delta t \sim N(\mu_0 \Delta t, \sigma^2 \Delta t V_0) \\
+    \sigma^2 \Delta t \sim IG(\alpha_0, \beta_0)
 \end{aligned}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(V_0\)</span>, <span class="math notranslate nohighlight">\(\mu_0\)</span>, <span class="math notranslate nohighlight">\(\alpha_0\)</span>, <span class="math notranslate nohighlight">\(\beta_0\)</span> are parameters that define the prior, this distribution is a conjugate prior of the likelihood:</p>
 <div class="math notranslate nohighlight">
-\[P(D|\mu \Delta, \sigma^2 \Delta, P_I) = \Pi_{n=1}^N \frac{1}{\sqrt{2\pi\Delta^2\sigma^2}} e^{-\frac{(S_{t_n} - S_{t_{n-1}} - \Delta \mu)^2}{2 \Delta^2 \sigma^2}}\]</div>
+\[P(D|\mu \Delta, \sigma^2 \Delta t,  P_I) = \Pi_{n=1}^N \frac{1}{\sqrt{2\pi\Delta t ^2\sigma^2}} e^{-\frac{(S_{t_n} - S_{t_{n-1}} - \Delta t \mu)^2}{2 \Delta t^2 \sigma^2}}\]</div>
 <p>Therefore, the posterior is also a NIG, with updated parameters:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-    \mu \Delta | D, \sigma^2  \Delta \sim N(\mu_N \Delta, \sigma^2 \Delta V_N) \\
-    \sigma^2 \Delta | D \sim IG(\alpha_N, \beta_N)
+    \mu \Delta t | D, \sigma^2  \Delta t\sim N(\mu_N \Delta t, \sigma^2 \Delta t V_N) \\
+    \sigma^2 \Delta t | D \sim IG(\alpha_N, \beta_N)
 \end{aligned}\end{split}\]</div>
 <p>To get the updated parameters from the general equations, bear in mind that in this representation with only an
 intercept our feature-set can be seen as a N dimensional vector <span class="math notranslate nohighlight">\({\bf X} = (1, ..., 1)\)</span>. Therefore:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
     V_N = (V_0^{-1} + N)^{-1} \\
-   \mu_N \Delta = \mu_0 \Delta \frac{V_N}{V_0} + \frac{1}{V_0^{-1} + N } \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\
+   \mu_N \Delta = \mu_0 \Delta t \frac{V_N}{V_0} + \frac{1}{V_0^{-1} + N } \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\
    \alpha_N = \alpha_0 + N/2 \\
-   \beta_N = \beta_0 + \frac{1}{2}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 + \mu_0^2 \Delta^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right)
+   \beta_N = \beta_0 + \frac{1}{2}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 + \mu_0^2 \Delta t^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right)
 \end{aligned}\end{split}\]</div>
-<p>The predictive marginal for the <span class="math notranslate nohighlight">\(\mu \Delta\)</span> parameter requires integrating out the <span class="math notranslate nohighlight">\(\sigma^2 \Delta\)</span>, resulting in:</p>
+<p>The predictive marginal for the <span class="math notranslate nohighlight">\(\mu \Delta t\)</span> parameter requires integrating out the <span class="math notranslate nohighlight">\(\sigma^2 \Delta t\)</span>, resulting in:</p>
 <div class="math notranslate nohighlight">
-\[\mu \Delta |D \sim T(\mu_N \Delta, \frac{\beta_N}{\alpha_N} V_N, 2 \alpha_N)\]</div>
+\[\mu \Delta t |D \sim T(\mu_N \Delta t, \frac{\beta_N}{\alpha_N} V_N, 2 \alpha_N)\]</div>
 <p>where <span class="math notranslate nohighlight">\(T\)</span> is the Student’s distribution.</p>
-<p>Following our discussion in chapter <a class="reference internal" href="intro_bayesian.html#intro-bayesian"><span class="std std-ref">Introduction to Bayesian Modelling</span></a>, the best estimator of parameters extracted from the posterior in a mean squared error minimizing sense is to compute the mean of the posterior marginals. For <span class="math notranslate nohighlight">\(\sigma^2 \Delta\)</span>, we
+<p>Following our discussion in chapter <a class="reference internal" href="intro_bayesian.html#intro-bayesian"><span class="std std-ref">Introduction to Bayesian Modelling</span></a>, the best estimator of parameters extracted from the posterior in a mean squared error minimizing sense is to compute the mean of the posterior marginals. For <span class="math notranslate nohighlight">\(\sigma^2 \Delta t\)</span>, we
 have:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-\mathbb{E}[\sigma^2 \Delta |D, I_P] = \frac{\beta_N}{\alpha_N-1}=  \frac{\beta_0}{\alpha_0 -1 + N/2} + \nonumber \\ \frac{1}{2 \alpha_0 + N -1}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2+\mu_0^2 \Delta^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right) 
+\mathbb{E}[\sigma^2 \Delta t |D, I_P] = \frac{\beta_N}{\alpha_N-1}=  \frac{\beta_0}{\alpha_0 -1 + N/2} + \nonumber \\ \frac{1}{2 \alpha_0 + N -1}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2+\mu_0^2 \Delta t^2 V_0^{-1} -\mu_N^2 \Delta t^2 V_N^{-1} \right) 
 \end{aligned}\end{split}\]</div>
 <p>whereas for <span class="math notranslate nohighlight">\(\mu\)</span> we have:</p>
 <div class="math notranslate nohighlight">
-\[\mathbb{E}[\mu \Delta|D, I_P] = \mu_N \Delta = \mu_0 \Delta \frac{V_0}{V_N} + \frac{1}{V_0^{-1} + N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}}))\]</div>
+\[\mathbb{E}[\mu \Delta t|D, I_P] = \mu_N \Delta  t= \mu_0 \Delta t \frac{V_0}{V_N} + \frac{1}{V_0^{-1} + N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}}))\]</div>
 <p>A special case deserved our attention: if we take the limit in the prior distribution <span class="math notranslate nohighlight">\(V_0\rightarrow\infty\)</span> and
 <span class="math notranslate nohighlight">\(\alpha_0, \beta_0 \rightarrow 0\)</span>, the prior distribution becomes a non-informative or Jeffrey’s prior, with
-<span class="math notranslate nohighlight">\(p(\sigma^2 \Delta) \sim 1/(\sigma^2 \Delta)\)</span>, and
-<span class="math notranslate nohighlight">\(p(\mu\Delta|\sigma^2\Delta)\)</span> becoming a flat prior. Jeffrey’s prior is considered the best choice to describe non-informative priors of scale parameters as is the case of <span class="math notranslate nohighlight">\(\sigma^2 \Delta\)</span>. In this situation:</p>
+<span class="math notranslate nohighlight">\(p(\sigma^2 \Delta t) \sim 1/(\sigma^2 \Delta t)\)</span>, and
+<span class="math notranslate nohighlight">\(p(\mu\Delta t|\sigma^2\Delta t)\)</span> becoming a flat prior. Jeffrey’s prior is considered the best choice to describe non-informative priors of scale parameters as is the case of <span class="math notranslate nohighlight">\(\sigma^2 \Delta t\)</span>. In this situation:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
-\mathbb{E}[\mu \Delta|D, I_P] \rightarrow \mu_{MLE}\Delta = \frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\ 
-\mathbb{E}[\sigma^2 \Delta|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
+\mathbb{E}[\mu \Delta t|D, I_P] \rightarrow \mu_{MLE}\Delta t = \frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\ 
+\mathbb{E}[\sigma^2 \Delta t|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta t \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
 \end{aligned}\end{split}\]</div>
 <p>which are the maximum likelihood estimators (MLE) of the
 mean and the variance of a Gaussian distribution, which is expected for a non-informative prior since 1) for a Gaussian distribution the mean and the mode coincide, 2) maximizing the posterior with the
@@ -1071,15 +1072,15 @@ information contained in the posterior distribution.</p>
 <p>We will see in later chapters that keeping the full posterior distribution can be relevant when we want to incorporate model estimation uncertainty into the inferences that are derived using stochastic processes. For instance, in the presence of a non-negligible
 estimation uncertainty of the parameters of our Brownian process, the correct predictive distribution of the next value of the process given its past history is actually given by:</p>
 <div class="math notranslate nohighlight">
-\[S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_N \Delta, \frac{\beta_N}{\alpha_N}(1+V_N), 2\alpha_N)\]</div>
+\[S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_N \Delta t, \frac{\beta_N}{\alpha_N}(1+V_N), 2\alpha_N)\]</div>
 <p>If we consider a non-informative prior, this becomes:</p>
 <div class="math notranslate nohighlight">
-\[S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_{MLE} \Delta, \sigma_{MLE}^2(1 + \frac{1}{N}), N)\]</div>
+\[S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_{MLE} \Delta t, \sigma_{MLE}^2(1 + \frac{1}{N}), N)\]</div>
 <p>This is to be compared with the inference using the MLE estimator, which would essentially plug the point MLE estimator into the Brownian process, yielding:</p>
 <div class="math notranslate nohighlight">
-\[S_{t_{N+1}}|S_{t_N}, D, I_P \sim N(\mu_{MLE} \Delta, \sigma_{MLE}^2 \Delta)\]</div>
-<p>The mean and the mode of both distributions is the same, namely <span class="math notranslate nohighlight">\(\mu_{MLE} \Delta\)</span>, but the Student distribution has fatter tails than the Gaussian distribution, reflecting the extra uncertainty coming from
-the estimation error. Only in the case of having a very large data-set <span class="math notranslate nohighlight">\(N\rightarrow \infty\)</span>, both distributions converge, as in this limit the Student distribution becomes a Gaussian <span class="math notranslate nohighlight">\(N(\mu_{MLE} \Delta, \sigma_{MLE} \Delta)\)</span>. Another way of seeing this is to interpret the variance term of the Student distribution as the sum
+\[S_{t_{N+1}}|S_{t_N}, D, I_P \sim N(\mu_{MLE} \Delta t, \sigma_{MLE}^2 \Delta)\]</div>
+<p>The mean and the mode of both distributions is the same, namely <span class="math notranslate nohighlight">\(\mu_{MLE} \Delta t\)</span>, but the Student distribution has fatter tails than the Gaussian distribution, reflecting the extra uncertainty coming from
+the estimation error. Only in the case of having a very large data-set <span class="math notranslate nohighlight">\(N\rightarrow \infty\)</span>, both distributions converge, as in this limit the Student distribution becomes a Gaussian <span class="math notranslate nohighlight">\(N(\mu_{MLE} \Delta t, \sigma_{MLE} \Delta t)\)</span>. Another way of seeing this is to interpret the variance term of the Student distribution as the sum
 of two terms: the first one coming from the intrinsic noise of the Brownian process, and the second one, the <span class="math notranslate nohighlight">\(1/N\)</span> correction, coming from the estimation uncertainty.</p>
 <p><strong>Dimensional analysis</strong></p>
 <p>In order to reason about stochastic processes it is important to keep track or the units of their parameters. This can also be useful as a consistency check on the estimators derived, for instance. We will use a
@@ -1152,8 +1153,20 @@ Therefore, any finite set <span class="math notranslate nohighlight">\(\log(S_{t
 <div class="math notranslate nohighlight">
 \[\mu_t^{GP}= \log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2)\]</div>
 <p><strong>Simulation</strong></p>
+<p>We can again simulate the GBM either using a discretization scheme or the connection to Gaussian processes. When using the discretization scheme more robust results can attained by simulating a Wiener process and then using a discrete integration of the GBM:</p>
+<div class="math notranslate nohighlight">
+\[S_{t_{i+1}} = S_{t_{i}} e^{(\mu_{t_i} - \frac{1}{2} \sigma_{t_{i}}^2)\Delta t + \sigma_{t_{i}} Z}\]</div>
+<p>where <span class="math notranslate nohighlight">\(Z \sim N(0,1)\)</span>. We perform such simulation with constant parameters in the following figure:</p>
+<figure class="align-default" id="fig-gbm-simulation">
+<a class="reference internal image-reference" href="../_images/GBM_simulation.png"><img alt="../_images/GBM_simulation.png" src="../_images/GBM_simulation.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7.6 </span><span class="caption-text">Simulation of five different paths of the the Geometric Brownian Motion with drift process using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 1000\)</span><span class="math notranslate nohighlight">\(, \)</span>S_0 = 100<span class="math notranslate nohighlight">\(, \)</span>\mu = 0.05<span class="math notranslate nohighlight">\(, \)</span>\sigma = 0.2$.</span><a class="headerlink" href="#fig-gbm-simulation" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <p><strong>Estimation</strong></p>
+<p>The estimation of the Geometric Brownian Motion is relatively straightforward by linking it to a Brownian motion using log-returns. Therefore, we can transform a set of observations <span class="math notranslate nohighlight">\(D = \{S_{t_0}, ..., S_{t_N}\}\)</span> into <span class="math notranslate nohighlight">\(D' = \{\log S_{t_0}, ..., \log S_{t_N}\}\)</span> and apply any of the estimation techniques discussed in the previous sections.</p>
 <p><strong>Applications</strong></p>
+<p>The Geometric Brownian Motion is a corner-stone in financial modelling since it is the most simple model that captures non-negativity of asset prices like stocks. Therefore it has been applied in multiple context. For example, it was the model used by Black, Merton and Scholes for their infamous option pricing theory. It is also used typically in risk management use cases to simulate paths to compute value at risk (VaR).</p>
 </section>
 <section id="arithmetic-average-of-the-brownian-motion">
 <h3><span class="section-number">7.6.3. </span>Arithmetic Average of the Brownian motion<a class="headerlink" href="#arithmetic-average-of-the-brownian-motion" title="Permalink to this heading">#</a></h3>
@@ -1226,19 +1239,81 @@ e^{\theta t} S_t - S_0 = (e^{\theta t} - 1) \mu + \sigma \int_0^t e^{\theta u} d
 <div class="math notranslate nohighlight">
 \[\begin{split} k(t_1, t_2) = \textrm{cov}[S_{t_1} S_{t_2}] = \sigma^2 \int_0^{\min(t_1,t_2)} e^{-\theta(t_1-u)} e^{-\theta(t_2 -u)}du \nonumber \\ = \sigma^2 e^{-\theta (t_1 + t_2) }\left( \frac{e^{2 \theta \min(t_1,t_2)}-1}{2\theta}\right) = \frac{\sigma^2}{2\theta} e^{-\theta |t_1 - t_2| }\left( 1-e^{2 \theta \min(t_1,t_2)}\right)\end{split}\]</div>
 <p>where we have used that <span class="math notranslate nohighlight">\(t_1 + t_2 - 2 \min(t_1, t_2) = |t_1 - t_2|\)</span> to simplify the expression.</p>
-<p>The specification so far only describes the mean-reverting fluctuations around the mean. To complete the mapping to a Gaussian process of the full Orstein - Uhlenbeck process we need to add the mean to the specification:</p>
+<p>The specification so far only describes the mean-reverting fluctuations around the long-term mean. To complete the mapping to a Gaussian process of the full Orstein - Uhlenbeck process we need to add the mean to the specification:</p>
 <div class="math notranslate nohighlight">
 \[\mu_t^{GP} = S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t})\]</div>
+<p><strong>Simulation</strong></p>
 <p><strong>Estimation</strong></p>
+<p>Given a set of observations <span class="math notranslate nohighlight">\(D = \{ S_{t_i}, ..., S_{t_N}\}\)</span>, we can use maximum likelihood estimation to find the parameters of the model. The
+The log-likelihood function <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> for the observed data is:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}(\theta, \mu, \sigma^2) = -\frac{n}{2} \ln(2\pi) - \frac{1}{2} \sum_{i=1}^n \left[ \ln v_i + \frac{(S_{t_i} - m_i)^2}{v_i} \right]
+\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[m_i \equiv \mu + (S_{t_{i-1}} - \mu) e^{-\theta \Delta t_i}\]</div>
+<div class="math notranslate nohighlight">
+\[v_i \equiv \frac{\sigma^2}{2\theta} \left( 1 - e^{-2\theta \Delta t_i} \right)\]</div>
+<p>Due to the complexity of the log-likelihood function, finding closed-form solutions for all the parameters is not possible, and we need to resort to numerical optimization.</p>
+<p>However, under the assumption of equally spaced observations <span class="math notranslate nohighlight">\(\Delta t_i = \Delta t\)</span>, we can simplify the estimation process linking the model to a linear regression problem. Define:</p>
+<div class="math notranslate nohighlight">
+\[\phi = e^{-\theta \Delta t} \]</div>
+<div class="math notranslate nohighlight">
+\[\gamma = 1 - \phi = 1 - e^{-\theta \Delta t}\]</div>
+<div class="math notranslate nohighlight">
+\[\psi^2 = \frac{\sigma^2}{2\theta} (1 - \phi^2)\]</div>
+<p>The process can be written in discrete time as:</p>
+<div class="math notranslate nohighlight">
+\[S_i = \mu \gamma + \phi S_{t_{i-1}} + \varepsilon_i\]</div>
+<p>where <span class="math notranslate nohighlight">\(\varepsilon_i \sim \mathcal{N}(0, \psi^2) \)</span>. We can estimate <span class="math notranslate nohighlight">\(\phi\)</span> and <span class="math notranslate nohighlight">\(\mu\)</span> by regressing <span class="math notranslate nohighlight">\(S_i\)</span> on <span class="math notranslate nohighlight">\(S_{i-1}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[S_{t_i} = \beta_0 + \beta_1 S_{t_{i-1}} + \varepsilon_i\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta_0 = \mu \gamma\)</span> and <span class="math notranslate nohighlight">\(\beta_1 = \phi\)</span>. The ordinary least squares (OLS) estimation yields:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\beta}_1 = \frac{\sum_{i=1}^n (S_{t_{i-1}} - \bar{S}_{-1})(S_{t_i} - \bar{S})}{\sum_{i=1}^n (S_{t_{i-1}} - \bar{S}_{-1})^2} \equiv \hat{\rho}_{t_i, t_{i-1}}\]</div>
+<p>which is the first-order auto-correlation function. Moreover:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\beta}_0 = \bar{S} - \hat{\beta}_1 \bar{S}_{t_{i-1}} \approx \bar{S} (1 - \hat{\beta}_1)\]</div>
+<p>where the last approximation holds for a large enough number of samples. We can now come back to the original parameters. Starting with the long-term mean,  Since <span class="math notranslate nohighlight">\(\beta_0 = \mu \gamma = \mu (1 - \phi)\)</span> and <span class="math notranslate nohighlight">\(\phi = \beta_1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\hat{\mu} = \frac{\hat{\beta}_0}{1 - \hat{\phi}} = \frac{\hat{\beta}_0}{1 - \hat{\beta_1}}  \approx \bar{S}\]</div>
+<p>The mean-reversion speed reads</p>
+<div class="math notranslate nohighlight">
+\[\hat{\theta} = -\frac{1}{\Delta t} \ln \hat{\phi}  =  -\frac{1}{\Delta t} \ln \hat{\rho}_{t_i, t_{i-1}}\]</div>
+<p>Finally, to estimate the variance, we use the definition of <span class="math notranslate nohighlight">\( \psi^2 \)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\psi^2 = \frac{\sigma^2}{2\theta} (1 - \phi^2) \]</div>
+<p>Therefore, the estimator is:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\sigma}^2 = \frac{2 \hat{\theta} \hat{\psi}^2}{1 - \hat{\phi}^2}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\psi^2\)</span> is the residual variance of the regression, which is estimated as:
+$<span class="math notranslate nohighlight">\(
+\hat{\psi}^2 = \frac{1}{n} \sum_{i=1}^n (S_{t_i} - \hat{\beta}_0 - \hat{\beta}_1 S_{t_{i-1}})^2
+\)</span>$</p>
 <p><strong>Applications</strong></p>
+<p>The Orstein - Uhlenbeck process can be applied to a variety of real phenomena. In the financial and economical domain, we find mean reversion in multiple processes like:</p>
+<ul class="simple">
+<li><p>Inflation: which is influenced by central bank policy with specific inflation targets. For example, 2% in the Eurozone.</p></li>
+<li><p>Interest rates: also influenced by central bank policy, as a way to affect inflation. It is also monitored by governments in order to ensure individual and companies can borrow money in competitive conditions.</p></li>
+<li><p>Commodity prices: subject to supply and demand forces, stationality and, in some cases like oil, explicit intervention by organizations like OPEC, which use their oligopolistic control of supply to ensure prices remain within a range that is not too low to affect profits and too high to incentivise the switch to alternative sources.</p></li>
+<li><p>Statistical arbitrage: prices of financial instruments might not show mean reversion, but combinations of them sometimes do. For example, pairs of stocks of companies with similar fundamentals.</p></li>
+</ul>
 <p><strong>Other mean reverting processes</strong></p>
-<p>The Cox-Ingersoll-Ross (CIR) process is another mean-reverting stochastic process. It can be considered a variation of the Orstein-Uhlenbeck process, but with the added feature that the volatility term depends on the square root of the process itself, ensuring that the process remains positive.</p>
+<p>Despite the popularity of the Orstein - Uhlenbeck process to model mean - reverting processes due to its simplicity and tractability, it has limitations in the type of models that can describe. For instance, for processes that can only take positive values, and the mean reversion time is independent of the distance to the long-term mean.</p>
+<p>A popular related model is the Cox-Ingersoll-Ross (CIR) process, which is a variation of the Orstein-Uhlenbeck process, but with the added feature that the volatility term depends on the square root of the process itself, ensuring that the process remains positive.</p>
 <p>The CIR process is given by:</p>
 <div class="math notranslate nohighlight">
-\[d S_t = \theta (S_t - \mu_t) dt + \sigma_t S_t^{1/2} d W_t\]</div>
-<p>Again, <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span> controls the speed of mean reversion, <span class="math notranslate nohighlight">\(\mu\)</span> represents the long-term mean level, and <span class="math notranslate nohighlight">\(\sigma\)</span> is the volatility. Unlike the Orstein-Uhlenbeck process, where the volatility is constant, the CIR model introduces a state-dependent volatility term <span class="math notranslate nohighlight">\(\sqrt{S_t}\)</span>, which ensures that <span class="math notranslate nohighlight">\(S_t\)</span> stays positive (as the volatility goes to zero when <span class="math notranslate nohighlight">\(S_t\)</span> approaches zero).</p>
+\[d S_t = \theta (\mu_t - S_t) dt + \sigma_t S_t^{1/2} d W_t\]</div>
+<p>Again, <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span> controls the speed of mean reversion, <span class="math notranslate nohighlight">\(\mu\)</span> represents the long-term mean level, and <span class="math notranslate nohighlight">\(\sigma\)</span> is the volatility. Unlike the Orstein-Uhlenbeck process, where the volatility is constant, the CIR model introduces a state-dependent volatility term <span class="math notranslate nohighlight">\(\sqrt{S_t}\)</span>, which ensures that <span class="math notranslate nohighlight">\(S_t\)</span> stays positive (as the volatility goes to zero when <span class="math notranslate nohighlight">\(S_t\)</span> approaches zero). As a byproduct, the mean reversion time also depends on the actual value of the process.</p>
 <p>Though no closed-form solution exists for the CIR process as simple as the one for the Orstein-Uhlenbeck process, it is often analyzed through numerical methods or approximations. The Fokker-Planck equation corresponding to the CIR process can be solved to obtain the transition probability density, which follows a non-central chi-squared distribution.</p>
 <p>The CIR process is widely used in financial applications, such as in the modeling of short-term interest rates and in the Heston model for stochastic volatility, due to its ability to capture mean reversion and maintain non-negativity.</p>
+<p>Other alternatives to the Orstein - Uhlenbeck process that allow to specifically model the behaviour of the mean reversion time are non linear drift models in the form:</p>
+<div class="math notranslate nohighlight">
+\[d S_t = \theta f(\mu_t - S_t) (\mu_t - S_t) dt + \sigma_t d W_t\]</div>
+<p>where <span class="math notranslate nohighlight">\(f(\cdot)\)</span> is function of the distance to the mean, for instance a power law.</p>
 </section>
 <section id="brownian-bridge">
 <h3><span class="section-number">7.6.5. </span>Brownian bridge<a class="headerlink" href="#brownian-bridge" title="Permalink to this heading">#</a></h3>
@@ -1274,7 +1349,7 @@ k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T}
 <figure class="align-default" id="fig-bb-gps">
 <a class="reference internal image-reference" href="../_images/BB_gps.png"><img alt="../_images/BB_gps.png" src="../_images/BB_gps.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.6 </span><span class="caption-text">Simulation of five different paths of the the Brownian Bridge using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 100\)</span>.</span><a class="headerlink" href="#fig-bb-gps" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.7 </span><span class="caption-text">Simulation of five different paths of the the Brownian Bridge using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 100\)</span>.</span><a class="headerlink" href="#fig-bb-gps" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Applications</strong></p>
@@ -1399,14 +1474,14 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <figure class="align-default" id="fig-poisson-process">
 <a class="reference internal image-reference" href="../_images/poisson_process.png"><img alt="../_images/poisson_process.png" src="../_images/poisson_process.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.7 </span><span class="caption-text">Simulation of a Poisson process in a discrete grid with 50 time-steps and intensity <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span></span><a class="headerlink" href="#fig-poisson-process" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.8 </span><span class="caption-text">Simulation of a Poisson process in a discrete grid with 50 time-steps and intensity <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span></span><a class="headerlink" href="#fig-poisson-process" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The same method can be used for more complex jump processes. For example, the following plot has been generated for a Hawkes process using a exponential excitation function. In this case, jumps tend to cluster together in comparison with the behaviour of the Poisson process.</p>
 <figure class="align-default" id="fig-hawkes-process">
 <a class="reference internal image-reference" href="../_images/hawkes_process.png"><img alt="../_images/hawkes_process.png" src="../_images/hawkes_process.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.8 </span><span class="caption-text">Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. The excitation function is an exponential with <span class="math notranslate nohighlight">\(\alpha = 0.5\)</span> and <span class="math notranslate nohighlight">\(\beta = 1\)</span>.</span><a class="headerlink" href="#fig-hawkes-process" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. The excitation function is an exponential with <span class="math notranslate nohighlight">\(\alpha = 0.5\)</span> and <span class="math notranslate nohighlight">\(\beta = 1\)</span>.</span><a class="headerlink" href="#fig-hawkes-process" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Applications:</strong></p>
@@ -1452,7 +1527,7 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <figure class="align-default" id="fig-compound-poisson">
 <a class="reference internal image-reference" href="../_images/compound_poisson.png"><img alt="../_images/compound_poisson.png" src="../_images/compound_poisson.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. For the distribution of jumps we use a exponential distribution with rate <span class="math notranslate nohighlight">\(\eta = 2.5\)</span>. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process.</span><a class="headerlink" href="#fig-compound-poisson" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. For the distribution of jumps we use a exponential distribution with rate <span class="math notranslate nohighlight">\(\eta = 2.5\)</span>. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process.</span><a class="headerlink" href="#fig-compound-poisson" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1496,7 +1571,7 @@ One famous instance of such models incorporating jumps is Merton’s jump diffus
 <figure class="align-default" id="fig-jump-diffusion">
 <a class="reference internal image-reference" href="../_images/jump_diffusion.png"><img alt="../_images/jump_diffusion.png" src="../_images/jump_diffusion.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Simulation of five paths of a jump diffusion process in a discrete grid with 1000 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 1\)</span>. The Geometric Brownian Motion has drift <span class="math notranslate nohighlight">\(\mu = 0.1\)</span> and volatility <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span> For the distribution of jumps we use a log-normal distribution with mean <span class="math notranslate nohighlight">\(k = -0.1\)</span> and standard deviation <span class="math notranslate nohighlight">\(\delta = 0.1\)</span>.</span><a class="headerlink" href="#fig-jump-diffusion" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.11 </span><span class="caption-text">Simulation of five paths of a jump diffusion process in a discrete grid with 1000 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 1\)</span>. The Geometric Brownian Motion has drift <span class="math notranslate nohighlight">\(\mu = 0.1\)</span> and volatility <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span> For the distribution of jumps we use a log-normal distribution with mean <span class="math notranslate nohighlight">\(k = -0.1\)</span> and standard deviation <span class="math notranslate nohighlight">\(\delta = 0.1\)</span>.</span><a class="headerlink" href="#fig-jump-diffusion" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Applications</strong></p>

@@ -1,4 +1,4 @@
-# Overview of Financial Instruments
+# Financial Instruments
 
 ## Introduction
 
@@ -10,7 +10,7 @@
 
 Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name "derivative".
 
-### Linear derivatives: Fowards, Futures and ETFs
+### Linear derivatives: Forwards, Futures and ETFs
 
 ### Options
 
