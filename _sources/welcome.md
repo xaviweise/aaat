@@ -9,6 +9,10 @@ name: Book Cover
 ---
 ```
 
+## Notebooks
+
+All the code used for the examples in the book is available in the repo. URL: https://github.com/xaviweise/aaat/tree/main/notebooks
+
 ## Citation
 
 If you use the content of this book in your own work, please cite us using
@@ -27,7 +31,7 @@ Here is the citation in BibTeX format
 ```
 
 ## See a mistake or want to make a suggestion? 
-File an [issue](https://github.com/xaviweise/aaat/issues) if you notice anything broken so we can fix it. I also welcome suggestions on which contents to prioritise.
+File an [issue](https://github.com/xaviweise/aaat/issues) if you notice anything broken so we can fix it. I also welcome suggestions on which contents to prioritize.
 
 
 ### License

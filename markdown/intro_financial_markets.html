@@ -62,8 +62,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'markdown/intro_financial_markets';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -171,13 +169,13 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="symbollist.html">Symbols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Fundamentals</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Markets Fundamentals</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Financial Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="market_microstructure.html">2. Market microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithmic_trading.html">3. Algorithmic Trading</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelling Fundamentals</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Modelling Fundamentals</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro_bayesian.html">4. Introduction to Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro_causal.html">5. Causal inference</a></li>
@@ -216,6 +214,11 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
 </ul>
 
     </div>
@@ -411,27 +414,29 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1.1. Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-purpose-of-financial-markets">1.2. The purpose of financial markets</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-banking-system">1.2.1. The Banking System</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.2.2. Financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1.1. Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-banking-system">1.1.1. The Banking System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.1.2. Financial markets</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-participate-in-financial-markets">1.3. Who participate in financial markets?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-financial-instruments-and-asset-classes">1.4. Types of financial instruments and asset classes</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#market-structures">1.5. Market structures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.6. Equity market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.7. Fixed income market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.8. FX market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-markets">1.9. Derivatives markets</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-derivatives">1.9.1. Introduction to derivatives</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-derivatives-fowards-futures-and-etfs">1.9.2. Linear derivatives: Fowards, Futures and ETFs</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options">1.9.3. Options</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-participates-in-financial-markets">1.2. Who Participates in Financial Markets?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-financial-instruments-and-asset-classes">1.3. Types of Financial Instruments and Asset Classes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stocks-and-bonds-the-backbone-of-equity-and-fixed-income">1.3.1. Stocks and Bonds: The Backbone of Equity and Fixed Income</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#money-markets-short-term-debt-instruments">1.3.2. Money Markets: Short-Term Debt Instruments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-financial-instruments-derived-from-other-assets">1.3.3. Derivatives: Financial Instruments Derived from Other Assets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foreign-exchange-fx-spot-and-derivative-transactions">1.3.4. Foreign Exchange (FX): Spot and Derivative Transactions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#commodities-physical-goods-and-their-derivatives">1.3.5. Commodities: Physical Goods and Their Derivatives</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cryptocurrencies-a-new-asset-class">1.3.6. Cryptocurrencies: A New Asset Class</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.10. Crypto market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.11. Regulation of financial markets</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.12. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#market-structures">1.4. Market structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.5. Equity market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.6. Fixed income market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.7. FX market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-markets-structure">1.8. Derivatives markets structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.9. Crypto market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.10. Regulation of financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.11. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -447,31 +452,16 @@ document.write(`
 <h1><span class="section-number">1. </span>Financial Markets<a class="headerlink" href="#financial-markets" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
 <h2><span class="section-number">1.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="the-purpose-of-financial-markets">
-<h2><span class="section-number">1.2. </span>The purpose of financial markets<a class="headerlink" href="#the-purpose-of-financial-markets" title="Permalink to this heading">#</a></h2>
 <p>Financial markets are a solution to a problem perennial to our
 societies: the efficient channelling of savings into productive uses.
-Legal and natural persons who have excess cash seek to obtain the
-maximum returns (investment) with the maximum availability (liquidity).
-Therefore, they would prefer to lend money short - term. Those however
-who need cash in order to fund their ventures (new companies, new
-business plans for existing companies, acquisition of assets like houses
-via mortgages, social programs, etc) prefer to pay the minimal
-compensation possible and retain the funds for long-term. The lack of a
-mechanism to be able to accommodate those opposing objectives might lead
-to a society where excess funds remain idle instead of being channeled
-to productive uses.</p>
-<p>Modern capitalist societies solve this problem in two ways, which form
-the backbone of the financial system: the banking system and financial
-markets.</p>
+Legal and natural persons who have excess cash seek to obtain the maximum returns (investment) with the maximum availability (liquidity).
+Therefore, they would prefer to lend money short - term. Those however who need cash in order to fund their ventures (new companies, new business plans for existing companies, acquisition of assets like houses via mortgages, social programs, etc) prefer to pay the minimal
+compensation possible and retain the funds for long-term. The lack of a mechanism to be able to accommodate those opposing objectives might lead to a society where excess funds remain idle instead of being channeled to productive uses.</p>
+<p>Modern capitalist societies solve this problem in two ways, which form the backbone of the financial system: the banking system and financial markets.</p>
 <section id="the-banking-system">
-<h3><span class="section-number">1.2.1. </span>The Banking System<a class="headerlink" href="#the-banking-system" title="Permalink to this heading">#</a></h3>
-<p>In the banking system the center is the bank, an institution or private
-company that offers short-term deposits with high availability to those
-with excess funds, and long-term loans to those who need funds. A
-capital cushion based on short-term loans or directly cash is maintained
-in order to fulfills withdrawals. Their activity is not exempt from
+<h3><span class="section-number">1.1.1. </span>The Banking System<a class="headerlink" href="#the-banking-system" title="Permalink to this heading">#</a></h3>
+<p>In the banking system the center is the bank, an institution or private company that offers short-term deposits with high availability to those
+with excess funds, and long-term loans to those who need funds. A capital cushion based on short-term loans or directly cash is maintained in order to fulfills withdrawals. Their activity is not exempt from
 risks:</p>
 <ul class="simple">
 <li><p>liquidity risk, which can happens if the demand to withdraw deposits
@@ -486,124 +476,97 @@ operations. The banking system has traditionally being the central core
 of the financial system in Europe.</p>
 </section>
 <section id="id1">
-<h3><span class="section-number">1.2.2. </span>Financial markets<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">1.1.2. </span>Financial markets<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <p>In financial markets, those who need funds issue financial instruments,
 legally binding contracts that articulate the terms in which those funds
-will be returned to the investor, as well as the compensation for the
-service. So far that is not that different from traditional banking
-loans. The key for financial instruments is the possibility of
-transferring the property of the contract, i.e. the right to receive
-back those future cash-flows and compensations. This provides a
-mechanism for the lender to potentially recover the funds before the
+will be returned to the investor, as well as the compensation for the service. So far that is not that different from traditional banking loans. The key for financial instruments is the possibility of
+transferring the property of the contract, i.e. the right to receive back those future cash-flows and compensations. This provides a mechanism for the lender to potentially recover the funds before the
 contract ends, solving the problem of liquidity even if contracts are
 issued with long-term horizons.</p>
-<p>Of course, for that the lender needs to find a counterpart that is
-willing to purchase the financial instrument, and agree to the price.
-Pricing financial instruments is however not a simple task, since their
-value depend on assumptions about the certainty of those future
-cash-flows (for instance, what if the borrower cannot commit in the
-future to pay back?). There are also considerations of opportunity
-costs, since the potential investor will necessarily compare the return
-on its investment when acquiring the financial instrument with other
-potential productive uses of her money. Financial markets developed
-precisely to solve these two problems: 1) finding counterparts, 2)
-setting a price.</p>
-<p>Financial markets are the place where interested parties meet and
-negotiate the prices of financial instruments. In <strong>primary markets</strong>,
-financial instruments are issued by the borrowers and acquire initially
-by investors, sometimes via intermediaries like banks. In <strong>secondary
-markets</strong>, already issued financial instruments are negotiated between
-investors, with the original borrower not playing any part any more in
-the process. Most of trading nowadays occurs in secondary markets.</p>
-<p>In this process, financial markets not only provide of a mechanism for
-investors to obtain liquidity from their investments, but also serve as
-a mechanism for price discovery. In the end, in financial markets (as in
-other markets), the price of a financial instrument is what two willing
-parties agree to transact, independently of the subjective value that
-each of them place on the instrument. Of course, by pulling multiple
-investors in the same place to negotiate, financial markets channel
-multiple speculative ways about the value of a financial instrument into
+<p>Of course, for that the lender needs to find a counterpart that is willing to purchase the financial instrument, and agree to the price.
+Pricing financial instruments is however not a simple task, since their value depend on assumptions about the certainty of those future cash-flows (for instance, what if the borrower cannot commit in the future to pay back?). There are also considerations of opportunity costs, since the potential investor will necessarily compare the return
+on its investment when acquiring the financial instrument with other potential productive uses of her money. Financial markets developed precisely to solve these two problems: 1) finding counterparts, 2) setting a price.</p>
+<p>Financial markets are the place where interested parties meet and negotiate the prices of financial instruments. In <strong>primary markets</strong>, financial instruments are issued by the borrowers and acquire initially by investors, sometimes via intermediaries like banks. In <strong>secondary
+markets</strong>, already issued financial instruments are negotiated between investors, with the original borrower not playing any part any more in the process. Most of trading nowadays occurs in secondary markets.</p>
+<p>In this process, financial markets not only provide of a mechanism for investors to obtain liquidity from their investments, but also serve as a mechanism for price discovery. In the end, in financial markets (as in
+other markets), the price of a financial instrument is what two willing parties agree to transact, independently of the subjective value that each of them place on the instrument. Of course, by pulling multiple investors in the same place to negotiate, financial markets channel multiple speculative ways about the value of a financial instrument into
 an actual price. These prices can guide investors about future
 decisions.</p>
+<p>Certainly! Here’s an expanded version of the section while maintaining the main ideas:</p>
 </section>
 </section>
-<section id="who-participate-in-financial-markets">
-<h2><span class="section-number">1.3. </span>Who participate in financial markets?<a class="headerlink" href="#who-participate-in-financial-markets" title="Permalink to this heading">#</a></h2>
-<p>Financial markets are mostly the domain of legal persons, although
-natural persons might participate as investors normally via an
-intermediary like a bank or a broker. Financial instruments are issued
-by corporations who need to fund their business plans, governments at
-many different levels (local, regional, national, supranational) that
-seek to fund social programs or public investments, or by banks that
-create tailored products for investors.</p>
-<p>Financial instruments are acquired by institutional investors like hedge
-funds, mutual funds, pension funds or insurance companies, among others,
-in order to generate returns for their clients or themselves. Or to
-hedge particular risks of their concern. Corporations also acquire
-financial instruments to put to work their extra cash, and also to hedge
-risks. Banks acquire financial instruments as well to manage their
-liquidity, generate returns from deposits and hedge risks. And central
-banks use them to control their monetary policy.</p>
+<hr class="docutils" />
+<section id="who-participates-in-financial-markets">
+<h2><span class="section-number">1.2. </span>Who Participates in Financial Markets?<a class="headerlink" href="#who-participates-in-financial-markets" title="Permalink to this heading">#</a></h2>
+<p>Financial markets primarily involve <strong>legal entities</strong>, although <strong>natural persons</strong>—individuals—may also participate, typically through intermediaries such as <strong>banks</strong> or <strong>brokers</strong>. The core participants issuing financial instruments are varied: <strong>corporations</strong> issue securities to fund their business activities, while <strong>governments</strong> at all levels—local, regional, national, and supranational—issue bonds to finance social programs or public investments. Additionally, <strong>banks</strong> design and issue customized products aimed at meeting the investment needs of institutional and individual investors.</p>
+<p>On the demand side, <strong>institutional investors</strong> such as hedge funds, mutual funds, pension funds, and insurance companies play a crucial role in acquiring financial instruments. Their goal is either to generate returns for their clients or manage specific risks. <strong>Corporations</strong> also buy financial instruments, both to make their excess cash productive and to hedge against business risks. Similarly, <strong>banks</strong> acquire these instruments as part of their liquidity management strategy, to generate returns on customer deposits, and to mitigate various financial risks. <strong>Central banks</strong> are key participants as well, utilizing financial instruments to execute their monetary policies, influencing money supply and interest rates.</p>
+<p>In terms of intermediation, <strong>banks</strong> and <strong>brokers</strong> facilitate market transactions. <strong>Banks</strong>, particularly in their role as market-makers, are key <strong>liquidity providers</strong>. They stand ready to buy or sell financial instruments, profiting from the <strong>spread</strong>—the difference between the buying and selling price—which compensates them for holding the instrument until an opposing counterparty emerges. <strong>Brokers</strong>, on the other hand, connect buyers and sellers through their networks or proprietary platforms, charging a fee for their matchmaking services without holding the financial instruments themselves.</p>
+<p>An increasingly important role in financial markets today is played by <strong>new liquidity providers</strong>—technology-driven financial firms. Many of these firms originated from <strong>high-frequency trading</strong> and now use advanced algorithms to provide liquidity in electronic markets. This new breed of liquidity providers competes with traditional market-makers, leveraging automation and sophisticated trading strategies to ensure tighter spreads and more efficient markets.</p>
 </section>
 <section id="types-of-financial-instruments-and-asset-classes">
-<h2><span class="section-number">1.4. </span>Types of financial instruments and asset classes<a class="headerlink" href="#types-of-financial-instruments-and-asset-classes" title="Permalink to this heading">#</a></h2>
-<p>Intro, stocks, bonds</p>
-<p>those are cash instruments, the backbone of two asset classes, equity
-and fixed income</p>
-<p>Within fixed income, but also considered sometimes as its own asset
-class, money markets</p>
-<p>there are also derivatives, as their own asset class, although sometimes
-considered part of another asset class, being derived</p>
-<p>finally fx, spot transactions (two days), derivatives. fx spot not
-considered financial isntrument under mifid 2</p>
-<p>commodities per se not financial instrument, but their derivatives are</p>
-<p>crypto is considered an “asset class”, although cryptos are not
-financial instruments, i.e. contracts with obligations of payments.
-Derivatives of crypto again are financial contracts</p>
-<p>Liquidity providers vs liquidity takers</p>
+<h2><span class="section-number">1.3. </span>Types of Financial Instruments and Asset Classes<a class="headerlink" href="#types-of-financial-instruments-and-asset-classes" title="Permalink to this heading">#</a></h2>
+<p>Financial instruments are the building blocks of financial markets, representing the contracts or securities through which money flows. These instruments are typically grouped into distinct <strong>asset classes</strong> based on their characteristics, the types of returns they provide, and the markets they operate within. Understanding the different types of financial instruments and asset classes is essential for comprehending how financial markets function and how participants make investment decisions.</p>
+<p>The major asset classes include <strong>equity</strong>, <strong>fixed income</strong>, <strong>money markets</strong>, <strong>derivatives</strong>, <strong>foreign exchange (FX)</strong>, <strong>commodities</strong>, and <strong>cryptocurrencies</strong>. Each asset class plays a distinct role in the financial ecosystem, catering to different investor needs, risk appetites, and financial goals.</p>
+<section id="stocks-and-bonds-the-backbone-of-equity-and-fixed-income">
+<h3><span class="section-number">1.3.1. </span>Stocks and Bonds: The Backbone of Equity and Fixed Income<a class="headerlink" href="#stocks-and-bonds-the-backbone-of-equity-and-fixed-income" title="Permalink to this heading">#</a></h3>
+<p>The most well-known financial instruments are <strong>stocks</strong> and <strong>bonds</strong>, which form the foundation of two major asset classes: <strong>equity</strong> and <strong>fixed income</strong>.</p>
+<ul class="simple">
+<li><p><strong>Stocks</strong> represent ownership in a corporation and give investors a claim on a portion of the company’s assets and earnings. Stocks are part of the <strong>equity asset class</strong>, providing potential for capital appreciation and dividends. However, they also expose investors to market volatility and business risk, making them a relatively high-risk, high-reward investment.</p></li>
+<li><p><strong>Bonds</strong>, on the other hand, are debt securities issued by governments, corporations, or other entities to raise capital. Investors in bonds lend money to the issuer in exchange for periodic interest payments and the return of the bond’s face value at maturity. Bonds belong to the <strong>fixed income asset class</strong>, which generally offers stable and predictable returns, although they are still subject to risks such as interest rate fluctuations and credit defaults.</p></li>
+</ul>
+<p>Both stocks and bonds are often referred to as <strong>cash instruments</strong>, meaning their value derives directly from the underlying market dynamics, without the need for an intermediary asset.</p>
+</section>
+<section id="money-markets-short-term-debt-instruments">
+<h3><span class="section-number">1.3.2. </span>Money Markets: Short-Term Debt Instruments<a class="headerlink" href="#money-markets-short-term-debt-instruments" title="Permalink to this heading">#</a></h3>
+<p>Within the fixed income category, there is a sub-sector known as the <strong>money market</strong>, which some consider an asset class of its own due to its distinct features. <strong>Money market instruments</strong> are short-term debt securities that typically mature in less than a year, such as <strong>Treasury bills</strong>, <strong>commercial paper</strong>, and <strong>certificates of deposit</strong>. These instruments are highly liquid and relatively low-risk, making them an attractive option for institutions and governments looking to manage short-term liquidity needs, as well as for investors seeking a safe place to park cash temporarily.</p>
+</section>
+<section id="derivatives-financial-instruments-derived-from-other-assets">
+<h3><span class="section-number">1.3.3. </span>Derivatives: Financial Instruments Derived from Other Assets<a class="headerlink" href="#derivatives-financial-instruments-derived-from-other-assets" title="Permalink to this heading">#</a></h3>
+<p><strong>Derivatives</strong> are financial contracts whose value is derived from the performance of an underlying asset, index, or rate. They can be based on a wide range of underlying assets, including stocks, bonds, commodities, currencies, and interest rates. This is why some categorize derivatives within the asset class of the underlying instrument, though they are often considered an <strong>asset class</strong> of their own due to their unique characteristics.</p>
+<p>Derivatives are versatile and serve several purposes, such as <strong>hedging</strong> risks, <strong>speculating</strong> on price movements, or <strong>leveraging</strong> positions. Common types of derivatives include <strong>futures</strong>, <strong>options</strong>, <strong>swaps</strong>, and <strong>forwards</strong>, each offering different structures and risk profiles. For example, a company might use derivatives to hedge against fluctuations in interest rates or commodity prices, while a trader might use options to speculate on the price of a stock.</p>
+</section>
+<section id="foreign-exchange-fx-spot-and-derivative-transactions">
+<h3><span class="section-number">1.3.4. </span>Foreign Exchange (FX): Spot and Derivative Transactions<a class="headerlink" href="#foreign-exchange-fx-spot-and-derivative-transactions" title="Permalink to this heading">#</a></h3>
+<p>The <strong>foreign exchange (FX)</strong> market is a critical component of the global financial system, where participants trade currencies. Transactions in the FX market are generally categorized as either <strong>spot</strong> or <strong>derivative</strong> transactions.</p>
+<ul class="simple">
+<li><p><strong>Spot transactions</strong> involve the immediate exchange of currencies, typically settling within two business days. While FX spot transactions are essential for international trade and finance, they are not classified as financial instruments under <strong>MiFID II</strong>, as they do not involve contractual obligations extending beyond the settlement period.</p></li>
+<li><p>FX <strong>derivatives</strong>, such as <strong>forwards</strong>, <strong>options</strong>, and <strong>swaps</strong>, are used to hedge currency risk or speculate on currency movements. Unlike spot transactions, these contracts involve specific obligations between parties and are therefore considered financial instruments.</p></li>
+</ul>
+<p>FX markets are used by a wide range of participants, including <strong>central banks</strong> (to manage currency reserves), <strong>corporations</strong> (to hedge currency risk in international operations), and <strong>investors</strong> looking to profit from currency fluctuations.</p>
+</section>
+<section id="commodities-physical-goods-and-their-derivatives">
+<h3><span class="section-number">1.3.5. </span>Commodities: Physical Goods and Their Derivatives<a class="headerlink" href="#commodities-physical-goods-and-their-derivatives" title="Permalink to this heading">#</a></h3>
+<p><strong>Commodities</strong> are physical goods such as oil, gold, and agricultural products, traded primarily in spot markets. These goods themselves are not considered financial instruments, as they represent tangible assets rather than financial claims. However, the <strong>derivatives</strong> based on commodities, such as <strong>futures</strong> and <strong>options on commodities</strong>, are classified as financial instruments. These contracts enable investors to gain exposure to commodity price movements without needing to take physical delivery of the underlying goods, providing opportunities for hedging and speculation.</p>
+</section>
+<section id="cryptocurrencies-a-new-asset-class">
+<h3><span class="section-number">1.3.6. </span>Cryptocurrencies: A New Asset Class<a class="headerlink" href="#cryptocurrencies-a-new-asset-class" title="Permalink to this heading">#</a></h3>
+<p><strong>Cryptocurrencies</strong>, such as Bitcoin and Ethereum, are a relatively new and rapidly evolving <strong>asset class</strong>. Unlike traditional financial instruments, cryptocurrencies do not represent contractual obligations or financial claims. Instead, they function as digital assets, leveraging <strong>blockchain technology</strong> to provide decentralized and transparent transactions. Their value is driven by supply and demand dynamics, making them highly volatile compared to other asset classes.</p>
+<p>Although cryptocurrencies themselves are not classified as financial instruments under existing regulatory frameworks, <strong>derivatives on cryptocurrencies</strong> (such as Bitcoin futures) are considered financial contracts. These derivatives allow market participants to speculate on or hedge against the price movements of cryptocurrencies, much like they would with other asset classes.</p>
+</section>
 </section>
 <section id="market-structures">
-<h2><span class="section-number">1.5. </span>Market structures<a class="headerlink" href="#market-structures" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.4. </span>Market structures<a class="headerlink" href="#market-structures" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="equity-market-structure">
-<h2><span class="section-number">1.6. </span>Equity market structure<a class="headerlink" href="#equity-market-structure" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.5. </span>Equity market structure<a class="headerlink" href="#equity-market-structure" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="fixed-income-market-structure">
-<h2><span class="section-number">1.7. </span>Fixed income market structure<a class="headerlink" href="#fixed-income-market-structure" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.6. </span>Fixed income market structure<a class="headerlink" href="#fixed-income-market-structure" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="fx-market-structure">
-<h2><span class="section-number">1.8. </span>FX market structure<a class="headerlink" href="#fx-market-structure" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.7. </span>FX market structure<a class="headerlink" href="#fx-market-structure" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="derivatives-markets">
-<h2><span class="section-number">1.9. </span>Derivatives markets<a class="headerlink" href="#derivatives-markets" title="Permalink to this heading">#</a></h2>
-<section id="introduction-to-derivatives">
-<h3><span class="section-number">1.9.1. </span>Introduction to derivatives<a class="headerlink" href="#introduction-to-derivatives" title="Permalink to this heading">#</a></h3>
-<p>Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name “derivative”.</p>
-<p>Note: Focus on derivatives traded in markets in contrast to OTC</p>
-</section>
-<section id="linear-derivatives-fowards-futures-and-etfs">
-<h3><span class="section-number">1.9.2. </span>Linear derivatives: Fowards, Futures and ETFs<a class="headerlink" href="#linear-derivatives-fowards-futures-and-etfs" title="Permalink to this heading">#</a></h3>
-</section>
-<section id="options">
-<h3><span class="section-number">1.9.3. </span>Options<a class="headerlink" href="#options" title="Permalink to this heading">#</a></h3>
-<p>Options are derivatives contracts that grant the holder the  the option (hence the name) to buy or sell (depending on the option) a given financial instrument (the underlying) at a price at time contingent to the clauses of the contract. The most simple option, the European option, pre-specifies a given time <span class="math notranslate nohighlight">\(T\)</span>, the expire, and price <span class="math notranslate nohighlight">\(K\)</span>, to exercise this option. But there are many other variations in the market. An option to buy a financial instrument is referred as a call option, and an option to sell is a put option.</p>
-<p>Let us consider european options of stocks. If the market price of the stock at the exprity is <span class="math notranslate nohighlight">\(S_T\)</span>, a call option will be exercised by a rational investor only if the price is higher than the strike <span class="math notranslate nohighlight">\(K\)</span>, making a profit of <span class="math notranslate nohighlight">\(S_T-K\)</span>, which in some cases is directly paid in cash, in others the actual stock is received, but of course it could be directly sold in the market at a favourable price. Therefore, the payoff of a call option can be written as:</p>
-<div class="math notranslate nohighlight">
-\[C_T = (S_T-K)^+\]</div>
-<p>where <span class="math notranslate nohighlight">\((.)^+\)</span> denotes the positive part of the argument. On the contrary, a put option will only be exercised if the market price is below the strike, hence the payoff is:</p>
-<div class="math notranslate nohighlight">
-\[P_T = (K-S_T)^+\]</div>
-<p>Options can be traded in regulated markets or be quoted by bank dealers. Since the investor that holds the option cannot lose money from it, such option does not come for free, and the question is how much is worth such option, which is called the premium of the option. At expiry, the price is naturally the payoff function. What at at time <span class="math notranslate nohighlight">\(t &lt; T\)</span> there is still  uncertainty about the price <span class="math notranslate nohighlight">\(S_T\)</span> which will determine the final profit (if any), so the premium will be different. But how much? That is the subject of the theory of option pricing.</p>
-</section>
+<section id="derivatives-markets-structure">
+<h2><span class="section-number">1.8. </span>Derivatives markets structure<a class="headerlink" href="#derivatives-markets-structure" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="crypto-market-structure">
-<h2><span class="section-number">1.10. </span>Crypto market structure<a class="headerlink" href="#crypto-market-structure" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.9. </span>Crypto market structure<a class="headerlink" href="#crypto-market-structure" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="regulation-of-financial-markets">
-<h2><span class="section-number">1.11. </span>Regulation of financial markets<a class="headerlink" href="#regulation-of-financial-markets" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.10. </span>Regulation of financial markets<a class="headerlink" href="#regulation-of-financial-markets" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="exercises">
-<h2><span class="section-number">1.12. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">1.11. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 </section>
 </section>
 
@@ -670,27 +633,29 @@ Derivatives of crypto again are financial contracts</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1.1. Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-purpose-of-financial-markets">1.2. The purpose of financial markets</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-banking-system">1.2.1. The Banking System</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.2.2. Financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">1.1. Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-banking-system">1.1.1. The Banking System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1.1.2. Financial markets</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-participate-in-financial-markets">1.3. Who participate in financial markets?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-financial-instruments-and-asset-classes">1.4. Types of financial instruments and asset classes</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#market-structures">1.5. Market structures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.6. Equity market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.7. Fixed income market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.8. FX market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-markets">1.9. Derivatives markets</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-derivatives">1.9.1. Introduction to derivatives</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-derivatives-fowards-futures-and-etfs">1.9.2. Linear derivatives: Fowards, Futures and ETFs</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#options">1.9.3. Options</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-participates-in-financial-markets">1.2. Who Participates in Financial Markets?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-financial-instruments-and-asset-classes">1.3. Types of Financial Instruments and Asset Classes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stocks-and-bonds-the-backbone-of-equity-and-fixed-income">1.3.1. Stocks and Bonds: The Backbone of Equity and Fixed Income</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#money-markets-short-term-debt-instruments">1.3.2. Money Markets: Short-Term Debt Instruments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-financial-instruments-derived-from-other-assets">1.3.3. Derivatives: Financial Instruments Derived from Other Assets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foreign-exchange-fx-spot-and-derivative-transactions">1.3.4. Foreign Exchange (FX): Spot and Derivative Transactions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#commodities-physical-goods-and-their-derivatives">1.3.5. Commodities: Physical Goods and Their Derivatives</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cryptocurrencies-a-new-asset-class">1.3.6. Cryptocurrencies: A New Asset Class</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.10. Crypto market structure</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.11. Regulation of financial markets</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.12. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#market-structures">1.4. Market structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#equity-market-structure">1.5. Equity market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income-market-structure">1.6. Fixed income market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-market-structure">1.7. FX market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivatives-markets-structure">1.8. Derivatives markets structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crypto-market-structure">1.9. Crypto market structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#regulation-of-financial-markets">1.10. Regulation of financial markets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">1.11. Exercises</a></li>
 </ul>
   </nav></div>
 
