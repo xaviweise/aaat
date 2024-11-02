@@ -2,7 +2,10 @@
 
 # Release Notes
 
-## 10.12
+## 11.24 
+Started chapters on financial markets and market microstructure, with particular emphasis on the central limit order book. Added new notebooks on market microstructure. Added simulation of processes in stochastic calculus chapter
+
+## 10.24
 Added jump processes sections. Added several simulations for stochastic processes, including code in the notebooks section. Added market price of risk for options discussion in the Fair price estimation chapter.
 
 ## 09.24

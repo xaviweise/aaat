@@ -13,7 +13,7 @@ parts:
   numbered: true
   chapters:
     - file: markdown/intro_financial_markets.md
-    - file: makdown/intro_financial_instruments.md
+    - file: markdown/intro_financial_instruments.md
     - file: markdown/market_microstructure.md
     - file: markdown/algorithmic_trading.md
 

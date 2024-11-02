@@ -171,13 +171,13 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="preface.html">Preface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="symbollist.html">Symbols</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Fundamentals</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Markets Fundamentals</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro_financial_markets.html">1. Financial Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="market_microstructure.html">2. Market microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithmic_trading.html">3. Algorithmic Trading</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Modelling Fundamentals</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Modelling Fundamentals</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro_bayesian.html">4. Introduction to Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro_causal.html">5. Causal inference</a></li>
@@ -1372,8 +1372,15 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <p>An important property of the Poisson process is that the times between consecutive events, known as <strong>inter-arrival times</strong>, are independently and identically distributed (i.i.d.) exponential random variables with parameter <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[P(T_i &gt; t) = e^{-\lambda t}, \quad t \geq 0\]</div>
-<p>where <span class="math notranslate nohighlight">\(T_i\)</span> is the time between the (i-1)-th and the i-th event.</p>
-<p>The exponential distribution of inter-arrival times implies the memoryless property: the probability that an event occurs in the next <span class="math notranslate nohighlight">\(t\)</span> units of time is independent of how much time has already elapsed since the last event.</p>
+<p>where <span class="math notranslate nohighlight">\(T_i\)</span> is the time between the (i-1)-th and the i-th event, a random variable with probability density:</p>
+<div class="math notranslate nohighlight">
+\[f(t) = \frac{d P(T_i \leq t)}{dt} = \lambda e^{-\lambda t}\]</div>
+<p>The derivation of this property is straightforward since we can link both distributions:</p>
+<div class="math notranslate nohighlight">
+\[P(T_i &gt; t) = P(N_{t+T_{i-1}} - N_{T_{i-1}} = 0) = e^{-\lambda t}\]</div>
+<p>The exponential distribution of inter-arrival times implies the memory-less property: the probability that an event occurs in the next <span class="math notranslate nohighlight">\(t\)</span> units of time is independent of how much time has already elapsed since the last event. The average inter-arrival time is easy to compute as:</p>
+<div class="math notranslate nohighlight">
+\[E[T_i]=\int_0^\infty dt t f(t) = \frac{1}{\lambda}\]</div>
 <p><strong>Mean and variance:</strong></p>
 <p>For a Poisson process with rate <span class="math notranslate nohighlight">\(\lambda\)</span>, both the expected value and the variance of <span class="math notranslate nohighlight">\(N_t\)</span> are linear in time:</p>
 <div class="math notranslate nohighlight">
@@ -1498,7 +1505,7 @@ One famous instance of such models incorporating jumps is Merton’s jump diffus
 </section>
 <section id="exercises">
 <h2><span class="section-number">6.8. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
-<ol class="arabic simple">
+<ol class="arabic">
 <li><p>Derive the Crank - Nikolson scheme discretization of the inflation targeting model. Simulate it numerically and compare with the exact solution</p></li>
 <li><p>Use Ito’s lemma to derive the differential of:</p>
 <ul class="simple">
@@ -1508,6 +1515,13 @@ One famous instance of such models incorporating jumps is Merton’s jump diffus
 </ul>
 </li>
 <li><p>Simulate a Brownian motion with drift using the connection to Gaussian Processes.</p></li>
+<li><p>Find the solution to the recursive differential equation:
+$<span class="math notranslate nohighlight">\(\frac{d}{dt} P(N_t = n) = -\lambda P(N_t = n) + \lambda P(N_t = n - 1)\)</span>$
+using the method of the generating function, which we introduce as:</p>
+<div class="math notranslate nohighlight">
+\[G(t,s) \equiv \sum_{n=0}^{\infty} P(N_t=n) s^n\]</div>
+<p>Hint: multiply the differential equation by <span class="math notranslate nohighlight">\(s^n\)</span> and sum over <span class="math notranslate nohighlight">\(n\)</span> to rewrite it as a function of the generating function. Solve the equation and express the solution as a Taylor series, matching the coefficients with <span class="math notranslate nohighlight">\(P(N_t =n)\)</span></p>
+</li>
 </ol>
 <hr class="footnotes docutils" />
 <aside class="footnote brackets" id="id6" role="note">
