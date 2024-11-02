@@ -9,14 +9,15 @@ parts:
     - file: markdown/preface.md
     - file: markdown/symbollist.md
 
-- caption: Financial Fundamentals
+- caption: Financial Markets Fundamentals
   numbered: true
   chapters:
     - file: markdown/intro_financial_markets.md
+    - file: makdown/intro_financial_instruments.md
     - file: markdown/market_microstructure.md
     - file: markdown/algorithmic_trading.md
 
-- caption: Modelling Fundamentals
+- caption: Financial Modelling Fundamentals
   numbered: true
   chapters:
     - file: markdown/intro_bayesian.md

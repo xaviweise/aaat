@@ -1173,9 +1173,17 @@ An important property of the Poisson process is that the times between consecuti
 
 $$P(T_i > t) = e^{-\lambda t}, \quad t \geq 0$$
 
-where $T_i$ is the time between the (i-1)-th and the i-th event.
+where $T_i$ is the time between the (i-1)-th and the i-th event, a random variable with probability density:
 
-The exponential distribution of inter-arrival times implies the memoryless property: the probability that an event occurs in the next $t$ units of time is independent of how much time has already elapsed since the last event.
+$$f(t) = \frac{d P(T_i \leq t)}{dt} = \lambda e^{-\lambda t}$$
+
+The derivation of this property is straightforward since we can link both distributions:
+
+$$P(T_i > t) = P(N_{t+T_{i-1}} - N_{T_{i-1}} = 0) = e^{-\lambda t}$$
+
+The exponential distribution of inter-arrival times implies the memory-less property: the probability that an event occurs in the next $t$ units of time is independent of how much time has already elapsed since the last event. The average inter-arrival time is easy to compute as:
+
+$$E[T_i]=\int_0^\infty dt t f(t) = \frac{1}{\lambda}$$
 
 **Mean and variance:**
 
@@ -1347,6 +1355,14 @@ For more theory or applications of jump diffusion processes, a good reference is
     -   $f(W_t) = \exp(W_t)$
 
 3. Simulate a Brownian motion with drift using the connection to Gaussian Processes. 
+
+4. Find the solution to the recursive differential equation:
+    $$\frac{d}{dt} P(N_t = n) = -\lambda P(N_t = n) + \lambda P(N_t = n - 1)$$
+    using the method of the generating function, which we introduce as:
+
+    $$G(t,s) \equiv \sum_{n=0}^{\infty} P(N_t=n) s^n$$
+
+    Hint: multiply the differential equation by $s^n$ and sum over $n$ to rewrite it as a function of the generating function. Solve the equation and express the solution as a Taylor series, matching the coefficients with $P(N_t =n)$
 
 [^1]: The demonstration is relatively straight-forward by computing the characteristic function of a sum of independent random Gaussian variables
 
