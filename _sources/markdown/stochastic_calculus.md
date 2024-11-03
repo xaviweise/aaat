@@ -876,7 +876,7 @@ where $Z \sim N(0,1)$. We perform such simulation with constant parameters in th
 ```{figure} figures/GBM_simulation.png
 :name: fig:GBM_simulation
 :width: 8in
-Simulation of five different paths of the the Geometric Brownian Motion with drift process using $t_0=0$ $t_N=1$, $N = 1000$$, $S_0 = 100$, $\mu = 0.05$, $\sigma = 0.2$.
+Simulation of five different paths of the Geometric Brownian Motion with drift process using $t_0=0$ $t_N=1$, $N = 1000$$, $S_0 = 100$, $\mu = 0.05$, $\sigma = 0.2$.
 ```
 
 **Estimation**
@@ -887,59 +887,84 @@ The estimation of the Geometric Brownian Motion is relatively straightforward by
 
 The Geometric Brownian Motion is a corner-stone in financial modelling since it is the most simple model that captures non-negativity of asset prices like stocks. Therefore it has been applied in multiple context. For example, it was the model used by Black, Merton and Scholes for their infamous option pricing theory. It is also used typically in risk management use cases to simulate paths to compute value at risk (VaR).
 
-### Arithmetic Average of the Brownian motion
+### Arithmetic mean of the Brownian motion
 
-As the name suggests, this is a derived process from the standard Brownian motion in which the latter is averaged continuously up to a certain time $T$: 
+As the name suggests, this is a derived process from the standard Brownian motion in which the latter is averaged continuously from a certain initial time to $t$. We take for simplicity the initial time $t_0 = 0$: 
 
 $$\begin{aligned}
-M_t = \frac{1}{T-t}\int_t^T S_u du 
+M_t = \frac{1}{t}\int_0^t S_u du 
 \end{aligned}$$ 
 
 To derive its distribution we integrate by parts the
 Brownian process: 
 
 $$\begin{aligned}
-M_t = \frac{T S_T - t S_t}{T-t} - \frac{1}{T-t}\int_t^T u d S_u  
-= S_t + \int_t^T \frac{T-u}{T-t} dS_u
+M_t = \frac{t S_t}{t} - \frac{1}{t}\int_0^t u d S_u  
+= S_0 + \int_0^t (1-\frac{u}{t}) dS_u
 \end{aligned}$$ 
 
-The result is the sum of two different parts, one is the
-evolution of the Brownian motion up to time $t$, where averaging starts. The second averages the variations of the Brownian motion. Since both terms are independent and Gaussian their distribution is simply:
+In this form, it is easy to derive the distribution, which is normal. Assuming for simplicity constant mean and volatility:
 
-$$M_t \sim N(S_0 + \int_0^t \mu_u du, \sigma^2(t +  \frac{1}{3} (T-t)))$$ 
+$$M_t \sim N(S_0 + \frac{1}{2} \mu t, \frac{1}{3}\sigma^2t)$$ 
 
-where we have used:
-$$\int_t^T (\frac{T-u}{T-t})^2 du = \frac{1}{3} (T-t)$$ 
-
-and assumed a constant volatility $\sigma_u = \sigma$. Notice that the variance of the averaged part is smaller than the variance up to t. This makes sense, since taking averages smooths out the random behavior of the process.
+Notice that the variance of the average process is smaller than the variance of the process itself, by a factor $1/3$. This makes sense, since taking averages smooths out the random behavior of the process.
 
 **Connection to Gaussian Processes**
 
 The arithmetic mean of Brownian motion is closely connected to Gaussian processes. Since the underlying process, $S_t$, is itself a Gaussian process, the arithmetic mean $M_t$, being a linear transformation of the Brownian motion, also follows a Gaussian process. 
 
-For any finite set of times $ M_{t_1}, M_{t_2}, \dots, M_{t_n} $, the joint distribution of these variables is multivariate Gaussian. The covariance structure of the arithmetic mean process can be derived as follows:
+For any finite set of times $ M_{t_1}, M_{t_2}, \dots, M_{t_n} $, the joint distribution of these variables is multivariate Gaussian. To derive the covariance, let us first consider the zero-mean process:
 
-$$ \text{cov}(M_{t_1}, M_{t_2}) = \mathbb{E}\left[ \int_{t_1}^T \frac{T-u}{T-t_1} dS_u \cdot \int_{t_2}^T \frac{T-v}{T-t_2} dS_v\right] $$
+$$\tilde{M_t} = M_t - \mathbb{E}[M_t] = \sigma \int_0^t (1-\frac{u}{t}) dW_t$$
 
-Since $S_u $ is a Brownian motion, the covariance simplifies to:
+where have simply used the definition of the process and used $dS_u = \mu du + \sigma dW_u$. The covariance structure of the arithmetic zero-mean process can be derived as follows:
 
-$$ \text{cov}(M_{t_1}, M_{t_2}) = \frac{1}{(T-t_1)(T-t_2)} \int_{\max(t_1,t_2)}^T \sigma^2 (T-u)^2 du \nonumber \\ = \frac{(T-\max(t_1, t_2))^3}{3(T-t_1)(T-t_2)} = k(t_1, t_2)$$
+$$ \text{cov}(M_{t_1}, M_{t_2}) = \text{cov}(\tilde{M}_{t_1}, \tilde{M}_{t_2}) = \mathbb{E}\left[ \sigma \int_{0}^{t_1} (1-\frac{u}{t_1}) dW_u \cdot \sigma \int_{0}^{t_2} (1-\frac{v}{t_2}) dW_v\right] $$
 
-This integral yields a covariance structure that reflects the smoothing effect of averaging over the time intervals, reducing the variance and creating a dependency between the values of the arithmetic mean process at different times. 
+$$ = \sigma^2 \int_0^{\min(t_1,t_2)} (1-\frac{u}{t_1}) (1-\frac{u}{t_2}) du $$
+
+When $t_1 < t_2$ we have:
+
+$$ \text{cov}(M_{t_1}, M_{t_2}) = \sigma^2 \frac{t_1}{2}(1 - \frac{t_1}{3 t_2})$$
+
+Symmetrically, when $t_1 > t_2$: 
+
+$$ \text{cov}(M_{t_1}, M_{t_2}) = \sigma^2 \frac{t_2}{2}(1 - \frac{t_2}{3 t_1})$$
+
+Therefore:
+
+$$ \text{cov}(M_{t_1}, M_{t_2}) = \sigma^2 \frac{\min(t_1,t_2)}{2}(1 - \frac{\min(t_1,t_2)}{3 \max(t_1, t_2)})$$
 
 As in the previous processes, if we are starting from a non-zero mean and / or the Brownian motion has drift, we need to add the mean:
 
-$$\mu_t^{GP} = S_0 + \int_0^t \mu_u du$$
+$$\mu_t^{GP} = S_0 + \frac{1}{2}\mu t$$
 
 **Simulation**
 
+Simulating the arithmetic mean does not present any extra complication with respect to the Brownian motion. We can discretize the underlying Brownian motion and simulate it, computing the mean at every step using the previous simulated values, i.e.:
 
+$$ M_{t_i} = \frac{1}{t_i} \sum_{j = 0}^i S_{t_j} \Delta t_j $$
 
+Alternatively, we can use the kernel function derived above and generate paths of the Gaussian process. The following example uses GPs:
+
+```{figure} figures/mean_BM_simulation.png
+:name: fig:mean_BM_simulation
+:width: 8in
+Simulation of five different paths of the arithmetic mean of the Geometric Brownian Motion with drift process using the correspondence to Gaussian Processes. Parameters: $t_0=0$ $t_N=1$, $N = 1000$$, $S_0 = 0$, $\mu = 0.5$, $\sigma = 0.3$.
+```
+As expected, the paths from the arithmetic mean are smoother than the ones from the underlying process, since they are averaged. 
 
 **Estimation**
 
+Given a dataset of observations of the mean, $D = \{M_{t_1}, ..., M_{t_N}\}$, the question is how to estimate the parameters of the underlying Brownian motion with drift. A priori, since the means are correlated, this could be a potentially complicated task. However, if we make the following transformation of the dataset:
+
+$$t_i M_{t_i}  - t_{i-1} M_{t_{i-1}}= \int_{t_{i-1}}^{t_i} S_u du \sim N(\frac{1}{2} \mu \Delta_{t_i}, \frac{1}{3}\sigma^2 \Delta t_i)$$
+
+these new variables are independent. We can therefore use standard Maximum Likelihood Estimators for the mean and variance of independent Gaussian random variables to obtain $\mu$ and $\sigma$. 
 
 **Applications**
+
+In the financial modelling domain, arithmetic means of stochastic processes are used for instance when modelling so-called Asian options, whose underlying is precisely the arithmetic mean of the price of a financial instrument. For Asian options on stocks, which is the typical case, a Geometric Brownian Motion (GBM) is used to model prices to ensure non-negativity, and therefore rigorously speaking is the arithmetic mean of the GBM the underlying. 
 
 ### Orstein-Uhlenbeck process
 
@@ -991,7 +1016,17 @@ $$\mu_t^{GP} = S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t})$$
 
 **Simulation**
 
+The simulation of the Orstein - Uhlenbeck process can be done once again by using a Euler discretization scheme of the SDE or exploiting the connection to Gaussian processes. If we use the former, it is convenient as it happened with the Geometric Brownian Motion, not to work directly with a discretized SDE, but to solve the equation for the discrete time step and sample from the Gaussian distribution:
 
+$$ S_{t_{i+1}} \sim N(S_{t_i} e^{-\theta \Delta t_i} + \mu (1 - e^{-\theta \Delta t_i}), \frac{\sigma^2}{2\theta} (1 - e^{-2\theta \Delta t_i})) $$
+
+The following picture shows such simulation. The initial condition is far from the long-term mean, showing a clear reversion until the stationary state is reached, over a time-scale proportional to the inverse of the mean-reversion speed $\theta$.
+
+```{figure} figures/OU_simulation.png
+:name: fig:OU_simulation
+:width: 8in
+Simulation of five different paths of the Orstein Uhlenbeck process using $t_0=0$ $t_N=1$, $N = 1000$$, $S_0 = 5$, $\mu = 1$, $\theta = 10$, $\sigma = 1$.
+```
 
 **Estimation**
 
