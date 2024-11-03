@@ -659,7 +659,7 @@ $$\mu_t^{GP}= S_0 + \int_0^t \mu_u du$$
 **Simulation**
 
 Similarly to the Wiener process, simulation can be carried out using a discretization scheme. To improve numerical stability and convergence it is convenient to integrate first the distribution between points in the
-simulation grid $t_0, ..., t_N$, $t_{i+1} = t_i + \Delta$, namely:
+simulation grid $t_0, ..., t_N$, $t_{i+1} = t_i + \Delta t_i$, namely:
 
 $$S_{t_{i+1}} |F_{t_n} \sim N(S_{t_i} + \int_{t_i}^{t_{i+1}} \mu_u du, \int_{t_i}^{t_{i+1}} \sigma^2_u du)$$
 
@@ -667,13 +667,13 @@ If we have a generator of standard Gaussian random numbers $Z$, we can perform t
 
 $$S_{t_{i+1}} = S_{t_i} + \int_{t_i}^{t_{i+1}} \mu_u du + \left(\int_{t_i}^{t_{i+1}} \sigma^2_u du \right)^{1/2} Z$$
 
-If $\mu_u$ and $\sigma_u$ are smooth functions of time and $\Delta$ is small enough such that the variation in the interval is negligible, we can approximate the integrals:
+If $\mu_u$ and $\sigma_u$ are smooth functions of time and $\Delta t_i$ is small enough such that the variation in the interval is negligible, we can approximate the integrals:
 
-$$S_{t_{i+1}} |F_{t_n} \sim N(S_{t_i} + \mu_{t_i} \Delta,  \sigma^2_{t_i} \Delta)$$
+$$S_{t_{i+1}} |F_{t_n} \sim N(S_{t_i} + \mu_{t_i} \Delta t_i,  \sigma^2_{t_i} \Delta)$$
 
 or simply:
 
-$$S_{t_{i+1}} = S_{t_i} + \mu_{t_i} \Delta + \sigma_{t_i} \sqrt{\Delta} Z$$
+$$S_{t_{i+1}} = S_{t_i} + \mu_{t_i} \Delta t_i + \sigma_{t_i} \sqrt{\Delta} Z$$
 
 The following graph shows samples of the Brownian motion for specific values of drift and volatility:
 
@@ -690,29 +690,29 @@ Alternatively, we could use the connection to Gaussian processes to perform the 
 If we have a set of observations of a process $D = \{S_{t_0}, ..., S_{t_N}\}$ that we want to model as a Brownian
 motion, we need to find the value of the parameters of the process that best fit the data.
 
-Let us consider for simplicity that $\mu_t = \mu$ and
-$\sigma_u = \sigma$. As discussed in the context of Bayesian models, a general estimation process models the parameters as random variables that capture our uncertainty about their exact values, which comes from
+Let us consider for simplicity that $\mu_t = \mu$, 
+$\sigma_u = \sigma$ and $\Delta t_i = \Delta t$ . As discussed in the context of Bayesian models, a general estimation process models the parameters as random variables that capture our uncertainty about their exact values, which comes from
 the fact that the sample is finite, or also in general because the data generation process will not necessarily be the one we are proposing, being models a simplification of reality. In this setup, the best
 inference of the parameters is carried out by computing the posterior distribution $P(\mu, \sigma^2|D, I_P)$ where $I_P$ represents the prior information about the parameters.
 
 Since as shown in the previous section we can write the process between observations as
-$S_{t_{i+1}} - S_{t_i} = \mu \Delta + \sigma \sqrt{\Delta} Z$ with $Z\sim N(0,1)$, this is equivalent to fitting a Bayesian linear regression model om $S_{t_{i+1}} - S_{t_i}$ with an intercept $\mu \Delta$ and a noise term $\epsilon \sim N(0, \sigma^2 \Delta)$. As
+$S_{t_{i+1}} - S_{t_i} = \mu \Delta t + \sigma \sqrt{\Delta t_i} Z$ with $Z\sim N(0,1)$, this is equivalent to fitting a Bayesian linear regression model om $S_{t_{i+1}} - S_{t_i}$ with an intercept $\mu \Delta t$ and a noise term $\epsilon \sim N(0, \sigma^2 \Delta t)$. As
 we shown in chapter {ref}`intro_bayesian`, if we model the prior distributions of the parameters as a Normal Inverse Gamma (NIG), meaning that:
 
 $$\begin{aligned}
-    \mu \Delta | \sigma^2 \Delta \sim N(\mu_0 \Delta, \sigma^2 \Delta V_0) \\
-    \sigma^2 \Delta \sim IG(\alpha_0, \beta_0)
+    \mu \Delta | \sigma^2 \Delta t \sim N(\mu_0 \Delta t, \sigma^2 \Delta t V_0) \\
+    \sigma^2 \Delta t \sim IG(\alpha_0, \beta_0)
 \end{aligned}$$ 
 
 where $V_0$, $\mu_0$, $\alpha_0$, $\beta_0$ are parameters that define the prior, this distribution is a conjugate prior of the likelihood:
 
-$$P(D|\mu \Delta, \sigma^2 \Delta, P_I) = \Pi_{n=1}^N \frac{1}{\sqrt{2\pi\Delta^2\sigma^2}} e^{-\frac{(S_{t_n} - S_{t_{n-1}} - \Delta \mu)^2}{2 \Delta^2 \sigma^2}}$$
+$$P(D|\mu \Delta, \sigma^2 \Delta t,  P_I) = \Pi_{n=1}^N \frac{1}{\sqrt{2\pi\Delta t ^2\sigma^2}} e^{-\frac{(S_{t_n} - S_{t_{n-1}} - \Delta t \mu)^2}{2 \Delta t^2 \sigma^2}}$$
 
 Therefore, the posterior is also a NIG, with updated parameters:
 
 $$\begin{aligned}
-    \mu \Delta | D, \sigma^2  \Delta \sim N(\mu_N \Delta, \sigma^2 \Delta V_N) \\
-    \sigma^2 \Delta | D \sim IG(\alpha_N, \beta_N)
+    \mu \Delta t | D, \sigma^2  \Delta t\sim N(\mu_N \Delta t, \sigma^2 \Delta t V_N) \\
+    \sigma^2 \Delta t | D \sim IG(\alpha_N, \beta_N)
 \end{aligned}$$ 
 
 To get the updated parameters from the general equations, bear in mind that in this representation with only an
@@ -720,36 +720,36 @@ intercept our feature-set can be seen as a N dimensional vector ${\bf X} = (1, .
 
 $$\begin{aligned}
     V_N = (V_0^{-1} + N)^{-1} \\
-   \mu_N \Delta = \mu_0 \Delta \frac{V_N}{V_0} + \frac{1}{V_0^{-1} + N } \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\
+   \mu_N \Delta = \mu_0 \Delta t \frac{V_N}{V_0} + \frac{1}{V_0^{-1} + N } \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\
    \alpha_N = \alpha_0 + N/2 \\
-   \beta_N = \beta_0 + \frac{1}{2}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 + \mu_0^2 \Delta^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right)
+   \beta_N = \beta_0 + \frac{1}{2}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 + \mu_0^2 \Delta t^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right)
 \end{aligned}$$ 
 
-The predictive marginal for the $\mu \Delta$ parameter requires integrating out the $\sigma^2 \Delta$, resulting in:
+The predictive marginal for the $\mu \Delta t$ parameter requires integrating out the $\sigma^2 \Delta t$, resulting in:
 
-$$\mu \Delta |D \sim T(\mu_N \Delta, \frac{\beta_N}{\alpha_N} V_N, 2 \alpha_N)$$
+$$\mu \Delta t |D \sim T(\mu_N \Delta t, \frac{\beta_N}{\alpha_N} V_N, 2 \alpha_N)$$
 
 where $T$ is the Student's distribution.
 
-Following our discussion in chapter {ref}`intro_bayesian`, the best estimator of parameters extracted from the posterior in a mean squared error minimizing sense is to compute the mean of the posterior marginals. For $\sigma^2 \Delta$, we
+Following our discussion in chapter {ref}`intro_bayesian`, the best estimator of parameters extracted from the posterior in a mean squared error minimizing sense is to compute the mean of the posterior marginals. For $\sigma^2 \Delta t$, we
 have: 
 
 $$\begin{aligned}
-\mathbb{E}[\sigma^2 \Delta |D, I_P] = \frac{\beta_N}{\alpha_N-1}=  \frac{\beta_0}{\alpha_0 -1 + N/2} + \nonumber \\ \frac{1}{2 \alpha_0 + N -1}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2+\mu_0^2 \Delta^2 V_0^{-1} -\mu_N^2 \Delta^2 V_N^{-1} \right) 
+\mathbb{E}[\sigma^2 \Delta t |D, I_P] = \frac{\beta_N}{\alpha_N-1}=  \frac{\beta_0}{\alpha_0 -1 + N/2} + \nonumber \\ \frac{1}{2 \alpha_0 + N -1}\left(\sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2+\mu_0^2 \Delta t^2 V_0^{-1} -\mu_N^2 \Delta t^2 V_N^{-1} \right) 
 \end{aligned}$$ 
 
 whereas for $\mu$ we have:
 
-$$\mathbb{E}[\mu \Delta|D, I_P] = \mu_N \Delta = \mu_0 \Delta \frac{V_0}{V_N} + \frac{1}{V_0^{-1} + N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}}))$$
+$$\mathbb{E}[\mu \Delta t|D, I_P] = \mu_N \Delta  t= \mu_0 \Delta t \frac{V_0}{V_N} + \frac{1}{V_0^{-1} + N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}}))$$
 
 A special case deserved our attention: if we take the limit in the prior distribution $V_0\rightarrow\infty$ and
 $\alpha_0, \beta_0 \rightarrow 0$, the prior distribution becomes a non-informative or Jeffrey's prior, with
-$p(\sigma^2 \Delta) \sim 1/(\sigma^2 \Delta)$, and
-$p(\mu\Delta|\sigma^2\Delta)$ becoming a flat prior. Jeffrey's prior is considered the best choice to describe non-informative priors of scale parameters as is the case of $\sigma^2 \Delta$. In this situation:
+$p(\sigma^2 \Delta t) \sim 1/(\sigma^2 \Delta t)$, and
+$p(\mu\Delta t|\sigma^2\Delta t)$ becoming a flat prior. Jeffrey's prior is considered the best choice to describe non-informative priors of scale parameters as is the case of $\sigma^2 \Delta t$. In this situation:
 
 $$\begin{aligned}
-\mathbb{E}[\mu \Delta|D, I_P] \rightarrow \mu_{MLE}\Delta = \frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\ 
-\mathbb{E}[\sigma^2 \Delta|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
+\mathbb{E}[\mu \Delta t|D, I_P] \rightarrow \mu_{MLE}\Delta t = \frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\\ 
+\mathbb{E}[\sigma^2 \Delta t|D, I_P] \rightarrow \frac{N}{N -1} \sigma_{MLE}^2 \Delta t \nonumber \\ \frac{N}{N -1}\left(\frac{1}{N} \sum_{n=1}^N(S_{t_n}-S_{t_{n-1}})^2 -\left(\frac{1}{N} \sum_{n=1}^N (S_{t_{n}} - S_{t_{n-1}})\right)^2 \right) 
 \end{aligned}$$ 
 
 which are the maximum likelihood estimators (MLE) of the
@@ -761,18 +761,18 @@ information contained in the posterior distribution.
 We will see in later chapters that keeping the full posterior distribution can be relevant when we want to incorporate model estimation uncertainty into the inferences that are derived using stochastic processes. For instance, in the presence of a non-negligible
 estimation uncertainty of the parameters of our Brownian process, the correct predictive distribution of the next value of the process given its past history is actually given by:
 
-$$S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_N \Delta, \frac{\beta_N}{\alpha_N}(1+V_N), 2\alpha_N)$$
+$$S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_N \Delta t, \frac{\beta_N}{\alpha_N}(1+V_N), 2\alpha_N)$$
 
 If we consider a non-informative prior, this becomes:
 
-$$S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_{MLE} \Delta, \sigma_{MLE}^2(1 + \frac{1}{N}), N)$$
+$$S_{t_{N+1}}|S_{t_N}, D, I_P \sim T(\mu_{MLE} \Delta t, \sigma_{MLE}^2(1 + \frac{1}{N}), N)$$
 
 This is to be compared with the inference using the MLE estimator, which would essentially plug the point MLE estimator into the Brownian process, yielding:
 
-$$S_{t_{N+1}}|S_{t_N}, D, I_P \sim N(\mu_{MLE} \Delta, \sigma_{MLE}^2 \Delta)$$
+$$S_{t_{N+1}}|S_{t_N}, D, I_P \sim N(\mu_{MLE} \Delta t, \sigma_{MLE}^2 \Delta)$$
 
-The mean and the mode of both distributions is the same, namely $\mu_{MLE} \Delta$, but the Student distribution has fatter tails than the Gaussian distribution, reflecting the extra uncertainty coming from
-the estimation error. Only in the case of having a very large data-set $N\rightarrow \infty$, both distributions converge, as in this limit the Student distribution becomes a Gaussian $N(\mu_{MLE} \Delta, \sigma_{MLE} \Delta)$. Another way of seeing this is to interpret the variance term of the Student distribution as the sum
+The mean and the mode of both distributions is the same, namely $\mu_{MLE} \Delta t$, but the Student distribution has fatter tails than the Gaussian distribution, reflecting the extra uncertainty coming from
+the estimation error. Only in the case of having a very large data-set $N\rightarrow \infty$, both distributions converge, as in this limit the Student distribution becomes a Gaussian $N(\mu_{MLE} \Delta t, \sigma_{MLE} \Delta t)$. Another way of seeing this is to interpret the variance term of the Student distribution as the sum
 of two terms: the first one coming from the intrinsic noise of the Brownian process, and the second one, the $1/N$ correction, coming from the estimation uncertainty.
 
 **Dimensional analysis**
@@ -867,12 +867,25 @@ $$\mu_t^{GP}= \log S_0 + \int_0^t du (\mu_u - \frac{1}{2} \sigma_u^2)$$
 
 **Simulation**
 
+We can again simulate the GBM either using a discretization scheme or the connection to Gaussian processes. When using the discretization scheme more robust results can attained by simulating a Wiener process and then using a discrete integration of the GBM:
+
+$$S_{t_{i+1}} = S_{t_{i}} e^{(\mu_{t_i} - \frac{1}{2} \sigma_{t_{i}}^2)\Delta t + \sigma_{t_{i}} Z}$$
+
+where $Z \sim N(0,1)$. We perform such simulation with constant parameters in the following figure: 
+
+```{figure} figures/GBM_simulation.png
+:name: fig:GBM_simulation
+:width: 8in
+Simulation of five different paths of the the Geometric Brownian Motion with drift process using $t_0=0$ $t_N=1$, $N = 1000$$, $S_0 = 100$, $\mu = 0.05$, $\sigma = 0.2$.
+```
 
 **Estimation**
 
+The estimation of the Geometric Brownian Motion is relatively straightforward by linking it to a Brownian motion using log-returns. Therefore, we can transform a set of observations $D = \{S_{t_0}, ..., S_{t_N}\}$ into $D' = \{\log S_{t_0}, ..., \log S_{t_N}\}$ and apply any of the estimation techniques discussed in the previous sections.
 
 **Applications**
 
+The Geometric Brownian Motion is a corner-stone in financial modelling since it is the most simple model that captures non-negativity of asset prices like stocks. Therefore it has been applied in multiple context. For example, it was the model used by Black, Merton and Scholes for their infamous option pricing theory. It is also used typically in risk management use cases to simulate paths to compute value at risk (VaR).
 
 ### Arithmetic Average of the Brownian motion
 
@@ -972,30 +985,105 @@ $$ k(t_1, t_2) = \textrm{cov}[S_{t_1} S_{t_2}] = \sigma^2 \int_0^{\min(t_1,t_2)}
 
 where we have used that $t_1 + t_2 - 2 \min(t_1, t_2) = |t_1 - t_2|$ to simplify the expression.
 
-The specification so far only describes the mean-reverting fluctuations around the mean. To complete the mapping to a Gaussian process of the full Orstein - Uhlenbeck process we need to add the mean to the specification:
+The specification so far only describes the mean-reverting fluctuations around the long-term mean. To complete the mapping to a Gaussian process of the full Orstein - Uhlenbeck process we need to add the mean to the specification:
 
 $$\mu_t^{GP} = S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t})$$
+
+**Simulation**
+
 
 
 **Estimation**
 
+Given a set of observations $D = \{ S_{t_i}, ..., S_{t_N}\}$, we can use maximum likelihood estimation to find the parameters of the model. The
+The log-likelihood function $\mathcal{L}$ for the observed data is:
+
+$$
+\mathcal{L}(\theta, \mu, \sigma^2) = -\frac{n}{2} \ln(2\pi) - \frac{1}{2} \sum_{i=1}^n \left[ \ln v_i + \frac{(S_{t_i} - m_i)^2}{v_i} \right]
+$$
+
+where:
+
+$$m_i \equiv \mu + (S_{t_{i-1}} - \mu) e^{-\theta \Delta t_i}$$
+$$v_i \equiv \frac{\sigma^2}{2\theta} \left( 1 - e^{-2\theta \Delta t_i} \right)$$
+
+Due to the complexity of the log-likelihood function, finding closed-form solutions for all the parameters is not possible, and we need to resort to numerical optimization.
+
+However, under the assumption of equally spaced observations $\Delta t_i = \Delta t$, we can simplify the estimation process linking the model to a linear regression problem. Define:
+
+$$\phi = e^{-\theta \Delta t} $$
+$$\gamma = 1 - \phi = 1 - e^{-\theta \Delta t}$$
+$$\psi^2 = \frac{\sigma^2}{2\theta} (1 - \phi^2)$$
+
+The process can be written in discrete time as:
+
+$$S_i = \mu \gamma + \phi S_{t_{i-1}} + \varepsilon_i$$
+
+
+where $\varepsilon_i \sim \mathcal{N}(0, \psi^2) $. We can estimate $\phi$ and $\mu$ by regressing $S_i$ on $S_{i-1}$:
+
+$$S_{t_i} = \beta_0 + \beta_1 S_{t_{i-1}} + \varepsilon_i$$
+
+where $\beta_0 = \mu \gamma$ and $\beta_1 = \phi$. The ordinary least squares (OLS) estimation yields:
+
+$$\hat{\beta}_1 = \frac{\sum_{i=1}^n (S_{t_{i-1}} - \bar{S}_{-1})(S_{t_i} - \bar{S})}{\sum_{i=1}^n (S_{t_{i-1}} - \bar{S}_{-1})^2} \equiv \hat{\rho}_{t_i, t_{i-1}}$$
+
+which is the first-order auto-correlation function. Moreover: 
+
+$$\hat{\beta}_0 = \bar{S} - \hat{\beta}_1 \bar{S}_{t_{i-1}} \approx \bar{S} (1 - \hat{\beta}_1)$$
+
+where the last approximation holds for a large enough number of samples. We can now come back to the original parameters. Starting with the long-term mean,  Since $\beta_0 = \mu \gamma = \mu (1 - \phi)$ and $\phi = \beta_1$:
+
+ $$\hat{\mu} = \frac{\hat{\beta}_0}{1 - \hat{\phi}} = \frac{\hat{\beta}_0}{1 - \hat{\beta_1}}  \approx \bar{S}$$
+
+The mean-reversion speed reads
+
+$$\hat{\theta} = -\frac{1}{\Delta t} \ln \hat{\phi}  =  -\frac{1}{\Delta t} \ln \hat{\rho}_{t_i, t_{i-1}}$$
+
+Finally, to estimate the variance, we use the definition of $ \psi^2 $:
+
+$$\psi^2 = \frac{\sigma^2}{2\theta} (1 - \phi^2) $$
+
+Therefore, the estimator is:
+
+$$
+\hat{\sigma}^2 = \frac{2 \hat{\theta} \hat{\psi}^2}{1 - \hat{\phi}^2}
+$$
+
+where $\psi^2$ is the residual variance of the regression, which is estimated as:
+$$
+\hat{\psi}^2 = \frac{1}{n} \sum_{i=1}^n (S_{t_i} - \hat{\beta}_0 - \hat{\beta}_1 S_{t_{i-1}})^2
+$$
 
 **Applications**
 
+The Orstein - Uhlenbeck process can be applied to a variety of real phenomena. In the financial and economical domain, we find mean reversion in multiple processes like:
+* Inflation: which is influenced by central bank policy with specific inflation targets. For example, 2% in the Eurozone. 
+* Interest rates: also influenced by central bank policy, as a way to affect inflation. It is also monitored by governments in order to ensure individual and companies can borrow money in competitive conditions. 
+* Commodity prices: subject to supply and demand forces, stationality and, in some cases like oil, explicit intervention by organizations like OPEC, which use their oligopolistic control of supply to ensure prices remain within a range that is not too low to affect profits and too high to incentivise the switch to alternative sources. 
+* Statistical arbitrage: prices of financial instruments might not show mean reversion, but combinations of them sometimes do. For example, pairs of stocks of companies with similar fundamentals. 
 
 **Other mean reverting processes**
 
-The Cox-Ingersoll-Ross (CIR) process is another mean-reverting stochastic process. It can be considered a variation of the Orstein-Uhlenbeck process, but with the added feature that the volatility term depends on the square root of the process itself, ensuring that the process remains positive.
+Despite the popularity of the Orstein - Uhlenbeck process to model mean - reverting processes due to its simplicity and tractability, it has limitations in the type of models that can describe. For instance, for processes that can only take positive values, and the mean reversion time is independent of the distance to the long-term mean. 
+
+A popular related model is the Cox-Ingersoll-Ross (CIR) process, which is a variation of the Orstein-Uhlenbeck process, but with the added feature that the volatility term depends on the square root of the process itself, ensuring that the process remains positive.
 
 The CIR process is given by:
 
-$$d S_t = \theta (S_t - \mu_t) dt + \sigma_t S_t^{1/2} d W_t$$
+$$d S_t = \theta (\mu_t - S_t) dt + \sigma_t S_t^{1/2} d W_t$$
 
-Again, $\theta > 0$ controls the speed of mean reversion, $\mu$ represents the long-term mean level, and $\sigma$ is the volatility. Unlike the Orstein-Uhlenbeck process, where the volatility is constant, the CIR model introduces a state-dependent volatility term $\sqrt{S_t}$, which ensures that $S_t$ stays positive (as the volatility goes to zero when $S_t$ approaches zero). 
+Again, $\theta > 0$ controls the speed of mean reversion, $\mu$ represents the long-term mean level, and $\sigma$ is the volatility. Unlike the Orstein-Uhlenbeck process, where the volatility is constant, the CIR model introduces a state-dependent volatility term $\sqrt{S_t}$, which ensures that $S_t$ stays positive (as the volatility goes to zero when $S_t$ approaches zero). As a byproduct, the mean reversion time also depends on the actual value of the process.
 
 Though no closed-form solution exists for the CIR process as simple as the one for the Orstein-Uhlenbeck process, it is often analyzed through numerical methods or approximations. The Fokker-Planck equation corresponding to the CIR process can be solved to obtain the transition probability density, which follows a non-central chi-squared distribution.
 
 The CIR process is widely used in financial applications, such as in the modeling of short-term interest rates and in the Heston model for stochastic volatility, due to its ability to capture mean reversion and maintain non-negativity.
+
+Other alternatives to the Orstein - Uhlenbeck process that allow to specifically model the behaviour of the mean reversion time are non linear drift models in the form:
+
+$$d S_t = \theta f(\mu_t - S_t) (\mu_t - S_t) dt + \sigma_t d W_t$$
+
+where $f(\cdot)$ is function of the distance to the mean, for instance a power law. 
 
 ### Brownian bridge
 
