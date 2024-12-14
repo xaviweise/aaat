@@ -69,7 +69,7 @@ Financial instruments are the building blocks of financial markets, representing
 
 The major asset classes include **equity**, **fixed income**, **money markets**, **derivatives**, **foreign exchange (FX)**, **commodities**, and **cryptocurrencies**. Each asset class plays a distinct role in the financial ecosystem, catering to different investor needs, risk appetites, and financial goals.
 
-### Stocks and Bonds: The Backbone of Equity and Fixed Income
+### Equity and Fixed Income
 
 The most well-known financial instruments are **stocks** and **bonds**, which form the foundation of two major asset classes: **equity** and **fixed income**.
 
@@ -79,17 +79,17 @@ The most well-known financial instruments are **stocks** and **bonds**, which fo
 
 Both stocks and bonds are often referred to as **cash instruments**, meaning their value derives directly from the underlying market dynamics, without the need for an intermediary asset.
 
-### Money Markets: Short-Term Debt Instruments
+### Money Markets
 
 Within the fixed income category, there is a sub-sector known as the **money market**, which some consider an asset class of its own due to its distinct features. **Money market instruments** are short-term debt securities that typically mature in less than a year, such as **Treasury bills**, **commercial paper**, and **certificates of deposit**. These instruments are highly liquid and relatively low-risk, making them an attractive option for institutions and governments looking to manage short-term liquidity needs, as well as for investors seeking a safe place to park cash temporarily.
 
-### Derivatives: Financial Instruments Derived from Other Assets
+### Derivatives
 
 **Derivatives** are financial contracts whose value is derived from the performance of an underlying asset, index, or rate. They can be based on a wide range of underlying assets, including stocks, bonds, commodities, currencies, and interest rates. This is why some categorize derivatives within the asset class of the underlying instrument, though they are often considered an **asset class** of their own due to their unique characteristics.
 
 Derivatives are versatile and serve several purposes, such as **hedging** risks, **speculating** on price movements, or **leveraging** positions. Common types of derivatives include **futures**, **options**, **swaps**, and **forwards**, each offering different structures and risk profiles. For example, a company might use derivatives to hedge against fluctuations in interest rates or commodity prices, while a trader might use options to speculate on the price of a stock.
 
-### Foreign Exchange (FX): Spot and Derivative Transactions
+### Foreign Exchange (FX)
 
 The **foreign exchange (FX)** market is a critical component of the global financial system, where participants trade currencies. Transactions in the FX market are generally categorized as either **spot** or **derivative** transactions.
 
@@ -99,11 +99,11 @@ The **foreign exchange (FX)** market is a critical component of the global finan
 
 FX markets are used by a wide range of participants, including **central banks** (to manage currency reserves), **corporations** (to hedge currency risk in international operations), and **investors** looking to profit from currency fluctuations.
 
-### Commodities: Physical Goods and Their Derivatives
+### Commodities
 
 **Commodities** are physical goods such as oil, gold, and agricultural products, traded primarily in spot markets. These goods themselves are not considered financial instruments, as they represent tangible assets rather than financial claims. However, the **derivatives** based on commodities, such as **futures** and **options on commodities**, are classified as financial instruments. These contracts enable investors to gain exposure to commodity price movements without needing to take physical delivery of the underlying goods, providing opportunities for hedging and speculation.
 
-### Cryptocurrencies: A New Asset Class
+### Cryptocurrencies
 
 **Cryptocurrencies**, such as Bitcoin and Ethereum, are a relatively new and rapidly evolving **asset class**. Unlike traditional financial instruments, cryptocurrencies do not represent contractual obligations or financial claims. Instead, they function as digital assets, leveraging **blockchain technology** to provide decentralized and transparent transactions. Their value is driven by supply and demand dynamics, making them highly volatile compared to other asset classes.
 

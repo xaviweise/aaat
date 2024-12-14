@@ -436,7 +436,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">7.6. Basic stochastic processes</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">7.6.1. Brownian motion with drift</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">7.6.2. Geometric Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">7.6.3. Arithmetic Average of the Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-mean-of-the-brownian-motion">7.6.3. Arithmetic mean of the Brownian motion</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">7.6.4. Orstein-Uhlenbeck process</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">7.6.5. Brownian bridge</a></li>
 </ul>
@@ -1160,7 +1160,7 @@ Therefore, any finite set <span class="math notranslate nohighlight">\(\log(S_{t
 <figure class="align-default" id="fig-gbm-simulation">
 <a class="reference internal image-reference" href="../_images/GBM_simulation.png"><img alt="../_images/GBM_simulation.png" src="../_images/GBM_simulation.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.6 </span><span class="caption-text">Simulation of five different paths of the the Geometric Brownian Motion with drift process using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 1000\)</span><span class="math notranslate nohighlight">\(, \)</span>S_0 = 100<span class="math notranslate nohighlight">\(, \)</span>\mu = 0.05<span class="math notranslate nohighlight">\(, \)</span>\sigma = 0.2$.</span><a class="headerlink" href="#fig-gbm-simulation" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.6 </span><span class="caption-text">Simulation of five different paths of the Geometric Brownian Motion with drift process using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 1000\)</span><span class="math notranslate nohighlight">\(, \)</span>S_0 = 100<span class="math notranslate nohighlight">\(, \)</span>\mu = 0.05<span class="math notranslate nohighlight">\(, \)</span>\sigma = 0.2$.</span><a class="headerlink" href="#fig-gbm-simulation" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Estimation</strong></p>
@@ -1168,42 +1168,65 @@ Therefore, any finite set <span class="math notranslate nohighlight">\(\log(S_{t
 <p><strong>Applications</strong></p>
 <p>The Geometric Brownian Motion is a corner-stone in financial modelling since it is the most simple model that captures non-negativity of asset prices like stocks. Therefore it has been applied in multiple context. For example, it was the model used by Black, Merton and Scholes for their infamous option pricing theory. It is also used typically in risk management use cases to simulate paths to compute value at risk (VaR).</p>
 </section>
-<section id="arithmetic-average-of-the-brownian-motion">
-<h3><span class="section-number">7.6.3. </span>Arithmetic Average of the Brownian motion<a class="headerlink" href="#arithmetic-average-of-the-brownian-motion" title="Permalink to this heading">#</a></h3>
-<p>As the name suggests, this is a derived process from the standard Brownian motion in which the latter is averaged continuously up to a certain time <span class="math notranslate nohighlight">\(T\)</span>:</p>
+<section id="arithmetic-mean-of-the-brownian-motion">
+<h3><span class="section-number">7.6.3. </span>Arithmetic mean of the Brownian motion<a class="headerlink" href="#arithmetic-mean-of-the-brownian-motion" title="Permalink to this heading">#</a></h3>
+<p>As the name suggests, this is a derived process from the standard Brownian motion in which the latter is averaged continuously from a certain initial time to <span class="math notranslate nohighlight">\(t\)</span>. We take for simplicity the initial time <span class="math notranslate nohighlight">\(t_0 = 0\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{aligned}
-M_t = \frac{1}{T-t}\int_t^T S_u du 
+M_t = \frac{1}{t}\int_0^t S_u du 
 \end{aligned}\]</div>
 <p>To derive its distribution we integrate by parts the
 Brownian process:</p>
 <div class="math notranslate nohighlight">
 \[\begin{aligned}
-M_t = \frac{T S_T - t S_t}{T-t} - \frac{1}{T-t}\int_t^T u d S_u  
-= S_t + \int_t^T \frac{T-u}{T-t} dS_u
+M_t = \frac{t S_t}{t} - \frac{1}{t}\int_0^t u d S_u  
+= S_0 + \int_0^t (1-\frac{u}{t}) dS_u
 \end{aligned}\]</div>
-<p>The result is the sum of two different parts, one is the
-evolution of the Brownian motion up to time <span class="math notranslate nohighlight">\(t\)</span>, where averaging starts. The second averages the variations of the Brownian motion. Since both terms are independent and Gaussian their distribution is simply:</p>
+<p>In this form, it is easy to derive the distribution, which is normal. Assuming for simplicity constant mean and volatility:</p>
 <div class="math notranslate nohighlight">
-\[M_t \sim N(S_0 + \int_0^t \mu_u du, \sigma^2(t +  \frac{1}{3} (T-t)))\]</div>
-<p>where we have used:
-$<span class="math notranslate nohighlight">\(\int_t^T (\frac{T-u}{T-t})^2 du = \frac{1}{3} (T-t)\)</span>$</p>
-<p>and assumed a constant volatility <span class="math notranslate nohighlight">\(\sigma_u = \sigma\)</span>. Notice that the variance of the averaged part is smaller than the variance up to t. This makes sense, since taking averages smooths out the random behavior of the process.</p>
+\[M_t \sim N(S_0 + \frac{1}{2} \mu t, \frac{1}{3}\sigma^2t)\]</div>
+<p>Notice that the variance of the average process is smaller than the variance of the process itself, by a factor <span class="math notranslate nohighlight">\(1/3\)</span>. This makes sense, since taking averages smooths out the random behavior of the process.</p>
 <p><strong>Connection to Gaussian Processes</strong></p>
 <p>The arithmetic mean of Brownian motion is closely connected to Gaussian processes. Since the underlying process, <span class="math notranslate nohighlight">\(S_t\)</span>, is itself a Gaussian process, the arithmetic mean <span class="math notranslate nohighlight">\(M_t\)</span>, being a linear transformation of the Brownian motion, also follows a Gaussian process.</p>
-<p>For any finite set of times <span class="math notranslate nohighlight">\( M_{t_1}, M_{t_2}, \dots, M_{t_n} \)</span>, the joint distribution of these variables is multivariate Gaussian. The covariance structure of the arithmetic mean process can be derived as follows:</p>
+<p>For any finite set of times <span class="math notranslate nohighlight">\( M_{t_1}, M_{t_2}, \dots, M_{t_n} \)</span>, the joint distribution of these variables is multivariate Gaussian. To derive the covariance, let us first consider the zero-mean process:</p>
 <div class="math notranslate nohighlight">
-\[ \text{cov}(M_{t_1}, M_{t_2}) = \mathbb{E}\left[ \int_{t_1}^T \frac{T-u}{T-t_1} dS_u \cdot \int_{t_2}^T \frac{T-v}{T-t_2} dS_v\right] \]</div>
-<p>Since <span class="math notranslate nohighlight">\(S_u \)</span> is a Brownian motion, the covariance simplifies to:</p>
+\[\tilde{M_t} = M_t - \mathbb{E}[M_t] = \sigma \int_0^t (1-\frac{u}{t}) dW_t\]</div>
+<p>where have simply used the definition of the process and used <span class="math notranslate nohighlight">\(dS_u = \mu du + \sigma dW_u\)</span>. The covariance structure of the arithmetic zero-mean process can be derived as follows:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split} \text{cov}(M_{t_1}, M_{t_2}) = \frac{1}{(T-t_1)(T-t_2)} \int_{\max(t_1,t_2)}^T \sigma^2 (T-u)^2 du \nonumber \\ = \frac{(T-\max(t_1, t_2))^3}{3(T-t_1)(T-t_2)} = k(t_1, t_2)\end{split}\]</div>
-<p>This integral yields a covariance structure that reflects the smoothing effect of averaging over the time intervals, reducing the variance and creating a dependency between the values of the arithmetic mean process at different times.</p>
+\[ \text{cov}(M_{t_1}, M_{t_2}) = \text{cov}(\tilde{M}_{t_1}, \tilde{M}_{t_2}) = \mathbb{E}\left[ \sigma \int_{0}^{t_1} (1-\frac{u}{t_1}) dW_u \cdot \sigma \int_{0}^{t_2} (1-\frac{v}{t_2}) dW_v\right] \]</div>
+<div class="math notranslate nohighlight">
+\[ = \sigma^2 \int_0^{\min(t_1,t_2)} (1-\frac{u}{t_1}) (1-\frac{u}{t_2}) du \]</div>
+<p>When <span class="math notranslate nohighlight">\(t_1 &lt; t_2\)</span> we have:</p>
+<div class="math notranslate nohighlight">
+\[ \text{cov}(M_{t_1}, M_{t_2}) = \sigma^2 \frac{t_1}{2}(1 - \frac{t_1}{3 t_2})\]</div>
+<p>Symmetrically, when <span class="math notranslate nohighlight">\(t_1 &gt; t_2\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[ \text{cov}(M_{t_1}, M_{t_2}) = \sigma^2 \frac{t_2}{2}(1 - \frac{t_2}{3 t_1})\]</div>
+<p>Therefore:</p>
+<div class="math notranslate nohighlight">
+\[ \text{cov}(M_{t_1}, M_{t_2}) = \sigma^2 \frac{\min(t_1,t_2)}{2}(1 - \frac{\min(t_1,t_2)}{3 \max(t_1, t_2)})\]</div>
 <p>As in the previous processes, if we are starting from a non-zero mean and / or the Brownian motion has drift, we need to add the mean:</p>
 <div class="math notranslate nohighlight">
-\[\mu_t^{GP} = S_0 + \int_0^t \mu_u du\]</div>
+\[\mu_t^{GP} = S_0 + \frac{1}{2}\mu t\]</div>
 <p><strong>Simulation</strong></p>
+<p>Simulating the arithmetic mean does not present any extra complication with respect to the Brownian motion. We can discretize the underlying Brownian motion and simulate it, computing the mean at every step using the previous simulated values, i.e.:</p>
+<div class="math notranslate nohighlight">
+\[ M_{t_i} = \frac{1}{t_i} \sum_{j = 0}^i S_{t_j} \Delta t_j \]</div>
+<p>Alternatively, we can use the kernel function derived above and generate paths of the Gaussian process. The following example uses GPs:</p>
+<figure class="align-default" id="fig-mean-bm-simulation">
+<a class="reference internal image-reference" href="../_images/mean_BM_simulation.png"><img alt="../_images/mean_BM_simulation.png" src="../_images/mean_BM_simulation.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7.7 </span><span class="caption-text">Simulation of five different paths of the arithmetic mean of the Geometric Brownian Motion with drift process using the correspondence to Gaussian Processes. Parameters: <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 1000\)</span><span class="math notranslate nohighlight">\(, \)</span>S_0 = 0<span class="math notranslate nohighlight">\(, \)</span>\mu = 0.5<span class="math notranslate nohighlight">\(, \)</span>\sigma = 0.3$.</span><a class="headerlink" href="#fig-mean-bm-simulation" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>As expected, the paths from the arithmetic mean are smoother than the ones from the underlying process, since they are averaged.</p>
 <p><strong>Estimation</strong></p>
+<p>Given a dataset of observations of the mean, <span class="math notranslate nohighlight">\(D = \{M_{t_1}, ..., M_{t_N}\}\)</span>, the question is how to estimate the parameters of the underlying Brownian motion with drift. A priori, since the means are correlated, this could be a potentially complicated task. However, if we make the following transformation of the dataset:</p>
+<div class="math notranslate nohighlight">
+\[t_i M_{t_i}  - t_{i-1} M_{t_{i-1}}= \int_{t_{i-1}}^{t_i} S_u du \sim N(\frac{1}{2} \mu \Delta_{t_i}, \frac{1}{3}\sigma^2 \Delta t_i)\]</div>
+<p>these new variables are independent. We can therefore use standard Maximum Likelihood Estimators for the mean and variance of independent Gaussian random variables to obtain <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span>.</p>
 <p><strong>Applications</strong></p>
+<p>In the financial modelling domain, arithmetic means of stochastic processes are used for instance when modelling so-called Asian options, whose underlying is precisely the arithmetic mean of the price of a financial instrument. For Asian options on stocks, which is the typical case, a Geometric Brownian Motion (GBM) is used to model prices to ensure non-negativity, and therefore rigorously speaking is the arithmetic mean of the GBM the underlying.</p>
 </section>
 <section id="orstein-uhlenbeck-process">
 <h3><span class="section-number">7.6.4. </span>Orstein-Uhlenbeck process<a class="headerlink" href="#orstein-uhlenbeck-process" title="Permalink to this heading">#</a></h3>
@@ -1243,6 +1266,16 @@ e^{\theta t} S_t - S_0 = (e^{\theta t} - 1) \mu + \sigma \int_0^t e^{\theta u} d
 <div class="math notranslate nohighlight">
 \[\mu_t^{GP} = S_t = S_0 e^{-\theta t} + \mu (1 - e^{-\theta t})\]</div>
 <p><strong>Simulation</strong></p>
+<p>The simulation of the Orstein - Uhlenbeck process can be done once again by using a Euler discretization scheme of the SDE or exploiting the connection to Gaussian processes. If we use the former, it is convenient as it happened with the Geometric Brownian Motion, not to work directly with a discretized SDE, but to solve the equation for the discrete time step and sample from the Gaussian distribution:</p>
+<div class="math notranslate nohighlight">
+\[ S_{t_{i+1}} \sim N(S_{t_i} e^{-\theta \Delta t_i} + \mu (1 - e^{-\theta \Delta t_i}), \frac{\sigma^2}{2\theta} (1 - e^{-2\theta \Delta t_i})) \]</div>
+<p>The following picture shows such simulation. The initial condition is far from the long-term mean, showing a clear reversion until the stationary state is reached, over a time-scale proportional to the inverse of the mean-reversion speed <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<figure class="align-default" id="fig-ou-simulation">
+<a class="reference internal image-reference" href="../_images/OU_simulation.png"><img alt="../_images/OU_simulation.png" src="../_images/OU_simulation.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7.8 </span><span class="caption-text">Simulation of five different paths of the Orstein Uhlenbeck process using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 1000\)</span><span class="math notranslate nohighlight">\(, \)</span>S_0 = 5<span class="math notranslate nohighlight">\(, \)</span>\mu = 1<span class="math notranslate nohighlight">\(, \)</span>\theta = 10<span class="math notranslate nohighlight">\(, \)</span>\sigma = 1$.</span><a class="headerlink" href="#fig-ou-simulation" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <p><strong>Estimation</strong></p>
 <p>Given a set of observations <span class="math notranslate nohighlight">\(D = \{ S_{t_i}, ..., S_{t_N}\}\)</span>, we can use maximum likelihood estimation to find the parameters of the model. The
 The log-likelihood function <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> for the observed data is:</p>
@@ -1349,7 +1382,7 @@ k(t_1,t_2) = \textrm{cov}[B_{t_1} B_{t_2}] = \mathbb{E}[(W_{t_1} - \frac{t_1}{T}
 <figure class="align-default" id="fig-bb-gps">
 <a class="reference internal image-reference" href="../_images/BB_gps.png"><img alt="../_images/BB_gps.png" src="../_images/BB_gps.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.7 </span><span class="caption-text">Simulation of five different paths of the the Brownian Bridge using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 100\)</span>.</span><a class="headerlink" href="#fig-bb-gps" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Simulation of five different paths of the the Brownian Bridge using <span class="math notranslate nohighlight">\(t_0=0\)</span> <span class="math notranslate nohighlight">\(t_N=1\)</span>, <span class="math notranslate nohighlight">\(N = 100\)</span>.</span><a class="headerlink" href="#fig-bb-gps" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Applications</strong></p>
@@ -1474,14 +1507,14 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <figure class="align-default" id="fig-poisson-process">
 <a class="reference internal image-reference" href="../_images/poisson_process.png"><img alt="../_images/poisson_process.png" src="../_images/poisson_process.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.8 </span><span class="caption-text">Simulation of a Poisson process in a discrete grid with 50 time-steps and intensity <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span></span><a class="headerlink" href="#fig-poisson-process" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Simulation of a Poisson process in a discrete grid with 50 time-steps and intensity <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span></span><a class="headerlink" href="#fig-poisson-process" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The same method can be used for more complex jump processes. For example, the following plot has been generated for a Hawkes process using a exponential excitation function. In this case, jumps tend to cluster together in comparison with the behaviour of the Poisson process.</p>
 <figure class="align-default" id="fig-hawkes-process">
 <a class="reference internal image-reference" href="../_images/hawkes_process.png"><img alt="../_images/hawkes_process.png" src="../_images/hawkes_process.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.9 </span><span class="caption-text">Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. The excitation function is an exponential with <span class="math notranslate nohighlight">\(\alpha = 0.5\)</span> and <span class="math notranslate nohighlight">\(\beta = 1\)</span>.</span><a class="headerlink" href="#fig-hawkes-process" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.11 </span><span class="caption-text">Simulation of a Hawkes process in a discrete grid with 50 time-steps. The baseline intensity is again <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. The excitation function is an exponential with <span class="math notranslate nohighlight">\(\alpha = 0.5\)</span> and <span class="math notranslate nohighlight">\(\beta = 1\)</span>.</span><a class="headerlink" href="#fig-hawkes-process" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Applications:</strong></p>
@@ -1527,7 +1560,7 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <figure class="align-default" id="fig-compound-poisson">
 <a class="reference internal image-reference" href="../_images/compound_poisson.png"><img alt="../_images/compound_poisson.png" src="../_images/compound_poisson.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.10 </span><span class="caption-text">Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. For the distribution of jumps we use a exponential distribution with rate <span class="math notranslate nohighlight">\(\eta = 2.5\)</span>. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process.</span><a class="headerlink" href="#fig-compound-poisson" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.12 </span><span class="caption-text">Simulation of a compound Poisson process in a discrete grid with 50 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 0.2\)</span>. For the distribution of jumps we use a exponential distribution with rate <span class="math notranslate nohighlight">\(\eta = 2.5\)</span>. We plot separately the underlying Poisson process result and the simulated jump sizes, as well as the resulting compound process.</span><a class="headerlink" href="#fig-compound-poisson" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1571,7 +1604,7 @@ One famous instance of such models incorporating jumps is Merton’s jump diffus
 <figure class="align-default" id="fig-jump-diffusion">
 <a class="reference internal image-reference" href="../_images/jump_diffusion.png"><img alt="../_images/jump_diffusion.png" src="../_images/jump_diffusion.png" style="width: 8in;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 7.11 </span><span class="caption-text">Simulation of five paths of a jump diffusion process in a discrete grid with 1000 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 1\)</span>. The Geometric Brownian Motion has drift <span class="math notranslate nohighlight">\(\mu = 0.1\)</span> and volatility <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span> For the distribution of jumps we use a log-normal distribution with mean <span class="math notranslate nohighlight">\(k = -0.1\)</span> and standard deviation <span class="math notranslate nohighlight">\(\delta = 0.1\)</span>.</span><a class="headerlink" href="#fig-jump-diffusion" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7.13 </span><span class="caption-text">Simulation of five paths of a jump diffusion process in a discrete grid with 1000 time-steps. The baseline intensity is <span class="math notranslate nohighlight">\(\lambda = 1\)</span>. The Geometric Brownian Motion has drift <span class="math notranslate nohighlight">\(\mu = 0.1\)</span> and volatility <span class="math notranslate nohighlight">\(\sigma = 0.2\)</span> For the distribution of jumps we use a log-normal distribution with mean <span class="math notranslate nohighlight">\(k = -0.1\)</span> and standard deviation <span class="math notranslate nohighlight">\(\delta = 0.1\)</span>.</span><a class="headerlink" href="#fig-jump-diffusion" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p><strong>Applications</strong></p>
@@ -1688,7 +1721,7 @@ using the method of the generating function, which we introduce as:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-stochastic-processes">7.6. Basic stochastic processes</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-motion-with-drift">7.6.1. Brownian motion with drift</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-brownian-motion">7.6.2. Geometric Brownian motion</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-average-of-the-brownian-motion">7.6.3. Arithmetic Average of the Brownian motion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arithmetic-mean-of-the-brownian-motion">7.6.3. Arithmetic mean of the Brownian motion</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#orstein-uhlenbeck-process">7.6.4. Orstein-Uhlenbeck process</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#brownian-bridge">7.6.5. Brownian bridge</a></li>
 </ul>

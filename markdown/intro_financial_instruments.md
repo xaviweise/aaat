@@ -1,12 +1,18 @@
-# Financial Instruments
+# Mechanics of Financial Instruments
 
 ## Introduction
+
+As discussed in the previous chapter, a financial instrument is a exchangeable contract that specifies the conditions for the transfer of funds between two parties, namely amounts exchanged, times, clauses and rights, among others. Given the multiple objectives of the parties both issuing and acquiring them, it is not surprising that a lot of innovation has been done around financial instruments. 
+
+Classical financial instruments like stocks and bonds articulate the concept of funding corporations and governments (not stocks), the former in exchange of ownership and a share of profits (reinvested or in form of dividends), the latter purely in terms of a fixed periodic income and the promise of returning the funds in a specified time. 
+
+Derivatives markets take innovation a step further, providing a lot of customization to accommodate specific needs of market participants in terms of speculation or risk management. 
 
 ## Stocks
 
 ## Bonds
 
-### Derivatives
+## Derivatives
 
 Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name "derivative".
 
