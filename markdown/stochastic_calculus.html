@@ -174,7 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Markets Fundamentals</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro_financial_markets.html">1. Financial Markets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro_financial_instruments.html">2. Financial Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_financial_instruments.html">2. Mechanics of Financial Instruments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="market_microstructure.html">3. Market microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithmic_trading.html">4. Algorithmic Trading</a></li>
 </ul>
@@ -1526,7 +1526,7 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <p>In many applications, events not only occur randomly over time but also have random magnitudes or impacts. A compound Poisson process extends the Poisson process by allowing for random jump sizes.</p>
 <p>A compound Poisson process <span class="math notranslate nohighlight">\(X_t\)</span> is defined as:</p>
 <div class="math notranslate nohighlight">
-\[X_t = \sum_{i=1}^{N_t} Y_i,\]</div>
+\[J_t = \sum_{i=1}^{N_t} Y_i\]</div>
 <p>where:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(N_t\)</span> is a Poisson process with rate <span class="math notranslate nohighlight">\(\lambda\)</span>.</p></li>
@@ -1548,14 +1548,14 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 \[\begin{split}\mathbb{E}[x_1 + ... + x_N] = \sum_{n=0}^\infty P(N=n) \mathbb{E}[x_1 + ... + x_N|N]  \nonumber \\ = \sum_{n=0}^\infty P(N=n) N \mathbb{E}[x_1] = \mathbb{E}[N] \mathbb{E}[x_1]\end{split}\]</div>
 <p>where we have used that <span class="math notranslate nohighlight">\(\mathbb{E}[x_1]\)</span> is independent of <span class="math notranslate nohighlight">\(N\)</span>. Coming back to the definition of compound Poisson process:</p>
 <div class="math notranslate nohighlight">
-\[\mathbb{E}[X_t] = \mathbb{E}[N_t] \mathbb{E}[Y_i] = \lambda t \mathbb{E}[Y_i]\]</div>
+\[\mathbb{E}[J_t] = \mathbb{E}[N_t] \mathbb{E}[Y_i] = \lambda t \mathbb{E}[Y_i]\]</div>
 <p>A similar reasoning can be applied to the variance:</p>
 <div class="math notranslate nohighlight">
 \[
-\mathbb{Var}(X_t) = \mathbb{E}[N_t] \mathbb{Var}(Y_i) + \mathbb{Var}(N_t) \left( \mathbb{E}[Y_i] \right)^2 = \lambda t \left( \mathbb{Var}(Y_i) + \left( \mathbb{E}[Y_i] \right)^2 \right)
+\mathbb{Var}(J_t) = \mathbb{E}[N_t] \mathbb{Var}(Y_i) + \mathbb{Var}(N_t) \left( \mathbb{E}[Y_i] \right)^2 = \lambda t \left( \mathbb{Var}(Y_i) + \left( \mathbb{E}[Y_i] \right)^2 \right)
 \]</div>
 <p><strong>Simulation:</strong></p>
-<p>To simulate a compound Poisson process we simulate first  the number of events <span class="math notranslate nohighlight">\(N_t\)</span> occurring up to time <span class="math notranslate nohighlight">\(t\)</span> using a Poisson distribution with parameter <span class="math notranslate nohighlight">\(\lambda t\)</span>. Then, for each event <span class="math notranslate nohighlight">\(i = 1, \dots, N_t\)</span>, we sample a jump size <span class="math notranslate nohighlight">\(Y_i\)</span> from the specified distribution. Finally, we sum the jump sizes to obtain <span class="math notranslate nohighlight">\(X_t = \sum_{i=1}^{N_t} Y_i\)</span>.</p>
+<p>To simulate a compound Poisson process we simulate first  the number of events <span class="math notranslate nohighlight">\(N_t\)</span> occurring up to time <span class="math notranslate nohighlight">\(t\)</span> using a Poisson distribution with parameter <span class="math notranslate nohighlight">\(\lambda t\)</span>. Then, for each event <span class="math notranslate nohighlight">\(i = 1, \dots, N_t\)</span>, we sample a jump size <span class="math notranslate nohighlight">\(Y_i\)</span> from the specified distribution. Finally, we sum the jump sizes to obtain <span class="math notranslate nohighlight">\(J_t = \sum_{i=1}^{N_t} Y_i\)</span>.</p>
 <p>A result of such simulation is shown in the following figure, with jumps being driven by an exponential model.</p>
 <figure class="align-default" id="fig-compound-poisson">
 <a class="reference internal image-reference" href="../_images/compound_poisson.png"><img alt="../_images/compound_poisson.png" src="../_images/compound_poisson.png" style="width: 8in;" /></a>
@@ -1575,13 +1575,13 @@ P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 <li><p><span class="math notranslate nohighlight">\(\mu(X_{t^-}, t)\)</span> is the drift coefficient, representing the deterministic trend.</p></li>
 <li><p><span class="math notranslate nohighlight">\(\sigma(X_{t^-}, t)\)</span> is the diffusion coefficient, representing the volatility.</p></li>
 <li><p><span class="math notranslate nohighlight">\(W_t\)</span> is a Wiener process</p></li>
-<li><p><span class="math notranslate nohighlight">\(dJ_t\)</span> represents the jump component.</p></li>
+<li><p><span class="math notranslate nohighlight">\(J_t\)</span> represents the jump component, with <span class="math notranslate nohighlight">\(J_t\)</span> a compound Poisson process <span class="math notranslate nohighlight">\(J_t =  \sum_{i=1}^{N_t} Y_i\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(X_{t^-}\)</span> denotes the value of <span class="math notranslate nohighlight">\(X_t\)</span> just before time <span class="math notranslate nohighlight">\(t\)</span>, accounting for any discontinuities at <span class="math notranslate nohighlight">\(t\)</span>.</p></li>
 </ul>
-<p>The jump component <span class="math notranslate nohighlight">\(dJ_t\)</span> is often modeled using a compound Poisson process:</p>
+<p>As with the Wiener process, the differential of the jump process is a shorthand notation for <span class="math notranslate nohighlight">\(dJ_t = J_{t+dt} - J_t\)</span>, i.e. the number of jumps happening between <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(t+dt\)</span>. As we saw above, in a compound Poisson process since the intensity is <span class="math notranslate nohighlight">\(\lambda dt\)</span> only one or zero jumps are possible in the limit <span class="math notranslate nohighlight">\(dt \rightarrow 0\)</span>. Therefore, we can simply write:</p>
 <div class="math notranslate nohighlight">
-\[dJ_t = J \, dN_t = \sum_{i=1}^{N_t} Y_i\]</div>
-<p>where as before <span class="math notranslate nohighlight">\(N_t\)</span> is a Poisson process with intensity <span class="math notranslate nohighlight">\(\lambda\)</span>, <span class="math notranslate nohighlight">\(Y_i\)</span> are i.i.d. random variables representing the jump sizes, and we have <span class="math notranslate nohighlight">\(J = Y_i\)</span> when a jump occurs at time <span class="math notranslate nohighlight">\(t\)</span>.</p>
+\[dJ_t = Y \, dN_t\]</div>
+<p>with <span class="math notranslate nohighlight">\(P(dN_t = 1) = \lambda dt\)</span>.</p>
 <p><strong>Ito’s Lemma with Jumps</strong></p>
 <p>To analyze functions of jump diffusion processes, we need to extend the classical Ito’s lemma to account for jumps. The Ito’s lemma with jumps provides a framework for calculating the differential of a function applied to a process that includes both continuous and jump components.</p>
 <p>Let <span class="math notranslate nohighlight">\(X_t\)</span> be a jump diffusion process defined above, and let <span class="math notranslate nohighlight">\(f(X_t, t)\)</span> be a twice continuously differentiable function in <span class="math notranslate nohighlight">\(x\)</span> and once differentiable in <span class="math notranslate nohighlight">\(t\)</span>. Then, the differential <span class="math notranslate nohighlight">\(df(X_t, t)\)</span> is given by:</p>
@@ -1592,15 +1592,15 @@ df(X_t, t) &amp;= \left( \frac{\partial f}{\partial t} + \mu(X_{t^-}, t) \frac{\
 &amp;\quad + \sigma(X_{t^-}, t) \frac{\partial f}{\partial x} \, dW_t + \left[ f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t) \right] dN_t,
 \end{align*}
 \end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\Delta X_t = X_t - X_{t^-} = J\)</span> is the jump size at time <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<p>where <span class="math notranslate nohighlight">\(\Delta X_t = X_t - X_{t^-} = Y\)</span> is the jump size at time <span class="math notranslate nohighlight">\(t\)</span>.</p>
 <p>As we argued in the case of a Wiener process, the derivation can be motivated using a Taylor series expansion on the function for the continuous part, only adding the jump process, which is orthogonal to the continuous stochastic dynamics. When adding the jump component, the function <span class="math notranslate nohighlight">\(f(X_t,t)\)</span> changes discretely, hence the term <span class="math notranslate nohighlight">\(f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t)\)</span> instead of the derivative. We only keep in this case the expansion up to <span class="math notranslate nohighlight">\(dN_t\)</span> since <span class="math notranslate nohighlight">\(\mathbb{E}[dN_t] = \lambda dt\)</span> which is already of order <span class="math notranslate nohighlight">\(O(dN_t)\)</span>, so any extra term in the expansion will have a higher order.</p>
 <p><strong>Simulation</strong></p>
 <p>As mentioned above, one of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously.
 One famous instance of such models incorporating jumps is Merton’s jump diffusion model <span id="id4">[<a class="reference internal" href="references.html#id13" title="Robert Merton. Option pricing when underlying stock returns are discontinuous. Journal of Financial Economics, 3(1-2):125-144, 1976.">6</a>]</span>, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price <span class="math notranslate nohighlight">\(S_t\)</span> is:</p>
 <div class="math notranslate nohighlight">
-\[dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (J - 1) \, dN_t,\]</div>
-<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the expected return rate, <span class="math notranslate nohighlight">\(\sigma\)</span> is the volatility, <span class="math notranslate nohighlight">\(J\)</span> is a random variable representing the jump multiplier, and <span class="math notranslate nohighlight">\(dN_t\)</span> indicates the occurrence of a jump, modeled by a Poisson process with intensity <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
-<p>A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, <span class="math notranslate nohighlight">\(\log J \sim \mathcal{N}(k, \delta^2)\)</span>. The following simulation of the Merton model has been generated using such model.</p>
+\[dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (Y - 1) \, dN_t,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the expected return rate, <span class="math notranslate nohighlight">\(\sigma\)</span> is the volatility, <span class="math notranslate nohighlight">\(Y\)</span> is a random variable representing the jump multiplier, and <span class="math notranslate nohighlight">\(dN_t\)</span> indicates the occurrence of a jump, modeled by a Poisson process with intensity <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+<p>A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, <span class="math notranslate nohighlight">\(\log Y \sim \mathcal{N}(k, \delta^2)\)</span>. The following simulation of the Merton model has been generated using such model.</p>
 <figure class="align-default" id="fig-jump-diffusion">
 <a class="reference internal image-reference" href="../_images/jump_diffusion.png"><img alt="../_images/jump_diffusion.png" src="../_images/jump_diffusion.png" style="width: 8in;" /></a>
 <figcaption>

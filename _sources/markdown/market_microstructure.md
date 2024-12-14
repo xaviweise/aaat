@@ -46,7 +46,7 @@ In another version of a hybrid market, dealers are obligated to participate in a
 
 Hybrid markets strike a balance between dealer-driven liquidity provision and the transparency and efficiency of an order book system. They are commonly used in highly liquid markets, such as foreign exchange platforms and some modern equity exchanges, where large institutional players need the certainty of liquidity alongside the openness of an order-driven market.
 
-**The rationale for each trading mechanism**
+**Why two different market microstructures?**
 
 Each of these trading mechanisms serves different types of markets and participants. Quote-driven markets are particularly useful for illiquid or over-the-counter products, where large trades and custom negotiations are common. Order-driven markets thrive in environments with high trading volumes and transparency, offering fast execution and price discovery through collective action. Hybrid markets bring together the strengths of both systems, ensuring liquidity and fairness even in challenging trading conditions. Understanding these mechanisms is crucial for anyone looking to navigate today’s financial markets.
 
@@ -88,7 +88,7 @@ In request-driven trading, a client requests a quote or a trade from a dealer at
 
 Request-driven trading provides flexibility for both clients and dealers, allowing them to negotiate trades that meet specific needs. However, it lacks the transparency and immediacy of continuous or auction-based systems, as each trade is typically a private transaction between the client and the dealer.
 
-**The rationale behind these choices**
+**Trade-offs**
 
 The choice of trading frequency and timing mechanism reflects the unique characteristics of each market and the needs of its participants. Continuous trading offers fast execution and real-time price discovery, while scheduled auctions and request-driven trading provide alternatives that manage liquidity and volatility more effectively under specific conditions. Understanding these mechanisms is crucial for market participants seeking to navigate the intricacies of different trading environments.
 
@@ -201,8 +201,6 @@ Order-driven markets often provide different levels of data to market participan
 
 - **Level III**: The most detailed level of data, showing individual orders, their sizes, prices, and time stamps. This information is typically used by algorithmic traders and market makers to track the behavior of specific market participants.
 
-**Tick Data**
-
 Historical data from order books is called **tick data**, and captures every change that occurs in the order book. It is  provided by the exchanges or via financial data companies like LSEG (ex Refinitiv) and Bloomberg, which aggregate and normalize this data.  There are also free resources with samples of data like Lobster. 
 
 Tick data generally comes in two forms:
@@ -220,5 +218,26 @@ However, the system is not without challenges. In less liquid markets, **price v
 To mitigate these issues, many markets incorporate mechanisms like **circuit breakers** and **trading halts** during periods of extreme volatility, as well as **opening and closing auctions** to establish stable prices at the beginning and end of trading sessions.
 
 ## Quote-driven markets: the Request for Quote protocol
+
+Central Limit Order Books have become the cornerstone of market microstructure given their efficiency in matching continuously buying and selling interest, while at the same time offering valuable information for price and liquidity discovery to other investors and market participants. However, for their well functioning they rely on having enough liquidity in the form of visible bid and ask limit orders. A relatively empty order book discourages other investors to post their orders, becoming a self-fulfilling prophecy. It also becomes less useful as an engine for price and liquidity discovery. Market operators and even Governments try to incentive this market structure, for instance by offering attractive fees to liquidity providers like banks in exchange of keeping bid and ask limit orders most of the time in a trading session. 
+
+However, for some financial instruments this is insufficient. Take corporate bonds. Companies usually only issue a single stock, but might have hundreds of different bonds in circulation with different maturities, coupon types, amortization types and contractual clauses. They do so to attract different type of lenders and adapt to specific economic conditions and / or forecasts. As a result, many of those bonds trade very infrequently, making central limit order book relatively useless for market participants to find counter-parties to trade with. The same happens, for example, with most but the less standard derivatives. 
+
+The market solution to trade those instruments has been traditionally to rely on intermediaries:
+
+* *Brokers*, who have an extensive network of market participants that use to find a potential match to an order, charging a commission for the service
+
+* *Dealers*, typically banks, who are willing to buy at a discount or sell at a premium, keeping the instruments in their inventory until a counter-party is found. Therefore, in contrast with brokers, they take on inventory risk since they don't typically can liquidate the position taken quickly, sometimes keeping inventory holdings for extensive periods of time.
+
+Investors who want to trade illiquid financial instruments would contact brokers or dealers by "voice" (which nowadays means usually by email or chat, sometimes by phone), requesting them quotes and in case of matching interests, trading over the counter, i.e. bilaterally out of market structures. 
+
+Whereas this is still the case for some financial instruments, with the advent of electronification in financial markets, broker-dealers started building electronic platforms to allow their clients to request them quotes. Such *single-dealer-to-client* (SD2C) platforms have the advantage of simplifying and automatic partly both price discovery, trading and settling later the trade, but being proprietary of the broker-dealer, clients were potentially missing the benefit of competition, unless they kept multiple accounts with different broker-dealers.
+
+This opened up a business opportunity of creating electronic *multi-dealer-to-client* (MD2C) platforms, where clients can request quotes simultaneously to multiple dealers in competition. To make clients select them as dealers, broker-dealers typically also provide indicative streams of prices for standard volumes of the contract, which are helpful for price discovery. Therefore, those platforms operated by providers like Bloomberg, Market-Axess or Tradeweb, have become the standard alternative to centralized exchanges based on the Central Limit Order Book for illiquid instruments. At the heart of the platform is a standard $request for quote* (RfQ) protocol to interact between client and broker-dealers. 
+
+### Mechanics of the Request for Quote protocol
+
+
+
 
 ## Exercises
