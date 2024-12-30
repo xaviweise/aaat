@@ -259,7 +259,7 @@ Depending on the instrument and the regulation, dealers are requested to publish
 
 A related protocol to RfQ is Request for Streaming, in which  dealers are asked by the client to provide executable prices for a period of time for particular sizes. The client can accept the price at any time. 
 
-### Strategic considerations from dealers and clients
+### Strategic considerations for dealers and clients
 
 The existence of MD2C platforms for clients has the advantage of providing competition to dealers who are then forced to provide better prices to clients than in proprietary SD2C platforms. However, in practice, clients don't usually select the maximum number of dealers allowed by the platforms (which can be around 20 or 30). The reason is that doing so has the trade-off of informing multiple dealers of the client's intention to trade. Even if a dealer does not end up trading with the client, this information might be relevant to consider potential short-term movements in the market, and might be exploited by them although in some jurisdictions this is considering an illegal practice of *front running* the client.
 
