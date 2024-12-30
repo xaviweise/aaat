@@ -418,26 +418,24 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">3.1. Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-trading-mechanisms">3.2. Types of trading mechanisms</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-times-and-frequencies">3.3. Trading Times and Frequencies</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#order-driven-markets-and-the-central-limit-order-book-clob">3.3.1. Order-Driven Markets and the Central Limit Order Book (CLOB)</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-structure-of-the-central-limit-order-book-clob">3.3.1.1. The Structure of the Central Limit Order Book (CLOB)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-orders">3.3.1.2. Types of Orders</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-fees">3.3.2. Trading Fees</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-order-book-data">3.3.2.1. Types of Order Book Data</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-and-challenges-of-order-driven-markets">3.3.2.2. Advantages and Challenges of Order-Driven Markets</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-trading-mechanisms">3.1. Types of trading mechanisms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-times-and-frequencies">3.2. Trading Times and Frequencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#order-driven-markets-and-the-central-limit-order-book-clob">3.3. Order-Driven Markets and the Central Limit Order Book (CLOB)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-structure-of-the-central-limit-order-book-clob">3.3.1. The Structure of the Central Limit Order Book (CLOB)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-orders">3.3.2. Types of Orders</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-fees">3.3.3. Trading Fees</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-order-book-data">3.3.4. Types of Order Book Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-and-challenges-of-order-driven-markets">3.3.5. Advantages and Challenges of Order-Driven Markets</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quote-driven-markets-the-request-for-quote-protocol">3.4. Quote-driven markets: the Request for Quote protocol</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanics-of-the-request-for-quote-protocol">3.4.1. Mechanics of the Request for Quote protocol</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanics-of-the-rfq-protocol-in-md2c-platforms">3.4.1. Mechanics of the RfQ protocol in MD2C platforms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#request-for-streaming-rfs">3.4.2. Request for Streaming (RfS)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#strategic-considerations-from-dealers-and-clients">3.4.3. Strategic considerations from dealers and clients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rfq-data">3.4.4. RfQ Data</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">3.5. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#financial-security-identification-codes">3.5. Financial Security Identification Codes</a></li>
 </ul>
             </nav>
         </div>
@@ -451,8 +449,6 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="market-microstructure">
 <h1><span class="section-number">3. </span>Market microstructure<a class="headerlink" href="#market-microstructure" title="Permalink to this heading">#</a></h1>
-<section id="introduction">
-<h2><span class="section-number">3.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>Market microstructure is the study of the processes and mechanisms through which financial instruments are traded in financial markets. It focuses on how different participants —such as investors, intermediaries, and liquidity providers—interact, and how their actions affect the price formation, liquidity, and efficiency of markets. Whereas many financial models often assume that prices reflect all available information, market microstructure digs deeper into the realities of trading: the role of transaction costs, bid-ask spreads, order types, and how information asymmetry influences trading strategies and outcomes.</p>
 <p>At the core of market microstructure is the understanding that prices are not simply the result of supply and demand but are shaped by specific choices in the architecture of the market. These include:</p>
 <ul class="simple">
@@ -464,9 +460,8 @@ document.write(`
 ensure they can trade fairly</p></li>
 </ul>
 <p>By studying these elements, market microstructure helps explain phenomena like price discovery, short-term price fluctuations, and the impact of large trades.</p>
-</section>
 <section id="types-of-trading-mechanisms">
-<h2><span class="section-number">3.2. </span>Types of trading mechanisms<a class="headerlink" href="#types-of-trading-mechanisms" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">3.1. </span>Types of trading mechanisms<a class="headerlink" href="#types-of-trading-mechanisms" title="Permalink to this heading">#</a></h2>
 <p>The way financial markets are structured has a profound effect on how trades are executed, how prices are formed, and how liquidity is provided. At the heart of this structure lies the mechanism that governs how buyers and sellers interact. Broadly speaking, we can categorize trading mechanisms into three types: quote-driven, order-driven, and hybrid. Each has its unique characteristics and implications for market participants.</p>
 <p><strong>Quote-Driven Markets</strong></p>
 <p>In a quote-driven market, transactions revolve around a specialized intermediary known as a dealer or market maker. The dealer plays a central role by continuously quoting prices at which they are willing to buy and sell a given financial instrument. These quotes typically consist of two parts: the bid price, which is the price the dealer is willing to pay to buy the instrument, and the ask price, which is the price at which they are willing to sell it. The dealer profits from the spread, the difference between the bid and ask prices, and adjusts these quotes dynamically based on supply, demand, and market conditions.</p>
@@ -486,7 +481,7 @@ ensure they can trade fairly</p></li>
 <p>Each of these trading mechanisms serves different types of markets and participants. Quote-driven markets are particularly useful for illiquid or over-the-counter products, where large trades and custom negotiations are common. Order-driven markets thrive in environments with high trading volumes and transparency, offering fast execution and price discovery through collective action. Hybrid markets bring together the strengths of both systems, ensuring liquidity and fairness even in challenging trading conditions. Understanding these mechanisms is crucial for anyone looking to navigate today’s financial markets.</p>
 </section>
 <section id="trading-times-and-frequencies">
-<h2><span class="section-number">3.3. </span>Trading Times and Frequencies<a class="headerlink" href="#trading-times-and-frequencies" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">3.2. </span>Trading Times and Frequencies<a class="headerlink" href="#trading-times-and-frequencies" title="Permalink to this heading">#</a></h2>
 <p>The timing of trades and the frequency with which they occur are essential aspects of market design, significantly impacting how liquidity, price discovery, and volatility are managed. Different trading mechanisms operate under varying time structures, and these structures influence the behavior of market participants, the efficiency of order execution, and the stability of markets. Broadly, trading times and frequencies can be categorized into continuous trading, periodic auctions, and request-driven trading. Each of these methods plays a role in shaping market dynamics, especially under different market conditions such as periods of high volatility or when liquidity is scarce.</p>
 <p><strong>Continuous Trading</strong></p>
 <p>Continuous trading is the most common method used in modern financial markets, where trading happens continuously within a defined window of time. During this window, market participants can submit and execute orders at any moment, allowing for a constant flow of trades and real-time price updates. This method is particularly effective in markets with high trading volumes, where liquidity is readily available throughout the trading day.</p>
@@ -508,31 +503,26 @@ ensure they can trade fairly</p></li>
 <p>In request-driven trading, a client requests a quote or a trade from a dealer at a specific time, and the dealer responds with a price. The trade is executed based on this interaction, often involving some negotiation over the size or price of the transaction. This model is common in markets for customized or illiquid products, such as large blocks of bonds or structured financial instruments, where finding a counter-party may not be straightforward.</p>
 <p>Request-driven trading provides flexibility for both clients and dealers, allowing them to negotiate trades that meet specific needs. However, it lacks the transparency and immediacy of continuous or auction-based systems, as each trade is typically a private transaction between the client and the dealer.</p>
 <p><strong>Trade-offs</strong></p>
-<p>The choice of trading frequency and timing mechanism reflects the unique characteristics of each market and the needs of its participants. Continuous trading offers fast execution and real-time price discovery, while scheduled auctions and request-driven trading provide alternatives that manage liquidity and volatility more effectively under specific conditions. Understanding these mechanisms is crucial for market participants seeking to navigate the intricacies of different trading environments.</p>
+<p>The choice of trading frequency and timing mechanism reflects the unique characteristics of each market and the needs of its participants. Continuous trading offers fast execution and real-time price discovery, while scheduled auctions and request-driven trading provide alternatives that manage liquidity and volatility more effectively under specific conditions.</p>
+</section>
 <section id="order-driven-markets-and-the-central-limit-order-book-clob">
-<h3><span class="section-number">3.3.1. </span>Order-Driven Markets and the Central Limit Order Book (CLOB)<a class="headerlink" href="#order-driven-markets-and-the-central-limit-order-book-clob" title="Permalink to this heading">#</a></h3>
+<h2><span class="section-number">3.3. </span>Order-Driven Markets and the Central Limit Order Book (CLOB)<a class="headerlink" href="#order-driven-markets-and-the-central-limit-order-book-clob" title="Permalink to this heading">#</a></h2>
 <p>Order-driven markets are a fundamental type of financial market structure where prices and liquidity are determined directly by the orders placed by market participants, without the need for intermediaries such as dealers. In these markets, investors interact through a <strong>central limit order book (CLOB)</strong>, a system that aggregates and displays buy and sell orders in real time. The CLOB organizes these orders based on price, ensuring that the best available prices are always visible to participants, making the system transparent and efficient.</p>
 <p>CLOBs don’t allow orders at arbitrary prices, instead enforcing minimum price increments known as <strong>tick sizes</strong>, which define the smallest allowable difference between order prices. The tick size choice traditionally falls to the market owner, who aims to balance liquidity by setting smaller tick sizes, encouraging tighter spreads and more precise pricing. However, overly small tick sizes can also penalize liquidity providers who maintain constant bid and ask orders in the CLOB, as they may face more frequent price competition and increased order cancellations.</p>
 <p>In recent years, regulatory bodies in some markets have implemented restrictions on tick sizes to stabilize order book structures and reduce excessive market noise. For instance, in the European Union, MiFID II introduced a tick size regime based on price levels and average daily number of trades for specific instruments, limiting the ability of markets to set overly fine increments. Similarly, in the U.S., tick size pilot programs have explored tick adjustments for smaller-cap stocks to assess impacts on liquidity and execution quality. Such regulatory measures aim to ensure fairer conditions for both liquidity providers and market participants, while supporting orderly and efficient markets.</p>
 <p>Additionally to tick sizes, markets typically impose restrictions on the the quantities that can be traded, known as <strong>lot sizes</strong>.</p>
 <section id="the-structure-of-the-central-limit-order-book-clob">
-<h4><span class="section-number">3.3.1.1. </span>The Structure of the Central Limit Order Book (CLOB)<a class="headerlink" href="#the-structure-of-the-central-limit-order-book-clob" title="Permalink to this heading">#</a></h4>
+<h3><span class="section-number">3.3.1. </span>The Structure of the Central Limit Order Book (CLOB)<a class="headerlink" href="#the-structure-of-the-central-limit-order-book-clob" title="Permalink to this heading">#</a></h3>
 <p>At any given moment, the CLOB provides a snapshot of the market by showing all active buy and sell orders. These orders are aggregated anonymously and displayed in two columns: one for <strong>buy orders</strong> (bids) and another for <strong>sell orders</strong> (asks or offers). Each column is ordered by price, with the best bid (the highest price a buyer is willing to pay) and the best ask (the lowest price a seller is willing to accept) at the top.</p>
-<ul class="simple">
-<li><p><strong>Best Bid/Ask</strong>: The best bid and ask, <span class="math notranslate nohighlight">\(P^b_{best}\)</span> and <span class="math notranslate nohighlight">\(P^a_{best}\)</span>, represent the highest and lowest prices, respectively, that are currently available in the market. The difference between them is the <strong>bid-ask spread</strong>, which can serve as a measure of liquidity. A narrow spread generally indicates higher liquidity.</p></li>
-<li><p><strong>Market Depth</strong>: The CLOB also shows the <strong>market depth</strong>, which refers to the number of orders available at various price levels. Market depth gives traders insight into the potential for price movements based on the volume of buy and sell interest at different prices.</p></li>
-<li><p><strong>Mid-Price</strong>: The <strong>mid-price</strong> is calculated as the average of the best bid and best ask prices. It serves as an estimate of the fair market price at a given moment:</p></li>
-</ul>
+<p><strong>Best Bid/Ask</strong>: The best bid and ask, <span class="math notranslate nohighlight">\(P^b_{best}\)</span> and <span class="math notranslate nohighlight">\(P^a_{best}\)</span>, represent the highest and lowest prices, respectively, that are currently available in the market. The difference between them is the <strong>bid-ask spread</strong>, which can serve as a measure of liquidity. A narrow spread generally indicates higher liquidity.</p>
+<p><strong>Market Depth</strong>: The CLOB also shows the <strong>market depth</strong>, which refers to the number of orders available at various price levels. Market depth gives traders insight into the potential for price movements based on the volume of buy and sell interest at different prices.</p>
+<p><strong>Mid-Price</strong>: The <strong>mid-price</strong> is calculated as the average of the best bid and best ask prices. It serves as an estimate of the fair market price at a given moment:</p>
 <div class="math notranslate nohighlight">
 \[ P_{mid} = \frac{1}{2}(P^b_{best} + P^a_{best}) \]</div>
-<ul class="simple">
-<li><p><strong>Spread</strong>: The difference between the best bid and ask prices. It is a metric of liquidity in the order book, since the larger it is the less likely is that investors can trade at prices close to the mid-price:</p></li>
-</ul>
+<p><strong>Spread</strong>: The difference between the best bid and ask prices. It is a metric of liquidity in the order book, since the larger it is the less likely is that investors can trade at prices close to the mid-price:</p>
 <div class="math notranslate nohighlight">
 \[ S = P^a_{best} + P^b_{best} \]</div>
-<ul class="simple">
-<li><p><strong>Volume Imbalance</strong>: it refers to the difference in the volume of buy orders, typically at the best bid and ask prices, although a larger number of levels might be taken for a more robust estimation. A significant imbalance can indicate potential price movement; for example, if the volume at the best bid is substantially higher than the volume at the best ask, it may suggest upward pressure on the price. This feature helps traders gauge short-term supply and demand dynamics and assess potential price changes. It is typically reported as a percentage over total volume in the best bid and ask:</p></li>
-</ul>
+<p><strong>Volume Imbalance</strong>: it refers to the difference in the volume of buy orders, typically at the best bid and ask prices, although a larger number of levels might be taken for a more robust estimation. A significant imbalance can indicate potential price movement; for example, if the volume at the best bid is substantially higher than the volume at the best ask, it may suggest upward pressure on the price. This feature helps traders gauge short-term supply and demand dynamics and assess potential price changes. It is typically reported as a percentage over total volume in the best bid and ask:</p>
 <div class="math notranslate nohighlight">
 \[ I = \frac{V^b_{best} - V^a_{best}}{V^b_{best} + V^a_{best}} \]</div>
 <p>The following picture shows a visualization of the order book called market depth, since it shows the current orders sitting in the book ordered by price. Each level might have orders from different participants, but we show them aggregated which is how real markets report them in their feeds.</p>
@@ -544,11 +534,9 @@ ensure they can trade fairly</p></li>
 </figure>
 </section>
 <section id="types-of-orders">
-<h4><span class="section-number">3.3.1.2. </span>Types of Orders<a class="headerlink" href="#types-of-orders" title="Permalink to this heading">#</a></h4>
+<h3><span class="section-number">3.3.2. </span>Types of Orders<a class="headerlink" href="#types-of-orders" title="Permalink to this heading">#</a></h3>
 <p>Market participants in order-driven markets can use a variety of order types, each serving different trading objectives:</p>
-<ol class="arabic simple">
-<li><p><strong>Market Orders</strong>: These orders instruct the system to buy or sell immediately at the best available price, consuming always the liquidity available at best prices (<strong>price priority</strong>). Market orders are executed quickly, but they carry the risk of paying a higher price or receiving a lower price than expected if there is insufficient liquidity at the best bid or ask. In this case, the order may “walk the book,” executing across multiple price levels and resulting in a higher average price (for buys) or lower average price (for sells). The execution price of an order that consumes liquidity across various levels is computed using the <strong>volume weighted average price (VWAP)</strong>:</p></li>
-</ol>
+<p><strong>Market Orders</strong>: These orders instruct the system to buy or sell immediately at the best available price, consuming always the liquidity available at best prices (<strong>price priority</strong>). Market orders are executed quickly, but they carry the risk of paying a higher price or receiving a lower price than expected if there is insufficient liquidity at the best bid or ask. In this case, the order may “walk the book,” executing across multiple price levels and resulting in a higher average price (for buys) or lower average price (for sells). The execution price of an order that consumes liquidity across various levels is computed using the <strong>volume weighted average price (VWAP)</strong>:</p>
 <div class="math notranslate nohighlight">
 \[ P_{exec} = \frac{\sum_i v_i P_i}{\sum_i v_i} \]</div>
 <p><strong>Example</strong>: Taking the previous CLOB example, suppose an investor wants to buy Suppose an investor wants to buy 500 shares with a market order. As shown in the figure below, the order consumes liquidity up to three levels. The resulting execution price is 103.51. After the market order, the mid-price is recalculated given the new liquidity, to <span class="math notranslate nohighlight">\(P_{mid} = 101\)</span>, and the spread broadens to <span class="math notranslate nohighlight">\(S = 6\)</span></p>
@@ -558,9 +546,7 @@ ensure they can trade fairly</p></li>
 <p><span class="caption-number">Fig. 3.2 </span><span class="caption-text">Effect of a buy market order of size 500 in the Central Limit Order Book.</span><a class="headerlink" href="#fig-market-order" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<ol class="arabic simple" start="2">
-<li><p><strong>Limit Orders</strong>: These specify a price at which the trader is willing to buy or sell. If the limit price is not immediately available to trade, the order remains in the order book until a matching counter-party arrives or the order is canceled. Limit orders allow traders to control the price at which they execute but come with the risk that the order may not be executed if the market price moves away from the limit.</p></li>
-</ol>
+<p><strong>Limit Orders</strong>: These specify a price at which the trader is willing to buy or sell. If the limit price is not immediately available to trade, the order remains in the order book until a matching counter-party arrives or the order is canceled. Limit orders allow traders to control the price at which they execute but come with the risk that the order may not be executed if the market price moves away from the limit.</p>
 <p>When an order is added to a level with existing liquidity, there is the question of which order has the priority when a matching order arrives at the CLOB. Most markets use a <strong>time priority</strong> or first in first out (FIFO) rule, in which orders that arrived earlier are consumed first. It is not the only rule, though. For instance some markets use a <strong>pro-rata rule</strong>, in which all existing orders are consumed proportionally to their size.</p>
 <p><strong>Example 1</strong>: Using again the previous order book, suppose and investor wants to buy the 500 shares but instead of sending a market order, it uses a limit order at price 98. Since there are order existing at that price level, the order sits at the bottom of the level. If this is a market with a time priority rule, this means this order will be the last to be consumed at the level. After placing the order, the mid-price and the spread does not change, but the imbalance is affected, see figure below.</p>
 <figure class="align-default" id="fig-limit-order-passive">
@@ -576,24 +562,21 @@ ensure they can trade fairly</p></li>
 <p><span class="caption-number">Fig. 3.4 </span><span class="caption-text">Effect of a buy limit order of size 500 and price 102 in the Central Limit Order Book. A hatch pattern is used to show the consumed liquidity by the limit order.</span><a class="headerlink" href="#fig-limit-order-aggressive" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<ol class="arabic" start="3">
-<li><p><strong>Hidden Orders</strong>: Hidden orders are limit orders that are not visible to other market participants. They allow traders to conceal their trading intentions, which can be advantageous in avoiding market impact or revealing their strategy to others. However, hidden orders generally have <strong>lower priority</strong> compared to visible orders at the same price level, meaning they will only be executed after all visible orders at that price have been matched.</p>
-<p><strong>Prevalence</strong>: Estimates suggest that hidden orders can account for approximately 10% to 20% of total liquidity on major exchanges like the NASDAQ or NYSE. The prevalence of hidden orders tends to increase during periods of high volatility or when large institutional players are active.</p>
-</li>
-<li><p><strong>Other Order Types</strong>:</p>
+<p><strong>Hidden Orders</strong>: Hidden orders are limit orders that are not visible to other market participants. They allow traders to conceal their trading intentions, which can be advantageous in avoiding market impact or revealing their strategy to others. However, hidden orders generally have <strong>lower priority</strong> compared to visible orders at the same price level, meaning they will only be executed after all visible orders at that price have been matched.</p>
+<ul class="simple">
+<li><p>Prevalence: Estimates suggest that hidden orders can account for approximately 10% to 20% of total liquidity on major exchanges like the NASDAQ or NYSE. The prevalence of hidden orders tends to increase during periods of high volatility or when large institutional players are active.</p></li>
+</ul>
+<p><strong>Other Order Types</strong>:</p>
 <ul class="simple">
 <li><p><strong>Market-to-Limit</strong>: Begins as a market order but converts into a limit order if only part of the order is filled.</p></li>
 <li><p><strong>Immediate-Or-Cancel</strong>: Any unexecuted portion of the order is canceled immediately after partial execution.</p></li>
 <li><p><strong>Fill-Or-Kill</strong>: The order is either executed in full immediately or not at all.</p></li>
 <li><p><strong>All-Or-None</strong>: Similar to Fill-Or-Kill, but the order may remain active if it cannot be immediately executed.</p></li>
-<li><p><strong>Stop Orders</strong>: Triggered when a specified price is reached, turning into a market or limit order based on conditions.</p></li>
+<li><p><strong>Stop Orders</strong>: Triggered when a specified price is reached, turning into a market or limit order based on conditions. For example, a price based condition that will sent a market order if the mid-price of a financial instrument goes below a certain price level.</p></li>
 </ul>
-</li>
-</ol>
-</section>
 </section>
 <section id="trading-fees">
-<h3><span class="section-number">3.3.2. </span>Trading Fees<a class="headerlink" href="#trading-fees" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">3.3.3. </span>Trading Fees<a class="headerlink" href="#trading-fees" title="Permalink to this heading">#</a></h3>
 <p>Trading fees are an important consideration in order-driven markets, as they can impact the overall cost of executing trades. Exchanges generally apply fees based on the type of order and the participant’s role in providing or taking liquidity. The common fee structures include:</p>
 <ul class="simple">
 <li><p>Maker-Taker Model: This model differentiates between liquidity providers (makers) and liquidity takers. Makers, who place limit orders that add liquidity to the order book, are typically rewarded with a rebate, while takers, who execute against existing orders and remove liquidity, are charged a fee. This model incentivizes the addition of liquidity to the market.</p></li>
@@ -601,8 +584,9 @@ ensure they can trade fairly</p></li>
 <li><p>Flat Fee Model: Some exchanges charge a flat fee per transaction, regardless of whether the participant is adding or removing liquidity. This approach provides simplicity and is often used in less active markets.</p></li>
 </ul>
 <p>The specific fee structure and the level of fees depend on various factors, including the type of asset being traded, the exchange, and the participant’s trading volume. In some markets, high-frequency traders may receive favorable fee arrangements due to the large volumes they generate, which contribute significantly to market liquidity.</p>
+</section>
 <section id="types-of-order-book-data">
-<h4><span class="section-number">3.3.2.1. </span>Types of Order Book Data<a class="headerlink" href="#types-of-order-book-data" title="Permalink to this heading">#</a></h4>
+<h3><span class="section-number">3.3.4. </span>Types of Order Book Data<a class="headerlink" href="#types-of-order-book-data" title="Permalink to this heading">#</a></h3>
 <p>Order-driven markets often provide different levels of data to market participants, depending on their needs:</p>
 <ul class="simple">
 <li><p><strong>Level I</strong>: This basic level shows only the best bid and ask prices, giving traders a minimal snapshot of the market.</p></li>
@@ -617,11 +601,10 @@ ensure they can trade fairly</p></li>
 </ul>
 </section>
 <section id="advantages-and-challenges-of-order-driven-markets">
-<h4><span class="section-number">3.3.2.2. </span>Advantages and Challenges of Order-Driven Markets<a class="headerlink" href="#advantages-and-challenges-of-order-driven-markets" title="Permalink to this heading">#</a></h4>
+<h3><span class="section-number">3.3.5. </span>Advantages and Challenges of Order-Driven Markets<a class="headerlink" href="#advantages-and-challenges-of-order-driven-markets" title="Permalink to this heading">#</a></h3>
 <p>The CLOB system provides significant <strong>pre-trade transparency</strong>, as market participants can view the full order book and adjust their strategies based on available prices and liquidity. This transparency promotes price discovery, helping ensure that prices reflect the collective expectations of all market participants.</p>
 <p>However, the system is not without challenges. In less liquid markets, <strong>price volatility</strong> can be higher due to the lack of continuous buy and sell interest. Large market orders can “sweep” through multiple price levels, causing significant short-term price fluctuations. Moreover, the transparency of the system can also lead to <strong>front-running</strong>, where certain traders take advantage of visible large orders by placing their own orders ahead of them.</p>
 <p>To mitigate these issues, many markets incorporate mechanisms like <strong>circuit breakers</strong> and <strong>trading halts</strong> during periods of extreme volatility, as well as <strong>opening and closing auctions</strong> to establish stable prices at the beginning and end of trading sessions.</p>
-</section>
 </section>
 </section>
 <section id="quote-driven-markets-the-request-for-quote-protocol">
@@ -635,13 +618,72 @@ ensure they can trade fairly</p></li>
 </ul>
 <p>Investors who want to trade illiquid financial instruments would contact brokers or dealers by “voice” (which nowadays means usually by email or chat, sometimes by phone), requesting them quotes and in case of matching interests, trading over the counter, i.e. bilaterally out of market structures.</p>
 <p>Whereas this is still the case for some financial instruments, with the advent of electronification in financial markets, broker-dealers started building electronic platforms to allow their clients to request them quotes. Such <em>single-dealer-to-client</em> (SD2C) platforms have the advantage of simplifying and automatic partly both price discovery, trading and settling later the trade, but being proprietary of the broker-dealer, clients were potentially missing the benefit of competition, unless they kept multiple accounts with different broker-dealers.</p>
-<p>This opened up a business opportunity of creating electronic <em>multi-dealer-to-client</em> (MD2C) platforms, where clients can request quotes simultaneously to multiple dealers in competition. To make clients select them as dealers, broker-dealers typically also provide indicative streams of prices for standard volumes of the contract, which are helpful for price discovery. Therefore, those platforms operated by providers like Bloomberg, Market-Axess or Tradeweb, have become the standard alternative to centralized exchanges based on the Central Limit Order Book for illiquid instruments. At the heart of the platform is a standard $request for quote* (RfQ) protocol to interact between client and broker-dealers.</p>
-<section id="mechanics-of-the-request-for-quote-protocol">
-<h3><span class="section-number">3.4.1. </span>Mechanics of the Request for Quote protocol<a class="headerlink" href="#mechanics-of-the-request-for-quote-protocol" title="Permalink to this heading">#</a></h3>
+<p>This opened up a business opportunity: electronic <em>multi-dealer-to-client</em> (MD2C) platforms, where clients can request quotes simultaneously to multiple dealers in competition. To make clients select them as dealers, broker-dealers typically also provide indicative streams of prices for standard volumes of the contract, which are helpful for price discovery. Therefore, those platforms operated by providers like Bloomberg, MarketAxess or Tradeweb, have become the standard alternative to centralized exchanges based on the Central Limit Order Book for illiquid instruments. At the heart of the platform is a standard <em>request for quote</em> (RfQ) protocol to interact between client and broker-dealers.</p>
+<section id="mechanics-of-the-rfq-protocol-in-md2c-platforms">
+<h3><span class="section-number">3.4.1. </span>Mechanics of the RfQ protocol in MD2C platforms<a class="headerlink" href="#mechanics-of-the-rfq-protocol-in-md2c-platforms" title="Permalink to this heading">#</a></h3>
+<p>A client request a quote to a number of dealers <span class="math notranslate nohighlight">\(N\)</span> preselected in the electronic platform. The platform sends the RfQ to the selected dealers, who have a maximum time specified by the platform to answer with a quote. As dealers respond, the client receives the quotes immediately, and can decide to trade at any time, or walk away in case she does not want to trade with any of the dealers. When they are willing to trade, though, they are forced to trade with the dealer that offers the most competitive quote. A sketch of this process is shown in the figure below.</p>
+<figure class="align-default" id="fig-rfq">
+<a class="reference internal image-reference" href="../_images/rfq.png"><img alt="../_images/rfq.png" src="../_images/rfq.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 3.5 </span><span class="caption-text">Sketch of the RfQ protocol in a MD2C platform with four dealers in competition</span><a class="headerlink" href="#fig-rfq" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Dealers have the following information <em>pre-trade</em>:</p>
+<ul class="simple">
+<li><p>The client’s identity</p></li>
+<li><p>The instrument, size and side for which the client request a quote. There is a special type of RfQs called Request for Market (RfM) where dealers don’t know the side and are requested to quote simultaneously bid and ask quotes.</p></li>
+<li><p>The number of dealers in competition, although they don’t know their identities</p></li>
+<li><p>Some platforms offer a composite of indicative dealer’s quotes for specific sizes, using proprietary methodologies. For instance Bloomberg’s CBBT for bonds or MarketAxess CP Plus. However, they don’t know the actual quotes that dealers in competition are sending to the client.</p></li>
+</ul>
+<p>Once the client decides to trade or walk away, dealer’s have typically access to the following information <em>post-trade</em>:</p>
+<ul class="simple">
+<li><p>If they are chosen to trade, they know the second best price that was quoted by dealers in competition, which is called the <em>cover price</em>. This information is useful to understand how competitive are their prices with respect to other dealers and adjust them if they see consistent biases across many RfQs.</p></li>
+<li><p>If they quoted the second best price (the cover price), they are informed that they were <em>cover</em>, although they don’t get informed of the price at which the client traded.</p></li>
+<li><p>In any other case, they know if the client traded or just walked away, and implicitly that they were not cover since they did not get informed of being cover.</p></li>
+</ul>
+<p>Depending on the instrument and the regulation, dealers are requested to publish later information about trades in public repositories, which typically uphold the information for a time until it is released, which can be as short as 15-20 minutes and as long as multiple days. This is the case for instance for bonds in Europe, where MiFID 2 regulation requests that trades are published in public APAs (Approved Publication Arrangements). In the USA, FINRA has a similar requirement to publish trades in TRACE (Trade Reporting and Compliance Engine). There are also private information sharing schemes like Trax, where dealers willingly share information about trades to get access to information from other dealers, typically with some limitations in instrument universe, aggregation of volumes and prices over time periods, etc.</p>
+</section>
+<section id="request-for-streaming-rfs">
+<h3><span class="section-number">3.4.2. </span>Request for Streaming (RfS)<a class="headerlink" href="#request-for-streaming-rfs" title="Permalink to this heading">#</a></h3>
+<p>A related protocol to RfQ is Request for Streaming, in which  dealers are asked by the client to provide executable prices for a period of time for particular sizes. The client can accept the price at any time.</p>
+</section>
+<section id="strategic-considerations-from-dealers-and-clients">
+<h3><span class="section-number">3.4.3. </span>Strategic considerations from dealers and clients<a class="headerlink" href="#strategic-considerations-from-dealers-and-clients" title="Permalink to this heading">#</a></h3>
+<p>The existence of MD2C platforms for clients has the advantage of providing competition to dealers who are then forced to provide better prices to clients than in proprietary SD2C platforms. However, in practice, clients don’t usually select the maximum number of dealers allowed by the platforms (which can be around 20 or 30). The reason is that doing so has the trade-off of informing multiple dealers of the client’s intention to trade. Even if a dealer does not end up trading with the client, this information might be relevant to consider potential short-term movements in the market, and might be exploited by them although in some jurisdictions this is considering an illegal practice of <em>front running</em> the client.</p>
+<p>Dealers might also be discouraged to quote competitively to win the RfQ when they see a lot of dealers in competition for similar reasons: dealers typically hedge their positions after trading using similar instruments and liquid markets. Therefore, other dealers might take advantage of potential short-term movements in the hedging instruments after trading, and take advantage of them, front running the winning dealer. They will also have a better idea of inventory positions in the market, and therefore potential needs to liquidate them aggressively in adverse scenarios.</p>
+<p>This means that in practice clients tend to carefully balance the number of dealers in competition to get the benefit of competition without providing too many of them with valuable trade information.</p>
+<p>For dealers, the quoting decision has also multiple strategic considerations. Apart from the fact that deciding to trade with multiple dealers in competition might be risky due to potential front-running effects in the hedging instruments, choosing the optimal quote is a complex problem that is actually prone to the use of mathematical and statistical analysis, as we will see in other chapters. For the moment, consider the following trade-off:</p>
+<ul class="simple">
+<li><p>quote too aggressively (i.e. with prices that are more likely to be accepted by the client) and they might trade with the client at the expense of profits.</p></li>
+<li><p>quote too conservatively and they might be consistently out-competed by other dealers.</p></li>
+</ul>
+<p>To find the right balance, dealers tend to monitor metrics like:</p>
+<ul class="simple">
+<li><p><em>hit&amp;miss</em>, i.e. the ratio of trades (hits) with them over the ratio of total trades with other dealers (hits plus misses). A hit&amp;miss that is consistently too high signals a quoting policy that is too aggressive, whereas if it is too low the policy might be too conservative.</p></li>
+<li><p>the <em>distance to the cover price</em>, to analyze how far are they quoting with respect to the next dealer. Small distances to cover are an indication of a healthy pricing policy.</p></li>
+</ul>
+<p>Dealers need to have other considerations in mind when quoting. For instance, some clients typically request quotes without the intention to trade, just to get information about price levels in illiquid instruments (<em>price discovery</em>). Unless dealers are using trading algorithms, it is convenient to flag those clients and don’t spend time providing them quotes.</p>
+<p>Other clients might have hidden information to the dealer when requesting quotes, that will later adversely affect the dealer. For instance, if they are sending a large order to multiple dealers split in small sizes, so each set of dealers only see a part of the full order. As mentioned, when hedging those orders the market for the hedging instruments might have a large price impact from the multiple dealers, costing them profits from the hedging size. In other cases, clients might have consistently better information about short-term price movements due to better market intelligence or insider information. Those flows are therefore <em>adverse</em> or <em>toxic</em> to the dealers, and they need to identify those clients before-hand in order to avoid potential losses in their trading books when trading with them.</p>
+</section>
+<section id="rfq-data">
+<h3><span class="section-number">3.4.4. </span>RfQ Data<a class="headerlink" href="#rfq-data" title="Permalink to this heading">#</a></h3>
+<p>RfQ data is more difficult to come across than order book data since it is proprietary to the dealers quoting. Some agreements have been done in the past between dealers and researchers to share data, but public data is not widely available. RfQ datasets are usually offered in two levels of aggregation:</p>
+<ul class="simple">
+<li><p>Full negotiation history: those typically contain the full history of the negotiation, including intermediate states in which the dealer might update quotes before the client decides to trade.</p></li>
+<li><p>Final negotiation status: in this case, the dataset only offers the final status of the negotiation, i.e. if the client traded with the dealer, traded away or walked away.</p></li>
+</ul>
+<p>In both cases, the dataset typically includes the type or RfQ (RfQ, RfS, RfM), the timestamp of the status update, the client name and/or ID, the instrument name and/or ID, the size, the side, the price quoted by the dealer and the status. Additional information like the composite mid-price provided by the platform and additional market data might also be included.</p>
 </section>
 </section>
-<section id="exercises">
-<h2><span class="section-number">3.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<section id="financial-security-identification-codes">
+<h2><span class="section-number">3.5. </span>Financial Security Identification Codes<a class="headerlink" href="#financial-security-identification-codes" title="Permalink to this heading">#</a></h2>
+<p>To conclude the chapter, let us review various unique identification codes that are used to uniquely identify financial instruments. These codes ensure clarity and reduce errors in transactions:</p>
+<p><strong>Ticker Symbol</strong>: A ticker symbol is a unique identifier assigned to a specific security listed on an exchange or traded publicly. All listed securities have a unique ticker symbol, which facilitates their identification during trading. <strong>Example</strong>: IBM, MSFT</p>
+<p><strong>ISIN (International Securities Identification Number)</strong>:
+The International Securities Identification Number (ISIN) is a globally recognized identifier based on ISO standards. It uniquely identifies a security regardless of its currency or the exchange on which it is traded. However, to specify the exchange, another identifier, such as the Market Identifier Code (MIC), is often required. ISINs are widely used for bonds, equities, warrants, commercial paper, and most listed derivatives. <strong>Example</strong>: LT0000610040</p>
+<p><strong>CUSIP (Committee on Uniform Securities Identification Procedures)</strong>: The CUSIP is an identifier used primarily in the United States to represent stocks and bonds. It consists of nine characters: the first six denote the issuer, the next two specify the type of instrument, and the last is a control digit. <strong>Example</strong>: 008000AA7</p>
+<p><strong>SEDOL (Stock Exchange Daily Official List)</strong>: The SEDOL code is used for securities trading on the London Stock Exchange and other exchanges in the United Kingdom. It is particularly useful for securities not traded in the United States. While SEDOL does not depend on the exchange, the MIC is required for specifying the exchange. <strong>Example</strong>: B0WNLY7</p>
+<p><strong>RIC (Reuters Instrument Code)</strong>: The Reuters Instrument Code (RIC) is a proprietary code used by Reuters to identify financial instruments and indices. It consists of two parts separated by a period (“.”). The first part represents the instrument, while the second, which is optional, denotes the exchange. <strong>Example</strong>: MSFT.OQ</p>
 </section>
 </section>
 
@@ -708,26 +750,24 @@ ensure they can trade fairly</p></li>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">3.1. Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-trading-mechanisms">3.2. Types of trading mechanisms</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-times-and-frequencies">3.3. Trading Times and Frequencies</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#order-driven-markets-and-the-central-limit-order-book-clob">3.3.1. Order-Driven Markets and the Central Limit Order Book (CLOB)</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-structure-of-the-central-limit-order-book-clob">3.3.1.1. The Structure of the Central Limit Order Book (CLOB)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-orders">3.3.1.2. Types of Orders</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-fees">3.3.2. Trading Fees</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-order-book-data">3.3.2.1. Types of Order Book Data</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-and-challenges-of-order-driven-markets">3.3.2.2. Advantages and Challenges of Order-Driven Markets</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-trading-mechanisms">3.1. Types of trading mechanisms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-times-and-frequencies">3.2. Trading Times and Frequencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#order-driven-markets-and-the-central-limit-order-book-clob">3.3. Order-Driven Markets and the Central Limit Order Book (CLOB)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-structure-of-the-central-limit-order-book-clob">3.3.1. The Structure of the Central Limit Order Book (CLOB)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-orders">3.3.2. Types of Orders</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trading-fees">3.3.3. Trading Fees</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-order-book-data">3.3.4. Types of Order Book Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-and-challenges-of-order-driven-markets">3.3.5. Advantages and Challenges of Order-Driven Markets</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quote-driven-markets-the-request-for-quote-protocol">3.4. Quote-driven markets: the Request for Quote protocol</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanics-of-the-request-for-quote-protocol">3.4.1. Mechanics of the Request for Quote protocol</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanics-of-the-rfq-protocol-in-md2c-platforms">3.4.1. Mechanics of the RfQ protocol in MD2C platforms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#request-for-streaming-rfs">3.4.2. Request for Streaming (RfS)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#strategic-considerations-from-dealers-and-clients">3.4.3. Strategic considerations from dealers and clients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rfq-data">3.4.4. RfQ Data</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">3.5. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#financial-security-identification-codes">3.5. Financial Security Identification Codes</a></li>
 </ul>
   </nav></div>
 

@@ -418,7 +418,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-modelling-dynamical-systems">7.1. Introduction: modelling dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-dynamical-systems">7.1. Modelling dynamical systems</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">7.2. Deterministic dynamical systems</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solutions-of-dynamical-systems">7.2.1. Numerical solutions of dynamical systems</a></li>
 </ul>
@@ -461,9 +461,11 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="stochastic-calculus">
 <span id="id1"></span><h1><span class="section-number">7. </span>Stochastic Calculus<a class="headerlink" href="#stochastic-calculus" title="Permalink to this heading">#</a></h1>
-<section id="introduction-modelling-dynamical-systems">
-<span id="modelling-dynamical-systems"></span><h2><span class="section-number">7.1. </span>Introduction: modelling dynamical systems<a class="headerlink" href="#introduction-modelling-dynamical-systems" title="Permalink to this heading">#</a></h2>
-<p>A dynamical system is a set of variables that follow a time dynamics law</p>
+<p>In this chapter we provide an introduction to Stochastic Calculus: a mathematical tool useful to build models of  systems that have a relevant degree of randomness in their evolution, and such randomness is a key determinant of the properties we want to model. The latter is important: the use of Stochastic Calculus complicates the analysis of a model. It is the role of the modeller to assess initially if a deterministic model is sufficient, say because we are just interested in average properties for which randomness averages out and can be neglected. Stochastic Calculus is useful when randomness might generate a variety of outcomes, so we want to study trajectories as scenarios weighted by probability, i.e. probability distributions.</p>
+<p>We start the chapter introducing the study of dynamical systems, focusing initially in those deterministic models that could be a sufficient starting point for the modeller. They are also usually one part of the stochastic model, which as we will see is usually decomposed in a deterministic plus a stochastic dynamics. Then we introduce the Wiener process as a building block to build stochastic models of systems with continuous dynamics. From that, we move into stochastic differential equations as well as a few useful tools to analyze them and solve the probability distributions of their trajectories. There are not many tractable stochastic differential equations, i.e. those whose distribution can be derived in closed-form. We introduce the most typical cases when it is. Finally, we close the chapter introducing jump processes, a second useful tool to model stochastic systems, in this case those that show discontinuities in their dynamics.</p>
+<section id="modelling-dynamical-systems">
+<span id="id2"></span><h2><span class="section-number">7.1. </span>Modelling dynamical systems<a class="headerlink" href="#modelling-dynamical-systems" title="Permalink to this heading">#</a></h2>
+<p>We model a dynamical system a a set of variables that follow a time dynamics law</p>
 <div class="math notranslate nohighlight">
 \[y = f(t,{X_t})\]</div>
 <p>where <span class="math notranslate nohighlight">\(\{X_t\}\)</span> is a set of external factors that influence the trajectory of the system.</p>
@@ -477,14 +479,14 @@ document.write(`
 <div class="math notranslate nohighlight">
 \[dy = \frac{\partial f}{\partial t}dt + \sum_{n=1}^N \frac{\partial f}{\partial X_{i,t}} d X_{i,t}\]</div>
 <p>Modelization can be done empirically or using fundamental laws if available, we will see examples in next section</p>
-<p>The dynamics of the system might not be deterministic. We can also model the dynamics of a stochastic system in the same way. In this case we need to model the source of randomness in the dynamical system, for which we use  stochastic differential equations (SDE) of the form:</p>
+<p>As mentioned, the dynamics of the system might not be deterministic. In this case we need to model the source of randomness in the dynamical system, for which we use  stochastic differential equations (SDE) of the form:</p>
 <div class="math notranslate nohighlight">
 \[d X_t = \mu(X_t, t) dt + \sigma (X_t, t) d W_t\]</div>
 <p>where <span class="math notranslate nohighlight">\(d W_t\)</span> is the Wiener process (Brownian motion) that will be introduced later.</p>
 </section>
 <section id="deterministic-dynamical-systems">
 <h2><span class="section-number">7.2. </span>Deterministic dynamical systems<a class="headerlink" href="#deterministic-dynamical-systems" title="Permalink to this heading">#</a></h2>
-<p>Let us review some relevant deterministic differential equations that come across in the modelization of dynamical systems.</p>
+<p>We will introduce the topic by looking at some relevant deterministic differential equations that come across in the modelization of dynamical systems.</p>
 <p><strong>Example: Newton’s Laws</strong></p>
 <p>A first example comes from Newton’s laws applied to the dynamics of particles in a gravitational field. The second law of Newton states:</p>
 <div class="math notranslate nohighlight">
@@ -794,7 +796,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 <div class="math notranslate nohighlight">
 \[I_{1t} = \lim_{\Delta \rightarrow 0} \sum_{i=0}^{N-1} f(u_i) (W_{u_{i+1}} - W_{u_i})\]</div>
 <p>where <span class="math notranslate nohighlight">\(\Delta = t / N\)</span>, <span class="math notranslate nohighlight">\(u_i = \Delta i\)</span>. This is a sum of independent Gaussian random variables, since by definition the increments of the Wiener process are independent. Therefore its distribution is itself
-Gaussian <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. Its mean is easily computed as:</p>
+Gaussian <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. Its mean is easily computed as:</p>
 <div class="math notranslate nohighlight">
 \[\mathbb{E}[I_{1t}|F_0] = \lim_{\Delta \rightarrow 0}  \sum_{i=0}^{N-1} f(u_i) \mathbb{E}[(W_{u_{i+1}} - W_{u_i})|F_0] =\]</div>
 <p>For the variance, we could simply use the result that the variance of independent variables is the sum of variances, but it is instructive to compute it directly over the discrete expression:</p>
@@ -958,7 +960,7 @@ d Y_s = e^{-\int_t^s r(X_v,v) dv} \frac{\partial u}{\partial  X_s} \sigma(X_s, s
 <p>Here we are essentially shifting and rescaling the Wiener process to describe dynamical systems whose stochastic fluctuations have a deterministic non-zero mean <span class="math notranslate nohighlight">\(mu_t\)</span>
 (drift) and arbitrary variance, the latter controlled by the so-called volatility <span class="math notranslate nohighlight">\(\sigma_t\)</span>. In practice, this is the process to use for any real application of stochastic calculus to model random time-series, since the simple Wiener process is simply too restrictive to describe
 any real process. The name Brownian motion comes actually from the early application of this kind of process to describe the random fluctuations of pollen suspended in water observed by English botanist Robert Brown
-in 1827. The actual modelling of this process would be pioneered by Albert Einstein <span id="id3">[<a class="reference internal" href="references.html#id6" title="A. Einstein. Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen. Annalen der Physik, 322(8):549-560, January 1905. doi:10.1002/andp.19053220806.">5</a>]</span>, in one of the four papers published in 1905, his “annus mirabilis”, each of them transformative of its
+in 1827. The actual modelling of this process would be pioneered by Albert Einstein <span id="id4">[<a class="reference internal" href="references.html#id6" title="A. Einstein. Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen. Annalen der Physik, 322(8):549-560, January 1905. doi:10.1002/andp.19053220806.">5</a>]</span>, in one of the four papers published in 1905, his “annus mirabilis”, each of them transformative of its
 respective field.</p>
 <p>The distribution of <span class="math notranslate nohighlight">\(dS_t\)</span> is easily derived by using the property that multiplying and summing scalars to a Gaussian random variable (<span class="math notranslate nohighlight">\(dW_t\)</span>) yields another Gaussian variable. Hence since <span class="math notranslate nohighlight">\(dW_t \sim N(0, t)\)</span> then
 we have:</p>
@@ -1594,13 +1596,28 @@ df(X_t, t) &amp;= \left( \frac{\partial f}{\partial t} + \mu(X_{t^-}, t) \frac{\
 \end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\Delta X_t = X_t - X_{t^-} = Y\)</span> is the jump size at time <span class="math notranslate nohighlight">\(t\)</span>.</p>
 <p>As we argued in the case of a Wiener process, the derivation can be motivated using a Taylor series expansion on the function for the continuous part, only adding the jump process, which is orthogonal to the continuous stochastic dynamics. When adding the jump component, the function <span class="math notranslate nohighlight">\(f(X_t,t)\)</span> changes discretely, hence the term <span class="math notranslate nohighlight">\(f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t)\)</span> instead of the derivative. We only keep in this case the expansion up to <span class="math notranslate nohighlight">\(dN_t\)</span> since <span class="math notranslate nohighlight">\(\mathbb{E}[dN_t] = \lambda dt\)</span> which is already of order <span class="math notranslate nohighlight">\(O(dN_t)\)</span>, so any extra term in the expansion will have a higher order.</p>
-<p><strong>Simulation</strong></p>
-<p>As mentioned above, one of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously.
-One famous instance of such models incorporating jumps is Merton’s jump diffusion model <span id="id4">[<a class="reference internal" href="references.html#id13" title="Robert Merton. Option pricing when underlying stock returns are discontinuous. Journal of Financial Economics, 3(1-2):125-144, 1976.">6</a>]</span>, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price <span class="math notranslate nohighlight">\(S_t\)</span> is:</p>
+<p><strong>Example: Merton’s jump diffusion model</strong>
+One of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously.</p>
+<p>One famous instance of such models incorporating jumps is Merton’s jump diffusion model <span id="id5">[<a class="reference internal" href="references.html#id13" title="Robert Merton. Option pricing when underlying stock returns are discontinuous. Journal of Financial Economics, 3(1-2):125-144, 1976.">6</a>]</span>, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price <span class="math notranslate nohighlight">\(S_t\)</span> is:</p>
 <div class="math notranslate nohighlight">
 \[dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (Y - 1) \, dN_t,\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the expected return rate, <span class="math notranslate nohighlight">\(\sigma\)</span> is the volatility, <span class="math notranslate nohighlight">\(Y\)</span> is a random variable representing the jump multiplier, and <span class="math notranslate nohighlight">\(dN_t\)</span> indicates the occurrence of a jump, modeled by a Poisson process with intensity <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
-<p>A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, <span class="math notranslate nohighlight">\(\log Y \sim \mathcal{N}(k, \delta^2)\)</span>. The following simulation of the Merton model has been generated using such model.</p>
+<p>A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, <span class="math notranslate nohighlight">\(\log Y \sim \mathcal{N}(k, \delta^2)\)</span></p>
+<p>In order to derive the distribution that follows this process, we can apply Ito’s lemma with jumps to the logarithm of the process, <span class="math notranslate nohighlight">\(f(S_t) = \log S_t\)</span>, as we did analogously with the Geometric Brownian Motion, to which this model reduces in the absence of jumps. Since we have:</p>
+<div class="math notranslate nohighlight">
+\[ \frac{\partial f}{\partial t} = 0\]</div>
+<div class="math notranslate nohighlight">
+\[ \frac{\partial f}{\partial S_t} = \frac{1}{S_t}\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{\partial^2 f}{\partial S_t^2} = - \frac{1}{S_t^2}\]</div>
+<div class="math notranslate nohighlight">
+\[f(S_{t^-} + \Delta S_t, t) - f(S_{t^-}, t)=\log (Y S_{t^-}) - \log (S_{t^-})= \log Y\]</div>
+<p>Then:</p>
+<div class="math notranslate nohighlight">
+\[d \log S_t = (\mu - \frac{\sigma^2}{2} )dt + \sigma dW_t + \log Y dN_t\]</div>
+<p>Therefore, the logarithm of the process follows a more simple dynamics composed of a Brownian motion with drift plus a jump that does not depend on the magnitude of the process. For Merton, this was a convenient way of introducing jumps in the returns of a financial instrument.</p>
+<p><strong>Simulation</strong></p>
+<p>Simulating jump diffusion models is relatively simple given what we have learnt so far, since we can proceed step by step by simulating independently the deterministic, the continuous stochastic and the jump components. The following simulation of the Merton model has been generated using such method.</p>
 <figure class="align-default" id="fig-jump-diffusion">
 <a class="reference internal image-reference" href="../_images/jump_diffusion.png"><img alt="../_images/jump_diffusion.png" src="../_images/jump_diffusion.png" style="width: 8in;" /></a>
 <figcaption>
@@ -1608,8 +1625,8 @@ One famous instance of such models incorporating jumps is Merton’s jump diffus
 </figcaption>
 </figure>
 <p><strong>Applications</strong></p>
-<p>As mentioned, one of the main applications of these models in financial modeling is simulating price series with jumps that might happen due to unexpected news or other disruptions in markets like sudden drops of liquidity. These models can be used to improve pricing and risk management of derivatives, or optimal market-making models. We discussed above that another typical application is modeling the jump to default of a corporation or government. Jump diffusion models are then used to model the impact in traded instruments influenced by credit risk, like bonds issued by those entities or credit default swaps linked to them.</p>
-<p>For more theory or applications of jump diffusion processes, a good reference is that or Cont &amp; Tankov <span id="id5">[<a class="reference internal" href="references.html#id14" title="Rama Cont and Peter Tankov. Financial Modelling with Jump Processes. Chapman &amp; Hall/CRC, 2004.">7</a>]</span>.</p>
+<p>We have already mentioned the application of these models to simulating price series with jumps that might happen due to unexpected news or other disruptions in markets like sudden drops of liquidity. These models can be used to improve pricing and risk management of derivatives, or optimal market-making models. We discussed above that another typical application is modeling the jump to default of a corporation or government. Jump diffusion models are then used to model the impact in traded instruments influenced by credit risk, like bonds issued by those entities or credit default swaps linked to them.</p>
+<p>For more theory or applications of jump diffusion processes, a good reference is that or Cont &amp; Tankov <span id="id6">[<a class="reference internal" href="references.html#id14" title="Rama Cont and Peter Tankov. Financial Modelling with Jump Processes. Chapman &amp; Hall/CRC, 2004.">7</a>]</span>.</p>
 </section>
 </section>
 <section id="exercises">
@@ -1633,8 +1650,8 @@ using the method of the generating function, which we introduce as:</p>
 </li>
 </ol>
 <hr class="footnotes docutils" />
-<aside class="footnote brackets" id="id6" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id7" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
 <p>The demonstration is relatively straight-forward by computing the characteristic function of a sum of independent random Gaussian variables</p>
 </aside>
 </section>
@@ -1703,7 +1720,7 @@ using the method of the generating function, which we introduce as:</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-modelling-dynamical-systems">7.1. Introduction: modelling dynamical systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-dynamical-systems">7.1. Modelling dynamical systems</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deterministic-dynamical-systems">7.2. Deterministic dynamical systems</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solutions-of-dynamical-systems">7.2.1. Numerical solutions of dynamical systems</a></li>
 </ul>

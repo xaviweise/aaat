@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 12.24
+First version of market microstructure chapter finished.
+
 ## 11.24 
 Started chapters on financial markets and market microstructure, with particular emphasis on the central limit order book. Added new notebooks on market microstructure. Added simulation of processes in stochastic calculus chapter
 

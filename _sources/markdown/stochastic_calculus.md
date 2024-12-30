@@ -1,10 +1,15 @@
 (stochastic_calculus)=
 # Stochastic Calculus
 
-(modelling_dynamical_systems)=
-## Introduction: modelling dynamical systems
+In this chapter we provide an introduction to Stochastic Calculus: a mathematical tool useful to build models of  systems that have a relevant degree of randomness in their evolution, and such randomness is a key determinant of the properties we want to model. The latter is important: the use of Stochastic Calculus complicates the analysis of a model. It is the role of the modeller to assess initially if a deterministic model is sufficient, say because we are just interested in average properties for which randomness averages out and can be neglected. Stochastic Calculus is useful when randomness might generate a variety of outcomes, so we want to study trajectories as scenarios weighted by probability, i.e. probability distributions. 
 
-A dynamical system is a set of variables that follow a time dynamics law
+We start the chapter introducing the study of dynamical systems, focusing initially in those deterministic models that could be a sufficient starting point for the modeller. They are also usually one part of the stochastic model, which as we will see is usually decomposed in a deterministic plus a stochastic dynamics. Then we introduce the Wiener process as a building block to build stochastic models of systems with continuous dynamics. From that, we move into stochastic differential equations as well as a few useful tools to analyze them and solve the probability distributions of their trajectories. There are not many tractable stochastic differential equations, i.e. those whose distribution can be derived in closed-form. We introduce the most typical cases when it is. Finally, we close the chapter introducing jump processes, a second useful tool to model stochastic systems, in this case those that show discontinuities in their dynamics.
+
+
+(modelling_dynamical_systems)=
+## Modelling dynamical systems
+
+We model a dynamical system a a set of variables that follow a time dynamics law
 
 $$y = f(t,{X_t})$$ 
 
@@ -24,7 +29,7 @@ $$dy = \frac{\partial f}{\partial t}dt + \sum_{n=1}^N \frac{\partial f}{\partial
 
 Modelization can be done empirically or using fundamental laws if available, we will see examples in next section
 
-The dynamics of the system might not be deterministic. We can also model the dynamics of a stochastic system in the same way. In this case we need to model the source of randomness in the dynamical system, for which we use  stochastic differential equations (SDE) of the form:
+As mentioned, the dynamics of the system might not be deterministic. In this case we need to model the source of randomness in the dynamical system, for which we use  stochastic differential equations (SDE) of the form:
 
 $$d X_t = \mu(X_t, t) dt + \sigma (X_t, t) d W_t$$ 
 
@@ -32,7 +37,7 @@ where $d W_t$ is the Wiener process (Brownian motion) that will be introduced la
 
 ## Deterministic dynamical systems
 
-Let us review some relevant deterministic differential equations that come across in the modelization of dynamical systems.
+We will introduce the topic by looking at some relevant deterministic differential equations that come across in the modelization of dynamical systems.
 
 **Example: Newton's Laws**
 
@@ -1441,16 +1446,33 @@ where $\Delta X_t = X_t - X_{t^-} = Y$ is the jump size at time $t$.
 
 As we argued in the case of a Wiener process, the derivation can be motivated using a Taylor series expansion on the function for the continuous part, only adding the jump process, which is orthogonal to the continuous stochastic dynamics. When adding the jump component, the function $f(X_t,t)$ changes discretely, hence the term $f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t)$ instead of the derivative. We only keep in this case the expansion up to $dN_t$ since $\mathbb{E}[dN_t] = \lambda dt$ which is already of order $O(dN_t)$, so any extra term in the expansion will have a higher order. 
 
-**Simulation**
+**Example: Merton's jump diffusion model**
+One of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously. 
 
-As mentioned above, one of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously. 
 One famous instance of such models incorporating jumps is Merton's jump diffusion model {cite:p}`mertonJumps1976`, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price $S_t$ is:
 
 $$dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (Y - 1) \, dN_t,$$
 
 where $\mu$ is the expected return rate, $\sigma$ is the volatility, $Y$ is a random variable representing the jump multiplier, and $dN_t$ indicates the occurrence of a jump, modeled by a Poisson process with intensity $\lambda$.
 
-A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, $\log Y \sim \mathcal{N}(k, \delta^2)$. The following simulation of the Merton model has been generated using such model.
+A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, $\log Y \sim \mathcal{N}(k, \delta^2)$
+
+In order to derive the distribution that follows this process, we can apply Ito's lemma with jumps to the logarithm of the process, $f(S_t) = \log S_t$, as we did analogously with the Geometric Brownian Motion, to which this model reduces in the absence of jumps. Since we have: 
+
+$$ \frac{\partial f}{\partial t} = 0$$
+$$ \frac{\partial f}{\partial S_t} = \frac{1}{S_t}$$
+$$\frac{\partial^2 f}{\partial S_t^2} = - \frac{1}{S_t^2}$$
+$$f(S_{t^-} + \Delta S_t, t) - f(S_{t^-}, t)=\log (Y S_{t^-}) - \log (S_{t^-})= \log Y$$
+
+Then:
+
+$$d \log S_t = (\mu - \frac{\sigma^2}{2} )dt + \sigma dW_t + \log Y dN_t$$
+
+Therefore, the logarithm of the process follows a more simple dynamics composed of a Brownian motion with drift plus a jump that does not depend on the magnitude of the process. For Merton, this was a convenient way of introducing jumps in the returns of a financial instrument.
+
+**Simulation**
+
+Simulating jump diffusion models is relatively simple given what we have learnt so far, since we can proceed step by step by simulating independently the deterministic, the continuous stochastic and the jump components. The following simulation of the Merton model has been generated using such method.
 
 ```{figure} figures/jump_diffusion.png
 :name: fig:jump_diffusion
@@ -1460,7 +1482,7 @@ Simulation of five paths of a jump diffusion process in a discrete grid with 100
 
 **Applications**
 
-As mentioned, one of the main applications of these models in financial modeling is simulating price series with jumps that might happen due to unexpected news or other disruptions in markets like sudden drops of liquidity. These models can be used to improve pricing and risk management of derivatives, or optimal market-making models. We discussed above that another typical application is modeling the jump to default of a corporation or government. Jump diffusion models are then used to model the impact in traded instruments influenced by credit risk, like bonds issued by those entities or credit default swaps linked to them.
+We have already mentioned the application of these models to simulating price series with jumps that might happen due to unexpected news or other disruptions in markets like sudden drops of liquidity. These models can be used to improve pricing and risk management of derivatives, or optimal market-making models. We discussed above that another typical application is modeling the jump to default of a corporation or government. Jump diffusion models are then used to model the impact in traded instruments influenced by credit risk, like bonds issued by those entities or credit default swaps linked to them.
 
 For more theory or applications of jump diffusion processes, a good reference is that or Cont & Tankov {cite:p}`cont2004financial`. 
 
