@@ -1,0 +1,20 @@
+// RfQ Protocol
+digraph {
+	fontname=Helvetica fontsize=12
+	Client [label=Client color=lightblue fontname=Helvetica fontsize=12 shape=ellipse style=filled]
+	Platform [label=Platform color=lightgrey fontname=Helvetica fontsize=12 shape=box style=filled]
+	Dealer1 [label="Dealer 1" color=lightcoral fontname="Helvetica-Italic" fontsize=12 shape=ellipse style=filled]
+	Dealer2 [label="Dealer 2" color=lightcoral fontname="Helvetica-Italic" fontsize=12 shape=ellipse style=filled]
+	Dealer3 [label="Dealer 3" color=lightcoral fontname="Helvetica-Italic" fontsize=12 shape=ellipse style=filled]
+	Dealer4 [label="Dealer 4" color=lightcoral fontname="Helvetica-Italic" fontsize=12 shape=ellipse style=filled]
+	Client -> Platform [label=RfQ fontcolor=darkblue fontname=Courier fontsize=10]
+	Platform -> Dealer1 [label=RfQ fontcolor=darkblue fontname=Courier fontsize=10]
+	Dealer1 -> Platform [label=Quote1 fontcolor=darkred fontname=Courier fontsize=10]
+	Platform -> Dealer2 [label=RfQ fontcolor=darkblue fontname=Courier fontsize=10]
+	Dealer2 -> Platform [label=Quote2 fontcolor=darkred fontname=Courier fontsize=10]
+	Platform -> Dealer3 [label=RfQ fontcolor=darkblue fontname=Courier fontsize=10]
+	Dealer3 -> Platform [label=Quote3 fontcolor=darkred fontname=Courier fontsize=10]
+	Platform -> Dealer4 [label=RfQ fontcolor=darkblue fontname=Courier fontsize=10]
+	Dealer4 -> Platform [label=Quote4 fontcolor=darkred fontname=Courier fontsize=10]
+	Platform -> Client [label=Quotes fontcolor=darkred fontname=Courier fontsize=10]
+}

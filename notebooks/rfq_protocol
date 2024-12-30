@@ -1,0 +1,22 @@
+// RfQ Protocol
+digraph {
+	Client [label=Client color=lightblue shape=ellipse style=filled]
+	Platform [label=Platform color=lightgreen shape=box style=filled]
+	Dealer1 [label="Dealer 1" color=lightcoral shape=ellipse style=filled]
+	Dealer2 [label="Dealer 2" color=lightcoral shape=ellipse style=filled]
+	Dealer3 [label="Dealer 3" color=lightcoral shape=ellipse style=filled]
+	Dealer4 [label="Dealer 4" color=lightcoral shape=ellipse style=filled]
+	Dealer5 [label="Dealer 5" color=lightcoral shape=ellipse style=filled]
+	Client -> Platform [label=RfQ]
+	Platform -> Dealer1 [label="To Dealer 1"]
+	Dealer1 -> Platform [label="Quote 1"]
+	Platform -> Dealer2 [label="To Dealer 2"]
+	Dealer2 -> Platform [label="Quote 2"]
+	Platform -> Dealer3 [label="To Dealer 3"]
+	Dealer3 -> Platform [label="Quote 3"]
+	Platform -> Dealer4 [label="To Dealer 4"]
+	Dealer4 -> Platform [label="Quote 4"]
+	Platform -> Dealer5 [label="To Dealer 5"]
+	Dealer5 -> Platform [label="Quote 5"]
+	Platform -> Client [label="Best Quote or Walk Away"]
+}

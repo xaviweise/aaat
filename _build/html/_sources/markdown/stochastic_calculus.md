@@ -1356,7 +1356,7 @@ In many applications, events not only occur randomly over time but also have ran
 
 A compound Poisson process $X_t$ is defined as:
 
-$$X_t = \sum_{i=1}^{N_t} Y_i,$$
+$$J_t = \sum_{i=1}^{N_t} Y_i$$
 
 where:
 
@@ -1381,18 +1381,18 @@ This result can be proven simply by conditioning the expected value on $N$:
 $$\mathbb{E}[x_1 + ... + x_N] = \sum_{n=0}^\infty P(N=n) \mathbb{E}[x_1 + ... + x_N|N]  \nonumber \\ = \sum_{n=0}^\infty P(N=n) N \mathbb{E}[x_1] = \mathbb{E}[N] \mathbb{E}[x_1]$$
 where we have used that $\mathbb{E}[x_1]$ is independent of $N$. Coming back to the definition of compound Poisson process: 
 
-$$\mathbb{E}[X_t] = \mathbb{E}[N_t] \mathbb{E}[Y_i] = \lambda t \mathbb{E}[Y_i]$$
+$$\mathbb{E}[J_t] = \mathbb{E}[N_t] \mathbb{E}[Y_i] = \lambda t \mathbb{E}[Y_i]$$
 
 A similar reasoning can be applied to the variance: 
 
 $$
-\mathbb{Var}(X_t) = \mathbb{E}[N_t] \mathbb{Var}(Y_i) + \mathbb{Var}(N_t) \left( \mathbb{E}[Y_i] \right)^2 = \lambda t \left( \mathbb{Var}(Y_i) + \left( \mathbb{E}[Y_i] \right)^2 \right)
+\mathbb{Var}(J_t) = \mathbb{E}[N_t] \mathbb{Var}(Y_i) + \mathbb{Var}(N_t) \left( \mathbb{E}[Y_i] \right)^2 = \lambda t \left( \mathbb{Var}(Y_i) + \left( \mathbb{E}[Y_i] \right)^2 \right)
 $$
 
 
 **Simulation:**
 
-To simulate a compound Poisson process we simulate first  the number of events $N_t$ occurring up to time $t$ using a Poisson distribution with parameter $\lambda t$. Then, for each event $i = 1, \dots, N_t$, we sample a jump size $Y_i$ from the specified distribution. Finally, we sum the jump sizes to obtain $X_t = \sum_{i=1}^{N_t} Y_i$.
+To simulate a compound Poisson process we simulate first  the number of events $N_t$ occurring up to time $t$ using a Poisson distribution with parameter $\lambda t$. Then, for each event $i = 1, \dots, N_t$, we sample a jump size $Y_i$ from the specified distribution. Finally, we sum the jump sizes to obtain $J_t = \sum_{i=1}^{N_t} Y_i$.
 
 A result of such simulation is shown in the following figure, with jumps being driven by an exponential model.
 
@@ -1415,14 +1415,14 @@ where:
 - $\mu(X_{t^-}, t)$ is the drift coefficient, representing the deterministic trend.
 - $\sigma(X_{t^-}, t)$ is the diffusion coefficient, representing the volatility.
 - $W_t$ is a Wiener process
-- $dJ_t$ represents the jump component.
+- $J_t$ represents the jump component, with $J_t$ a compound Poisson process $J_t =  \sum_{i=1}^{N_t} Y_i$
 - $X_{t^-}$ denotes the value of $X_t$ just before time $t$, accounting for any discontinuities at $t$.
 
-The jump component $dJ_t$ is often modeled using a compound Poisson process:
+As with the Wiener process, the differential of the jump process is a shorthand notation for $dJ_t = J_{t+dt} - J_t$, i.e. the number of jumps happening between $t$ and $t+dt$. As we saw above, in a compound Poisson process since the intensity is $\lambda dt$ only one or zero jumps are possible in the limit $dt \rightarrow 0$. Therefore, we can simply write: 
 
-$$dJ_t = J \, dN_t = \sum_{i=1}^{N_t} Y_i$$
+$$dJ_t = Y \, dN_t$$
 
-where as before $N_t$ is a Poisson process with intensity $\lambda$, $Y_i$ are i.i.d. random variables representing the jump sizes, and we have $J = Y_i$ when a jump occurs at time $t$.
+with $P(dN_t = 1) = \lambda dt$.
 
 **Ito's Lemma with Jumps**
 
@@ -1437,7 +1437,7 @@ df(X_t, t) &= \left( \frac{\partial f}{\partial t} + \mu(X_{t^-}, t) \frac{\part
 \end{align*}
 $$
 
-where $\Delta X_t = X_t - X_{t^-} = J$ is the jump size at time $t$.
+where $\Delta X_t = X_t - X_{t^-} = Y$ is the jump size at time $t$.
 
 As we argued in the case of a Wiener process, the derivation can be motivated using a Taylor series expansion on the function for the continuous part, only adding the jump process, which is orthogonal to the continuous stochastic dynamics. When adding the jump component, the function $f(X_t,t)$ changes discretely, hence the term $f(X_{t^-} + \Delta X_t, t) - f(X_{t^-}, t)$ instead of the derivative. We only keep in this case the expansion up to $dN_t$ since $\mathbb{E}[dN_t] = \lambda dt$ which is already of order $O(dN_t)$, so any extra term in the expansion will have a higher order. 
 
@@ -1446,11 +1446,11 @@ As we argued in the case of a Wiener process, the derivation can be motivated us
 As mentioned above, one of the main applications of jump diffusion models in the financial context is to model jumps in financial instruments that otherwise diffuse continuously. 
 One famous instance of such models incorporating jumps is Merton's jump diffusion model {cite:p}`mertonJumps1976`, which model the dynamics of the asset with a Geometric Brownian Motion with jumps in the returns. The SDE for the asset price $S_t$ is:
 
-$$dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (J - 1) \, dN_t,$$
+$$dS_t = \mu S_{t^-} \, dt + \sigma S_{t^-} \, dW_t + S_{t^-} (Y - 1) \, dN_t,$$
 
-where $\mu$ is the expected return rate, $\sigma$ is the volatility, $J$ is a random variable representing the jump multiplier, and $dN_t$ indicates the occurrence of a jump, modeled by a Poisson process with intensity $\lambda$.
+where $\mu$ is the expected return rate, $\sigma$ is the volatility, $Y$ is a random variable representing the jump multiplier, and $dN_t$ indicates the occurrence of a jump, modeled by a Poisson process with intensity $\lambda$.
 
-A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, $\log J \sim \mathcal{N}(k, \delta^2)$. The following simulation of the Merton model has been generated using such model.
+A typical choice to model jumps in this setup is using a log-normal distribution for the jumps, $\log Y \sim \mathcal{N}(k, \delta^2)$. The following simulation of the Merton model has been generated using such model.
 
 ```{figure} figures/jump_diffusion.png
 :name: fig:jump_diffusion

@@ -68,7 +68,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="4. Algorithmic Trading" href="algorithmic_trading.html" />
-    <link rel="prev" title="2. Financial Instruments" href="intro_financial_instruments.html" />
+    <link rel="prev" title="2. Mechanics of Financial Instruments" href="intro_financial_instruments.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -174,7 +174,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Markets Fundamentals</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro_financial_markets.html">1. Financial Markets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro_financial_instruments.html">2. Financial Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_financial_instruments.html">2. Mechanics of Financial Instruments</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">3. Market microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithmic_trading.html">4. Algorithmic Trading</a></li>
 </ul>
@@ -433,7 +433,10 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quote-driven-markets-the-request-for-quote-protocol">3.4. Quote-driven markets: the Request for Quote protocol</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quote-driven-markets-the-request-for-quote-protocol">3.4. Quote-driven markets: the Request for Quote protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanics-of-the-request-for-quote-protocol">3.4.1. Mechanics of the Request for Quote protocol</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">3.5. Exercises</a></li>
 </ul>
             </nav>
@@ -479,7 +482,7 @@ ensure they can trade fairly</p></li>
 <p>One version of a hybrid market includes quote-driven mechanisms where dealers post executable prices. Unlike indicative quotes, these prices are firm and represent actual tradeable prices for specified quantities. This arrangement provides certainty for investors, especially when trading in large quantities or illiquid instruments, where the guarantee of liquidity from a dealer can be critical.</p>
 <p>In another version of a hybrid market, dealers are obligated to participate in an order-driven system. They act as liquidity providers, continually placing passive two-way orders (both buy and sell orders) on the public order book. These dealers, often referred to as market makers, must post prices even when the market is quiet, ensuring that there is always liquidity available. This contractual obligation to provide liquidity helps maintain market stability and reduces the risk of sudden price jumps due to a lack of counter-party interest.</p>
 <p>Hybrid markets strike a balance between dealer-driven liquidity provision and the transparency and efficiency of an order book system. They are commonly used in highly liquid markets, such as foreign exchange platforms and some modern equity exchanges, where large institutional players need the certainty of liquidity alongside the openness of an order-driven market.</p>
-<p><strong>The rationale for each trading mechanism</strong></p>
+<p><strong>Why two different market microstructures?</strong></p>
 <p>Each of these trading mechanisms serves different types of markets and participants. Quote-driven markets are particularly useful for illiquid or over-the-counter products, where large trades and custom negotiations are common. Order-driven markets thrive in environments with high trading volumes and transparency, offering fast execution and price discovery through collective action. Hybrid markets bring together the strengths of both systems, ensuring liquidity and fairness even in challenging trading conditions. Understanding these mechanisms is crucial for anyone looking to navigate today’s financial markets.</p>
 </section>
 <section id="trading-times-and-frequencies">
@@ -504,7 +507,7 @@ ensure they can trade fairly</p></li>
 <p>In some markets, trading does not happen on a continuous or scheduled basis but instead occurs <strong>at the discretion of the client</strong>. This model, known as <strong>request-driven trading</strong>, is often used in over-the-counter (OTC) markets for instruments that are not frequently traded or have specialized liquidity needs.</p>
 <p>In request-driven trading, a client requests a quote or a trade from a dealer at a specific time, and the dealer responds with a price. The trade is executed based on this interaction, often involving some negotiation over the size or price of the transaction. This model is common in markets for customized or illiquid products, such as large blocks of bonds or structured financial instruments, where finding a counter-party may not be straightforward.</p>
 <p>Request-driven trading provides flexibility for both clients and dealers, allowing them to negotiate trades that meet specific needs. However, it lacks the transparency and immediacy of continuous or auction-based systems, as each trade is typically a private transaction between the client and the dealer.</p>
-<p><strong>The rationale behind these choices</strong></p>
+<p><strong>Trade-offs</strong></p>
 <p>The choice of trading frequency and timing mechanism reflects the unique characteristics of each market and the needs of its participants. Continuous trading offers fast execution and real-time price discovery, while scheduled auctions and request-driven trading provide alternatives that manage liquidity and volatility more effectively under specific conditions. Understanding these mechanisms is crucial for market participants seeking to navigate the intricacies of different trading environments.</p>
 <section id="order-driven-markets-and-the-central-limit-order-book-clob">
 <h3><span class="section-number">3.3.1. </span>Order-Driven Markets and the Central Limit Order Book (CLOB)<a class="headerlink" href="#order-driven-markets-and-the-central-limit-order-book-clob" title="Permalink to this heading">#</a></h3>
@@ -606,7 +609,6 @@ ensure they can trade fairly</p></li>
 <li><p><strong>Level II</strong>: More advanced, this level displays multiple bid and ask levels beyond the best prices, giving insight into the market depth.</p></li>
 <li><p><strong>Level III</strong>: The most detailed level of data, showing individual orders, their sizes, prices, and time stamps. This information is typically used by algorithmic traders and market makers to track the behavior of specific market participants.</p></li>
 </ul>
-<p><strong>Tick Data</strong></p>
 <p>Historical data from order books is called <strong>tick data</strong>, and captures every change that occurs in the order book. It is  provided by the exchanges or via financial data companies like LSEG (ex Refinitiv) and Bloomberg, which aggregate and normalize this data.  There are also free resources with samples of data like Lobster.</p>
 <p>Tick data generally comes in two forms:</p>
 <ul class="simple">
@@ -624,6 +626,19 @@ ensure they can trade fairly</p></li>
 </section>
 <section id="quote-driven-markets-the-request-for-quote-protocol">
 <h2><span class="section-number">3.4. </span>Quote-driven markets: the Request for Quote protocol<a class="headerlink" href="#quote-driven-markets-the-request-for-quote-protocol" title="Permalink to this heading">#</a></h2>
+<p>Central Limit Order Books have become the cornerstone of market microstructure given their efficiency in matching continuously buying and selling interest, while at the same time offering valuable information for price and liquidity discovery to other investors and market participants. However, for their well functioning they rely on having enough liquidity in the form of visible bid and ask limit orders. A relatively empty order book discourages other investors to post their orders, becoming a self-fulfilling prophecy. It also becomes less useful as an engine for price and liquidity discovery. Market operators and even Governments try to incentive this market structure, for instance by offering attractive fees to liquidity providers like banks in exchange of keeping bid and ask limit orders most of the time in a trading session.</p>
+<p>However, for some financial instruments this is insufficient. Take corporate bonds. Companies usually only issue a single stock, but might have hundreds of different bonds in circulation with different maturities, coupon types, amortization types and contractual clauses. They do so to attract different type of lenders and adapt to specific economic conditions and / or forecasts. As a result, many of those bonds trade very infrequently, making central limit order book relatively useless for market participants to find counter-parties to trade with. The same happens, for example, with most but the less standard derivatives.</p>
+<p>The market solution to trade those instruments has been traditionally to rely on intermediaries:</p>
+<ul class="simple">
+<li><p><em>Brokers</em>, who have an extensive network of market participants that use to find a potential match to an order, charging a commission for the service</p></li>
+<li><p><em>Dealers</em>, typically banks, who are willing to buy at a discount or sell at a premium, keeping the instruments in their inventory until a counter-party is found. Therefore, in contrast with brokers, they take on inventory risk since they don’t typically can liquidate the position taken quickly, sometimes keeping inventory holdings for extensive periods of time.</p></li>
+</ul>
+<p>Investors who want to trade illiquid financial instruments would contact brokers or dealers by “voice” (which nowadays means usually by email or chat, sometimes by phone), requesting them quotes and in case of matching interests, trading over the counter, i.e. bilaterally out of market structures.</p>
+<p>Whereas this is still the case for some financial instruments, with the advent of electronification in financial markets, broker-dealers started building electronic platforms to allow their clients to request them quotes. Such <em>single-dealer-to-client</em> (SD2C) platforms have the advantage of simplifying and automatic partly both price discovery, trading and settling later the trade, but being proprietary of the broker-dealer, clients were potentially missing the benefit of competition, unless they kept multiple accounts with different broker-dealers.</p>
+<p>This opened up a business opportunity of creating electronic <em>multi-dealer-to-client</em> (MD2C) platforms, where clients can request quotes simultaneously to multiple dealers in competition. To make clients select them as dealers, broker-dealers typically also provide indicative streams of prices for standard volumes of the contract, which are helpful for price discovery. Therefore, those platforms operated by providers like Bloomberg, Market-Axess or Tradeweb, have become the standard alternative to centralized exchanges based on the Central Limit Order Book for illiquid instruments. At the heart of the platform is a standard $request for quote* (RfQ) protocol to interact between client and broker-dealers.</p>
+<section id="mechanics-of-the-request-for-quote-protocol">
+<h3><span class="section-number">3.4.1. </span>Mechanics of the Request for Quote protocol<a class="headerlink" href="#mechanics-of-the-request-for-quote-protocol" title="Permalink to this heading">#</a></h3>
+</section>
 </section>
 <section id="exercises">
 <h2><span class="section-number">3.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
@@ -666,7 +681,7 @@ ensure they can trade fairly</p></li>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">2. </span>Financial Instruments</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Mechanics of Financial Instruments</p>
       </div>
     </a>
     <a class="right-next"
@@ -708,7 +723,10 @@ ensure they can trade fairly</p></li>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quote-driven-markets-the-request-for-quote-protocol">3.4. Quote-driven markets: the Request for Quote protocol</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quote-driven-markets-the-request-for-quote-protocol">3.4. Quote-driven markets: the Request for Quote protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mechanics-of-the-request-for-quote-protocol">3.4.1. Mechanics of the Request for Quote protocol</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">3.5. Exercises</a></li>
 </ul>
   </nav></div>
