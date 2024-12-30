@@ -1,7 +1,5 @@
 # Financial Markets
 
-## Introduction
-
 Financial markets are a solution to a problem perennial to our
 societies: the efficient channelling of savings into productive uses.
 Legal and natural persons who have excess cash seek to obtain the maximum returns (investment) with the maximum availability (liquidity).
@@ -48,10 +46,6 @@ In this process, financial markets not only provide of a mechanism for investors
 other markets), the price of a financial instrument is what two willing parties agree to transact, independently of the subjective value that each of them place on the instrument. Of course, by pulling multiple investors in the same place to negotiate, financial markets channel multiple speculative ways about the value of a financial instrument into
 an actual price. These prices can guide investors about future
 decisions.
-
-Certainly! Here's an expanded version of the section while maintaining the main ideas:
-
----
 
 ## Who Participates in Financial Markets?
 
@@ -111,16 +105,61 @@ Although cryptocurrencies themselves are not classified as financial instruments
 
 ## Market structures
 
-## Equity market structure
+Market structures play a critical role in the functioning of financial markets, influencing how participants interact and how trades are executed. Traditionally, markets have been organized to accommodate the needs of intermediaries, such as dealers, who facilitate trading by providing liquidity. However, market structures have evolved significantly, shaped by technology, competition, and regulatory changes.
 
-## Fixed income market structure
+Financial markets can broadly be categorized into three main structures based on the role of intermediaries and the nature of participation:
 
-## FX market structure
+### Inter-Dealer Markets
 
-## Derivatives markets structure
+Inter-dealer markets are venues where intermediaries, often referred to as dealers or market makers, trade exclusively with each other. The primary purpose of these markets is to allow dealers to manage their inventories effectively, enabling them to better serve their clients in dealer-to-client markets. The main types of inter-dealer markets are Exchanges and inter-dealer broker networks.
 
-## Crypto market structure
+**Direct Market Access**: While traditionally exclusive to dealers, some inter-dealer markets now allow institutional investors to participate directly through membership or other access arrangements.
+
+### Dealer-to-Client Markets
+
+Dealer-to-client markets are the most common venues where intermediaries interact with investors, including institutional and retail clients. Here, dealers act as liquidity providers, offering quotes to clients who wish to buy or sell financial instruments.
+
+These markets are typically either quote-driven, where prices are determined by dealers, or order-driven, where buyers and sellers are matched directly. Increasingly, electronic platforms have replaced traditional voice-based trading, improving efficiency and transparency.
+
+### Alternative Markets
+
+Alternative markets represent a significant departure from traditional market structures by eliminating the segmentation between dealers and clients. These markets are often referred to as "all-to-all" trading platforms because they allow any participant—dealer or client—to interact and trade under the same conditions.
+
+Alternative markets have gained prominence due to technological advancements and regulatory pressures aimed at increasing competition and reducing trading costs. These markets often provide a mix of trading mechanisms, such as order books or dark pools, that facilitate liquidity without relying exclusively on dealers.
+
+### The Evolution of Market Structures
+
+Market structures have evolved through several stages, driven by the interplay of standardization, technological progress, competition, and regulation:
+
+1. **Single-Dealer to Client**: Initially, trading was dominated by single-dealer platforms, where clients could only trade directly with one intermediary. These structures were common in the early stages of market development or for niche and complex products.
+   
+2. **Multi-Dealer to Client**: As markets matured, competition among dealers increased, leading to platforms that allowed clients to interact with multiple dealers simultaneously. This structure enhanced price transparency and liquidity for investors.
+
+3. **Dealer-to-Dealer Markets**: The rise of inter-dealer markets enabled dealers to manage their inventories more effectively, creating a robust secondary layer of liquidity. Over time, some of these markets allowed direct access to clients through mechanisms like direct market access (DMA).
+
+4. **All-to-All Markets**: Recent regulatory reforms, such as MiFID II in Europe and Reg NMS in the USA, have encouraged the development of all-to-all markets. These structures aim to lower trading costs by eliminating intermediary fees and creating a more level playing field for all participants.
+
+### Key Trends Shaping Modern Market Structures
+
+Modern market structures are influenced by three key trends:
+
+**Accessibility**: The shift toward all-to-all markets has made it easier for participants to access liquidity directly, bypassing traditional intermediaries.
+
+**Transparency**: Regulatory frameworks, particularly in Europe and the USA, have emphasized greater transparency in trading, requiring platforms to disclose pricing and trade information.
+
+**Technological Advancements**: The move from voice-based trading to electronic platforms has transformed the efficiency and scalability of markets. Electronic trading systems now dominate most asset classes, enabling faster execution and broader market participation.
+
+## Overview of market structures per asset class
+
+### Equity market structure
+
+### Fixed income market structure
+
+### FX market structure
+
+### Derivatives markets structure
+
+### Crypto market structure
 
 ## Regulation of financial markets
 
-## Exercises
