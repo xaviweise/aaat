@@ -150,7 +150,9 @@ In Europe, MiFID II four types of market structure are defined:
 * **Multilateral Trading Facilities** (MTFs): similar to ATS in the USA regulation, e.g. covering non-exchange trading venues like ECNs and dark pools. European regulation also introduces the concept of **Organized Trading Facilities** (OTFs), restricted to non-equities instruments and with more lax requirements, but in terms of structure is similar to MTFs. 
 * **Systematic Internalizers** (SIs): not strictly a market structure, when a broker or dealer executes orders on own account outside of RMs, MTFs or OTFs. 
 
-## Exchanges
+## The main building blocks of financial market structure
+
+### Exchanges
 
 Exchanges (also known are regulated markets) are among the oldest institutions in financial markets, serving as centralized venues where buyers and sellers meet to trade financial instruments. They provide a structured environment for trading, ensuring transparency, fairness, and efficiency in the execution of transactions. Historically, exchanges were physical locations where traders gathered to negotiate prices through verbal communication and hand signals. Over time, these systems evolved into highly sophisticated electronic platforms that now dominate the financial landscape.
 
@@ -168,7 +170,7 @@ While exchanges offer many advantages, including transparency, reduced counterpa
 
 Despite these challenges, exchanges continue to be a cornerstone of financial markets. Their ability to adapt to technological advancements and regulatory shifts ensures their relevance in an ever-changing landscape. By providing a centralized and regulated platform for trading, exchanges remain indispensable for fostering market confidence and maintaining the integrity of financial systems.
 
-## Inter-Dealer Broker Networks (IDBs)
+### Inter-Dealer Broker Networks (IDBs)
 
 Inter-dealer broker (IDB) networks play a crucial role in financial markets by acting as intermediaries between dealers, facilitating transactions that would otherwise be difficult to execute directly. These networks are particularly important in over-the-counter (OTC) markets, where trading is less centralized and often involves complex, less standardized financial instruments.
 
@@ -184,7 +186,7 @@ In recent years, regulatory changes and technological advancements have reshaped
 
 Despite these shifts, inter-dealer broker networks remain a cornerstone of financial markets, providing critical infrastructure for OTC trading. They ensure that dealers can manage risk, adjust positions, and execute large trades without destabilizing markets. As technology continues to advance, these networks are likely to evolve further, integrating new tools to enhance their efficiency and adaptability while continuing to fulfill their essential role in the financial system.
 
-## Electronic Communication Networks (ECNs)
+### Electronic Communication Networks (ECNs)
 
 Electronic Communication Networks (ECNs) are digital platforms that connect buyers and sellers directly, providing a decentralized and efficient mechanism for trading financial instruments. As traditional exchanges have become electronic trading venues, the differences between them and ECNs is blurring. Both of them typically operate as "lit" platforms, based on order books that are fully transparent, offering real-time insights into market depth and pricing. The main differences are essentially:
 * the role of intermediaries like brokers or dealers, who have a monopoly of access and a dominant role as market-makers in exchanges
@@ -200,7 +202,7 @@ Despite their many benefits, ECNs face challenges, including market fragmentatio
 
 Nevertheless, ECNs have fundamentally reshaped financial markets by increasing accessibility, reducing transaction costs, and fostering competition. They have become a cornerstone of modern trading, offering a blend of transparency, efficiency, and innovation. As markets evolve, ECNs will likely continue to expand their reach, further blurring the lines between traditional and alternative trading venues.
 
-## Dark Pools
+### Dark Pools
 
 Dark pools are private trading venues where buy and sell orders are matched without being publicly displayed. These platforms operate outside traditional exchanges and are designed to provide anonymity and minimize market impact, particularly for large trades. Dark pools have become an essential part of the financial ecosystem, catering primarily to institutional investors who seek to execute sizable orders without revealing their intentions to the broader market.
 
@@ -224,7 +226,7 @@ Technological advancements have also shaped the evolution of dark pools. Many no
 
 In summary, dark pools play a critical role in modern financial markets, providing a valuable tool for institutional investors to execute large trades with minimal market impact. While they continue to face challenges related to transparency and regulation, their importance in facilitating efficient and discreet trading ensures they remain a key component of the trading landscape.
 
-## Systematic Internalizers
+### Systematic Internalizers
 
 A Systematic Internalizer is an investment firm that executes client orders internally, using its own capital, rather than routing those orders to external trading venues like exchanges or Multilateral Trading Facilities (MTFs). Unlike traditional trading venues, SIs do not operate a central order book where multiple participants interact; instead, they provide quotes bilaterally to their clients.
 
