@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 01.25
+First version of intro to financial markets and market structure chapter finished.
+
 ## 12.24
 First version of market microstructure chapter finished.
 
