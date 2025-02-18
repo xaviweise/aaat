@@ -1,10 +1,6 @@
 # Financial Markets
 
-Financial markets are a solution to a problem perennial to our
-societies: the efficient channelling of savings into productive uses.
-Legal and natural persons who have excess cash seek to obtain the maximum returns (investment) with the maximum availability (liquidity).
-Therefore, they would prefer to lend money short - term. Those however who need cash in order to fund their ventures (new companies, new business plans for existing companies, acquisition of assets like houses via mortgages, social programs, etc) prefer to pay the minimal
-compensation possible and retain the funds for long-term. The lack of a mechanism to be able to accommodate those opposing objectives might lead to a society where excess funds remain idle instead of being channeled to productive uses.
+Financial markets address a perennial challenge faced by societies: the efficient allocation of savings toward productive uses. Individuals and institutions with excess funds aim to achieve the highest returns (investment) while maintaining maximum liquidity. Consequently, they often prefer to lend money on a short-term basis. Conversely, those requiring capital—whether to launch new ventures, expand existing businesses, acquire assets such as homes through mortgages, or finance social programs—seek to secure funds at minimal cost and for extended periods. Without a mechanism to reconcile these opposing objectives, surplus funds may remain idle, hindering their potential to contribute to economic productivity.
 
 Modern capitalist societies solve this problem in two ways, which form the backbone of the financial system: the banking system and financial markets.
 
@@ -459,7 +455,7 @@ Market globalization introduces additional complexity. Cross-border trading, glo
 * **Regulating Emerging Technologies**: **Electronic and Algorithmic Trading** were among the first major technological advances disrupting the workings of financial markets. Their regulation has been addressed by sections of the USA and European frameworks mentioned above. In particular, the most comprehensive regulation of Algorithmic Trading has been tackled by a specific section of MiFID 2, RTS-6, as we will discuss in the specific chapter introducing this technology. More recently, the rise of **cryptocurrencies and decentralized finance (DeFi)** has prompted new regulatory efforts. Jurisdictions like the European Union are leading with frameworks such as the Markets in Crypto-Assets Regulation (MiCA), while others, like the United States, are still defining comprehensive policies. 
 **Artificial Intelligence**, particularly the use of Large Language Models (LLMs) and agent-based frameworks for trading, is expected to be the next major chapter of regulatory oversight.
 * **Environmental, Social, and Governance (ESG)** Regulation: As sustainable investing gains traction, regulators are focusing on mandating ESG disclosures and preventing green-washing. Europe’s Sustainable Finance Disclosure Regulation (SFDR) is a leading example.
-* **Data and Cybersecurity**: The reliance on digital platforms and cloud-based systems has increased regulatory focus on data protection, cybersecurity, and operational resilience. Here, specific regulatory frameworks like the European Union's Data General Protection Regulation (DGPR) also have an impact in the financial markets. 
+* **Data and Cybersecurity**: The reliance on digital platforms and cloud-based systems has increased regulatory focus on data protection, cybersecurity, and operational resilience. Here, specific regulatory frameworks like the European Union's General Data Protection Regulation (GDPR) also have an impact in the financial markets. 
 * **Retail Investor Protection**: The surge in retail trading, driven by platforms like Robinhood, is prompting new rules on transparency, execution quality, and the specific regulation of practices like payment for order flow (PFOF).
 
 

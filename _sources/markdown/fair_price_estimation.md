@@ -8,28 +8,139 @@ For flow products that are relatively liquid, we can aim at extracting all the p
 
 The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair price, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair price is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide of liquidity is thin in the first levels, such estimation is not necessary very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability. 
 
-These makes all these price observations noisy estimates of the fair price, so if we want to estimate a fair price out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what a Kalman filter does. 
-
-### Pricing sources and models
-
-#### LOB traded
-
-
-#### RfQ traded
-
-##### Composites
-
-##### RfQs
-
-##### Trades
-
-##### HitMiss
-
-#### Correlated instruments
+These makes all these price observations noisy estimates of the fair price, so if we want to estimate a fair price out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what, under certain model assumptions, a Kalman filter does. 
 
 ### The Kalman Filter model for pricing
 
-The Kalman filter was introduced in chapter ... 
+The Kalman filter was introduced in the chapter on [Bayesian Theory](#intro_bayesian). It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM). 
+
+Recall that a *State Space Model (SSM)* is a model to describe dynamic systems where we have a non or partially observable state, a vector ${\bold x}$, whose dynamics in time is described by a so-called transition equation:
+
+$$ {\bold x}_{t+\Delta t} = f({\bold x}_t, {\bold u}_t) + {\bold \epsilon}_t$$
+
+where $f({\bold x}_t, {\bold u}_t)$ is a general function, ${\bold u}_t$ are inputs (or controls) that affect the dynamics, $\Delta t$ is the time-step between observations, and ${\bold \epsilon}_t$ is a transition noise with a given distribution. The state is observed indirectly via a proxy vector ${\bold y}$ via the observation equation:
+
+$${\bold y}_t = g({\bold x}_t, {\bold u}_t)  + {\bold \eta}$$
+
+where $g({\bold x}_t, {\bold u}_t)$ is another general function and ${\bold \eta}_t$ the observation noise, meaning that observations have a degree of uncertainty with respect to the latent space.
+
+A *Linear Gaussian Model (LGM)* is a specific case of the SSM were both the transition and observation functions are linear and the noise terms are Gaussian. In this case, we can use the Kalman filter algorithm to compute the distribution of the state vector at any time, given the observations and the transition and observation model. If some or all the parameters of these models are not known, they can be estimated using standard techniques like Maximum Likelihood Estimation (MLE) or Expectation Maximization (EM) when the former becomes computationally intractable due to the latent state vector.
+
+For non-Linear Gaussian Models, there are extensions of the Kalman filter that can be used: 
+
+* Extended Kalman Filter (EKF): Extends the Kalman Filter to non-linear state space models by linearizing the dynamics and observation models around the current estimate using Taylor expansions. 
+
+* Unscented Kalman Filter (UKF): Avoids linearization by using deterministic sampling to approximate the state distribution.
+
+#### A simple pricing model
+
+Let us consider a simple setup where we aim to infer the distribution of the mid-price $m_t$ of a financial instrument that follows a random walk:
+
+$$m_{t+\Delta t} = m_t + \epsilon_t, \epsilon_t \sim N(0, \sigma_\epsilon^2 \Delta t)$$
+
+We don't observe this mid-price, only trades which we consider noisy observation of the mid since they include transaction costs and potentially other external factors like dealer inventory positions, etc:
+
+$$p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)$$
+
+For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
+
+$$\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+$$
+
+where $\sigma_p$ is a baseline observation noise and $v_\text{max}$ is an input to the model, the trade size we believe saturates information the information provided in the sense that our mid estimation will essentially move the price of the trade. In contrast, trades of small size, $v \ll v_\text{max}$, will have $\sigma_p \rightarrow \infty$ and will provide a negligible pricing information. An alternative simple model is: 
+
+$$\sigma_\nu(v) = \sigma_p \frac{v_0}{v}$$
+
+where $v_0$ in this case is a size scale that separates the regimes where the information provided by the trade is negligible, $v \ll v_0$, or relevant $v \gg v_0$, but it does not saturate for a specific trading size, as in Sinclair's model. Of course nothing prevents to use more business prior knowledge to enrich the observation model with other observable characteristics of the trade or the wider market context. 
+
+#### Estimation of the simple pricing model
+
+As discussed in Chapter XXX, the standard way to estimate the parameters of a Kalman Filter is using the Expectation Maximization (EM) algorithm, suitable for probabilistic models with latent variables. However, the properties of the simple pricing model can be exploited to obtain closed-form estimators for its parameters using moment matching.
+
+Let us start by working with a model where observation errors have no dependency on the volume: $\sigma_\nu (v) = \sigma_\nu$. The key is to compute statistics of:
+
+$$d_t \equiv p_{t+\Delta t} - p_t = (m_{t+\Delta t}- m_t) + (\nu_{t+\Delta t} - \nu_t) = \epsilon_t + (\nu_{t+\Delta t} - \nu_t)$$
+
+which depend only on observed trades. First we compute the variance:
+
+$$Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2\$$
+
+where we have used that $\epsilon_t$, $\nu_{t+\Delta t}$ and $\nu_t$ are independent random variables. This expression links the variance of the first differences in trade prices with the parameters to estimate. We need though a second expression to solve for each parameters separately. For that we compute the lag-1 auto-covariance of $d_t$:
+
+$$Cov[d_t,d_{t-\Delta t}]=Cov[\epsilon_t + (\nu_{t+\Delta t} - \nu_t), \epsilon_{t-\Delta t} + (\nu_t - \nu_{t-\Delta t})] = -Var[\nu_t] = -\sigma_\nu^2$$
+
+where again we have used the independence between the noise terms. Our estimators read then:
+
+$$ \hat{\sigma}_\epsilon^2 \Delta t = \frac{1}{N-1} \sum_{i=1}^{N-1} d_{t_i}^2 - 2 \hat{\sigma}_\nu^2 $$
+
+$$ \hat{\sigma}_\nu^2 = -\frac{1}{N-2}\sum_{i=2}^{N-1} d_{t_i} d_{t_{i}-\Delta t}$$
+
+The results have an interesting interpretation:
+*  Starting from the first equation: the variance of the mid-price must be lower than the variance of the observed trades, given the additional noise in the observation equation. Or, in other words, since the mid-price is filtered from the trades, which means that we estimate it by removing noise from the trades, it has to have a lower variance. 
+* The second equation can be recognized as a form of the Roll estimator for effective bid-ask spreads, a typical measure of liquidity. Of course, by construction of the model, the noise that is filtered is essentially the bid-ask spread that liquidity providers request as a compensation for the liquidity provision. 
+
+In the case of volume dependent observation errors, we can still compute these statistics, which now read:
+
+$$Var[d_t]= \sigma_\epsilon^2 \Delta t + \sigma_\nu^2(v_{t+\Delta t}) + \sigma_\nu^2(v_t)$$
+
+$$Cov[d_t,d_{t-\Delta t}]= -\sigma_\nu^2 (v_t)$$
+
+The statistical estimator of the variance of the first differences can still be used, by accounting by the variability of the error with volume (heteroskedasticity):
+
+$$E[\frac{1}{N-1} \sum_{i=1}^{N-1} d_{t_i}^2]= \frac{1}{N-1} \sum_{i=1}^{N-1} \left(\sigma_\epsilon^2 \Delta t + \sigma_\nu^2(v_{t+\Delta t}) + \sigma_\nu^2(v_t)\right)=\sigma_\epsilon^2 \Delta t+\frac{1}{N-1} \sum_{i=1}^{N-1} \left( \sigma_\nu^2(v_{t+\Delta t}) + \sigma_\nu^2(v_t)\right)$$
+
+Moving into the 1-lag covariance, we have:
+
+$$E[\frac{1}{N-2}\sum_{i=2}^{N-1} d_{t_i} d_{t_{i}-\Delta t}] = - \frac{1}{N-2}\sum_{i=2}^{N-1} \sigma_v^2(v_{t_i})$$
+
+As far as we the volume dependency has a single parameter to fit, we can still use these two equations to solve for the parameters. If we use, for instance, the simple model $\sigma_\nu(v) = \sigma_p \frac{v_0}{v}$, where $v_0$ is given and $\sigma_p$ is to be estimated from data (notice that we could simply estimate $\sigma_p v_0$, the factorization is useful for business interpretation):
+
+$$E[\frac{1}{N-1} \sum_{i=1}^{N-1} d_{t_i}^2]=\sigma_\epsilon^2 \Delta t+  \frac{\sigma_p^2}{N-1} \sum_{i=1}^{N-1} \left(  \frac{v^2_0}{v^2_{t_i+\Delta t}}  +  \frac{v^2_0}{v^2_{t_i}} \right)$$
+
+$$E[\frac{1}{N-2}\sum_{i=2}^{N-1} d_{t_i} d_{t_{i}-\Delta t}] =  - \frac{\sigma_p^2}{N-2}\sum_{i=2}^{N-1} \frac{v^2_0}{v^2_{t_i}} $$
+
+In this simple case, the estimation of the parameters $\sigma_p$ and $\sigma_\epsilon$ is straightforward. More complex functions like the one from Sinclair cannot be estimated with only two moments. Further moments can be computed to provide extra equations, although at this point it might be worthy to resort to standard estimation techniques like EM if available. 
+
+
+#### Inference on the simple pricing model
+
+We can use the general Kalman filter equations described in Chapter XXX to derive the distribution of our mid - price at the next time $t + \Delta t$ where a trade happens.
+
+The Kalman filter algorithm operates sequentially over observation steps applying two steps, the *predict* step, where we compute the distribution of the mid-price based purely on the random walk model, and the *update* step in which we incorporate the information provided by the observation of a new trade. We define $m_{t+\Delta t}^t$ as the distribution of the mid-price at $t+\Delta t$ before observing the trade, and $m_{t+\Delta}^{t+\Delta t}$ afterwards. 
+
+Let us apply first the predict step. The distribution of $m_{t+\Delta t}^t$ is Gaussian with mean and variance given by:
+
+$$\bar{m}_{t+\Delta t}^t = \bar{m}_{t}^t$$
+
+$$(\sigma_{m,t+\Delta t}^t)^2 = (\sigma_{m,t}^t)^2 + \sigma_\epsilon^2 \Delta t$$
+
+Since our model uses a drift-less random walk dynamics for the evolution of the mid-price, the updated mean does not change and the variance increases proportionally to the time step $\Delta t$. 
+
+Now we use the update step to incorporate the information from a trade happening at $t + \Delta t$:
+
+$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t} + K_t (p_t - \bar{m}_{t}^{t+\Delta t}) $$
+
+$$(\sigma_{m,t+\Delta t}^{t+\Delta t})^2 = \frac{(\sigma_{m,t+\Delta t}^t)^2  \sigma_\eta^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma_\eta^2}$$
+
+where $K_t$ is the Kalman gain, given by:
+
+$$K_t = \frac{(\sigma_{m,t+\Delta t}^t)^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma_\eta^2} $$
+
+The updated mean is an interpolation between the predicted mean and the trade observation, weighted by the Kalman gain
+
+* If the observation noise is much smaller than the uncertainty in the mean in the prediction step, namely $\sigma_\eta \ll \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 1$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = p_t$, i.e. since our confidence on the information from the trade is much higher than our best estimation of the mean, we essentially update the mean with the trade price. 
+* On the contrary, if $\sigma_\eta \gg \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 0$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t}$. In this case, our confidence on the information provided by the trade is very low, so essentially we ignore the trade information and use the predicted mean. 
+* In between those two limiting cases, the updated mean combines the information from the prediction using the internal dynamics and our last update, and the trade information. 
+
+If we look at the new standard deviation, we also find similar limiting behaviors:
+* If $\sigma_\eta \ll \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_\eta$, since as we discussed above, we essentially use the trade information to inform our estimation of the mid.
+* If $\sigma_\eta \gg \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_{m,t+\Delta t}^t$, i.e. we stick with the estimation from the predict step
+
+One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite $\sigma_\eta$ is always smaller: the information from the trade always contributes to improve our estimation of the mid-price.  This is easily seen writing:
+$$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}$$ 
+Since $\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1. 
+
+
+
 
 #### Two correlated instruments
 
@@ -49,6 +160,25 @@ observation of the second instrument on the first one: $$\begin{aligned}
 \hat{P}^{t}_{1,t} = \hat{P}^{t-1}_{1,t} + \frac{1}{1-(\rho_t^{t-1})^2 + (\frac{\sigma_{v,1}}{\sigma_{1,t}^{t-1}})^2}\left((1-(\rho_t^{t-1})^2)(O_{1,t} - \hat{P}^{t}_{1,t}) + \rho_t^{t-1} \frac{\sigma_{v,1}^2}{\sigma_{1,t}^{t-1} \sigma_{2,t}^{t-1}}(O_{2,t} - \hat{P}^{t}_{2,t})  \right)  \nonumber \\
 \end{aligned}$$
 
+
+
+
+### Pricing sources and models
+
+#### LOB traded
+
+
+#### RfQ traded
+
+##### Composites
+
+##### RfQs
+
+##### Trades
+
+##### HitMiss
+
+#### Correlated instruments
 
 
 ## Derivatives pricing
