@@ -53,11 +53,11 @@ where we have simply applied the product rule sequentially.
 
 This structure already provides a hint on the connection between generative models and Gen AI models, particularly Large Language Models, mentioned in the previous section. Statistical language models try to compute the distribution of words (or tokens, which are more granular building blocks to decompose language that perform better in practical tasks). For instance, given the sentence "the cat had blue ...", such models try to estimate the probability of any existing next word, conditional to the previous words, for instance:
 
-$$P("eyes"| "the", "cat", "had", "blue")$$
+$$P(\text{"eyes"}| \text{"the"}, \text{"cat"}, \text{"had"}, \text{"blue"})$$
 
-In this case, a well estimated model needs to be able to compute such probability for any word in the English vocabulary. Of course a useful model would not be specifically trained to compute probabilities for this case. This means that it should be able to compute the probability of any other sequence, in particular $P("blue"|"the", "cat", "had")$, $P("had"|"the", "cat")$, $P("cat"| "the")$ and $P("the")$. But using the previous equation this means that this model must be able to compute:
+In this case, a well estimated model needs to be able to compute such probability for any word in the English vocabulary. Of course a useful model would not be specifically trained to compute probabilities for this case. This means that it should be able to compute the probability of any other sequence, in particular $P(\text{"blue"}|\text{"the"}, \text{"cat"}, \text{"had"})$, $P(\text{"had"}|\text{"the"}, \text{"cat"})$, $P(\text{"cat"}| \text{"the"})$ and $P(\text{"the"})$. But using the previous equation this means that this model must be able to compute:
 
-$$P("the", "cat", "had", "blue", "eyes")$$
+$$P(\text{"the"}, \text{"cat"}, \text{"had"}, \text{"blue"}, \text{"eyes"})$$
 
 i.e. is a generative model for language. 
 
@@ -86,11 +86,8 @@ where we have identified the temperature $T$ as the inverse of the Lagrange mult
 * For $T \rightarrow \infty$ the exponential terms tend to $1$, so the distribution is uniform over all words once normalization is accounted. In this case, the model is random over the distribution of all possible words. 
 
 
-
-
 ### Gen AI models
 
-Qué poner aquí? quizás mencionar beyond transformer y cosas así?
 
 
 ## Large Language Models
