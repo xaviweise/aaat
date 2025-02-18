@@ -25,6 +25,7 @@ parts:
     - file: markdown/stochastic_calculus.md
     - file: markdown/stochastic_optimal_control.md
     - file: markdown/data_driven_methods.md
+    - file: markdown/generative_ai.md
 
 - caption: Execution Algorithms
   numbered: true
