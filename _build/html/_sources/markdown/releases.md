@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 02.25
+Kalman filter models for mid-price estimation section started. New chapter on Gen AI started.
+
 ## 01.25
 First version of intro to financial markets and market structure chapter finished.
 

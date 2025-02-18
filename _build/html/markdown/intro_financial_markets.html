@@ -183,33 +183,34 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="stochastic_calculus.html">7. Stochastic Calculus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stochastic_optimal_control.html">8. Stochastic optimal control</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_driven_methods.html">9. Data-driven methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generative_ai.html">10. Generative Artificial Intelligence</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Execution Algorithms</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="execution_fundamentals.html">10. Execution fundamentals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lob_models.html">11. Modelling the Limit Order Book</a></li>
-<li class="toctree-l1"><a class="reference internal" href="almgren_chriss.html">12. The Almgren - Chriss Framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="execution_tactics.html">13. Execution tactics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution_fundamentals.html">11. Execution fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lob_models.html">12. Modelling the Limit Order Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="almgren_chriss.html">13. The Almgren - Chriss Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="execution_tactics.html">14. Execution tactics</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Market Making Algorithms</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">14. Market Making fundamentals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">15. Fair price estimation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">16. Liquidity modelling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rfq_models.html">17. Modelling the request for quote process</a></li>
-<li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">18. The Avellaneda and Stoikov Framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enriching_avellaneda.html">19. Enriching the Avellaneda and Stoikov Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hedging.html">20. Hedging strategies</a></li>
-<li class="toctree-l1"><a class="reference internal" href="market_making_rl.html">21. Reinforcement Learning and Market Making</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">15. Market Making fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">16. Fair price estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">17. Liquidity modelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rfq_models.html">18. Modelling the request for quote process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">19. The Avellaneda and Stoikov Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enriching_avellaneda.html">20. Enriching the Avellaneda and Stoikov Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hedging.html">21. Hedging strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_making_rl.html">22. Reinforcement Learning and Market Making</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Investment Algorithms</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="quant_investment_fundamentals.html">22. Quantitative investment fundamentals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mean_reversion_strategies.html">23. Mean reversion strategies</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trend_following.html">24. Trend following strategies</a></li>
-<li class="toctree-l1"><a class="reference internal" href="arbitrage.html">25. Arbitrage Strategies</a></li>
-<li class="toctree-l1"><a class="reference internal" href="factor_investing.html">26. Factor Investing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="optimal_portfolios.html">27. Optimal portfolios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quant_investment_fundamentals.html">23. Quantitative investment fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mean_reversion_strategies.html">24. Mean reversion strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trend_following.html">25. Trend following strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arbitrage.html">26. Arbitrage Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="factor_investing.html">27. Factor Investing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimal_portfolios.html">28. Optimal portfolios</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
 <ul class="nav bd-sidenav">
@@ -464,11 +465,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="financial-markets">
 <h1><span class="section-number">1. </span>Financial Markets<a class="headerlink" href="#financial-markets" title="Permalink to this heading">#</a></h1>
-<p>Financial markets are a solution to a problem perennial to our
-societies: the efficient channelling of savings into productive uses.
-Legal and natural persons who have excess cash seek to obtain the maximum returns (investment) with the maximum availability (liquidity).
-Therefore, they would prefer to lend money short - term. Those however who need cash in order to fund their ventures (new companies, new business plans for existing companies, acquisition of assets like houses via mortgages, social programs, etc) prefer to pay the minimal
-compensation possible and retain the funds for long-term. The lack of a mechanism to be able to accommodate those opposing objectives might lead to a society where excess funds remain idle instead of being channeled to productive uses.</p>
+<p>Financial markets address a perennial challenge faced by societies: the efficient allocation of savings toward productive uses. Individuals and institutions with excess funds aim to achieve the highest returns (investment) while maintaining maximum liquidity. Consequently, they often prefer to lend money on a short-term basis. Conversely, those requiring capital—whether to launch new ventures, expand existing businesses, acquire assets such as homes through mortgages, or finance social programs—seek to secure funds at minimal cost and for extended periods. Without a mechanism to reconcile these opposing objectives, surplus funds may remain idle, hindering their potential to contribute to economic productivity.</p>
 <p>Modern capitalist societies solve this problem in two ways, which form the backbone of the financial system: the banking system and financial markets.</p>
 <section id="the-banking-system">
 <h2><span class="section-number">1.1. </span>The Banking System<a class="headerlink" href="#the-banking-system" title="Permalink to this heading">#</a></h2>
@@ -793,7 +790,7 @@ In the United States, the Dodd-Frank Act established Swap Execution Facilities (
 <li><p><strong>Regulating Emerging Technologies</strong>: <strong>Electronic and Algorithmic Trading</strong> were among the first major technological advances disrupting the workings of financial markets. Their regulation has been addressed by sections of the USA and European frameworks mentioned above. In particular, the most comprehensive regulation of Algorithmic Trading has been tackled by a specific section of MiFID 2, RTS-6, as we will discuss in the specific chapter introducing this technology. More recently, the rise of <strong>cryptocurrencies and decentralized finance (DeFi)</strong> has prompted new regulatory efforts. Jurisdictions like the European Union are leading with frameworks such as the Markets in Crypto-Assets Regulation (MiCA), while others, like the United States, are still defining comprehensive policies.
 <strong>Artificial Intelligence</strong>, particularly the use of Large Language Models (LLMs) and agent-based frameworks for trading, is expected to be the next major chapter of regulatory oversight.</p></li>
 <li><p><strong>Environmental, Social, and Governance (ESG)</strong> Regulation: As sustainable investing gains traction, regulators are focusing on mandating ESG disclosures and preventing green-washing. Europe’s Sustainable Finance Disclosure Regulation (SFDR) is a leading example.</p></li>
-<li><p><strong>Data and Cybersecurity</strong>: The reliance on digital platforms and cloud-based systems has increased regulatory focus on data protection, cybersecurity, and operational resilience. Here, specific regulatory frameworks like the European Union’s Data General Protection Regulation (DGPR) also have an impact in the financial markets.</p></li>
+<li><p><strong>Data and Cybersecurity</strong>: The reliance on digital platforms and cloud-based systems has increased regulatory focus on data protection, cybersecurity, and operational resilience. Here, specific regulatory frameworks like the European Union’s General Data Protection Regulation (GDPR) also have an impact in the financial markets.</p></li>
 <li><p><strong>Retail Investor Protection</strong>: The surge in retail trading, driven by platforms like Robinhood, is prompting new rules on transparency, execution quality, and the specific regulation of practices like payment for order flow (PFOF).</p></li>
 </ul>
 </section>
