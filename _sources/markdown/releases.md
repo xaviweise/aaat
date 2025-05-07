@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 05.25 
+Kalman filter and smoothing derivation for local level model. Introduction to Bayesian probability and decision theory.
+
 ## 02.25
 Kalman filter models for mid-price estimation section started. New chapter on Gen AI started.
 
@@ -25,6 +28,8 @@ Started working on chapter Fair Price Estimation. Added section on how to price 
 
 ## 03.24
 Created online book. Started work on the following chapters: Financial Markets, Bayesian Modelling and Stochastic Calculus
+
+
 
 
 

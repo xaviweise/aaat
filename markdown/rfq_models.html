@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>18. Modelling the request for quote process &#8212; Advanced Analytics and Algorithmic Trading</title>
+    <title>18. Modelling RfQs in Dealer to Client Markets &#8212; Advanced Analytics and Algorithmic Trading</title>
   
   
   
@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'markdown/rfq_models';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -178,7 +180,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Modelling Fundamentals</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="intro_bayesian.html">5. Introduction to Bayesian Modelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_bayesian.html">5. Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro_causal.html">6. Causal inference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stochastic_calculus.html">7. Stochastic Calculus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stochastic_optimal_control.html">8. Stochastic optimal control</a></li>
@@ -197,7 +199,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">15. Market Making fundamentals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">16. Fair price estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">17. Liquidity modelling</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">18. Modelling the request for quote process</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">18. Modelling RfQs in Dealer to Client Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">19. The Avellaneda and Stoikov Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enriching_avellaneda.html">20. Enriching the Avellaneda and Stoikov Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hedging.html">21. Hedging strategies</a></li>
@@ -407,7 +409,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Modelling the request for quote process</h1>
+    <h1>Modelling RfQs in Dealer to Client Markets</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -418,22 +420,20 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">18.1. Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-general-rfq-model">18.2. A general RfQ model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediction-of-demand">18.3. Prediction of demand</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-winning-the-rfq">18.4. Probability of winning the RfQ</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-framework">18.4.1. Probabilistic framework</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-driven-approaches">18.4.2. Data-driven approaches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-model-for-rfqs">18.2. Probabilistic graphical model for RfQs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-models-for-the-request-for-quote-activity">18.3. Generative models for the request for quote activity</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#models-for-the-arrival-of-rfqs">18.3.1. Models for the arrival of RfQs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attrition-risk">18.3.2. Attrition risk</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#price-discovery-models">18.5. Price discovery models</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-profiling-models">18.6. Client profiling models</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#behavioural-tiering">18.6.1. Behavioural tiering</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-asymmetry-and-adverse-flows">18.6.2. Information asymmetry and adverse flows</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#client-activity-and-attrition-risk">18.6.3. Client activity and attrition risk</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.6.4. Axe matcher</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-generative-model-for-rfqs-in-negotiation">18.4. A Generative model for RfQs in negotiation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-winning-the-rfq">18.4.1. Probability of winning the RfQ</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-price-discovery">18.4.2. Probability of price discovery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-asymmetry-and-adverse-flows">18.4.3. Information asymmetry and adverse flows</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.7. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.5. Axe matcher</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.6. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -445,46 +445,55 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="modelling-the-request-for-quote-process">
-<h1><span class="section-number">18. </span>Modelling the request for quote process<a class="headerlink" href="#modelling-the-request-for-quote-process" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="modelling-rfqs-in-dealer-to-client-markets">
+<h1><span class="section-number">18. </span>Modelling RfQs in Dealer to Client Markets<a class="headerlink" href="#modelling-rfqs-in-dealer-to-client-markets" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
 <h2><span class="section-number">18.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>In the context of platforms where the client identity is known, like Dealer to Client platforms, the analysis of the client patterns of trading is relevant in order to fine-tune pricing and hedging models, or to optime the management of axes.</p>
 </section>
-<section id="a-general-rfq-model">
-<h2><span class="section-number">18.2. </span>A general RfQ model<a class="headerlink" href="#a-general-rfq-model" title="Permalink to this heading">#</a></h2>
+<section id="probabilistic-graphical-model-for-rfqs">
+<h2><span class="section-number">18.2. </span>Probabilistic graphical model for RfQs<a class="headerlink" href="#probabilistic-graphical-model-for-rfqs" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="prediction-of-demand">
-<h2><span class="section-number">18.3. </span>Prediction of demand<a class="headerlink" href="#prediction-of-demand" title="Permalink to this heading">#</a></h2>
+<section id="generative-models-for-the-request-for-quote-activity">
+<h2><span class="section-number">18.3. </span>Generative models for the request for quote activity<a class="headerlink" href="#generative-models-for-the-request-for-quote-activity" title="Permalink to this heading">#</a></h2>
+<section id="models-for-the-arrival-of-rfqs">
+<h3><span class="section-number">18.3.1. </span>Models for the arrival of RfQs<a class="headerlink" href="#models-for-the-arrival-of-rfqs" title="Permalink to this heading">#</a></h3>
+<p>A dealer receives RfQs for different products from different clients every day or week. Each RfQ has a side, buy or sell, and a volume requested to be traded. A generative model that captures this distribution can be encoded by the following probability:</p>
+<div class="math notranslate nohighlight">
+\[p(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v)}} \in [t, t+dt]|F_t)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})}\)</span> is a random variable that specifies the time at which a client <span class="math notranslate nohighlight">\(\text{c}\)</span> requests a quote for product <span class="math notranslate nohighlight">\(\text{p}\)</span> of side <span class="math notranslate nohighlight">\(\text{s}\)</span> and volume <span class="math notranslate nohighlight">\(\text{v}\)</span>, and we have also a filtration <span class="math notranslate nohighlight">\(F_t\)</span> that includes all relevant information up to t. Alternatively we can introduce <span class="math notranslate nohighlight">\(N_t^{\text{RfQ}(\text{client = c, product = p, side = s, volume = v)}}\)</span> as the number of such RfQs up to time t. These two formulations are in fact equivalent:</p>
+<div class="math notranslate nohighlight">
+\[p(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} \in [t, t+dt]|F_t) = \]</div>
+<div class="math notranslate nohighlight">
+\[ p(N_{t+dt}^{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} - N_t^{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} = 1|F_t)\]</div>
+<p>From the Stochastic Calculus chapter we recognize this model as a <strong>counting process</strong>, whose probability distribution we can write as:</p>
+<div class="math notranslate nohighlight">
+\[ p(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} \in [t, t+dt]|F_t) = \lambda_t (...)dt\]</div>
+<p>with the so-called intensity <span class="math notranslate nohighlight">\(\lambda_t\)</span> being a general function of time, RfQ variables and any relevant information contained in <span class="math notranslate nohighlight">\(F_t\)</span>, for instances previous RfQs. If <span class="math notranslate nohighlight">\(\lambda_t = \lambda_t(c, p, s, v)\)</span> then we have an instance of a non-homogeneous Poisson process, and if it depends on previous times of arrivals of RfQs, i.e. it is a self-exciting process, we have a Hawkes process. Such counting processes are natural candidates to model the arrival of RfQs.</p>
+<p>DISCUSS RELATION TO MODEL WHERE SIDE, VOLUME ARE INDEPENDENT OF ARRIVAL WITH THEIR OWN DISTRIBUTIONS</p>
 </section>
+<section id="attrition-risk">
+<h3><span class="section-number">18.3.2. </span>Attrition risk<a class="headerlink" href="#attrition-risk" title="Permalink to this heading">#</a></h3>
+<p>Model from Fader et al, comment overall</p>
+</section>
+</section>
+<section id="a-generative-model-for-rfqs-in-negotiation">
+<h2><span class="section-number">18.4. </span>A Generative model for RfQs in negotiation<a class="headerlink" href="#a-generative-model-for-rfqs-in-negotiation" title="Permalink to this heading">#</a></h2>
 <section id="probability-of-winning-the-rfq">
-<h2><span class="section-number">18.4. </span>Probability of winning the RfQ<a class="headerlink" href="#probability-of-winning-the-rfq" title="Permalink to this heading">#</a></h2>
-<section id="probabilistic-framework">
-<h3><span class="section-number">18.4.1. </span>Probabilistic framework<a class="headerlink" href="#probabilistic-framework" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">18.4.1. </span>Probability of winning the RfQ<a class="headerlink" href="#probability-of-winning-the-rfq" title="Permalink to this heading">#</a></h3>
 </section>
-<section id="data-driven-approaches">
-<h3><span class="section-number">18.4.2. </span>Data-driven approaches<a class="headerlink" href="#data-driven-approaches" title="Permalink to this heading">#</a></h3>
-</section>
-</section>
-<section id="price-discovery-models">
-<h2><span class="section-number">18.5. </span>Price discovery models<a class="headerlink" href="#price-discovery-models" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="client-profiling-models">
-<h2><span class="section-number">18.6. </span>Client profiling models<a class="headerlink" href="#client-profiling-models" title="Permalink to this heading">#</a></h2>
-<section id="behavioural-tiering">
-<h3><span class="section-number">18.6.1. </span>Behavioural tiering<a class="headerlink" href="#behavioural-tiering" title="Permalink to this heading">#</a></h3>
+<section id="probability-of-price-discovery">
+<h3><span class="section-number">18.4.2. </span>Probability of price discovery<a class="headerlink" href="#probability-of-price-discovery" title="Permalink to this heading">#</a></h3>
 </section>
 <section id="information-asymmetry-and-adverse-flows">
-<h3><span class="section-number">18.6.2. </span>Information asymmetry and adverse flows<a class="headerlink" href="#information-asymmetry-and-adverse-flows" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">18.4.3. </span>Information asymmetry and adverse flows<a class="headerlink" href="#information-asymmetry-and-adverse-flows" title="Permalink to this heading">#</a></h3>
 </section>
-<section id="client-activity-and-attrition-risk">
-<h3><span class="section-number">18.6.3. </span>Client activity and attrition risk<a class="headerlink" href="#client-activity-and-attrition-risk" title="Permalink to this heading">#</a></h3>
 </section>
 <section id="axe-matcher">
-<h3><span class="section-number">18.6.4. </span>Axe matcher<a class="headerlink" href="#axe-matcher" title="Permalink to this heading">#</a></h3>
-</section>
+<h2><span class="section-number">18.5. </span>Axe matcher<a class="headerlink" href="#axe-matcher" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="exercises">
-<h2><span class="section-number">18.7. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">18.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 </section>
 </section>
 
@@ -552,22 +561,20 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">18.1. Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-general-rfq-model">18.2. A general RfQ model</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediction-of-demand">18.3. Prediction of demand</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-winning-the-rfq">18.4. Probability of winning the RfQ</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-framework">18.4.1. Probabilistic framework</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-driven-approaches">18.4.2. Data-driven approaches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-model-for-rfqs">18.2. Probabilistic graphical model for RfQs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-models-for-the-request-for-quote-activity">18.3. Generative models for the request for quote activity</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#models-for-the-arrival-of-rfqs">18.3.1. Models for the arrival of RfQs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attrition-risk">18.3.2. Attrition risk</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#price-discovery-models">18.5. Price discovery models</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-profiling-models">18.6. Client profiling models</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#behavioural-tiering">18.6.1. Behavioural tiering</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-asymmetry-and-adverse-flows">18.6.2. Information asymmetry and adverse flows</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#client-activity-and-attrition-risk">18.6.3. Client activity and attrition risk</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.6.4. Axe matcher</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-generative-model-for-rfqs-in-negotiation">18.4. A Generative model for RfQs in negotiation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-winning-the-rfq">18.4.1. Probability of winning the RfQ</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-price-discovery">18.4.2. Probability of price discovery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-asymmetry-and-adverse-flows">18.4.3. Information asymmetry and adverse flows</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.7. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.5. Axe matcher</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.6. Exercises</a></li>
 </ul>
   </nav></div>
 
