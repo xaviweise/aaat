@@ -14,15 +14,15 @@ These makes all these price observations noisy estimates of the fair price, so i
 
 The Kalman filter was introduced in the chapter on [Bayesian Theory](#intro_bayesian). It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM). 
 
-Recall that a *State Space Model (SSM)* is a model to describe dynamic systems where we have a non or partially observable state, a vector ${\bold x}$, whose dynamics in time is described by a so-called transition equation:
+Recall that a *State Space Model (SSM)* is a model to describe dynamic systems where we have a non or partially observable state, a vector $\mathbf{x}$, whose dynamics in time is described by a so-called transition equation:
 
-$$ {\bold x}_{t+\Delta t} = f({\bold x}_t, {\bold u}_t) + {\bold \epsilon}_t$$
+$$ \mathbf{x}_{t+\Delta t} = f(\mathbf{x}_t, \mathbf{u}_t) + \mathbf{\epsilon}_t$$
 
-where $f({\bold x}_t, {\bold u}_t)$ is a general function, ${\bold u}_t$ are inputs (or controls) that affect the dynamics, $\Delta t$ is the time-step between observations, and ${\bold \epsilon}_t$ is a transition noise with a given distribution. The state is observed indirectly via a proxy vector ${\bold y}$ via the observation equation:
+where $f(\mathbf{x}_t, \mathbf{u}_t)$ is a general function, $\mathbf{u}_t$ are inputs (or controls) that affect the dynamics, $\Delta t$ is the time-step between observations, and $\mathbf{ \epsilon}_t$ is a transition noise with a given distribution. The state is observed indirectly via a proxy vector $\mathbf{y}$ via the observation equation:
 
-$${\bold y}_t = g({\bold x}_t, {\bold u}_t)  + {\bold \eta}$$
+$$\mathbf{y}_t = g(\mathbf{x}_t, \mathbf{u}_t)  + \mathbf{\eta}$$
 
-where $g({\bold x}_t, {\bold u}_t)$ is another general function and ${\bold \eta}_t$ the observation noise, meaning that observations have a degree of uncertainty with respect to the latent space.
+where $g(\mathbf{x}_t, \mathbf{u}_t)$ is another general function and $\mathbf{\eta}_t$ the observation noise, meaning that observations have a degree of uncertainty with respect to the latent space.
 
 A *Linear Gaussian Model (LGM)* is a specific case of the SSM were both the transition and observation functions are linear and the noise terms are Gaussian. In this case, we can use the Kalman filter algorithm to compute the distribution of the state vector at any time, given the observations and the transition and observation model. If some or all the parameters of these models are not known, they can be estimated using standard techniques like Maximum Likelihood Estimation (MLE) or Expectation Maximization (EM) when the former becomes computationally intractable due to the latent state vector.
 

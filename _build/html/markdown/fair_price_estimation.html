@@ -180,7 +180,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Financial Modelling Fundamentals</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="intro_bayesian.html">5. Introduction to Bayesian Modelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_bayesian.html">5. Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro_causal.html">6. Causal inference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stochastic_calculus.html">7. Stochastic Calculus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stochastic_optimal_control.html">8. Stochastic optimal control</a></li>
@@ -199,7 +199,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">15. Market Making fundamentals</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">16. Fair price estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">17. Liquidity modelling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rfq_models.html">18. Modelling the request for quote process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rfq_models.html">18. Modelling RfQs in Dealer to Client Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">19. The Avellaneda and Stoikov Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enriching_avellaneda.html">20. Enriching the Avellaneda and Stoikov Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hedging.html">21. Hedging strategies</a></li>
@@ -506,7 +506,7 @@ document.write(`
 <p>We don’t observe this mid-price, only trades which we consider noisy observation of the mid since they include transaction costs and potentially other external factors like dealer inventory positions, etc:</p>
 <div class="math notranslate nohighlight">
 \[p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)\]</div>
-<p>For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading’s book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, <span class="math notranslate nohighlight">\(v\)</span>:</p>
+<p>Readers will recognize that this is the local level model discussed extensively in the Chapter on <span class="xref myst">Bayesian Theory</span>. For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading’s book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, <span class="math notranslate nohighlight">\(v\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+\]</div>
 <p>where <span class="math notranslate nohighlight">\(\sigma_p\)</span> is a baseline observation noise and <span class="math notranslate nohighlight">\(v_\text{max}\)</span> is an input to the model, the trade size we believe saturates information the information provided in the sense that our mid estimation will essentially move the price of the trade. In contrast, trades of small size, <span class="math notranslate nohighlight">\(v \ll v_\text{max}\)</span>, will have <span class="math notranslate nohighlight">\(\sigma_p \rightarrow \infty\)</span> and will provide a negligible pricing information. An alternative simple model is:</p>
@@ -586,6 +586,7 @@ document.write(`
 <p>One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite <span class="math notranslate nohighlight">\(\sigma_\eta\)</span> is always smaller: the information from the trade always contributes to improve our estimation of the mid-price.  This is easily seen writing:
 $<span class="math notranslate nohighlight">\(\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}\)</span><span class="math notranslate nohighlight">\( 
 Since \)</span>\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1.</p>
+<p>TO DO: MENTION ROLE OF SMOOTHING: eg flow value computation a posteriori, calibraiton etc</p>
 </section>
 <section id="two-correlated-instruments">
 <h4><span class="section-number">16.2.1.4. </span>Two correlated instruments<a class="headerlink" href="#two-correlated-instruments" title="Permalink to this heading">#</a></h4>

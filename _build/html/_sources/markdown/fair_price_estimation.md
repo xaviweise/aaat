@@ -42,7 +42,7 @@ We don't observe this mid-price, only trades which we consider noisy observation
 
 $$p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)$$
 
-For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
+Readers will recognize that this is the local level model discussed extensively in the Chapter on [Bayesian Theory](#intro_bayesian). For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
 
 $$\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+$$
 
@@ -140,7 +140,7 @@ $$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\f
 Since $\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1. 
 
 
-
+TO DO: MENTION ROLE OF SMOOTHING: eg flow value computation a posteriori, calibraiton etc
 
 #### Two correlated instruments
 
