@@ -1260,7 +1260,7 @@ Which we can see that satisfies the recursive differential equation:
 
 $$ \frac{d}{dt}P(N_t = n) = -\lambda P(N_t = n) + \frac{n \lambda (\lambda t)^{n-1}}{n!} e^{- \lambda t } \nonumber \\ = -\lambda P(N_t = n) + \lambda P(N_t = n-1) $$
 
-We recognize this expression as the Poisson distribution function with an intensity $\lambda$. Therefore this is called a homogeneous Poisson process, in contrast to non-homogeneous Poisson processes where the intensity is a deterministic function of time $\lambda_t$. 
+We recognize this expression as the Poisson distribution function with an intensity $\lambda$. Therefore this is called a **homogeneous** Poisson process, in contrast to **non-homogeneous** Poisson processes where the intensity is a deterministic function of time $\lambda_t$. 
 
 The previous demonstration can be easily reproduced in this case. The differential equation reads now:
 
@@ -1272,13 +1272,13 @@ $$
 P(N_t = n) = \frac{(\int_0^t\lambda_s ds)^{n}}{n!} e^{- \int_0^t \lambda_s ds }
 $$
 
-There are other two related processes that is worth to mention: we have a self-exciting or Hawkes process when the intensity is a function of previous number of jumps, namely:
+The previous processes are specific cases of *counting processes*, stochastic models that count the number of random events over time. There are other two related counting processes that is worth to mention: we have a self-exciting or **Hawkes** process when the intensity is a function of previous number of jumps, namely:
 
 $$\lambda_t = \mu_t + \sum_{i, \tau_i < t} \nu(t-\tau_i)$$
 
 where $\mu_t$ is a deterministic function (the background intensity). $\tau_i$ is the time at which jump $i$ happened, and $\nu$ is the excitation function, a deterministic function that controls the clustering of jumps. A popular choice is an exponential shape: $\mu(t - \tau_i) = \alpha e^{-\beta(t- \tau_i)}$. 
 
-Finally, if the intensity is itself a stochastic process, we have a Cox process.
+Finally, if the intensity is itself a stochastic process, we have a **Cox** process.
 
 
 **Definition and general properties**

@@ -489,10 +489,10 @@ document.write(`
 <p>where we have simply applied the product rule sequentially.</p>
 <p>This structure already provides a hint on the connection between generative models and Gen AI models, particularly Large Language Models, mentioned in the previous section. Statistical language models try to compute the distribution of words (or tokens, which are more granular building blocks to decompose language that perform better in practical tasks). For instance, given the sentence “the cat had blue …”, such models try to estimate the probability of any existing next word, conditional to the previous words, for instance:</p>
 <div class="math notranslate nohighlight">
-\[P(&quot;eyes&quot;| &quot;the&quot;, &quot;cat&quot;, &quot;had&quot;, &quot;blue&quot;)\]</div>
-<p>In this case, a well estimated model needs to be able to compute such probability for any word in the English vocabulary. Of course a useful model would not be specifically trained to compute probabilities for this case. This means that it should be able to compute the probability of any other sequence, in particular <span class="math notranslate nohighlight">\(P(&quot;blue&quot;|&quot;the&quot;, &quot;cat&quot;, &quot;had&quot;)\)</span>, <span class="math notranslate nohighlight">\(P(&quot;had&quot;|&quot;the&quot;, &quot;cat&quot;)\)</span>, <span class="math notranslate nohighlight">\(P(&quot;cat&quot;| &quot;the&quot;)\)</span> and <span class="math notranslate nohighlight">\(P(&quot;the&quot;)\)</span>. But using the previous equation this means that this model must be able to compute:</p>
+\[P(\text{&quot;eyes&quot;}| \text{&quot;the&quot;}, \text{&quot;cat&quot;}, \text{&quot;had&quot;}, \text{&quot;blue&quot;})\]</div>
+<p>In this case, a well estimated model needs to be able to compute such probability for any word in the English vocabulary. Of course a useful model would not be specifically trained to compute probabilities for this case. This means that it should be able to compute the probability of any other sequence, in particular <span class="math notranslate nohighlight">\(P(\text{&quot;blue&quot;}|\text{&quot;the&quot;}, \text{&quot;cat&quot;}, \text{&quot;had&quot;})\)</span>, <span class="math notranslate nohighlight">\(P(\text{&quot;had&quot;}|\text{&quot;the&quot;}, \text{&quot;cat&quot;})\)</span>, <span class="math notranslate nohighlight">\(P(\text{&quot;cat&quot;}| \text{&quot;the&quot;})\)</span> and <span class="math notranslate nohighlight">\(P(\text{&quot;the&quot;})\)</span>. But using the previous equation this means that this model must be able to compute:</p>
 <div class="math notranslate nohighlight">
-\[P(&quot;the&quot;, &quot;cat&quot;, &quot;had&quot;, &quot;blue&quot;, &quot;eyes&quot;)\]</div>
+\[P(\text{&quot;the&quot;}, \text{&quot;cat&quot;}, \text{&quot;had&quot;}, \text{&quot;blue&quot;}, \text{&quot;eyes&quot;})\]</div>
 <p>i.e. is a generative model for language.</p>
 <p>Having a generative model for human language opens up the possibility for multiple tasks. In particular, we can use it to generate language given some context of <em>prompt</em>. We can have an expert model that sticks to most likely facts by generating sequences taking the most likely word according to the model. Or we can build creative systems that sample the distribution according to the computed probabilities. A common practice to control the degree of creativity of these models is to transform the probability distribution for the next word or token into a Gibbs distribution. The motivation is the transformation:</p>
 <div class="math notranslate nohighlight">
@@ -515,7 +515,6 @@ document.write(`
 </section>
 <section id="gen-ai-models">
 <h3><span class="section-number">10.1.3. </span>Gen AI models<a class="headerlink" href="#gen-ai-models" title="Permalink to this heading">#</a></h3>
-<p>Qué poner aquí? quizás mencionar beyond transformer y cosas así?</p>
 </section>
 </section>
 <section id="large-language-models">
