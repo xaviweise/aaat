@@ -222,6 +222,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/bayesian_theory.html">Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/market_microstructure.html">Market Microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
 </ul>
@@ -485,13 +486,13 @@ document.write(`
 <section id="the-kalman-filter-model-for-pricing">
 <h3><span class="section-number">16.2.1. </span>The Kalman Filter model for pricing<a class="headerlink" href="#the-kalman-filter-model-for-pricing" title="Permalink to this heading">#</a></h3>
 <p>The Kalman filter was introduced in the chapter on <span class="xref myst">Bayesian Theory</span>. It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM).</p>
-<p>Recall that a <em>State Space Model (SSM)</em> is a model to describe dynamic systems where we have a non or partially observable state, a vector <span class="math notranslate nohighlight">\({\bold x}\)</span>, whose dynamics in time is described by a so-called transition equation:</p>
+<p>Recall that a <em>State Space Model (SSM)</em> is a model to describe dynamic systems where we have a non or partially observable state, a vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, whose dynamics in time is described by a so-called transition equation:</p>
 <div class="math notranslate nohighlight">
-\[ {\bold x}_{t+\Delta t} = f({\bold x}_t, {\bold u}_t) + {\bold \epsilon}_t\]</div>
-<p>where <span class="math notranslate nohighlight">\(f({\bold x}_t, {\bold u}_t)\)</span> is a general function, <span class="math notranslate nohighlight">\({\bold u}_t\)</span> are inputs (or controls) that affect the dynamics, <span class="math notranslate nohighlight">\(\Delta t\)</span> is the time-step between observations, and <span class="math notranslate nohighlight">\({\bold \epsilon}_t\)</span> is a transition noise with a given distribution. The state is observed indirectly via a proxy vector <span class="math notranslate nohighlight">\({\bold y}\)</span> via the observation equation:</p>
+\[ \mathbf{x}_{t+\Delta t} = f(\mathbf{x}_t, \mathbf{u}_t) + \mathbf{\epsilon}_t\]</div>
+<p>where <span class="math notranslate nohighlight">\(f(\mathbf{x}_t, \mathbf{u}_t)\)</span> is a general function, <span class="math notranslate nohighlight">\(\mathbf{u}_t\)</span> are inputs (or controls) that affect the dynamics, <span class="math notranslate nohighlight">\(\Delta t\)</span> is the time-step between observations, and <span class="math notranslate nohighlight">\(\mathbf{ \epsilon}_t\)</span> is a transition noise with a given distribution. The state is observed indirectly via a proxy vector <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> via the observation equation:</p>
 <div class="math notranslate nohighlight">
-\[{\bold y}_t = g({\bold x}_t, {\bold u}_t)  + {\bold \eta}\]</div>
-<p>where <span class="math notranslate nohighlight">\(g({\bold x}_t, {\bold u}_t)\)</span> is another general function and <span class="math notranslate nohighlight">\({\bold \eta}_t\)</span> the observation noise, meaning that observations have a degree of uncertainty with respect to the latent space.</p>
+\[\mathbf{y}_t = g(\mathbf{x}_t, \mathbf{u}_t)  + \mathbf{\eta}\]</div>
+<p>where <span class="math notranslate nohighlight">\(g(\mathbf{x}_t, \mathbf{u}_t)\)</span> is another general function and <span class="math notranslate nohighlight">\(\mathbf{\eta}_t\)</span> the observation noise, meaning that observations have a degree of uncertainty with respect to the latent space.</p>
 <p>A <em>Linear Gaussian Model (LGM)</em> is a specific case of the SSM were both the transition and observation functions are linear and the noise terms are Gaussian. In this case, we can use the Kalman filter algorithm to compute the distribution of the state vector at any time, given the observations and the transition and observation model. If some or all the parameters of these models are not known, they can be estimated using standard techniques like Maximum Likelihood Estimation (MLE) or Expectation Maximization (EM) when the former becomes computationally intractable due to the latent state vector.</p>
 <p>For non-Linear Gaussian Models, there are extensions of the Kalman filter that can be used:</p>
 <ul class="simple">

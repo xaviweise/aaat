@@ -42,7 +42,7 @@ We don't observe this mid-price, only trades which we consider noisy observation
 
 $$p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)$$
 
-Readers will recognize that this is the local level model discussed extensively in the Chapter on [Bayesian Theory](#intro_bayesian). For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
+Readers will recognize that this is the local level model discussed extensively in the Chapter on [Bayesian Modelling](#intro_bayesian). For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
 
 $$\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+$$
 
@@ -54,7 +54,7 @@ where $v_0$ in this case is a size scale that separates the regimes where the in
 
 #### Estimation of the simple pricing model
 
-As discussed in Chapter XXX, the standard way to estimate the parameters of a Kalman Filter is using the Expectation Maximization (EM) algorithm, suitable for probabilistic models with latent variables. However, the properties of the simple pricing model can be exploited to obtain closed-form estimators for its parameters using moment matching.
+As discussed in [Bayesian Modelling](#intro_bayesian), the standard way to estimate the parameters of a Kalman Filter is using the Expectation Maximization (EM) algorithm, suitable for probabilistic models with latent variables. However, the properties of the simple pricing model can be exploited to obtain closed-form estimators for its parameters using moment matching.
 
 Let us start by working with a model where observation errors have no dependency on the volume: $\sigma_\nu (v) = \sigma_\nu$. The key is to compute statistics of:
 
@@ -103,7 +103,7 @@ In this simple case, the estimation of the parameters $\sigma_p$ and $\sigma_\ep
 
 #### Inference on the simple pricing model
 
-We can use the general Kalman filter equations described in Chapter XXX to derive the distribution of our mid - price at the next time $t + \Delta t$ where a trade happens.
+We can use the general Kalman filter equations described in [Bayesian Modelling](#intro_bayesian) to derive the distribution of our mid - price at the next time $t + \Delta t$ where a trade happens.
 
 The Kalman filter algorithm operates sequentially over observation steps applying two steps, the *predict* step, where we compute the distribution of the mid-price based purely on the random walk model, and the *update* step in which we incorporate the information provided by the observation of a new trade. We define $m_{t+\Delta t}^t$ as the distribution of the mid-price at $t+\Delta t$ before observing the trade, and $m_{t+\Delta}^{t+\Delta t}$ afterwards. 
 
@@ -240,11 +240,11 @@ We see immediately that $P_t^i \leq P_d^i$, so there is only agreement if both i
 #### Example: pricing of a simple contingent claim
 A contingent claim is a contract that pays off only under the realization of an uncertain event. Many derivatives contracts like options are contingent claims. The most simple contingent claim pays 1$ under the realization of a specific uncertain event, and zero in all other cases. These contingent claims are called Arrow-Debreu securities, and have a theoretical interest since we could in principle decompose any contingent claim as a linear combination of these securities. Therefore, if we know the prices (premiums) of Arrow-Debreu securities, we could price any contingent claim.
 
-For our purposes, though, we just want to discuss a simple example of reservation prices. Let us consider a contingent claim in which the dealer pays the investor 1$ if we get heads when tossing a fair coin in the present. In our framework, the underlying now is the side of the coin, heads or tails, with probabilities $p_H = p_T = 1/2$. We also make $T = t$ since we toss the coin in the present. The value of the reservation price for the investor reads then:
+For our purposes, though, we just want to discuss a simple example of reservation prices. Let us consider a contingent claim in which the dealer pays the investor 1\$ if we get heads when tossing a fair coin in the present. In our framework, the underlying now is the side of the coin, heads or tails, with probabilities $p_H = p_T = 1/2$. We also make $T = t$ since we toss the coin in the present. The value of the reservation price for the investor reads then:
 
 $$ P_t^i = -\frac{1}{\gamma_i} \log \left(\frac{1}{2}e^{-\gamma_i} + \frac{1}{2} \right) = \frac{1}{2} - \frac{1}{\gamma_i}\log \cosh \left(\frac{\gamma_i}{2}\right)$$
 
-For a risk-neutral investor, by making $\gamma_i \rightarrow 0$, we get simply $P_t^i = 1/2$, which makes sense: the investor is willing to pay 0.5$ to make the game <em>fair</em>. Or in other terms, to make the expected value of the game zero. A fully risk averse investor for whom $\gamma_i \rightarrow \infty$ has $P_t = 0$, i.e. only is willing to buy the contract when there is guarantee of no losses under any scenario. In the middle, the premium lies between those two values: the investor will be willing to pay more than 0$ to trade, as far as the payoff is skewed in its favor. 
+For a risk-neutral investor, by making $\gamma_i \rightarrow 0$, we get simply $P_t^i = 1/2$, which makes sense: the investor is willing to pay 0.5\$ to make the game <em>fair</em>. Or in other terms, to make the expected value of the game zero. A fully risk averse investor for whom $\gamma_i \rightarrow \infty$ has $P_t = 0$, i.e. only is willing to buy the contract when there is guarantee of no losses under any scenario. In the middle, the premium lies between those two values: the investor will be willing to pay more than 0$ to trade, as far as the payoff is skewed in its favor. 
 
 #### Example: Forward on a non-dividend paying stock 
 
