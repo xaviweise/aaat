@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 08.25
+Started section on RfQ models, describing a general model for the RfQ process, as well as models for the arrival of RfQs, attrition risk and abnormal client behavior. A new notebook has been uploaded with the full code for the simulation of synthetic client data and implementations of the models. Additionally, worked on Gen AI and Bayesian chapters. 
+
 ## 05.25 
 Kalman filter and smoothing derivation for local level model. Introduction to Bayesian probability and decision theory.
 

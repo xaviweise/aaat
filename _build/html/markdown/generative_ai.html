@@ -222,6 +222,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/bayesian_theory.html">Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/market_microstructure.html">Market Microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
 </ul>
@@ -431,6 +432,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decoder-only-models">10.2.3. Decoder-only models</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fine-tuning-models-with-rlhl">10.2.4. Fine-tuning models with RLHL</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reasoning-models">10.2.5. Reasoning models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-of-large-language-models">10.2.6. Evaluation of Large Language Models</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-large-language-models">10.3. Working with Large Language Models</a><ul class="nav section-nav flex-column">
@@ -526,6 +528,32 @@ document.write(`
 <section id="reasoning-models">
 <h3><span class="section-number">10.2.5. </span>Reasoning models<a class="headerlink" href="#reasoning-models" title="Permalink to this heading">#</a></h3>
 </section>
+<section id="evaluation-of-large-language-models">
+<h3><span class="section-number">10.2.6. </span>Evaluation of Large Language Models<a class="headerlink" href="#evaluation-of-large-language-models" title="Permalink to this heading">#</a></h3>
+<p><strong>Perplexity score</strong>: Perplexity is a metric to evaluate probabilistic models. It is closely related to cross-entropy and for some specific distributions, likelihood. Its main advantage comes in terms of offering a more interpretable score. The idea is to quantify the degree in which an estimated probability distribution for the data is <em>perplexed</em> (i.e. surprised) when it sees new data supposedly coming from the same generative process. The perplexity of a model that assigns probability <span class="math notranslate nohighlight">\(p(x_i)\)</span> to a sample of a sample of test data <span class="math notranslate nohighlight">\(D = \{x_1, ..., x_N\}\)</span> which we assume is independent and identically distributed (iid):</p>
+<div class="math notranslate nohighlight">
+\[PP(D) = b^{-\frac{1}{N}\sum_{i=1}^N \log_b p(x_i)}\]</div>
+<p>where <span class="math notranslate nohighlight">\(b\)</span> is the base for the logarithm, e.g. <span class="math notranslate nohighlight">\(b = 2\)</span> or <span class="math notranslate nohighlight">\(b = e\)</span> being typical choices. We can see readily how is related to the likelihood <span class="math notranslate nohighlight">\(L(D)\)</span> by rewriting it as:</p>
+<div class="math notranslate nohighlight">
+\[PP(D) = \left(\Pi_i p(x_i) \right)^{-1/N} = L(D)^{-1/N}\]</div>
+<p>By inverting the likelihood and normalizing to the length of the sample data, we have a metric that 1) has a interpretation in terms of surprise, since data that has higher probability under the model is therefore less <em>surprising</em>, and 2) it can be better compared across different datasets with different lengths.</p>
+<p>Perplexity is also related to the cross-entropy between the proposed distribution and the empirical distribution of the test data, which is given by the empirical frequencies of the different outcomes <span class="math notranslate nohighlight">\(x\)</span>: <span class="math notranslate nohighlight">\(\hat{p}(x) = \frac{n(x)}{N}\)</span>, with <span class="math notranslate nohighlight">\(n(x)\)</span> the number of occurrences of outcome <span class="math notranslate nohighlight">\(x\)</span> in the test sample <span class="math notranslate nohighlight">\(D\)</span>. Its cross entropy is then defined as:</p>
+<p><span class="math notranslate nohighlight">\(H(\hat{p}, p) = -\sum_x \hat{p}(x) \log_b p(x) = -\frac{1}{N} \sum_i \log_b p(x_i)\)</span></p>
+<p>This relationship is useful if we express the cross entropy in terms of the Kullback - Leibler (KL) divergence:</p>
+<p><span class="math notranslate nohighlight">\(H(\hat{p}, p) = -\sum_x \hat{p}(x) \log_b \hat{p}(x) + \sum_x \hat{p}(x) \log_b \frac {\hat{p}(x)}{p(x)} = H(\hat{p}) + D_{KL}(\hat{p}, p)\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(H(\hat{p})\)</span> is the entropy of the distribution <span class="math notranslate nohighlight">\(\hat{p}\)</span>. Cross-entropy is minimized when <span class="math notranslate nohighlight">\(p(x) = \hat{p}(x)\)</span>, where <span class="math notranslate nohighlight">\(D_{KL} = 0\)</span>. Given that perplexity can be expressed in terms of cross-entropy as:</p>
+<p><span class="math notranslate nohighlight">\(PP(D) = b^{H(\hat{p}, p)}\)</span></p>
+<p>we see readily that perplexity is minimized when the empirical and the model probability distributions agree.</p>
+<p>The range of values for perplexity is <span class="math notranslate nohighlight">\([1, \infty)\)</span>, with <span class="math notranslate nohighlight">\(PP(D) =1\)</span> for models that assign probability <span class="math notranslate nohighlight">\(1\)</span> to the dataset, meaning that from the point of view of the model, there is no uncertainty in the prediction of the dataset. On the other hand, models that assign very low probabilities to the dataset have an unbounded upper limit in their perplexity score. Perplexity has also a natural interpretation in terms of simple benchmark models, helping to provide a natural scale to interpret the quality of the models: for example, a random guessing over a set of <span class="math notranslate nohighlight">\(K\)</span> possible outcomes yields a perplexity:</p>
+<div class="math notranslate nohighlight">
+\[PP(D) = b^{-\frac{1}{N}\sum_{i=1}^N \log_b \frac{1}{K}} = K\]</div>
+<p>Applying perplexity to sequence models like those modelling natural language simply requires us to compute the conditional probabilities to each element of the sequence conditional to the previous elements, i.e. <span class="math notranslate nohighlight">\(p(s_i|s_1, ..., s_{i-1})\)</span>, which decouples the sequence into i.i.d elements:</p>
+<p><span class="math notranslate nohighlight">\(p(s_1, ..., s_N) = \Pi_i p(s_i|s_1, ..., s_{i-1})\)</span></p>
+<p>The perplexity of this model is:</p>
+<div class="math notranslate nohighlight">
+\[PP(D) = b^{-\frac{1}{N}\sum_{i=1}^N \log_b p(s_i|s_1, ..., s_{i-1})}\]</div>
+<p>In the context of large language models, the perplexity score offers a simple interpretation of the quality of the model: if a score <span class="math notranslate nohighlight">\(PP\)</span> is obtained in the evaluation, it means that the model has a perplexity equivalent to a random guess among <span class="math notranslate nohighlight">\(PP\)</span> possible tokens. The smaller is this score compared to the actual size of the token vocabulary space of the model, the better is the quality of the model.</p>
+</section>
 </section>
 <section id="working-with-large-language-models">
 <h2><span class="section-number">10.3. </span>Working with Large Language Models<a class="headerlink" href="#working-with-large-language-models" title="Permalink to this heading">#</a></h2>
@@ -619,6 +647,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decoder-only-models">10.2.3. Decoder-only models</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fine-tuning-models-with-rlhl">10.2.4. Fine-tuning models with RLHL</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reasoning-models">10.2.5. Reasoning models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-of-large-language-models">10.2.6. Evaluation of Large Language Models</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-large-language-models">10.3. Working with Large Language Models</a><ul class="nav section-nav flex-column">

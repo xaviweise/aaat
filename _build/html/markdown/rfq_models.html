@@ -222,6 +222,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/bayesian_theory.html">Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/market_microstructure.html">Market Microstructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
 </ul>
@@ -423,16 +424,22 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-model-for-rfqs">18.2. Probabilistic graphical model for RfQs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-models-for-the-request-for-quote-activity">18.3. Generative models for the request for quote activity</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#models-for-the-arrival-of-rfqs">18.3.1. Models for the arrival of RfQs</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attrition-risk">18.3.2. Attrition risk</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attrition-risk">18.3.2. Attrition risk</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-attrition-risk">18.3.2.1. Simulation of attrition risk</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-generative-model-for-rfqs-in-negotiation">18.4. A Generative model for RfQs in negotiation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-winning-the-rfq">18.4.1. Probability of winning the RfQ</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-price-discovery">18.4.2. Probability of price discovery</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-asymmetry-and-adverse-flows">18.4.3. Information asymmetry and adverse flows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abnormal-client-behavior">18.3.3. Abnormal client behavior</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-client-abnormal-behavior">18.3.3.1. Simulation of client abnormal behavior</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.5. Axe matcher</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-generative-model-for-rfqs-in-negotiation">18.4. A Generative model for RfQs in negotiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causal-interventions">18.5. Causal interventions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimal-pricing">18.5.1. Optimal pricing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.5.2. Axe matcher</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.6. Exercises</a></li>
 </ul>
             </nav>
@@ -453,6 +460,69 @@ document.write(`
 </section>
 <section id="probabilistic-graphical-model-for-rfqs">
 <h2><span class="section-number">18.2. </span>Probabilistic graphical model for RfQs<a class="headerlink" href="#probabilistic-graphical-model-for-rfqs" title="Permalink to this heading">#</a></h2>
+<p>A model that captures the Request for Quote process discussed in the <a class="reference internal" href="market_microstructure.html"><span class="doc std std-doc">Market Microstructure</span></a> chapter is the probabilistic graphical model proposed by [&#64;marin2025causalmd2c], which we reproduce in the following figure:</p>
+<figure class="align-default" id="fig-pgm-rfq">
+<a class="reference internal image-reference" href="../_images/pgm_rfq.png"><img alt="../_images/pgm_rfq.png" src="../_images/pgm_rfq.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.1 </span><span class="caption-text">Probabilistic graphical model for the Request for Quote process</span><a class="headerlink" href="#fig-pgm-rfq" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The model is composed of the following elements. Some of them are known pre-trade, others post-trade depending on the result of the RfQ, and some are just simply non-observable (latent) variables:</p>
+<p><strong>RfQ</strong>: a binary random variable indicating whether an RfQ is initiated. Each RfQ carries associated features, collectively represented by the variable <strong>RF</strong> in the model. These include, for example, the time <span class="math notranslate nohighlight">\(t\)</span> of the request, the side <span class="math notranslate nohighlight">\(s\)</span> (buy or sell) — where “buy” implies the dealer purchases from the client, and “sell” implies the dealer sells to the client — the volume <span class="math notranslate nohighlight">\(v\)</span>, and the number of competing dealers <span class="math notranslate nohighlight">\(n\)</span> chosen by the client (typically subject to platform-imposed limits). The trigger for an RfQ can stem from external client factors, such as a specific trading strategy, which fall outside the model’s scope. In some cases, it may also result from proactive engagement by the dealer’s sales force, captured in the variable <strong>call</strong>. Other factors that may shape the client’s decision to request a quote, and which are explicitly included in the model, include:</p>
+<ul class="simple">
+<li><p><strong>Price discovery (PD)</strong>: The client is interested in discovering the fair value of the instrument but has no intention to execute a trade. This intent is unobservable (a latent variable), as the dealer cannot infer the client’s true motivation at the time the RfQ is received.</p></li>
+<li><p><strong>Client information asymmetry (IA)</strong>: If the client possesses meaningful information about the short-term direction of the market, this creates a situation of information asymmetry. There are several possible sources for this asymmetry:</p>
+<ol class="arabic simple">
+<li><p>The client’s trading activity itself may generate market impact, yet the RfQ submitted to the dealer often reflects only a portion of the total intended order. In this case, the information will affect the market and is captured in the model as a price drift (<span class="math notranslate nohighlight">\(\mu\)</span>) variable, with a direct link represented as <span class="math notranslate nohighlight">\(IA \rightarrow \mu\)</span>.</p></li>
+<li><p>Alternatively, the client might have access to insider information or sophisticated analytics that provide insight into future price movements. This scenario is also modeled via the drift variable, though here there is no direct causal connection between information asymmetry and drift —rather, the client forms an estimate of the drift but does not influence its true value post-trade.</p></li>
+</ol>
+</li>
+<li><p><strong>Axe</strong>: A publicly expressed interest by the dealer in executing a trade at a favorable price (either bid or ask), which can increase the likelihood that a client will submit an RfQ.</p></li>
+<li><p><strong>Client Features (CF)</strong>: Includes the identity of the client as well as broader attributes that may influence trading behavior—such as industry sector, geographic location, or credit rating.</p></li>
+<li><p><strong>Bond Features (BF)</strong>: Encompasses the bond’s unique identifier along with its financial attributes—such as coupon, yield, maturity, and interest rate sensitivity (e.g., DV01). It also includes factors related to liquidity, such as market bid-ask spreads, volatility, and the typical number of dealers quoting RfQs in that bond.</p></li>
+</ul>
+<p><strong>RfQ Status (RS)</strong>: The final outcome of the RfQ can be categorized into three main cases:</p>
+<ul class="simple">
+<li><p><strong>Hit</strong>: The client executes a trade with the dealer.</p></li>
+<li><p><strong>Missed</strong>: The client trades with a different dealer.</p></li>
+<li><p><strong>Passed</strong>: The client does not trade with any dealer. This may occur because the quotes were not attractive enough or the client was merely seeking price information (price discovery).</p></li>
+</ul>
+<p>The drivers of the RfQ status in this model include:</p>
+<ul>
+<li><p>The client’s intent to trade, which is what initiates a <strong>Request for Quote (RfQ)</strong> via a multi-dealer-to-client platform.</p></li>
+<li><p>If the quote is requested solely for <strong>price discovery (PD)</strong> purposes, the only possible outcome with non-zero probability is a <em>passed</em> status (i.e., the client walks away without trading).</p></li>
+<li><p>The <strong>half-spread (<span class="math notranslate nohighlight">\(\delta\)</span>)</strong> quoted by the dealer. Although dealers provide price quotes to clients, we assume that the client’s trading decision depends on the quoted spread relative to a reference mid-price <span class="math notranslate nohighlight">\(P_{m}\)</span>. For example, using a composite price from the platform, the transaction price is modeled as:<br />
+<span class="math notranslate nohighlight">\(P = P_{m} + s \delta\)</span>, where <span class="math notranslate nohighlight">\(s = 1\)</span> if the dealer is selling (ask), and <span class="math notranslate nohighlight">\(s = -1\)</span> if buying (bid).</p></li>
+<li><p>The <strong>spreads quoted by competing dealers</strong>, denoted <span class="math notranslate nohighlight">\(\delta_{dealer}\)</span>. Clients may choose to include up to <span class="math notranslate nohighlight">\(n\)</span> dealers in the RfQ. Naturally, as <span class="math notranslate nohighlight">\(n\)</span> increases, so does the probability of receiving a more competitive quote.  Typically, all quoting dealers know the number of participants <span class="math notranslate nohighlight">\(n\)</span>, but not the individual prices submitted by others. The only partial post-trade information available comes when a dealer wins the RfQ and the platform discloses the <em>cover price</em> (i.e., the second-best price). The dealer who submitted this cover price is informed of their status as <em>covered</em>, but they do not receive information on the actual winning price.</p></li>
+<li><p>The client’s <strong>reservation spread</strong> <span class="math notranslate nohighlight">\(\delta_{res}\)</span>: the maximum acceptable spread relative to the mid-price, defined as</p>
+<p><span class="math notranslate nohighlight">\(\delta_{res} = s(P_{res} - P_{m})\)</span>,</p>
+<p>where <span class="math notranslate nohighlight">\(s\)</span> is the trade side as defined earlier.<br />
+If all quoted prices exceed this threshold, the client will not trade (<em>passed</em> status). Since <span class="math notranslate nohighlight">\(\delta_{res}\)</span> is not directly observable, it must be inferred from historical client behavior. Its determinants include client features (<span class="math notranslate nohighlight">\(CF\)</span>), bond features (<span class="math notranslate nohighlight">\(BF\)</span>), and RfQ characteristics (<span class="math notranslate nohighlight">\(RF\)</span>). Additionally, <strong>information asymmetry (<span class="math notranslate nohighlight">\(IA\)</span>)</strong> is expected to play a role—clients with better information may be more inclined to accept trades.<br />
+Likewise, higher <strong>market volatility (<span class="math notranslate nohighlight">\(\sigma\)</span>)</strong> may prompt clients to trade more readily (e.g., to reduce risk exposure).</p>
+</li>
+</ul>
+<p><strong>Revenue (R)</strong>: The profitability of the trade. Dealers use several different revenue metrics depending on the context:</p>
+<ul class="simple">
+<li><p><em>Instantaneous Flow Value</em> (<span class="math notranslate nohighlight">\(R_0\)</span>):  A simple per-trade measure of profitability, calculated as  <span class="math notranslate nohighlight">\(R_0 = v \delta\)</span> where <span class="math notranslate nohighlight">\(v\)</span> is the trade volume and <span class="math notranslate nohighlight">\(\delta\)</span> is the half-spread at the time of the trade. This metric does not consider the gains or losses realized when the inventory is eventually unwound via an opposite trade.</p></li>
+</ul>
+<ul>
+<li><p><em>Round-Trip Revenue</em> (<span class="math notranslate nohighlight">\(R_{rt}\)</span>):  Addresses the limitations of the instantaneous flow value by considering the full round-trip (buy and sell or vice versa). Revenue is computed as:</p>
+<p><span class="math notranslate nohighlight">\(R_{rt} = s v (P_{t_{rt}} - P_t) = v \delta_{t_{rt}} - v \delta_{t} + s v (P_{m,t_{rt}} - P_{m,t})\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(t\)</span> is the RfQ time and <span class="math notranslate nohighlight">\(t_{rt}\)</span> is the round-trip time.<br />
+Assuming Brownian motion for price dynamics:</p>
+<p><span class="math notranslate nohighlight">\(P_{m,t_{rt}} - P_{m,t} = \mu(t_{rt} - t) + \sigma (W_{t_{rt}} - W_t)\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the <strong>drift</strong>, <span class="math notranslate nohighlight">\(\sigma\)</span> is the <strong>volatility</strong>, and <span class="math notranslate nohighlight">\(W_t\)</span> is a Wiener process such that <span class="math notranslate nohighlight">\(W_{t_{rt}} - W_t \sim N(0, t_{rt} - t)\)</span>  The stochastic component (<span class="math notranslate nohighlight">\(W\)</span>) captures the effect of <strong>market external factors (MXF)</strong>.  The model also allows for a causal relationship between <strong>information asymmetry (IA)</strong> and drift (<span class="math notranslate nohighlight">\(\mu\)</span>), to reflect situations where client trading influences market direction.
+Both <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> are latent variables—not observable at trade time.  However, the model assumes that <span class="math notranslate nohighlight">\(\sigma\)</span> (volatility) is relatively predictable, so its pre- and post-trade values are treated as equivalent. This makes it a valid driver of both dealer pricing (<span class="math notranslate nohighlight">\(\delta\)</span>, <span class="math notranslate nohighlight">\(\delta_{\text{dealer}}\)</span>) and client reservation spreads (<span class="math notranslate nohighlight">\(\delta_{\text{res}}\)</span>).  In contrast, <span class="math notranslate nohighlight">\(\mu\)</span> (drift) is much harder to predict reliably, except in cases where clients have asymmetric information. Hence, post-trade drift is excluded from dealer pricing logic.</p>
+</li>
+<li><p><em>End-of-Day Flow Value</em> (<span class="math notranslate nohighlight">\(R_{\text{eod}}\)</span>):  Used when trades remain open over long time horizons (e.g., illiquid bonds). Revenue is marked-to-market at the end of the day:</p>
+<p><span class="math notranslate nohighlight">\(R_{\text{eod}} = v \delta_t + s v (P_{m,T} - P_{m,t})\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is the end-of-day timestamp. This measure can incorporate <strong>liquidity penalties</strong> to reflect the risk of holding hard-to-sell positions.</p>
+</li>
+<li><p><em>Short-Term Flow Value</em> (<span class="math notranslate nohighlight">\(R_{t+h}\)</span>):  Evaluates revenue at a short time horizon <span class="math notranslate nohighlight">\(h\)</span> (seconds to minutes) after trade execution:</p>
+<p><span class="math notranslate nohighlight">\(R_{t+h} = v \delta_t + s v (P_{m,t+h} - P_{m,t})\)</span> .</p>
+<p>This is particularly useful for identifying <strong>information asymmetry (IA)</strong>, as such informational advantages typically manifest within short timeframes before being diluted by general market dynamics (<strong>MXF</strong>).</p>
+</li>
+</ul>
 </section>
 <section id="generative-models-for-the-request-for-quote-activity">
 <h2><span class="section-number">18.3. </span>Generative models for the request for quote activity<a class="headerlink" href="#generative-models-for-the-request-for-quote-activity" title="Permalink to this heading">#</a></h2>
@@ -460,40 +530,210 @@ document.write(`
 <h3><span class="section-number">18.3.1. </span>Models for the arrival of RfQs<a class="headerlink" href="#models-for-the-arrival-of-rfqs" title="Permalink to this heading">#</a></h3>
 <p>A dealer receives RfQs for different products from different clients every day or week. Each RfQ has a side, buy or sell, and a volume requested to be traded. A generative model that captures this distribution can be encoded by the following probability:</p>
 <div class="math notranslate nohighlight">
-\[p(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v)}} \in [t, t+dt]|F_t)\]</div>
-<p>where <span class="math notranslate nohighlight">\(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})}\)</span> is a random variable that specifies the time at which a client <span class="math notranslate nohighlight">\(\text{c}\)</span> requests a quote for product <span class="math notranslate nohighlight">\(\text{p}\)</span> of side <span class="math notranslate nohighlight">\(\text{s}\)</span> and volume <span class="math notranslate nohighlight">\(\text{v}\)</span>, and we have also a filtration <span class="math notranslate nohighlight">\(F_t\)</span> that includes all relevant information up to t. Alternatively we can introduce <span class="math notranslate nohighlight">\(N_t^{\text{RfQ}(\text{client = c, product = p, side = s, volume = v)}}\)</span> as the number of such RfQs up to time t. These two formulations are in fact equivalent:</p>
+\[P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|F_t)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_{\text{RfQ}(\text{c, p, s, v})}\)</span> is a random variable that specifies the time at which a client <span class="math notranslate nohighlight">\(\text{c}\)</span> requests a quote for product <span class="math notranslate nohighlight">\(\text{p}\)</span> of side <span class="math notranslate nohighlight">\(\text{s}\)</span> and volume <span class="math notranslate nohighlight">\(\text{v}\)</span> (for the moment we assume volumes to be discrete), and we have also a filtration <span class="math notranslate nohighlight">\(F_t\)</span> that includes all relevant information up to t. Alternatively we can introduce <span class="math notranslate nohighlight">\(N_t^{\text{RfQ}(\text{c, p, s, v)}}\)</span> as the number of such RfQs up to time t. These two formulations are in fact equivalent:</p>
 <div class="math notranslate nohighlight">
-\[p(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} \in [t, t+dt]|F_t) = \]</div>
+\[P(\tau_{\text{RfQ}(\text{c, p, s, v})} \in [t, t+dt]|F_t) = \]</div>
 <div class="math notranslate nohighlight">
-\[ p(N_{t+dt}^{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} - N_t^{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} = 1|F_t)\]</div>
+\[ P(N_{t+dt}^{\text{RfQ}(\text{c, p, s, v})} - N_t^{\text{RfQ}(\text{c, p, s, v})} = 1|F_t)\]</div>
 <p>From the Stochastic Calculus chapter we recognize this model as a <strong>counting process</strong>, whose probability distribution we can write as:</p>
 <div class="math notranslate nohighlight">
-\[ p(\tau_{\text{RfQ}(\text{client = c, product = p, side = s, volume = v})} \in [t, t+dt]|F_t) = \lambda_t (...)dt\]</div>
-<p>with the so-called intensity <span class="math notranslate nohighlight">\(\lambda_t\)</span> being a general function of time, RfQ variables and any relevant information contained in <span class="math notranslate nohighlight">\(F_t\)</span>, for instances previous RfQs. If <span class="math notranslate nohighlight">\(\lambda_t = \lambda_t(c, p, s, v)\)</span> then we have an instance of a non-homogeneous Poisson process, and if it depends on previous times of arrivals of RfQs, i.e. it is a self-exciting process, we have a Hawkes process. Such counting processes are natural candidates to model the arrival of RfQs.</p>
-<p>DISCUSS RELATION TO MODEL WHERE SIDE, VOLUME ARE INDEPENDENT OF ARRIVAL WITH THEIR OWN DISTRIBUTIONS</p>
+\[ P(\tau_{\text{RfQ}(\text{c, p, s, v})} \in [t, t+dt]|F_t) = \lambda_t (c, p, s, v)dt\]</div>
+<p>with the so-called intensity <span class="math notranslate nohighlight">\(\lambda_t\)</span> being a general function of time, RfQ variables and any relevant information contained in <span class="math notranslate nohighlight">\(F_t\)</span>, for instance, previous RfQs. This is an instance of a non-homogeneous Poisson process. If it also depends on previous times of arrivals of RfQs, i.e. it is a self-exciting process, we have a Hawkes process. Such counting processes are natural candidates to model the arrival of RfQs.</p>
+<p>Alternatively, we can rewrite the model using the product rule of probability as:
+$$ P(\tau_{\text{RfQ}(\text{c, p, s, v})} \in [t, t+dt]|F_t) =  P(v| s, c, p, \text{RfQ}_{t,t+dt}, F_t) P(s|c, p, \text{RfQ}:</p>
+<p><em>{t,t+dt}, F_t) P(c, p| \text{RfQ}</em>{t,t+dt}, F_t) P(\text{RfQ}_{t,t+dt}|F_t) $$</p>
+<p>where we have used the compact notation: <span class="math notranslate nohighlight">\(\text{RfQ}_{t,t+dt}\)</span> instead of <span class="math notranslate nohighlight">\(\tau_{\text{RfQ}} \in [t, t+dt]\)</span>. This way, we can explicitly model the statistics of each of the probabilities in the product. A typical hypothesis is to make the conditional probabilities independent of time and use simple distributions to model them. For instance, volumes are modelled in many cases as continuous distribution following a power law or a log-normal probability density, since volumes are positive and heavy tailed in their distribution:</p>
+<div class="math notranslate nohighlight">
+\[P(V \in [v, v+dv]| s, c, p, \text{RfQ}) = \frac{\alpha -1}{v_\text{min}}\left(\frac{v}{v_\text{min}}\right)^{-\alpha} dv\]</div>
+<p>where <span class="math notranslate nohighlight">\(v \geq v_\text{min}\)</span>, <span class="math notranslate nohighlight">\(\alpha &gt; 1\)</span>.</p>
+<p>The side <span class="math notranslate nohighlight">\(s\)</span>, being a binary variable, buy or sell, is typically modelled using a Bernoulli distribution. Finally, the probabilities that RfQs come from a specific client or product can be modelled using a multinomial distribution.</p>
 </section>
 <section id="attrition-risk">
 <h3><span class="section-number">18.3.2. </span>Attrition risk<a class="headerlink" href="#attrition-risk" title="Permalink to this heading">#</a></h3>
-<p>Model from Fader et al, comment overall</p>
+<p>The previous model considers that clients have a stable pattern of choosing the dealer for their requests for quotes. However, clients might at some point stop sending RfQs to the dealer, for instance when they perceive that prices are non competitive on average (i.e. they see low hit &amp; miss ratios) or when dealers often don’t respond with their quotes.</p>
+<p>A simple extension of the previous model for the arrival of RfQs introduces a latent binary random variable to characterize if clients are actively engaging with the dealer or not. Denoting this variable <span class="math notranslate nohighlight">\(a\)</span>, with <span class="math notranslate nohighlight">\(a=1\)</span> meaning the client is active, the model is decomposed as:</p>
+<div class="math notranslate nohighlight">
+\[P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|F_t) = P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|a = 1, F_t) P(a = 1|F_t)\]</div>
+<p>where we have implicitly used the fact that <span class="math notranslate nohighlight">\(P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|a = 0, F_t) = 0\)</span>, i.e. we don’t expect the arrival of RfQs for clients that are inactive. We are therefore interested in characterizing <span class="math notranslate nohighlight">\(P(a = 1|F_t)\)</span> or most typically <span class="math notranslate nohighlight">\(P(a = 0|F_t) = 1- P(a = 1|F_t)\)</span>, which is known in the marketing analytics literature as the <em>attrition risk</em> model.</p>
+<p>Inferences of attrition risk can be done by analyzing the historical patterns of client trading activity.  A simple albeit elegant model is that from Fader et al [&#64;fader2010customer], where they consider daily (or any other time scale) client activity as a set of independent identically distributed Bernoulli random variables <span class="math notranslate nohighlight">\(Y_t\)</span> with probability <span class="math notranslate nohighlight">\(p\)</span>. In our RfQ setup, this means <span class="math notranslate nohighlight">\(Y_t = 1\)</span> if the client sends any RfQ, or <span class="math notranslate nohighlight">\(Y_t = 0\)</span> otherwise.  Additionally, a client can become inactive at the beginning of the day with probability <span class="math notranslate nohighlight">\(\theta\)</span>. Given a pattern of historical daily activity <span class="math notranslate nohighlight">\(D\)</span> of a client we can compute the probability that the client is active using Bayes’ theorem:</p>
+<div class="math notranslate nohighlight">
+\[P(a = 1|D, p, \theta) = \frac{P(D|a=1, p, \theta)P(a = 1|p, \theta)}{P(D|a=1, p, \theta)P(a=1|p, \theta) + P(D|a=0, p, \theta)P(a=0|p, \theta)}\]</div>
+<p>For example, for the pattern <span class="math notranslate nohighlight">\(D = 10100\)</span>, the likelihood in the denominator is calculated as the probability that the the observed pattern is simply explained by the natural probabilities of requesting RfQs:</p>
+<div class="math notranslate nohighlight">
+\[P(D|a=1, p, \theta) = p(1-p)p(1-p)^2\]</div>
+<p>with the prior probability for the client being active corresponding to the scenario in which the client does not become inactive in all the observation periods:</p>
+<div class="math notranslate nohighlight">
+\[P(a = 1|p, \theta) =  (1-\theta)^5\]</div>
+<p>In contrast, the alternative hypothesis in which the client is already inactive is actually the result of two different paths, one in which the client becomes inactive at the last day, whereas in the second it does it in the previous day. Therefore:</p>
+<div class="math notranslate nohighlight">
+\[P(D|a=0, p, \theta)  P(a=0|p, \theta)=  p(1-p)p(1-p)(1-\theta)^4 \theta +  p(1-p)p (1-\theta)^3 \theta \]</div>
+<p>The model does not consider the possibility that clients which are inactive are activated again, which is definitely possible in reality, but not necessarily useful for a model that simply tries to detect clients that have recently stopped engaging with the dealer. Plugging these probabilities into Bayes’ theorem we get:</p>
+<div class="math notranslate nohighlight">
+\[P(a = 1|D, p, \theta) = \frac{p(1-p)p(1-p)^2(1-\theta)^5}{p(1-p)p(1-p)^2(1-\theta)^5+   p(1-p)p(1-p)(1-\theta)^4 \theta +  p(1-p)p (1-\theta)^3 \theta}\]</div>
+<div class="math notranslate nohighlight">
+\[ =  \frac{(1-p)^2(1-\theta)^2}{(1-p)^2(1-\theta)^2+ (1-p)(1-\theta) \theta +  \theta}\]</div>
+<p>As pointed out by the authors, any other trading pattern with the same number of active days –denoted as <span class="math notranslate nohighlight">\(x\)</span> (<em>frequency</em> in the marketing jargon), and the same number of days since the last RfQ –the <em>recency</em> <span class="math notranslate nohighlight">\(r\)</span>, has the same likelihood. For instance, <span class="math notranslate nohighlight">\(P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)\)</span>. see the exercise at the end of the chapter. This is an interesting insight that naturally links the model with the traditional heuristics based on recency and frequency in the Marketing Analytics literature, see for example [&#64;GrigsbyMarketing]. The general result for a pattern consisting of <span class="math notranslate nohighlight">\(n\)</span> days of trading activity, frequency <span class="math notranslate nohighlight">\(x\)</span> and recency <span class="math notranslate nohighlight">\(r\)</span>, we have:</p>
+<div class="math notranslate nohighlight">
+\[P(D|a=1, p, \theta)P(a = 1|p, \theta)= p^{x}(1-p)^{n-x} (1-\theta)^n\]</div>
+<div class="math notranslate nohighlight">
+\[P(D|a=0, p, \theta)P(a = 0|p, \theta) =  \sum_{i=1}^{r} p^x(1-p)^{n-x-i}(1-\theta)^{n-i} \theta\]</div>
+<p>Notice that the evidence in the denominator of Bayes’ theorem it is simply the <em>complete</em> likelihood of the data:</p>
+<div class="math notranslate nohighlight">
+\[P(D|p, \theta) = p^{x}(1-p)^{n-x} (1-\theta)^n + \sum_{i=1}^{r} p^x(1-p)^{n-x-i}(1-\theta)^{n-i} \theta \equiv L(D|p,\theta)\]</div>
+<p>Therefore:</p>
+<div class="math notranslate nohighlight">
+\[P(a=1|D, p, \theta) = \frac{p^{x}(1-p)^{n-x} (1-\theta)^n}{L(D|p,\theta)}\]</div>
+<p>The model in this form requires a separate estimation of parameters <span class="math notranslate nohighlight">\(p\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> for each individual client. Alternatively, the model can be generalized to a segment of clients whose parameters follow a probability distribution but we cannot attach specific parameters to any of them. As it is natural to model distributions of probabilities, Fader et al propose the use of Beta distributions for <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[f(p |\alpha, \beta) = \frac{p^{\alpha - 1}(1 - p)^{\beta - 1}}{B(\alpha, \beta)} \quad \text{for } 0 \leq p \leq 1, \, \alpha, \beta &gt; 0\]</div>
+<div class="math notranslate nohighlight">
+\[f(\theta| \gamma, \delta) = \frac{\theta^{\gamma - 1}(1 - \theta)^{\delta - 1}}{B(\gamma, \delta)} 
+\quad \text{for } 0 \leq \theta \leq 1,\; \gamma, \delta &gt; 0\]</div>
+<p>where the Beta function is by definition:</p>
+<div class="math notranslate nohighlight">
+\[B(\alpha, \beta) \equiv \int dp p^{\alpha - 1} (1-p)^{\beta - 1}\]</div>
+<p>This allow us to characterize the segment of clients with four parameters, <span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span> and <span class="math notranslate nohighlight">\(\delta\)</span>. Notice that this model does not capture the possibility of multiple segments within the population of clients. To capture that, a simple extension is to use a mixture of Betas, see next section for a simple application of such model in anomaly detection.</p>
+<p>Continuing with the single segment model, the likelihood now requires to integrate over the distribution of <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[P(D|\alpha, \beta, \gamma, \delta) = \int dp d\theta f(p| \alpha, \beta) f(\theta| \gamma, \delta) L(D|p, \theta)\]</div>
+<p>where recall that in this model, the dataset <span class="math notranslate nohighlight">\(D\)</span> can be reduced to <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(x\)</span>. The calculation can be carried out analytically in terms of Beta functions, since it involves integrals of the form:</p>
+<div class="math notranslate nohighlight">
+\[\int dp f(p|\alpha, \beta) p^n (1-p)^m = \frac{B(\alpha + n, \beta + m)}{B(\alpha, \beta)}\]</div>
+<p>The likelihood for a single client can be expressed in terms of Beta functions:</p>
+<div class="math notranslate nohighlight">
+\[P(D|\alpha, \beta, \gamma, \delta) = \frac{B(\alpha + x, \beta + n - x)}{B(\alpha, \beta)} \frac{B(\gamma, \delta + n)}{B(\gamma, \delta)} + \sum_{i=1}^{r} \frac{B(\alpha + x, \beta + n - x- i)}{B(\alpha, \beta)} \frac{B(\gamma+1, \delta + n-i)}{B(\gamma, \delta)} \]</div>
+<p>Applying accordingly Bayes theorem on <span class="math notranslate nohighlight">\(P(a = 1|D, \alpha, \beta, \gamma, \delta)\)</span> we get:</p>
+<div class="math notranslate nohighlight">
+\[P(a = 1|D, \alpha, \beta, \gamma, \delta) = \frac{B(\alpha + x, \beta + n - x)}{B(\alpha, \beta)} \frac{B(\gamma, \delta + n)}{B(\gamma, \delta)} L^{-1}(D|\alpha, \beta, \gamma, \delta)\]</div>
+<p>where we have defined <span class="math notranslate nohighlight">\(L(D|\alpha, \beta, \gamma, \delta) \equiv P(D|\alpha, \beta, \gamma, \delta)\)</span></p>
+<p>For model parameters estimation, the authors suggests using maximum likelihood over the historical dataset. For the one segment model this implies a joint estimation of the parameters for the collective of clients in the dataset, since they share parameters. Alternatively, a Bayesian estimation approach would seek to estimate <span class="math notranslate nohighlight">\(P(p, \theta|D)\)</span> for the single client model or <span class="math notranslate nohighlight">\(P(\alpha, \beta, \gamma, \delta|D_N)\)</span> for the one segment model, where we have used <span class="math notranslate nohighlight">\(D_N\)</span> to denote the full dataset of <span class="math notranslate nohighlight">\(N\)</span> clients.</p>
+<section id="simulation-of-attrition-risk">
+<h4><span class="section-number">18.3.2.1. </span>Simulation of attrition risk<a class="headerlink" href="#simulation-of-attrition-risk" title="Permalink to this heading">#</a></h4>
+<p>Let us see how this model works in practice. We simulate a segment of 50 clients that send RfQs to a dealer according to the Poisson model discussed in the previous section. For simplicity, we only consider the situation in which the client wants to buy from the dealer. Each client is characterized by an intensity of RfQ arrival drawn from a Gaussian distribution with mean 1 (i.e. a client on average sends one RfQ per day) and standard deviation 0.05. In principle such choice of parameters makes highly unlikely to generate negative intensities, but if that happens we simply force them to be positive. The clients’ reservation prices, i.e. the maximum prices they would accept in order to trade, also follows a Gaussian distribution, in this case with mean 100 (which could be considered the fair price of the financial product) and standard deviation of 10% around this mean. These reservation prices are not static, though: they fluctuate over time with some noise that models the potential impact of changing market conditions. We choose 20% of the mean for this parameter.</p>
+<p>We model attrition in this setup by considering that clients will stop sending RfQs to the dealer if the average hit rate (percentage ot trades over RfQs sent) is below a given threshold over a window of time. We take 10% as the threshold for all clients (although we could also model a distribution over the segment) and suppose that clients evaluate the hit rate with the dealer over a 10 days window (again, this could be made client dependent but we choose not to in this simulation).</p>
+<p>Finally, in order to produce a rich dynamics, we model the behavior of the dealer as follows: on the one hand, she has her own target hit ratio that tries to balance client satisfaction with he own profitability. We choose a 40% hit ratio target for all clients. To hit this target, the dealer try to infer the distribution of each of her clients’ reservation price using Bayesian methods, i.e. estimating the posterior distribution of the reservation price conditioned to the data, which consist of the time series of hits and misses of previous RfQs sent by clients and the prices quoted. Mathematically, let <span class="math notranslate nohighlight">\(r_n\)</span> the reservation price of client <span class="math notranslate nohighlight">\(n\)</span>, then the dealer seeks to infer the density function <span class="math notranslate nohighlight">\(f(r_n|D)\)</span>, where <span class="math notranslate nohighlight">\(D = \{(c_i, p_{i}, h_{i})\}\)</span> is the dataset comprised of clients <span class="math notranslate nohighlight">\(c_i\)</span>, the prices <span class="math notranslate nohighlight">\(p_{i,n}\)</span> quoted to client <span class="math notranslate nohighlight">\(n\)</span>, and the result of the negotiation <span class="math notranslate nohighlight">\(h_{i,n} = (1,0)\)</span> equal to one when the client accepts the price (hit) and zero otherwise (miss). The dealer updates the posterior dynamically after every negotiation, and uses this information to quote the next RfQ by choosing the price such that the probability of hit (which occurs when the price quoted is lower than the reservation price) is equal to the hit target of 40%:</p>
+<div class="math notranslate nohighlight">
+\[P(r_n \geq p|D) = \int_p^\infty dr_n f(r_n|D) = 0.4\]</div>
+<p>At the beginning of the simulation, we assume that the dealer has a prior estimation of the distribution of reservation prices given by a Gaussian distribution of mean <span class="math notranslate nohighlight">\(60\)</span> and standard deviation <span class="math notranslate nohighlight">\(10\)</span>, which means the estimation is relatively off with respect to reality.</p>
+<p>Let us simulate the model over 200 days. The following figure shows the mean of daily hit ratios that the dealer achieves with the clients that send RfQs that day (which are active by definition, although there could be active clients that a given day don’t send RfQs):</p>
+<figure class="align-default" id="fig-avg-hit-rate">
+<a class="reference internal image-reference" href="../_images/avg_hit_rate_attrition.png"><img alt="../_images/avg_hit_rate_attrition.png" src="../_images/avg_hit_rate_attrition.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.2 </span><span class="caption-text">Evolution of daily averages of hit rates with clients that sent RfQs each day. The dealer start with an off estimation of the reservation prices, which explains why it takes some time for dealers to reach their target hit ratios.</span><a class="headerlink" href="#fig-avg-hit-rate" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The effect of the prior estimation of reservation prices by the dealer is clearly reflected in the first part of the simulation, where hit ratios are far from the target set by the dealer. In particular, since the dealer has a low biased estimation of reservation prices, this translates into high hit rates at the beginning of the simulation. We see the effect of the Bayesian learning, though, as time goes on, since in the range of 25-50 days the hit rates have stabilized around the target, which remains noisy given the fluctuations in client reservation prices that we have introduced in the model. Precisely because of these fluctuations we find situations in which clients get average hit rates over their 10 days evaluation windows below their 10% target, which makes them stop sending RfQs to the dealer –becoming inactive, although they don’t inform the dealer of this situation. The following figure reflects this situation by plotting the evolution of the attrition rate, i.e. the cumulative percentage of clients who have become inactive since the beginning of the simulation:</p>
+<figure class="align-default" id="fig-attrition-rate">
+<a class="reference internal image-reference" href="../_images/attrition_rate.png"><img alt="../_images/attrition_rate.png" src="../_images/attrition_rate.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.3 </span><span class="caption-text">Cumulative attrition rate over time, i.e. percentage of inactive clients over the total number of clients (50) at the beginning of the simulation.</span><a class="headerlink" href="#fig-attrition-rate" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Precisely because the dealer starts with a pessimistic estimation of the reservation price of the clients, which translates into a large hit rate, attrition rates don’t kick off until the dealer corrects her estimation of the reservation prices and reaches her target hit rates. At this point, fluctuations in the reservation price from clients trigger attrition rates, which steadily grow over the simulation. If the dealer does not do anything to address the attrition risk, eventually all clients will become inactive. That’s where the attrition risk model comes into play, as a tool used by the dealer to detect which clients might have become inactive and trigger corrective actions, for example using her salesforce to contact clients and try to engage them back.</p>
+<p>We implement the model discussed in this section based on the work by Fader et al and fit it using maximum likelihood over the first 100 days of the simulation. Then we use it to evaluate the probability of being inactive for each client in the last 100 days, given their trading patterns. To check that the model is well calibrated, we plot the expected attrition rate from the model against the simulated one in the test set (last 100 days) in the following figure:</p>
+<figure class="align-default" id="fig-pred-vs-actual-attrition">
+<a class="reference internal image-reference" href="../_images/pred_vs_actual_attrition.png"><img alt="../_images/pred_vs_actual_attrition.png" src="../_images/pred_vs_actual_attrition.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.4 </span><span class="caption-text">Expected attrition rate computed by the model against the actual attrition rate from the simulation in the test set (the last 100 days of the simulation). The good match is an indication of a good calibration.</span><a class="headerlink" href="#fig-pred-vs-actual-attrition" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The figure shows a good agreement between model and simulation in the test set, implying that the model is reasonably well estimated. We further test the quality of the model by computing a confusion matrix that compares the prediction of the model: inactive if the probability of attrition is higher than 50%, active otherwise; against the hidden activity labels we have generated in the simulation, where clients become inactive when average hit rates are lower than 10% for the last 10 days. This is evaluated for each day and client in the test set (5000 evaluations, resulting from 50 clients over 100 days).</p>
+<p>The results indicate that the model is able to discriminate well between active and inactive clients across all thresholds, as evidenced by a high AUC of 0.9884. At the specific threshold of 50%, overall accuracy is very high (98.48%) and precision is perfect (100%), meaning that every client flagged as “inactive” truly was inactive. However, recall is 88.03%, which implies that the model misses some truly inactive clients (76 false negatives vs. 559 true positives). In practice, this means the model is conservative in raising alerts: it waits for clear evidence of non-trading before flagging a client, avoiding false positives entirely but potentially reacting slightly late. Depending on the cost a dealer might incur in missing early signs of disengagement, it may be worth exploring a lower threshold to catch more potential churn cases earlier, even if that introduces some false positives.</p>
+<p>Finally, let us check the behavior of the model for individual clients over the test set, with selected clients shown in the following figure:</p>
+<figure class="align-default" id="fig-attrition-per-client">
+<a class="reference internal image-reference" href="../_images/attrition_per_client.png"><img alt="../_images/attrition_per_client.png" src="../_images/attrition_per_client.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.5 </span><span class="caption-text">Trading behavior and activity for selected clients, against the probability of being inactive (attrition risk) computed by the model.</span><a class="headerlink" href="#fig-attrition-per-client" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The visualizations of Clients 3, 8, 9, and 30 illustrate how the model responds to different trading behaviors over time with its attrition probability signal.</p>
+<ul class="simple">
+<li><p>Client 3 remains consistently active throughout the period. Accordingly, the model keeps the attrition probability near zero, reflecting high confidence in continued engagement.</p></li>
+<li><p>Client 8 begins active but stops trading near the end of the test period. The model gradually increases its attrition probability, reaching high levels just as the client becomes inactive. This indicates that the model correctly detects disengagement with a slight delay, requiring some sustained evidence of inactivity before triggering an alert.</p></li>
+<li><p>Client 9 becomes inactive early (around day 15), stopping trading entirely. The attrition probability reacts sharply, climbing quickly toward 1 and staying there for the rest of the period. This is an ideal response, showing the model can detect early and persistent disengagement with high confidence.</p></li>
+<li><p>Client 30 shows intermittent trading throughout, with a notable gap around day 60. During this gap, the model’s probability of inactivity rises significantly, but it drops again once trading resumes. This demonstrates the model’s sensitivity to recent inactivity, while also its ability to recover when trading behavior picks up again—avoiding a false alert.</p></li>
+</ul>
+<p>Overall, the model shows consistent and interpretable behavior: it remains quiet when trading is stable, rises decisively when disengagement is clear, and adjusts adaptively when trading resumes after a gap.</p>
+</section>
+</section>
+<section id="abnormal-client-behavior">
+<h3><span class="section-number">18.3.3. </span>Abnormal client behavior<a class="headerlink" href="#abnormal-client-behavior" title="Permalink to this heading">#</a></h3>
+<p>In the attrition risk sector we introduced a model for the expected trading activity of a segment of clients, using a Beta distribution:</p>
+<div class="math notranslate nohighlight">
+\[f(p |\alpha, \beta) = \frac{p^{\alpha - 1}(1 - p)^{\beta - 1}}{B(\alpha, \beta)} \quad \text{for } 0 \leq p \leq 1, \, \alpha, \beta &gt; 0\]</div>
+<p>This model can be easily adapted to work as an anomaly detector for clients that suddenly change their pattern of trading behavior with respect to their peers. The attrition risk model in that sense is a specific instance of anomaly detection, in which we are testing the normal client behavior hypothesis against one in which the client has completely stopped trading. A less restrictive hypothesis is that the client has switched her pattern of activity to a different regime with a higher probability for tail scenarios of activity, i.e. the client is either trading much more often or much less often than expected. We model such trading scenario by using a mixture of two beta distributions:</p>
+<div class="math notranslate nohighlight">
+\[f(p |\alpha, \beta) = q_g \frac{p^{\alpha_g - 1}(1 - p)^{\beta_g - 1}}{B(\alpha_g, \beta_g)}  + (1-q_g) \frac{p^{\alpha_b - 1}(1 - p)^{\beta_b - 1}}{B(\alpha_b, \beta_b)} \]</div>
+<p>In order to ensure we capture tail anomalies in both sides, we force that both Beta distributions have the same mean:
+$<span class="math notranslate nohighlight">\( \frac{\alpha_g}{\alpha_g + \beta_g} = \frac{\alpha_b}{\alpha_b+\alpha_g}\)</span><span class="math notranslate nohighlight">\(
+This is an instance of a Good and Bad Data Model for anomaly detection, see [&#64;SilvaBayesian]. In this generative model, a trading observation can originate from either the good distribution — representing the expected behavior of a client segment — or from the bad distribution, which is fitted to capture tail anomalies such as drops in activity, attrition, or bursts in trading activity. Anomaly detection involves inferring the segment (good or bad) based on recent observations \)</span>D<span class="math notranslate nohighlight">\( over a window of size \)</span>n$ for a specific client. Following the attrition model, these observations are represented as a binary indicator series: a value of 1 if the client traded on a given day, and 0 otherwise. Using Bayes’ theorem:</p>
+<div class="math notranslate nohighlight">
+\[p({\rm good}|D) = \frac{p(D|{\rm good}) q_g}{p(D|{\rm good}) q_g + p(D|{\rm bad}) (1-q_g)}\]</div>
+<p>with:</p>
+<div class="math notranslate nohighlight">
+\[p(D|{\rm good}) = \int dp \frac{p^{\alpha_g - 1}(1 - p)^{\beta_g - 1}}{B(\alpha_g, \beta_g)} p^x (1-p)^{n-x} = \frac{B(\alpha_g + x, \beta_g + n - x)}{B(\alpha_g, \beta_g)} \]</div>
+<div class="math notranslate nohighlight">
+\[p(D|{\rm bad}) = \int dp \frac{p^{\alpha_b - 1}(1 - p)^{\beta_b - 1}}{B(\alpha_b, \beta_b)} p^x (1-p)^{n-x} = \frac{B(\alpha_b + x, \beta_b + n - x)}{B(\alpha_b, \beta_b)} \]</div>
+<p>where again <span class="math notranslate nohighlight">\(x\)</span> is the number of days that the client has traded in the window of size <span class="math notranslate nohighlight">\(n\)</span>, which is a sufficient statistic for this problem. <span class="math notranslate nohighlight">\(q_g\)</span> is the prior probability that the client might behave normally, although in practical setups the full model is estimated over a training set using maximum likelihood, from which the parameters <span class="math notranslate nohighlight">\(\alpha_g, \beta_g, \alpha_b, \beta_b, q_g\)</span> are estimated. Another possibility is to restrict the estimation to the coefficients of the Beta distribution and input <span class="math notranslate nohighlight">\(q_g\)</span> from pure prior business knowledge. Of course, as usual, the model can be estimated using a full Bayesian approach.</p>
+<section id="simulation-of-client-abnormal-behavior">
+<h4><span class="section-number">18.3.3.1. </span>Simulation of client abnormal behavior<a class="headerlink" href="#simulation-of-client-abnormal-behavior" title="Permalink to this heading">#</a></h4>
+<p>We extend the simulation from the attrition risk sector adding an extra mechanism, namely clients who are quoted too generously by the dealer will boost their RfQ request rate until the dealer quotes a worse enough price. In our simulation, clients boost their activity when prices quoted are <span class="math notranslate nohighlight">\(35%\)</span> cheaper than their reservation prices, and return to normality when the dealer quotes a price which are approximately <span class="math notranslate nohighlight">\(50%\)</span> more expensive than their reservation rates. When they boost their activity, they increase their RfQs rates ten-fold. We simulate 50 clients over 200 days.</p>
+<p>In the following pictures we see the resulting dynamics. The first 25 days show a different dynamics until the dealer learns enough about the distribution of reservation prices of clients. Since it has a very conservative estimation of the value of the financial asset, at the beginning we see a large number of clients receiving quotes below $35% of their reservation prices and therefore boosting their activity. After 25 days the rate of boosted clients stabilizes in a smaller proportion. The first plot shows the number of clients boosted compared to the number of active clients. The second one shows for each individual client the periods where they are boosting their quoting activity.</p>
+<figure class="align-default" id="fig-active-vs-boosted">
+<a class="reference internal image-reference" href="../_images/active_vs_boosted.png"><img alt="../_images/active_vs_boosted.png" src="../_images/active_vs_boosted.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.6 </span><span class="caption-text">Number of clients who at a given time are boosting their rates of requesting RfQs ten-fold vs the number of client actives. Clients become boosted when they receive prices from the dealer that are 35% cheaper than their reservation prices, and revert back to normal when they receive quotes worse than 50% of their reservation price. As in the previous section, they become inactive if their hit rate with the dealer is below 10% over the last 10 days.</span><a class="headerlink" href="#fig-active-vs-boosted" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig-boosted-over-time">
+<a class="reference internal image-reference" href="../_images/boosted_over_time.png"><img alt="../_images/boosted_over_time.png" src="../_images/boosted_over_time.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.7 </span><span class="caption-text">Boosted clients over the simulation period. Each row represents a different client from the 50 ones simulated. Given the initial prior from the dealer regarding the reservation prices, which is too conservative, at the beginning of the simulation there is higher proportion of clients boosted, stabilizing after 25 days approximately.</span><a class="headerlink" href="#fig-boosted-over-time" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>We estimate the model using the first 100 days of simulation, although we exclude the first 25 days to ensure the training data only uses a stable regime. The following plot shows the two estimated Beta density functions. Here, <span class="math notranslate nohighlight">\(q_g = 89%\)</span>, which supports our hypothesis that the bad data density captures anomalies. This is also seen in the plot: on the one hand, the good data density captures the normal trading behavior concentrated around a region of probability of requesting RfQs, which actually becomes essentially Gaussian, given the high values of <span class="math notranslate nohighlight">\(\alpha_g\)</span> and <span class="math notranslate nohighlight">\(\beta_g\)</span>; this is not the case for the bad data density, which takes a U-shape where most of the probability is concentrated around the extreme values. This reflects the two patterns of abnormal behavior present in our simulation, namely inactivity and boosted activity.</p>
+<figure class="align-default" id="fig-good-vs-bad">
+<a class="reference internal image-reference" href="../_images/good_vs_bad.png"><img alt="../_images/good_vs_bad.png" src="../_images/good_vs_bad.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.8 </span><span class="caption-text">Probability densities for the god and bad components of the model. The good data density is highly concentrated around a range of trading probabilities, becoming essentially a Gaussian distribution. The bad data density, on the other hand, places most of its density in the extreme values of very high and very low trading activity. The probability <span class="math notranslate nohighlight">\(q_g\)</span> equals 89% when fitted to the data, reflecting that bad data captures anomalies.</span><a class="headerlink" href="#fig-good-vs-bad" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>With the model estimated, we use a 10 days window of days to compute the probability of abnormal client behavior over the second half of the dataset. This means that we only compute results for the last 90 days, since 10 days are needed to gather sufficient data. Bear in mind that this is not necessary in a Bayesian paradigm, since we could perfectly get estimations for any window, including zero data –defaulting to the prior probability of the hypotheses <span class="math notranslate nohighlight">\(q_g\)</span>.  We choose a 50% threshold on <span class="math notranslate nohighlight">\(P({\rm good} |D)\)</span> to trigger alerts. Over a dataset of 50 clients and 90 days tested, i.e. 4500 points, the model produced 3,811 true negatives (correctly identifying normal cases) and 545 true positives (correctly identifying abnormal cases). It made 75 false positives (normal cases incorrectly flagged as abnormal) and 69 false negatives (abnormal cases missed). Overall, this means the global abnormality rule (inactive OR boosted) shows high specificity (≈ 98% of normal cases correctly classified) and strong sensitivity (≈ 89% of abnormal cases detected), with a relatively small number of errors on both sides. Therefore, the approach seems reliable at detecting abnormal clients while only rarely misclassifying normal ones.</p>
+<figure class="align-default" id="fig-abnormal-per-client">
+<a class="reference internal image-reference" href="../_images/abnormal_per_client.png"><img alt="../_images/abnormal_per_client.png" src="../_images/abnormal_per_client.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18.9 </span><span class="caption-text">Selected clients that showcase the different types of client behavior and how the model reacts to them.</span><a class="headerlink" href="#fig-abnormal-per-client" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>In the following figure we can see the predictions for specific clients showing different patterns of behavior:</p>
+<ul class="simple">
+<li><p>Client 30: An example of a client with no abnormal trading behavior. The model correctly reflects this, keeping probabilities <span class="math notranslate nohighlight">\(P({\rm good} |D)\)</span> mostly above 80% and not triggering any alerts.</p></li>
+<li><p>Client 31: Shows a period of boosted activity that the model captures after a few days, once sufficient evidence accumulates. When boosting ends, the probability quickly returns to high values after the first non-trading day, a pattern consistent with normality rather than extreme regimes. This illustrates the model’s asymmetry: it requires stronger evidence to reject normal trading (continuous activity can still occur under normal conditions) but reverts quickly once activity normalizes.</p></li>
+<li><p>Client 35: Becomes inactive during the simulation. After eight consecutive days without trading, the model rejects the normal trading hypothesis and flags the client. As with Client 31, strong and sustained evidence (in this case, consecutive inactivity) is needed before the model issues an alert.</p></li>
+<li><p>Client 37: Provides an instance of a false positive. A long, naturally occurring stretch of continuous activity was incorrectly flagged as abnormal. Since the model tends to produce confident abnormality probabilities quickly, one way to reduce such false positives—without significantly increasing false negatives—would be to lower the classification threshold.</p></li>
+</ul>
+<p>In conclusion, despite its simplicity, the Good vs. Bad Data model performs well in identifying abnormal clients in the simulation, both those with unusually high trading activity and those with unusually low activity. For the latter, it performs on par with the attrition risk model presented earlier. Moreover, the framework could be extended into a multi-label classifier by comparing trading probabilities against the mean of the good-data cluster, issuing attrition risk alerts for unusually low activity and boosted activity alerts for the opposite case.</p>
+</section>
 </section>
 </section>
 <section id="a-generative-model-for-rfqs-in-negotiation">
 <h2><span class="section-number">18.4. </span>A Generative model for RfQs in negotiation<a class="headerlink" href="#a-generative-model-for-rfqs-in-negotiation" title="Permalink to this heading">#</a></h2>
-<section id="probability-of-winning-the-rfq">
-<h3><span class="section-number">18.4.1. </span>Probability of winning the RfQ<a class="headerlink" href="#probability-of-winning-the-rfq" title="Permalink to this heading">#</a></h3>
 </section>
-<section id="probability-of-price-discovery">
-<h3><span class="section-number">18.4.2. </span>Probability of price discovery<a class="headerlink" href="#probability-of-price-discovery" title="Permalink to this heading">#</a></h3>
-</section>
-<section id="information-asymmetry-and-adverse-flows">
-<h3><span class="section-number">18.4.3. </span>Information asymmetry and adverse flows<a class="headerlink" href="#information-asymmetry-and-adverse-flows" title="Permalink to this heading">#</a></h3>
-</section>
+<section id="causal-interventions">
+<h2><span class="section-number">18.5. </span>Causal interventions<a class="headerlink" href="#causal-interventions" title="Permalink to this heading">#</a></h2>
+<section id="optimal-pricing">
+<h3><span class="section-number">18.5.1. </span>Optimal pricing<a class="headerlink" href="#optimal-pricing" title="Permalink to this heading">#</a></h3>
 </section>
 <section id="axe-matcher">
-<h2><span class="section-number">18.5. </span>Axe matcher<a class="headerlink" href="#axe-matcher" title="Permalink to this heading">#</a></h2>
+<h3><span class="section-number">18.5.2. </span>Axe matcher<a class="headerlink" href="#axe-matcher" title="Permalink to this heading">#</a></h3>
+</section>
 </section>
 <section id="exercises">
 <h2><span class="section-number">18.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Prove the identity <span class="math notranslate nohighlight">\(P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)\)</span> by explicitly working out the second term in the equality.</p></li>
+</ol>
 </section>
 </section>
 
@@ -564,16 +804,22 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-model-for-rfqs">18.2. Probabilistic graphical model for RfQs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generative-models-for-the-request-for-quote-activity">18.3. Generative models for the request for quote activity</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#models-for-the-arrival-of-rfqs">18.3.1. Models for the arrival of RfQs</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attrition-risk">18.3.2. Attrition risk</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attrition-risk">18.3.2. Attrition risk</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-attrition-risk">18.3.2.1. Simulation of attrition risk</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-generative-model-for-rfqs-in-negotiation">18.4. A Generative model for RfQs in negotiation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-winning-the-rfq">18.4.1. Probability of winning the RfQ</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-price-discovery">18.4.2. Probability of price discovery</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-asymmetry-and-adverse-flows">18.4.3. Information asymmetry and adverse flows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abnormal-client-behavior">18.3.3. Abnormal client behavior</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simulation-of-client-abnormal-behavior">18.3.3.1. Simulation of client abnormal behavior</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.5. Axe matcher</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-generative-model-for-rfqs-in-negotiation">18.4. A Generative model for RfQs in negotiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causal-interventions">18.5. Causal interventions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimal-pricing">18.5.1. Optimal pricing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#axe-matcher">18.5.2. Axe matcher</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.6. Exercises</a></li>
 </ul>
   </nav></div>

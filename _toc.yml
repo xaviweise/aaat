@@ -70,6 +70,7 @@ parts:
     - file: notebooks/stochastic_calculus.ipynb
     - file: notebooks/bayesian_theory.ipynb
     - file: notebooks/market_microstructure.ipynb
+    - file: notebooks/rfq_models.ipynb
     - file: notebooks/fair_price_estimation.ipynb
 
     
