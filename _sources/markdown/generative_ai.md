@@ -73,7 +73,6 @@ where we have defined the scores $s_i = -\log P_i$ per word $i$ in the vocabular
 
 * For $T \rightarrow \infty$ the exponential terms tend to $1$, so the distribution is uniform over all words once normalization is accounted. In this case, the model is random over the distribution of all possible words. 
 
-
 ### Gen AI models
 
 
@@ -92,6 +91,47 @@ N-grams, HMMs, first neural network architectures
 
 ### Reasoning models
 
+### Evaluation of Large Language Models
+
+**Perplexity score**: Perplexity is a metric to evaluate probabilistic models. It is closely related to cross-entropy and for some specific distributions, likelihood. Its main advantage comes in terms of offering a more interpretable score. The idea is to quantify the degree in which an estimated probability distribution for the data is *perplexed* (i.e. surprised) when it sees new data supposedly coming from the same generative process. The perplexity of a model that assigns probability $p(x_i)$ to a sample of a sample of test data $D = \{x_1, ..., x_N\}$ which we assume is independent and identically distributed (iid):
+
+$$PP(D) = b^{-\frac{1}{N}\sum_{i=1}^N \log_b p(x_i)}$$
+
+where $b$ is the base for the logarithm, e.g. $b = 2$ or $b = e$ being typical choices. We can see readily how is related to the likelihood $L(D)$ by rewriting it as:
+
+$$PP(D) = \left(\Pi_i p(x_i) \right)^{-1/N} = L(D)^{-1/N}$$
+
+By inverting the likelihood and normalizing to the length of the sample data, we have a metric that 1) has a interpretation in terms of surprise, since data that has higher probability under the model is therefore less *surprising*, and 2) it can be better compared across different datasets with different lengths. 
+
+Perplexity is also related to the cross-entropy between the proposed distribution and the empirical distribution of the test data, which is given by the empirical frequencies of the different outcomes $x$: $\hat{p}(x) = \frac{n(x)}{N}$, with $n(x)$ the number of occurrences of outcome $x$ in the test sample $D$. Its cross entropy is then defined as:
+
+$H(\hat{p}, p) = -\sum_x \hat{p}(x) \log_b p(x) = -\frac{1}{N} \sum_i \log_b p(x_i)$
+
+This relationship is useful if we express the cross entropy in terms of the Kullback - Leibler (KL) divergence:
+
+$H(\hat{p}, p) = -\sum_x \hat{p}(x) \log_b \hat{p}(x) + \sum_x \hat{p}(x) \log_b \frac {\hat{p}(x)}{p(x)} = H(\hat{p}) + D_{KL}(\hat{p}, p)$
+
+where $H(\hat{p})$ is the entropy of the distribution $\hat{p}$. Cross-entropy is minimized when $p(x) = \hat{p}(x)$, where $D_{KL} = 0$. Given that perplexity can be expressed in terms of cross-entropy as:
+
+$PP(D) = b^{H(\hat{p}, p)}$
+
+we see readily that perplexity is minimized when the empirical and the model probability distributions agree. 
+
+The range of values for perplexity is $[1, \infty)$, with $PP(D) =1$ for models that assign probability $1$ to the dataset, meaning that from the point of view of the model, there is no uncertainty in the prediction of the dataset. On the other hand, models that assign very low probabilities to the dataset have an unbounded upper limit in their perplexity score. Perplexity has also a natural interpretation in terms of simple benchmark models, helping to provide a natural scale to interpret the quality of the models: for example, a random guessing over a set of $K$ possible outcomes yields a perplexity:
+
+$$PP(D) = b^{-\frac{1}{N}\sum_{i=1}^N \log_b \frac{1}{K}} = K$$
+
+Applying perplexity to sequence models like those modelling natural language simply requires us to compute the conditional probabilities to each element of the sequence conditional to the previous elements, i.e. $p(s_i|s_1, ..., s_{i-1})$, which decouples the sequence into i.i.d elements:
+
+$p(s_1, ..., s_N) = \Pi_i p(s_i|s_1, ..., s_{i-1})$
+
+The perplexity of this model is:
+
+$$PP(D) = b^{-\frac{1}{N}\sum_{i=1}^N \log_b p(s_i|s_1, ..., s_{i-1})}$$
+
+In the context of large language models, the perplexity score offers a simple interpretation of the quality of the model: if a score $PP$ is obtained in the evaluation, it means that the model has a perplexity equivalent to a random guess among $PP$ possible tokens. The smaller is this score compared to the actual size of the token vocabulary space of the model, the better is the quality of the model. 
+
+
 ## Working with Large Language Models
 
 ### Prompt Engineering
@@ -101,3 +141,4 @@ N-grams, HMMs, first neural network architectures
 ### Retrieval - Augmented Generation (RAG)
 
 ### Agentic systems
+
