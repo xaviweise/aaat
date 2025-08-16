@@ -1,3 +1,4 @@
+(market_micro)=
 # Market microstructure
 
 Market microstructure is the study of the processes and mechanisms through which financial instruments are traded in financial markets. It focuses on how different participants —such as investors, intermediaries, and liquidity providers—interact, and how their actions affect the price formation, liquidity, and efficiency of markets. Whereas many financial models often assume that prices reflect all available information, market microstructure digs deeper into the realities of trading: the role of transaction costs, bid-ask spreads, order types, and how information asymmetry influences trading strategies and outcomes.
@@ -120,7 +121,7 @@ $$ S = P^a_{best} + P^b_{best} $$
 
 $$ I = \frac{V^b_{best} - V^a_{best}}{V^b_{best} + V^a_{best}} $$
 
-The following picture shows a visualization of the order book called market depth, since it shows the current orders sitting in the book ordered by price. Each level might have orders from different participants, but we show them aggregated which is how real markets report them in their feeds. 
+The following figure shows a visualization of the order book called market depth, since it shows the current orders sitting in the book ordered by price. Each level might have orders from different participants, but we show them aggregated which is how real markets report them in their feeds. 
 
 ```{figure} figures/market_depth_clob.png
 :name: fig:market_depth_clob
