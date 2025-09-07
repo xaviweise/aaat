@@ -401,7 +401,7 @@ As mentioned above, in this case we are dealing with a problem of missing data, 
 
 * Missing Not at Random (MNAR): in this case there is also a pattern in the missing data, but can only be explained using unobserved data (e.g. full latent variables). In the example of the booking database, if the issue comes from a certain sales person as in MAR, but the booking database does not record in any case the sales person identity. 
 
-The use of probabilistic methods for missing data is called multiple imputation and is described extensively in {cite_p}`little2019statistical`. The idea is essentially to estimate the model from the observed data using the techniques we will explore below in this section, and use it as a generative model for the unobserved variables, namely computing: 
+The use of probabilistic methods for missing data is called multiple imputation and is described extensively in {cite:p}`little2019statistical`. The idea is essentially to estimate the model from the observed data using the techniques we will explore below in this section, and use it as a generative model for the unobserved variables, namely computing: 
 
 $p({\rm x_{missing}} | {\rm x_{observed}}, \theta)$
 

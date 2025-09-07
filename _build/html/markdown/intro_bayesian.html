@@ -224,6 +224,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/stochastic_calculus.html">Stochastic Calculus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/bayesian_theory.html">Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/market_microstructure.html">Market Microstructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/rfq_models.html">Modelling RfQs in Dealer to Client Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/fair_price_estimation.html">Fair Price Estimation</a></li>
 </ul>
 
@@ -432,12 +433,32 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-linear-regression">5.3. Bayesian Linear Regression</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-models">5.4. Probabilistic Graphical Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-models">5.5. Latent variable models</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.1. The Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.1.1. The local level model</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.1.1.1. Derivation of the forward filtering equations: predict and update</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.1.1.2. Derivation of the smoothing equations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partially-observable-latent-variable-models">5.5.1. Partially observable latent variable models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#full-latent-variable-models">5.5.2. Full latent variable models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-latent-variable-models">5.5.3. Examples of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-models-gmms">5.5.3.1. Gaussian Mixture Models (GMMs)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hidden-markov-model-hmm">5.5.3.2. Hidden Markov Model (HMM)</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.4. The Kalman Filter</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.4.1. The local level model</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.4.1.1. Derivation of the forward filtering equations: predict and update</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.4.1.2. Derivation of the smoothing equations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">5.5.5. Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimation-mle">5.5.5.1. Maximum Likelihood Estimation (MLE)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization-em">5.5.5.2. Expectation Maximization (EM)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-model">5.5.5.2.1. Example 1: Gaussian Mixture Model</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-hidden-markov-model-the-baum-welch-algorithm">5.5.5.3. Example 2: Hidden Markov Model (the Baum - Welch algorithm)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-observation-probabilities">5.5.5.3.1. Gaussian observation probabilities</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model-simple-case-of-a-kalman-filter">5.5.5.4. Example 3: Local Level Model (simple case of a Kalman Filter)</a></li>
 </ul>
 </li>
 </ul>
@@ -482,8 +503,6 @@ we can write the product rule either way in terms of X or Y:</p>
 <div class="math notranslate nohighlight">
 \[P(X|Y) = \frac{P(Y|X) P(X)}{P(Y)}\]</div>
 <p>which is Bayes’s theorem. We also could derive the marginalization rule:</p>
-<div class="math notranslate nohighlight">
-\[P(X) = \int P(X,Y) dY\]</div>
 <p>by taking the continuum limit starting from a discrete and complete set of events. We leave it as an exercise for the interested reader.</p>
 <p>The work of Cox was continued by E.T. Jaynes, who would extensively work on the interpretation of probability as an extension of deductive logic, and tackle many of the controversial views on this interpretation –like the role of prior probabilities that we will discuss later on. Another typical criticism is its supposedly lack of objectivity  as a universal theory of knowledge, since degrees of belief are attached to individuals and therefore they lack the objectivity needed for consensual agreement on the validity of a proposition. As Jaynes points out, such subjectivity disappears if we introduce explicitly the set of information available to the observers: two rational observers with the same information available must agree on the degrees of belief assigned to a proposition, otherwise either they are not rational or they don’t share the same information. We can formalize this by introducing the set of information available, <span class="math notranslate nohighlight">\(I\)</span> into the definition of the probabilities, namely <span class="math notranslate nohighlight">\(P(X|I)\)</span>.</p>
 <section id="probability-as-an-extension-of-logic">
@@ -579,7 +598,7 @@ we can write the product rule either way in terms of X or Y:</p>
 <li><p>Scientists seek to test hypothesis by deriving predictions that are relatively unlikely. For the most precise case of a deterministic prediction, this means that <span class="math notranslate nohighlight">\(P(E|H) = 1\)</span>, and <span class="math notranslate nohighlight">\(P(E)\)</span> is small. This way, the ratio <span class="math notranslate nohighlight">\(P(E|H) / P(E)\)</span> is large, providing a strong support to the hypothesis in case the prediction is verified empirically.</p></li>
 <li><p>Scientists that disagree on the validity of a hypothesis will score different prior probabilities to <span class="math notranslate nohighlight">\(H\)</span>. However, if predictions that are strongly attributed to this hypothesis (and weekly to alternative ones) are confirmed, their posterior probabilities will tend to converge since the scientist that attached a lower prior probability for <span class="math notranslate nohighlight">\(H\)</span> will also attach naturally a lower probability to the prediction overall, <span class="math notranslate nohighlight">\(P(E)\)</span>, by virtue of Bayes’ theorem:</p>
 <div class="math notranslate nohighlight">
-\[P(E) = P(E|H)P(H) + P(E|\bar{H})P(\bar{H}) = P(H) + P(E|\bar{H})P(\bar{H}) \]</div>
+\[P(E) = P(E|H)P(H) + P(E|\bar{H})P(\bar{H}) = P(H) + P(E|\bar{H})P(\bar{H})\]</div>
 <p>This scientist therefore will need to update her posterior probability by a factor <span class="math notranslate nohighlight">\(1/P(E)\)</span> larger than the one that originally believed in the truth of the hypothesis, since, assuming that <span class="math notranslate nohighlight">\(P(E|\bar{H}) &lt; 1\)</span>, then:</p>
 <div class="math notranslate nohighlight">
 \[P(H) + P(E|\bar{H})P(\bar{H}) =  P(H)(1-P(E|\bar{H})) + P(E|\bar{H})\]</div>
@@ -649,7 +668,7 @@ we can write the product rule either way in terms of X or Y:</p>
 \[\hat{\theta} = \text{argmin}_{\hat{\theta}} -\int d\theta P(\theta| I) \delta(\theta - \hat{\theta})= \text{argmax}_{\hat{\theta}} P( \hat{\theta}| I) \]</div>
 <p>which we recognize directly as the mode of the posterior distribution: <span class="math notranslate nohighlight">\(\hat{\theta} = \text{mode}(P(\theta|I))\)</span>. Interestingly, if we apply Bayes’ theorem and we considered a prior <span class="math notranslate nohighlight">\(P(\theta)\)</span> that is constant around the high likelihood region, we have:</p>
 <div class="math notranslate nohighlight">
-\[\text{argmax}_{\hat{\theta}} P( \hat{\theta}| I) \simeq \text{argmax}_{\hat{\theta}} P( I | \hat{\theta}) \]</div>
+\[\text{argmax}_{\hat{\theta}} P( \hat{\theta}| I) \simeq \text{argmax}_{\hat{\theta}} P( I | \hat{\theta})\]</div>
 <p>which is the well-known Maximum Likelihood Estimator (MLE), used extensively in most real life statistical modelling and Machine Learning problems. Its wide recognition as a useful parameter estimation technique must be acknowledged, with the disclaimer of the many assumptions that it requires to be considered an optimal estimator. Bayesian theory and decision theory help us to understand the assumptions required to consider this family of estimator an optimal choice, in contrast with other statistical frameworks which only focus on desirable mathematical properties of the estimators derived.</p>
 </section>
 <section id="example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">
@@ -751,31 +770,144 @@ we can write the product rule either way in terms of X or Y:</p>
 </section>
 <section id="latent-variable-models">
 <h2><span class="section-number">5.5. </span>Latent variable models<a class="headerlink" href="#latent-variable-models" title="Permalink to this heading">#</a></h2>
+<p>So far we have been working with probabilistic models where all variables are observable. Latent variable models are probabilistic models where some of the variables cannot be measured or can only be partially measured, i.e. there is missing data in some of the records of the dataset.</p>
+<p>In both cases, formally we define latent models as a probability distribution over two sets of variables:</p>
+<div class="math notranslate nohighlight">
+\[p({\rm x}, {\rm z}| \theta)\]</div>
+<p>where <span class="math notranslate nohighlight">\({\rm x}\)</span> are the set of observable variables and <span class="math notranslate nohighlight">\({\rm z}\)</span> the latent ones. <span class="math notranslate nohighlight">\(\theta\)</span> are the parameters of the probability distribution, which we state explicitly for convenience later.</p>
+<section id="partially-observable-latent-variable-models">
+<h3><span class="section-number">5.5.1. </span>Partially observable latent variable models<a class="headerlink" href="#partially-observable-latent-variable-models" title="Permalink to this heading">#</a></h3>
+<p>As mentioned above, in this case we are dealing with a problem of missing data, where some of the data points of a set of variables have not been recorded for potentially various reasons. Rubin <span id="id1">[<a class="reference internal" href="references.html#id23" title="Roderick J. A. Little and Donald B. Rubin. Statistical Analysis with Missing Data. Wiley, 2019.">1</a>]</span> distinguishes between tree different situations regarding the generative model (i.e. the full probability distribution) for missing data:</p>
+<ul class="simple">
+<li><p>Missing Completely at Random (MCAR): there is no pattern in the missing data. The missing data is uncorrelated with observed and unobserved data. For instance, if some trades in a booking database are missing due to corruption of the physical support.</p></li>
+<li><p>Missing at Random (MAR): in this case there is pattern in the missing data that can be explained using observed data. Coming back to the example of a trades database, if the missing data is due to a particular sales person that tends to forget to register a voice operation in the systems</p></li>
+<li><p>Missing Not at Random (MNAR): in this case there is also a pattern in the missing data, but can only be explained using unobserved data (e.g. full latent variables). In the example of the booking database, if the issue comes from a certain sales person as in MAR, but the booking database does not record in any case the sales person identity.</p></li>
+</ul>
+<p>The use of probabilistic methods for missing data is called multiple imputation and is described extensively in <a href="#id2"><span class="problematic" id="id3">little2019statistical</span></a>. The idea is essentially to estimate the model from the observed data using the techniques we will explore below in this section, and use it as a generative model for the unobserved variables, namely computing:</p>
+<p><span class="math notranslate nohighlight">\(p({\rm x_{missing}} | {\rm x_{observed}}, \theta)\)</span></p>
+<p>Imputation of missing data can then be done using some statistic of the distribution like the mean or the median, or generating random samples from the distribution.</p>
+<p>Multiple imputation works well for MCAR and reasonably (with some negligible bias) for MAR. The case of MNAR is more complicated, and can only be properly dealt with by introducing full latent variables that properly capture the MNAR mechanism, which is difficult if there is not a prior knowledge of the missing data mechanism.</p>
+</section>
+<section id="full-latent-variable-models">
+<h3><span class="section-number">5.5.2. </span>Full latent variable models<a class="headerlink" href="#full-latent-variable-models" title="Permalink to this heading">#</a></h3>
+<p>In this case, there are not available observations of the latent variables. Models with full latent variables are closely related to probabilistic graphical models, since in many situations latent variables are introduced as prior knowledge in the structure of a model about a certain process, particularly when trying to model causal relationships. For instance, a model of two variables that are correlated but we believe not to be directly causally related, can be naturally extended by introducing a latent variable, a confounder, that influences both.</p>
+<p>We can distinguish between two practical cases where latent variable models naturally emerge:</p>
+<ul class="simple">
+<li><p>On the one hand, in problems where we know of the existence of a relevant variable, but it has not been observed and recorded in the data gathering process. An example, for instance, in the problem of demand estimation where only trades are observed, are the total interests or requests from clients to trade, that only in a fraction of cases (the hit &amp; miss) generate a trade.</p></li>
+<li><p>On the other hand, a latent variable can be an abstraction that cannot be directly measured but it might represent a common influence or effective factor.</p>
+<ul>
+<li><p>One example is that of a market regime, which is modelled as a categorical variable with a set of states (e.g. high volatility and low volatility), and influences the price returns. Hidden Markov Models are latent variable models frequently used to model the effect of so-called regime switch of the statistics of price returns. They are typically applied as signal generators that alert of changes in market behavior.</p></li>
+<li><p>Another example is the concept of mid or fair price. In real markets price information comes from trades, RfQs, limit order books, composite prices and so on. But the concept of mid / fair price of an instrument is unobservable. Kalman filters are typically used to infer the value of the mid-price from price informative observations.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="examples-of-latent-variable-models">
+<h3><span class="section-number">5.5.3. </span>Examples of Latent Variable Models<a class="headerlink" href="#examples-of-latent-variable-models" title="Permalink to this heading">#</a></h3>
+<section id="gaussian-mixture-models-gmms">
+<h4><span class="section-number">5.5.3.1. </span>Gaussian Mixture Models (GMMs)<a class="headerlink" href="#gaussian-mixture-models-gmms" title="Permalink to this heading">#</a></h4>
+<p>The Gaussian Mixture Model postulates that data observations <span class="math notranslate nohighlight">\(\vec{x}_n\)</span>, <span class="math notranslate nohighlight">\(n = 1, ..., N\)</span> are generated by <span class="math notranslate nohighlight">\(K\)</span> independent multivariate Gaussian distributions with unknown parameters <span class="math notranslate nohighlight">\(\vec{\mu}_k, \Sigma_k\)</span>. The membership of each data point to a particular Gaussian is determined by latent categorical random variables <span class="math notranslate nohighlight">\(z_n = {1, ..., K}\)</span> with probabilities <span class="math notranslate nohighlight">\(\pi_k\)</span>. Gaussian Mixture models are used to model unobserved subpopulations or segments from a given population. The probability distribution is therefore given by:</p>
+<div class="math notranslate nohighlight">
+\[p(\vec{x_n}) = \sum_{k=1}^K \pi_k {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\]</div>
+<p>which is a linear combination of Gaussian distributions, hence the name mixture of Gaussians. Mixture models are actually more general in that other distributions can be used to model the mixture components, namely a Binomial, Dirichlet, Poisson, Exponential, etc.</p>
+<p>As a graphical model, the so-called plate notation is usually employed to simplify the representation of the <span class="math notranslate nohighlight">\(N\)</span> random variables <span class="math notranslate nohighlight">\(\vec{x_n}\)</span> and their associated <span class="math notranslate nohighlight">\(K\)</span> latent random variables <span class="math notranslate nohighlight">\(z_n\)</span> categorizing their mixture component membership. The following figure represents the mode in plate notation:</p>
+<figure class="align-default" id="fig-gmm-model">
+<a class="reference internal image-reference" href="../_images/gmm_model.png"><img alt="../_images/gmm_model.png" src="../_images/gmm_model.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.5 </span><span class="caption-text">Gaussian Mixture Model in plate notation.</span><a class="headerlink" href="#fig-gmm-model" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The joint probability distribution of the model, including the latent variables, is the following:</p>
+<div class="math notranslate nohighlight">
+\[P(\vec{x_n}, z_n) = \sum_{k=1}^K \pi_k^{\delta_{z_n,k}} {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\delta_{z_n,k}\)</span> is an indicator function: <span class="math notranslate nohighlight">\(\delta_{z_n,k} = 1\)</span> if  z<span class="math notranslate nohighlight">\(_n = k\)</span>, <span class="math notranslate nohighlight">\(0\)</span> otherwise</p>
+<p>Gaussian mixture models have plenty of real-life applications. The most popular probably is its use as a clustering technique, and actually the most popular clustering technique itself, K-Means, is a particular case of the Gaussian Mixture model for spherical distributions, <span class="math notranslate nohighlight">\(\Sigma_k = \epsilon I\)</span>, in the limit <span class="math notranslate nohighlight">\(\epsilon \rightarrow 0\)</span>, when it is calibrated using the Expectation Maximization (EM) algorithm (see section below).</p>
+<p>Another interesting application is anomaly detection, particularly for one-dimensional data. If we have theoretical reasons to expect the distribution of data to be a Gaussian, we can use a mixture of two Gaussians
+distributions with the same mean but different standard deviations to capture anomalies from <em>normality</em>:</p>
+<div class="math notranslate nohighlight">
+\[p(x_n) =  \pi_G {\mathcal N}(x_n|\mu, \sigma_G) + (1-\pi_G) {\mathcal N}(x_n|\mu, \sigma_B)\]</div>
+<p>where <span class="math notranslate nohighlight">\(G\)</span> and <span class="math notranslate nohighlight">\(B\)</span> stand for good and bad, respectively, since the model is called the Good and Bad data model <span id="id4">[<a class="reference internal" href="references.html#id5" title="D.S. Silvia. Data Analysis: A Bayesian Tutorial. Oxford Science Publications, second edition, 2006.">2</a>]</span>. After learning the parameters of the model using our data (<span class="math notranslate nohighlight">\(\pi_G\)</span>, <span class="math notranslate nohighlight">\(\mu\)</span>, <span class="math notranslate nohighlight">\(\sigma_G\)</span>, <span class="math notranslate nohighlight">\(\sigma_G\)</span>), and making by definition <span class="math notranslate nohighlight">\(\sigma_B \geq \sigma_G\)</span>, we classify as anomalies those points in the dataset that are more likely to have been generated by the “bad” data Gaussian. This is done by inferring the probability of being “bad data” using Bayes’ theorem:</p>
+<div class="math notranslate nohighlight">
+\[p(\text{bad}|x_n) = \frac{p(x_n|\text{bad}) p(\text{bad})}{p(x_n)} = \frac{𝑁(𝑥_n|𝜇,𝜎_𝐵) (1-\pi_G)}{𝜋_G 𝑁(𝑥_n|𝜇,𝜎_𝐺)+(1−𝜋_𝐺)𝑁(𝑥_n|𝜇,𝜎_𝐵)}\]</div>
+<p>and classifying as “bad data” or anomalies those points whose probability exceeds a given threshold, typically 0.5. This anomaly detection model works surprisingly well highlighting anomalies in data that humans could also recognize visually, making it a good candidate for automating human-driven anomaly detections.</p>
+</section>
+<section id="hidden-markov-model-hmm">
+<h4><span class="section-number">5.5.3.2. </span>Hidden Markov Model (HMM)<a class="headerlink" href="#hidden-markov-model-hmm" title="Permalink to this heading">#</a></h4>
+<p>A Hidden Markov Model explains a sequence of observations <span class="math notranslate nohighlight">\(x_1, ..., x_T\)</span> as driven by a hidden variable (the state) <span class="math notranslate nohighlight">\(y_1, ..., y_T\)</span> that has Markov dynamics:</p>
+<div class="math notranslate nohighlight">
+\[P(y_{t+1}|y_t, ..., y_1) =  P(y_{t+1}|y_t)\]</div>
+<p>where the latter is called the transition probability, which usually is assumed stationary in the model:</p>
+<div class="math notranslate nohighlight">
+\[P(y_{t+s+1}|y_{t+s})=P(y_{t+1}|y_t)\]</div>
+<p>The observations only depend on the state of the hidden variable at the observation time:</p>
+<div class="math notranslate nohighlight">
+\[P(x_t|y_t, ..., y_1, x_{t-1}, ..., x_1) = P(x_t|y_t)\]</div>
+<p>The joint probability distribution of the sequence therefore simplifies to:</p>
+<div class="math notranslate nohighlight">
+\[P(x_1, ..., x_N, y_1, ..., y_N)=P(y_1) P(x_1|y_1)\Pi_{t=2}^T P(y_t|y_{t-1})P(x_t | y_t)\]</div>
+<p>As a graphical model, the HMM has the following structure:</p>
+<figure class="align-default" id="fig-hmm-model">
+<a class="reference internal image-reference" href="../_images/hmm_model.png"><img alt="../_images/hmm_model.png" src="../_images/hmm_model.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.6 </span><span class="caption-text">Graph representation of the Hidden Markov Model</span><a class="headerlink" href="#fig-hmm-model" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The hidden (latent) and observed variables can be either discrete or continuous. In many applications of HMMs, the latent variable is discrete. In this case, learning and inference is more tractable for general distributions. An example in the financial markets is explaining price returns as generated from a Gaussian noise whose volatility depends on a discret hidden state, which is interpreted as a market or volatility regime.</p>
+<p>A typical question when studying HMMs is to infer the most likely sequency of hidden states given a time-series of observations. There are specialized algorithms to do this task efficiently, the most popular one being the Viterbi algorithm <span id="id5">[<a class="reference internal" href="references.html#id19" title="Kevin P. Murphy. Machine learning : a probabilistic perspective. MIT Press, Cambridge, Mass. [u.a.], 2013. ISBN 9780262018029 0262018020.">3</a>]</span>. For learning, a special case of the Expectation Maximization algorithms (EM) is used, called the Baum - Welch algorithm.</p>
+</section>
+</section>
 <section id="the-kalman-filter">
-<h3><span class="section-number">5.5.1. </span>The Kalman Filter<a class="headerlink" href="#the-kalman-filter" title="Permalink to this heading">#</a></h3>
-<p>A Kalman filter is a particular instance of a filtering algorithm first proposed by Rudolf E. Kalman in 1960 in his seminal paper “A New Approach to Linear Filtering and Prediction Problems” <span id="id1">[<a class="reference internal" href="references.html#id7" title="Rudolf Emil Kalman. A new approach to linear filtering and prediction problems. Journal of Basic Engineering, 82(1):35–45, 1960.">1</a>]</span>. It is widely used in multiple applications from telecomunications, robotics and of course finance as we will focus here. Its popularity resides on its mathematical tractability since it is based on Gaussian models for the evolution of the signal to be filtered as well as the error sources that make observations noisy.</p>
-<p>GENERAL MODEL</p>
-<p>FORWARD FILTERING, online application</p>
-<p>SMOOTHING, Analogy to message passing, reduces variance of estimation by using full information, etc</p>
-<p>PARAMETERS LEARNING: EXPECTATION MAXIMIZATION</p>
+<h3><span class="section-number">5.5.4. </span>The Kalman Filter<a class="headerlink" href="#the-kalman-filter" title="Permalink to this heading">#</a></h3>
+<p>A Kalman filter is a particular instance of a filtering algorithm first proposed by Rudolf E. Kalman in 1960 in his seminal paper “A New Approach to Linear Filtering and Prediction Problems” <span id="id6">[<a class="reference internal" href="references.html#id7" title="Rudolf Emil Kalman. A new approach to linear filtering and prediction problems. Journal of Basic Engineering, 82(1):35–45, 1960.">4</a>]</span>. It is a particular case of a Hidden Markov Model where both the hidden and observed variables are continuous and follow Gaussian distributions. In this simple case, inference and learning becomes tractable, making it a very efficient estimation algorithm. Actually, the term Kalman Filter applies rigorously to an estimation algorithm that takes a series of noisy observations and produces  estimations of the underlying variable by combining its previous estimate and the current observation. In order to be optimal, transition and observation noises have to be Gaussian.</p>
+<p>The model in its graphical form is the same as shown in the HMM, being a particular case of this one. Mathematically, and considering for generality a vector of observations and hidden states, it can be written as:</p>
+<div class="math notranslate nohighlight">
+\[\vec{y}_{t+1} = \Phi \vec{y}_t + \vec{w}_t,  \vec{w}_t \sim {\mathcal N}(0, Q)\]</div>
+<div class="math notranslate nohighlight">
+\[\vec{x}_t = H \vec{y}_t + \vec{v}_t, \vec{v}_t \sim {\mathcal N}(0, R)\]</div>
+<p>The Kalman Filter is a recursive algorithm to estimate the hidden state value given observations, using two steps: the prediction and the update. First, using the best estimate at <span class="math notranslate nohighlight">\(t-1\)</span>, we predict the value of the hidden state at <span class="math notranslate nohighlight">\(t\)</span> and its covariance <span class="math notranslate nohighlight">\(P\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\vec{y}_{t|t-1} = \Phi \vec{y}_{t-1|t-1}\]</div>
+<div class="math notranslate nohighlight">
+\[P_{t|t-1} = \Phi P_{t-1|t-1} \Phi^t + Q\]</div>
+<p>where we use the suffix <span class="math notranslate nohighlight">\(\{t|t-1\}\)</span> to distinguish between the optimal estimations and the underlying random variables. Then, given an observation at <span class="math notranslate nohighlight">\(t\)</span>, we update the estimation as:</p>
+<div class="math notranslate nohighlight">
+\[\vec{y}_{t|t} = \vec{y}_{t|t-1} + K_t (\vec{y}_{t|t-1} - H \vec{x}_t) = (I-K_t) \vec{y}_{t|t-1} + K_t H \vec{x}_t\]</div>
+<div class="math notranslate nohighlight">
+\[P_{t|t} = (1-K_t H) P_{t|t-1} \]</div>
+<div class="math notranslate nohighlight">
+\[K_t =  P_{t|t-1} H ( H P_{t|t-1} H^t + R)^{-1}\]</div>
+<p>where <span class="math notranslate nohighlight">\(K_t\)</span> is called the Kalman gain. It controls the impact of the observation on the final estimate: if <span class="math notranslate nohighlight">\(K_t = 0\)</span>, then the final estimation is purely the prediction, whereas for <span class="math notranslate nohighlight">\(K_t = I\)</span>, the estimation is fully determined by the observation.</p>
+<p>These so-called filtering equations can be derived using probability theory, computing the posterior distributions under the information available. For the predict step, this means computing:</p>
+<div class="math notranslate nohighlight">
+\[P(\vec{y}_{t+1} | \vec{x}_{0:t})\]</div>
+<p>where <span class="math notranslate nohighlight">\(\vec{x}_{0:t}\)</span> denotes observations up to <span class="math notranslate nohighlight">\(t\)</span>. For the update state, we compute:</p>
+<div class="math notranslate nohighlight">
+\[P(\vec{y}_{t+1} | \vec{x}_{0:t+1})\]</div>
+<p>i.e. now we include the observation at time <span class="math notranslate nohighlight">\(t+1\)</span> to update the estimation of the latent variables.</p>
+<p>The filtering equations are central to Kalman filtering, as in most applications the goal is to estimate the most recent values of the latent variables given all available information up to the current time. However, there are situations where we may want to refine estimates of latent variables at earlier times by incorporating <em>all</em> available information, including observations collected after the time of interest. In such cases, the quantity of interest is</p>
+<div class="math notranslate nohighlight">
+\[P(\vec{y}_{t} \mid \vec{x}_{0:T})\]</div>
+<p>where information up to time <span class="math notranslate nohighlight">\(T\)</span> is taken into account. The equations derived for this inference are known as <em>smoothing equations</em>, since the refinement produces a smoother estimate of the latent variables across time.</p>
+<p>In the next subsection, we will derive both the filtering and the smoothing equations computing these probability distributions for a simple instance of the Kalman filter: the local level model.</p>
+<p>Kalman filters have many applications in multiple domains. In financial markets, they can be used to combine different noisy observations of spot prices to infer a consistent estimate of a fair or mid price, to be used typically in the market-making of relatively illiquid instruments like bonds or some derivatives <span id="id7">[<a class="reference internal" href="references.html#id20" title="E. Synclair. Option Trading: Pricing and Volatility Strategies and Techniques. Wiley, 1st edition, 2010.">5</a>]</span>. Another use case is to infer prices of instruments when markets are closed, which can be useful for hedging indexes that have components with different time zones. In reference <span id="id8">[<a class="reference internal" href="references.html#id21" title="A. Javaheri, D. Lautier, and A. E. Galli. Filtering in finance. Wilmott Magazine, 2003.">6</a>]</span>, they have been applied to the estimation of term structure models. And in the context of investment strategies, they have a relatively popular application to improve pairs trading strategies <span id="id9">[<a class="reference internal" href="references.html#id22" title="Ernest P. Chan. Algorithmic Trading: Winning Strategies and Their Rationale. Wiley Trading. John Wiley &amp; Sons, 2013.">7</a>]</span>. We will delve into some of these applications later in this book.</p>
 <section id="the-local-level-model">
-<h4><span class="section-number">5.5.1.1. </span>The local level model<a class="headerlink" href="#the-local-level-model" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">5.5.4.1. </span>The local level model<a class="headerlink" href="#the-local-level-model" title="Permalink to this heading">#</a></h4>
 <p>A simple tractable model that illustrates well the general theory of the Kalman filter is the local level model, which despite its simplicity can have relevant applications, for instance in pricing. The model has the structure:</p>
 <div class="math notranslate nohighlight">
-\[y_{t+1} = y_t + w_t, w_t \sim N(0, \sigma_w^2)\]</div>
+\[y_{t+1} = y_t + w_t, w_t \sim {\mathcal N}(0, \sigma_w^2)\]</div>
 <div class="math notranslate nohighlight">
-\[x_t = y_t + v_t, v_t \sim N(0, \sigma_v^2)\]</div>
+\[x_t = y_t + v_t, v_t \sim {\mathcal N}(0, \sigma_v^2)\]</div>
 <section id="derivation-of-the-forward-filtering-equations-predict-and-update">
-<h5><span class="section-number">5.5.1.1.1. </span>Derivation of the forward filtering equations: predict and update<a class="headerlink" href="#derivation-of-the-forward-filtering-equations-predict-and-update" title="Permalink to this heading">#</a></h5>
+<h5><span class="section-number">5.5.4.1.1. </span>Derivation of the forward filtering equations: predict and update<a class="headerlink" href="#derivation-of-the-forward-filtering-equations-predict-and-update" title="Permalink to this heading">#</a></h5>
 <p>The predict equation can be derived by computing the  distribution of <span class="math notranslate nohighlight">\(y_{t+1}\)</span> conditional to the previous observations, which we denote <span class="math notranslate nohighlight">\(x_{0:t}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[p(y_{t+1}|x_{0:t})\]</div>
 <p>We can compute this probability by using the marginalization rule over the latent variable <span class="math notranslate nohighlight">\(y_t\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[p(y_{t+1}|x_{0:t}) = \int dy_t p(y_t|x_{0:t})p(y_{t+1}|y_t)\]</div>
-<p>where we have exploited the graphical structure of the model to simplify <span class="math notranslate nohighlight">\(p(y_{t+1}|y_t, x_{0:t}) = p(y_{t+1}|y_t) = N(y_{t+1}| y_t, \sigma_w^2)\)</span>, since <span class="math notranslate nohighlight">\(y_t\)</span> is the only parent of <span class="math notranslate nohighlight">\(y_{t+1}\)</span>. The proof is based on induction: let us assume that <span class="math notranslate nohighlight">\(p(y_t|x_{0:t}) \sim N(\hat{y}_{t|t}, \sigma_{t|t}^2)\)</span>, i.e. it is Gaussian with mean <span class="math notranslate nohighlight">\(\hat{y}_{t|t}\)</span> and standard deviation <span class="math notranslate nohighlight">\(\sigma_{t|t}\)</span>. <span class="math notranslate nohighlight">\(p(y_{t+1}|x_{0:t})\)</span> is therefore the result of the convolution of two Gaussian distributions, which is itself a Gaussian distribution with:</p>
+<p>where we have exploited the graphical structure of the model to simplify <span class="math notranslate nohighlight">\(p(y_{t+1}|y_t, x_{0:t}) = p(y_{t+1}|y_t) = {\mathcal N}(y_{t+1}| y_t, \sigma_w^2)\)</span>, since <span class="math notranslate nohighlight">\(y_t\)</span> is the only parent of <span class="math notranslate nohighlight">\(y_{t+1}\)</span>. The proof is based on induction: let us assume that <span class="math notranslate nohighlight">\(p(y_t|x_{0:t}) \sim {\mathcal N}(\hat{y}_{t|t}, \sigma_{t|t}^2)\)</span>, i.e. it is Gaussian with mean <span class="math notranslate nohighlight">\(\hat{y}_{t|t}\)</span> and standard deviation <span class="math notranslate nohighlight">\(\sigma_{t|t}\)</span>. <span class="math notranslate nohighlight">\(p(y_{t+1}|x_{0:t})\)</span> is therefore the result of the convolution of two Gaussian distributions, which is itself a Gaussian distribution with:</p>
 <div class="math notranslate nohighlight">
-\[p(y_{t+1}|x_{0:t}) = N(y_{t+1}|\hat{y}_{t|t}, \sigma_{t|t}^2 +\sigma_w^2)\]</div>
+\[p(y_{t+1}|x_{0:t}) = {\mathcal N}(y_{t+1}|\hat{y}_{t|t}, \sigma_{t|t}^2 +\sigma_w^2)\]</div>
 <p>This completes the derivation of the predict equations, given by:</p>
 <div class="math notranslate nohighlight">
 \[\hat{y}_{t+1|t} = \hat{y}_{t|t}\]</div>
@@ -790,18 +922,19 @@ we can write the product rule either way in terms of X or Y:</p>
 \[p(y_{t+1}|x_{0:t+1}) = \frac{p(x_{t+1}|y_{t+1}) p(y_{t+1}|x_{0:t})}{p(x_{t+1}|x_{0:t})}\]</div>
 <p>We readily recognize the probability distribution derived in the predict step:</p>
 <div class="math notranslate nohighlight">
-\[p(y_{t+1}|x_{0:t}) = N(y_{t+1}|\hat{y}_{t|t}, \sigma_{t|t}^2 +\sigma_w^2) \equiv N(y_{t+1}|\hat{y}_{t+1|t}, \sigma_{t+1|t}^2)\]</div>
+\[p(y_{t+1}|x_{0:t}) = {\mathcal N}(y_{t+1}|\hat{y}_{t|t}, \sigma_{t|t}^2 +\sigma_w^2) \equiv {\mathcal N}(y_{t+1}|\hat{y}_{t+1|t}, \sigma_{t+1|t}^2)\]</div>
 <p>Moreover, from the model definition we have:</p>
 <div class="math notranslate nohighlight">
-\[p(x_{t+1}|y_{t+1}) = N(x_{t+1}|y_{t+1}, \sigma_v^2)\]</div>
+\[p(x_{t+1}|y_{t+1}) = {\mathcal N}(x_{t+1}|y_{t+1}, \sigma_v^2)\]</div>
 <p>This is the normalized product of two Gaussian density functions, which is also a Gaussian density function, since we can complete the square:</p>
 <div class="math notranslate nohighlight">
-\[\frac{1}{2\sigma_{t+1|t}^2}(y_{t+1} - \hat{y}_{t+1|t})^2 + \frac{1}{2\sigma_v^2}(x_{t+1} - y_{t+1})^2 = \frac{1}{2\sigma_{t+1|t+1}^2}(y_{t+1} - \hat{y}_{t+1|t+1})^2 + ...\]</div>
+\[\frac{1}{2\sigma_{t+1|t}^2}(y_{t+1} - \hat{y}_{t+1|t})^2 + \frac{1}{2\sigma_v^2}(x_{t+1} - y_{t+1})^2 =
+\frac{1}{2\sigma_{t+1|t+1}^2}(y_{t+1} - \hat{y}_{t+1|t+1})^2 + ... \]</div>
 <p>where we have omitted terms that are constant with respect to <span class="math notranslate nohighlight">\(y_{t+1}\)</span> and we have defined:</p>
 <div class="math notranslate nohighlight">
 \[\hat{y}_{t+1|t+1} = \sigma_{t+1|t+1}^2 (\frac{\hat{y}_{t+1|t}}{\sigma_{t+1|t}^2} + \frac{x_{t+1}}{\sigma_v^2})\]</div>
 <div class="math notranslate nohighlight">
-\[ \sigma_{t+1|t+1}^2 = \frac{\sigma_v^2 \sigma_{t+1|t}^2}{\sigma_v^2 + \sigma_{t+1|t}^2}\]</div>
+\[\sigma_{t+1|t+1}^2 = \frac{\sigma_v^2 \sigma_{t+1|t}^2}{\sigma_v^2 + \sigma_{t+1|t}^2}\]</div>
 <p>If we introduce the Kalman gain as:</p>
 <div class="math notranslate nohighlight">
 \[K_{t+1} =  \frac{\sigma_{t+1|t}^2}{\sigma_v^2 + \sigma_{t+1|t}^2} \]</div>
@@ -812,37 +945,321 @@ we can write the product rule either way in terms of X or Y:</p>
 \[ \sigma_{t+1|t+1}^2 =  (1 - K_{t+1} )\sigma_{t+1|t}^2\]</div>
 <p>which are the update equations of the Kalman filter, corresponding to the mean and variance of <span class="math notranslate nohighlight">\(y_{t+1}\)</span> conditional to observations up to <span class="math notranslate nohighlight">\(t+1\)</span>, which follows a Gaussian distribution:</p>
 <div class="math notranslate nohighlight">
-\[p(y_{t+1}|x_{0:t+1}) = N(y_{t+1}|\hat{y}_{t+1|t+1}, \sigma_{t+1|t+1}^2)\]</div>
+\[p(y_{t+1}|x_{0:t+1}) = {\mathcal N}(y_{t+1}|\hat{y}_{t+1|t+1}, \sigma_{t+1|t+1}^2)\]</div>
 <p>As a consequence, we have proven by induction that <span class="math notranslate nohighlight">\(p(y_t|x_{0:t})\)</span> follows a Gaussian distribution, as long as the initial condition <span class="math notranslate nohighlight">\(p(y_0)\)</span> is also Gaussian.</p>
 </section>
 <section id="derivation-of-the-smoothing-equations">
-<h5><span class="section-number">5.5.1.1.2. </span>Derivation of the smoothing equations<a class="headerlink" href="#derivation-of-the-smoothing-equations" title="Permalink to this heading">#</a></h5>
+<h5><span class="section-number">5.5.4.1.2. </span>Derivation of the smoothing equations<a class="headerlink" href="#derivation-of-the-smoothing-equations" title="Permalink to this heading">#</a></h5>
 <p>The derivation of the smoothing equations follows the same lines as the forward filtering equations. In this case, we are interested in computing:</p>
 <div class="math notranslate nohighlight">
 \[p(y_t|x_{0:T})\]</div>
 <p>i.e., we seek to infer the distribution of the latent variable at <span class="math notranslate nohighlight">\(0 \leq t \leq T\)</span>. We can exploit the structure of the graphical model to compute this expression by conditioning on <span class="math notranslate nohighlight">\(y_{t+1}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[p(y_t|x_{0:T}) = \int d y_{t+1} p(y_t|y_{t+1}, x_{0:T}) p(y_{t+1}|x_{0:T}) = \int d y_{t+1} p(y_t|y_{t+1}, x_{0:t}) p(y_{t+1}|x_{0:T})\]</div>
-<p>We assume that we have already done the forward filter path, so we have computed the distributions <span class="math notranslate nohighlight">\(p(y_t|x_{0:t}) \sim N(\hat{y}_{t|t}, \sigma^2_{t|t})\)</span> and <span class="math notranslate nohighlight">\(p(y_{t+1}|x_{0:t}) \sim N(\hat{y}_{t+1|t}, \sigma^2_{t+1|t})\)</span>. In particular, notice that for <span class="math notranslate nohighlight">\(t = T\)</span>, the filtering and smoothing inferences are the same, given by <span class="math notranslate nohighlight">\(p(y_{T}|x_{0:T})\)</span>.</p>
-<p>Therefore, we will derive the smoothing equations backwards starting from <span class="math notranslate nohighlight">\(p(y_{T}|x_{0:T}) \sim N(\hat{y}_{T|T}, \sigma^2_{T|T})\)</span> as the initial condition. The key idea is to assume that we already have computed:</p>
+<p>Where we have used, in the second step, the fact that conditioning on <span class="math notranslate nohighlight">\(y_{t+1}\)</span> removes the dependence on <span class="math notranslate nohighlight">\(x_{t+1:T}\)</span>.</p>
+<p>We assume that we have already done the forward filter path, so we have computed the distributions <span class="math notranslate nohighlight">\(p(y_t|x_{0:t}) \sim {\mathcal N}(\hat{y}_{t|t}, \sigma^2_{t|t})\)</span> and <span class="math notranslate nohighlight">\(p(y_{t+1}|x_{0:t}) \sim {\mathcal N}(\hat{y}_{t+1|t}, \sigma^2_{t+1|t})\)</span>. In particular, notice that for <span class="math notranslate nohighlight">\(t = T\)</span>, the filtering and smoothing inferences are the same, given by <span class="math notranslate nohighlight">\(p(y_{T}|x_{0:T})\)</span>.</p>
+<p>Therefore, we will derive the smoothing equations backwards starting from <span class="math notranslate nohighlight">\(p(y_{T}|x_{0:T}) \sim {\mathcal N}(\hat{y}_{T|T}, \sigma^2_{T|T})\)</span> as the initial condition. The key idea is to assume that we already have computed:</p>
 <div class="math notranslate nohighlight">
-\[p(y_{t+1}|x_{0:T}) \sim N(\hat{y}_{t+1|T}, \sigma^2_{t+1|T})\]</div>
-<p>and use is to compute <span class="math notranslate nohighlight">\(p(y_t|x_{0:T})\)</span>. This means to compute the previous integral. First, we need to work out the conditional probability <span class="math notranslate nohighlight">\(p(y_t|y_{t+1}, x_{0:T})\)</span>. We use the standard trick of computing the join probability <span class="math notranslate nohighlight">\(p(y_t, y_{t+1}|x_{0:T})\)</span>. Since <span class="math notranslate nohighlight">\(y_{t+1} = y_t + w_t\)</span>, where <span class="math notranslate nohighlight">\(y_t\)</span> and <span class="math notranslate nohighlight">\(w_t\)</span> are uncorrelated, this is simply:</p>
+\[p(y_{t+1}|x_{0:T}) \sim {\mathcal N}(\hat{y}_{t+1|T}, \sigma^2_{t+1|T})\]</div>
+<p>and use it to compute <span class="math notranslate nohighlight">\(p(y_t|x_{0:T})\)</span>. This means to compute the previous integral which depends on <span class="math notranslate nohighlight">\(p(y_{t+1}|x_{0:T})\)</span> which we have already computed, and <span class="math notranslate nohighlight">\(p(y_t|y_{t+1}, x_{0:t})\)</span>, which we need to derive. We use the standard trick of computing the join probability <span class="math notranslate nohighlight">\(p(y_t, y_{t+1}|x_{0:t})\)</span>. Since <span class="math notranslate nohighlight">\(y_{t+1} = y_t + w_t\)</span>, where <span class="math notranslate nohighlight">\(y_t\)</span> and <span class="math notranslate nohighlight">\(w_t\)</span> are uncorrelated, this is simply:</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}p(y_t, y_{t+1}|x_{0:t}) \sim N \left( \left[ \begin{matrix} \hat{y}_{t|t} \\ \hat{y}_{t+1|t} \end{matrix} \right], \left[ \begin{matrix} \sigma^2_{t|t} &amp; \sigma^2_{t|t} \\ \sigma^2_{t|t} &amp; \sigma^2_{t+1|t} \end{matrix} \right] \right)\end{split}\]</div>
+\[\begin{split}p(y_t, y_{t+1}|x_{0:t}) \sim {\mathcal N} \left( \left[ \begin{matrix} \hat{y}_{t|t} \\ \hat{y}_{t+1|t} \end{matrix} \right], \left[ \begin{matrix} \sigma^2_{t|t} &amp; \sigma^2_{t|t} \\ \sigma^2_{t|t} &amp; \sigma^2_{t+1|t} \end{matrix} \right] \right)\end{split}\]</div>
 <p>where we have used that <span class="math notranslate nohighlight">\(cov(y_t, y_{t+1}) = var(y_t)\)</span> in this model. Now we can derive the conditional distribution using:</p>
 <div class="math notranslate nohighlight">
 \[p(y_t|y_{t+1}, x_{0:t}) = \frac{p(y_t, y_{t+1}|x_{0:t})}{p(y_{t+1}|x_{0:t})}\]</div>
 <p>Computing this expression we get:</p>
 <div class="math notranslate nohighlight">
-\[p(y_t|y_{t+1}, x_{0:t}) \sim N\left( \hat{y}_{t|t}+ \frac{\sigma^2_{t|t}}{ \sigma^2_{t+1|t}}(y_t - \hat{y}_{t+1|t}), \sigma^2_{t|t}(1 - \frac{\sigma^2_{t|t}}{\sigma^2_{t+1|t}})\right)\]</div>
-<p>Now we have the expression for the two probabilities involved in the calculation of <span class="math notranslate nohighlight">\(p(y_t|x_{0:T})\)</span>, which can be carried by completing the squares on <span class="math notranslate nohighlight">\(y_{t+1}\)</span> and integrating it away. The final result is, unsurprisingly, a Gaussian distribution with the following backward iterative equations for the mean and variance, which conform the smoothing equations:</p>
+\[p(y_t|y_{t+1}, x_{0:t}) \sim {\mathcal N}\left( \hat{y}_{t|t}+ \frac{\sigma^2_{t|t}}{ \sigma^2_{t+1|t}}(y_t - \hat{y}_{t+1|t}), \sigma^2_{t|t}(1 - \frac{\sigma^2_{t|t}}{\sigma^2_{t+1|t}})\right)\]</div>
+<p>Now we have the expression for the two probabilities involved in the calculation of <span class="math notranslate nohighlight">\(p(y_t|x_{0:T})\)</span>, which can be carried by completing the squares on <span class="math notranslate nohighlight">\(y_{t+1}\)</span> and integrating it away. The final result is, unsurprisingly, a Gaussian distribution with the following backward iterative equations for the mean and variance, which conform the Rauch - Tung - Striebel smoothing equations:</p>
 <div class="math notranslate nohighlight">
 \[\hat{y}_{t|T} = \hat{y}_{t|t} + \frac{\sigma^2_{t|t}}{ \sigma^2_{t+1|t}}\left(\hat{y}_{t+1|T} - \hat{y}_{t+1|t}\right)\]</div>
 <div class="math notranslate nohighlight">
 \[\sigma^2_{t|T} = \sigma^2_{t|t} + (\frac{\sigma^2_{t|t}}{ \sigma^2_{t+1|t}})^2(\sigma^2_{t+1|T} - \sigma^2_{t+1|t})\]</div>
 <p>As mentioned, we compute first the forward filtering equations until <span class="math notranslate nohighlight">\(T\)</span>, which are used to initialize the smoothing equations and proceed backwards. The smoothing equations provide a better estimation than the filtering ones, since they use the full information set up to <span class="math notranslate nohighlight">\(T\)</span>. This translates into smaller estimation variances. They cannot be used in an online context, though, which is where Kalman filters find a large number of applications. Their main application is parameter estimation, since they are required to compute the likelihood of the data when using maximum likelihood estimation.</p>
 </section>
+</section>
+</section>
+<section id="estimation-of-latent-variable-models">
+<h3><span class="section-number">5.5.5. </span>Estimation of Latent Variable Models<a class="headerlink" href="#estimation-of-latent-variable-models" title="Permalink to this heading">#</a></h3>
+<p>Given observations and a latent variables model  typically represented as a probabilistic graphical model, we would like to estimate the parameters of the model. The difficulty, here, comes from the latent variables, for which we don’t have observations. There are different ways to estimate parameters in this case, but we will focus on the most popular ones: maximum likelihood estimation (MLE) and expectation maximization (EM), which computes an approximation of the MLE solution.</p>
+<section id="maximum-likelihood-estimation-mle">
+<h4><span class="section-number">5.5.5.1. </span>Maximum Likelihood Estimation (MLE)<a class="headerlink" href="#maximum-likelihood-estimation-mle" title="Permalink to this heading">#</a></h4>
+<p>The presence of latent variables does not preclude the use of MLE. Our goal is still to find the parameters that maximize the probability of the observations given the parameters (or likelihood). If we could observe the latent variables, that would mean maximizing the so-called (in the context of latent variable models) complete likelihood:</p>
+<p><span class="math notranslate nohighlight">\(\Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)\)</span></p>
+<p>Sine the latter are not observed, we need to integrate them out:</p>
+<p><span class="math notranslate nohighlight">\(\sum_{z_1, ..., z_N} \Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)\)</span></p>
+<p>where we have assumed discrete distributions for the latent variables. For continuous ones, the sums have to be replaced by integrals. The latter is called the incomplete likelihood.</p>
+<p>Whereas maximizing incomplete likelihoods with respect to the parameters is in theory possible, in practice it is usually a computationally expensive method. Therefore the need to develop more efficient estimation methods like Expectation Maximization.</p>
+</section>
+<section id="expectation-maximization-em">
+<h4><span class="section-number">5.5.5.2. </span>Expectation Maximization (EM)<a class="headerlink" href="#expectation-maximization-em" title="Permalink to this heading">#</a></h4>
+<p>If we were to have observations of the latent variables, we could then maximize the complete likelihood and get maximum likelihood estimators for the parameters <span class="math notranslate nohighlight">\(\theta\)</span>. However, we don’t have those observations and we need to maximize the incomplete likelihood, which is a harder problem.</p>
+<p>The intuition behind the Expectation Maximization (EM) method lies in this idea of maximizing the complete likelihood. Since we don’t have observations of the latent variables, EM seeks to maximize the incomplete likelihood breaking the problem in two easier steps:</p>
+<ul class="simple">
+<li><p>E-step: use observations and current best estimates of the parameters to infer values for the latent variables</p></li>
+<li><p>M-step: Plug these values into the complete likelihood and maximize it to get new estimations for the parameters
+These steps are repeated until convergence.</p></li>
+</ul>
+<p>Mathematically, EM does not guarantee to find a global optimum for the incomplete likelihood, but under certain general conditions it can be shown that the EM solution is a lower bound for the global maximum.</p>
+<p>Let us now look at the algorithm in more detail. We start with the <em>E-step</em>. The best estimate for the hidden variables given the latest estimation of parameters <span class="math notranslate nohighlight">\(\theta^{(s)}\)</span> and observations is given by the following conditional distribution:</p>
+<div class="math notranslate nohighlight">
+\[P({\rm z}|\{{\rm x_n}\},\theta^{s})\]</div>
+<p>It is called E-step because it computes the expectation of the complete (log)likelihood (the log to make it easier to compute) using this distribution, where the complete log-likelihood has yet unknown parameters <span class="math notranslate nohighlight">\(\theta\)</span>, which we denote:</p>
+<div class="math notranslate nohighlight">
+\[Q(\theta|\theta^{(s)}) \equiv \mathbb{E}_s[\log Π^𝑁_{𝑛=1}𝑃(x_𝑛,z_𝑛|𝜃)] \]</div>
+<div class="math notranslate nohighlight">
+\[=  \sum_n \sum_{z_n} P({\rm z_n}|{\rm x_n},\theta_{t})\log 𝑃(x_𝑛,z_𝑛|𝜃) \]</div>
+<p>where we have introduced the compact notation <span class="math notranslate nohighlight">\(\mathbb{E}_s[...] = \mathbb{E}[...|\{{\rm x_n}\},\theta^{s}]\)</span>.</p>
+<p>The <em>M-step</em> then maximizes this function with respect to <span class="math notranslate nohighlight">\(\theta\)</span>, which become <span class="math notranslate nohighlight">\(\theta^{(s+1)}\)</span> in the iterative algorithm.</p>
+<p>The sketch to prove that the EM solution is a lower bound of the maximum incomplete likelihood is relatively easy, so we do it in the follow. We start from the incomplete log-likelihood:</p>
+<div class="math notranslate nohighlight">
+\[\log \Pi_{n=1}^N P({\rm x}_n| \theta) = \sum_{n=1}^N \log \sum_{z_n}  P({\rm x}_n, {\rm z}_n| \theta) = \sum_{n=1}^N  \log \sum_{z_n} q({\rm z_n}|{\rm x}_n) \frac{P({\rm x}_n, {\rm z}_n| \theta)}{q({\rm z_n}|{\rm x}_n)}\]</div>
+<p>where <span class="math notranslate nohighlight">\(q(z_n|x_n)\)</span> is so far a generic distribution. Now since <span class="math notranslate nohighlight">\(log\)</span> is a concave function, we can use Jensen’s inequality, whose general form is:</p>
+<div class="math notranslate nohighlight">
+\[f(\sum_n \lambda_n x_n) \geq \sum_n \lambda_n f(x_n)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda_n \geq 0\)</span> and <span class="math notranslate nohighlight">\(\sum_n \lambda_n = 1\)</span>. Applied to our case, where <span class="math notranslate nohighlight">\(\lambda_n = q({\rm z_n}|{\rm x}_n)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\sum_{n=1}^N  \log \sum_{z_n} q({\rm z_n}|{\rm x}_n) \frac{P({\rm x}_n, {\rm z}_n| \theta)}{q({\rm z_n}|{\rm x}_n)} \geq \sum_{n=1}^N \sum_{z_n} q({\rm z_n}|{\rm x}_n) \log \frac{P({\rm x}_n, {\rm z}_n| \theta)}{q({\rm z_n}|{\rm x}_n)} \equiv F(q,\theta) \]</div>
+<p>with <span class="math notranslate nohighlight">\(F(q,\theta)\)</span> is called the free energy in analogy of Statistical Mechanics. The free energy is therefore a lower bound of the incomplete likelihood:</p>
+<div class="math notranslate nohighlight">
+\[\log \Pi_{n=1}^N P({\rm x}_n| \theta)  \geq F(q,\theta) \]</div>
+<p>If we maximized the free energy we are optimizing a lower bound of the incomplete likelihood, which is essentially what we claim EM does. EM maximizes the free energy using coordinate gradient ascent, i.e. iteratively optimizing <span class="math notranslate nohighlight">\(F\)</span> in <span class="math notranslate nohighlight">\(q\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span>:</p>
+<ul class="simple">
+<li><p>E-step: <span class="math notranslate nohighlight">\(q_{s+1} = {\rm argmax}_q F(q, \theta^{(s)})\)</span></p></li>
+<li><p>M-step: <span class="math notranslate nohighlight">\(\theta_{s+1} = {\rm argmax}_\theta F(q_{t+1}, \theta)\)</span></p></li>
+</ul>
+<p>To finish the proof, we only need to find the solution for the E-step. A simple proof consists in first noticing that the inequality also holds for <span class="math notranslate nohighlight">\(\theta = \theta^{(s)}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\log \Pi_{n=1}^N P({\rm x}_n| \theta^{(s)})  \geq F(q,\theta^{(s)}) \]</div>
+<p>Now let us take <span class="math notranslate nohighlight">\(q_{s+1} = P(z_n | x_n, \theta^{(s)})\)</span>. Plugging it in into the free energy:</p>
+<div class="math notranslate nohighlight">
+\[ \sum_{n=1}^N \sum_{z_n} P(z_n | x_n, \theta^{(s)}) \log \frac{P({\rm x}_n, {\rm z}_n| \theta^{(s)})}{P(z_n | x_n, \theta^{(s)})} \]</div>
+<div class="math notranslate nohighlight">
+\[= \sum_{n=1}^N (\sum_{z_n} P(z_n | x_n, \theta^{(s)})) \log P({\rm x}_n | \theta^{(s)}) \]</div>
+<div class="math notranslate nohighlight">
+\[= \sum_{n=1}^N \log P({\rm x}_n | \theta^{(s)}) = \log \Pi_{n=1}^N P({\rm x}_n| \theta^{(s)}) \]</div>
+<p>which makes the inequality an equality, therefore maximizing the free energy!</p>
+<p>For the M-step, we just need to sustitute <span class="math notranslate nohighlight">\(q_{s+1}\)</span> into the free energy:</p>
+<div class="math notranslate nohighlight">
+\[ F(q_{s+1}, \theta) = \sum_{n=1}^N \sum_{z_n} P(z_n | x_n, \theta^{(s)}) \log \frac{P({\rm x}_n, {\rm z}_n| \theta)}{P(z_n | x_n, \theta^{(s)})} \]</div>
+<div class="math notranslate nohighlight">
+\[  =\sum_{n=1}^N \sum_{z_n} P(z_n | x_n, \theta^{(s)}) \log P({\rm x}_n, {\rm z}_n| \theta) - \sum_{n=1}^N \sum_{z_n} P(z_n | x_n, \theta^{(s)}) \log P(z_n | x_n, \theta^{(s)}) \]</div>
+<div class="math notranslate nohighlight">
+\[= Q(\theta | \theta^{(s)}) + H_{q_{s+1}}\]</div>
+<p>where the second term, <span class="math notranslate nohighlight">\(H_{q_{s+1}}\)</span>, the entropy of <span class="math notranslate nohighlight">\(q_{s+1}\)</span>, does not depend on <span class="math notranslate nohighlight">\(\theta\)</span>. Therefore the maximum of this free energy wrt to <span class="math notranslate nohighlight">\(\theta\)</span> is the same as the maximum of <span class="math notranslate nohighlight">\(Q\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\theta_{s+1} = {\rm argmax}_\theta Q(\theta|\theta^{(s)})\]</div>
+<p>completing the proof.</p>
+<p>The algorithm is run until some form of convergence is reached (or a maximum number of iterations). Two different criteria are used typically to evaluate convergence:</p>
+<ul class="simple">
+<li><p>Convergence in the incomplete log-likelihood <span class="math notranslate nohighlight">\(l(\theta^{(s)})\)</span>, which we now from the previous proof that has to increase always on each EM iteration. The only issue is that potentially might be computationally expensive to evaluate, since it requires the integration over the latent variables.</p></li>
+<li><p>Convergence in parameters, meaning that two subsequent set of parameters are close enough using some distance metric, for instance Euclidean distance:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[||\theta^{(s+1)} - \theta^(s)||_2 &lt;= \text{threshold}\]</div>
+<p>In the following examples we will see examples of a general rule when using EM, namely that the estimators of the parameters <span class="math notranslate nohighlight">\(\theta\)</span> obtained in the M-step are the ones that we would get by optimizing the incomplete likelihood but with the values of the latent variables replaced by their expectations under <span class="math notranslate nohighlight">\(P(z_n | x_n, \theta^{(s)})\)</span></p>
+<section id="example-1-gaussian-mixture-model">
+<h5><span class="section-number">5.5.5.2.1. </span>Example 1: Gaussian Mixture Model<a class="headerlink" href="#example-1-gaussian-mixture-model" title="Permalink to this heading">#</a></h5>
+<p>As a first example we derive EM for the Gaussian Mixture Model (GMM). The complete log-likelihood for this model reads:</p>
+<div class="math notranslate nohighlight">
+\[\log \Pi_n P(\vec{x_n}, z_n|\theta) = \log \Pi_n \Pi_{k=1}^K \left(\pi_k {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\right)^{\delta_{z_n,k}} =  \sum_n \sum_{k=1}^K  \delta_{z_n,k} \left( \log \pi_k + \log {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\right) \]</div>
+<p>The set of parameters <span class="math notranslate nohighlight">\(\theta\)</span> of the model are the segment probabilities <span class="math notranslate nohighlight">\(\pi_k\)</span> and Gaussian parameters <span class="math notranslate nohighlight">\(\vec{\mu}_k, \Sigma_k\)</span>. Given observations <span class="math notranslate nohighlight">\(\vec{x_n}\)</span> and a current estimation of parameters <span class="math notranslate nohighlight">\(\theta^{(s)}\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is the index for the current EM iteration, we infer the distribution of the latent variables (E-step):</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{n,k}^{(s)} \equiv P(z_n=k|\vec{x}_n, \theta^{(s)}) = \frac{\pi_k^s {\mathcal N}(\vec{x_n}|\vec{\mu}_k^s, \Sigma_k^s)}{\sum_{k'=1}^K \pi_{k'}^s {\mathcal N}(\vec{x_n}|\vec{\mu}_{k'}^s, \Sigma_{k'}^s)}\]</div>
+<p>where we have used Bayes theorem. Now we write the expected log-likelihood with respect to this distribution, which again for simplicity of notation we denote as <span class="math notranslate nohighlight">\(\mathbb{E}_s[...]\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[Q(\theta | \theta^{(s)}) = \mathbb{E}_s\left[\log \Pi_n P(\vec{x_n}, z_n|\theta)\right] =  \sum_n \sum_{k=1}^K \mathbb{E}_s\left[\delta_{z_n,k}\right] \left( \log \pi_k + \log {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\right)\]</div>
+<div class="math notranslate nohighlight">
+\[=\sum_n \sum_{k=1}^K \gamma_{n,k}^{(s)} \left( \log \pi_k + \log {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\right)\]</div>
+<p>Now we apply the M-step, finding the estimators for the parameters that maximize the expected log-likelihood. For the case of <span class="math notranslate nohighlight">\(\pi_k\)</span> we need to introduce the constraint <span class="math notranslate nohighlight">\(\sum_k \pi_k = 1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\max_{\pi_k} Q(\theta|\theta^{(s)}) + \lambda (\sum_{k'} \pi_{k'} -1) \rightarrow \pi_k^{s+1} = \frac{1}{N} \sum_{n=1}^N \gamma_{n,k}^{(s)}\]</div>
+<p>Similarly we can find the estimators for the Gaussian parameters:</p>
+<div class="math notranslate nohighlight">
+\[\vec{\mu}_k^{s+1} = \frac{1}{N \pi_k^{s+1}} \sum_{n=1}^N \gamma_{n,k}^{(s)} \vec{x_n}\]</div>
+<div class="math notranslate nohighlight">
+\[\Sigma_k^{s+1} = \frac{1}{N \pi_k^{s+1}} \sum_{n=1}^N \gamma_{n,k}^{(s)} (\vec{x_n} - \vec{\mu}_k^{s+1})(\vec{x_n} - \vec{\mu}_k^{s+1})^t\]</div>
+<p>From these estimators, we can easily verify that indeed they are of the form of the estimators we would obtain for the complete log-likelihood, but with the hidden variables replaced by their expectations under the posterior <span class="math notranslate nohighlight">\(P(z_n=k|\vec{x}_n, \theta^{(s)})\)</span>. Another interesting point to remark is how the EM algorithm for the GMM is essentially a “soft” version of K-means, where instead of having hard assignments to the cluster with the nearest centroid, we have soft assignments to each of the Gaussian distributions. We left to the student the task, as an exercise, to show how EM converges to K-means in the particular case of spherical distributions <span class="math notranslate nohighlight">\(\Sigma_k = \epsilon I\)</span> in the limit <span class="math notranslate nohighlight">\(\epsilon \rightarrow 0\)</span>.</p>
+<p>Let us now illustrate the algorithm in practice. We apply the <em>Good and Bad Data Model</em> (GBDM) to detect anomalies in the daily returns of BBVA stock.</p>
+<p>The intuition behind GBDM is that, under normal market conditions, price returns approximately follow a Gaussian distribution, consistent with the Geometric Brownian Motion (GBM) model for stock prices first proposed by Samuelson. Yet, it is well established that financial markets can experience episodes of extreme stress in which returns deviate sharply from the predictions of GBM—for example, during the COVID-19 confinement, the Brexit referendum, or the first election of Donald Trump. The GBDM captures these empirical features by combining two components: a Gaussian distribution representing the <em>good</em> regime of normal market behavior, and a second Gaussian distribution accounting for the <em>bad</em> regime of stressed conditions. In this way, the model provides a simple but powerful generative framework for distinguishing between typical fluctuations and anomalous events in financial time series.</p>
+<p>Specifically, we consider a fixed 10-year window, compute daily returns, and fit the model to this time series using the Expectation–Maximization (EM) algorithm. For initialization, we set the mean of the historical returns as the common mean of both the good and bad data components. The standard deviation of the good data distribution is initialized with the historical standard deviation of returns, while the bad data distribution is initialized with twice this value. As a prior probability, we assume that 95% of observations belong to the good regime. Importantly, the final results are quite robust to these initialization choices, which suggests that the model reliably captures the distinction between normal and anomalous returns.</p>
+<p>We check that the EM algorithm behaves as expected, i.e. the incomplete log-likelihood always increases with each iteration of the algorithm, and it reaches convergence. This is shown in the following figure:</p>
+<figure class="align-default" id="fig-gbdm-loglikelihood">
+<a class="reference internal image-reference" href="../_images/GBDM_loglikelihood.png"><img alt="../_images/GBDM_loglikelihood.png" src="../_images/GBDM_loglikelihood.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.7 </span><span class="caption-text">Log-likelihood of the GBDM calculated with the parameters obtained at each iteration. As expected from the theoretical formulation of the algorithm, the log-likelihood cannot decrease at any iteration of EM.</span><a class="headerlink" href="#fig-gbdm-loglikelihood" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>To classify anomalies, we use a <span class="math notranslate nohighlight">\(P(\text{bad}|D) &gt; 0.5\)</span> rule to classify data as abnormal. In the following two figures we can see the results of the model in both the histogram and time-series of daily returns of BBVA. The GBDM partitions the data in two clusters: one that captures normal financial conditions, and a second one that flags periods of stress as well as exuberance (abnormally high negative and positive returns, respectively). By inspection of the data in the accompanying notebook we can see that the model correctly classifies the aforementioned events, since it flags the 2020-03-16 (the first lock-down day in Spain), the 2016-06-24 (the first trading day after the Brexit referendum) and the 2016-11-09 (the first trading day after Trump’s election).</p>
+<figure class="align-default" id="fig-gbdm-returns-histogram">
+<a class="reference internal image-reference" href="../_images/GBDM_returns_histogram.png"><img alt="../_images/GBDM_returns_histogram.png" src="../_images/GBDM_returns_histogram.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.8 </span><span class="caption-text">Histogram of daily returns of BBVA’s stock over 10 years from 2015 to 2025. The GBDM model has been used to flag anomalous returns, which are depicted in red.</span><a class="headerlink" href="#fig-gbdm-returns-histogram" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig-gbdm-returns-timeseries">
+<a class="reference internal image-reference" href="../_images/GBDM_returns_timeseries.png"><img alt="../_images/GBDM_returns_timeseries.png" src="../_images/GBDM_returns_timeseries.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.9 </span><span class="caption-text">Time-series of daily returns of BBVA’s stock over 10 years. Again, red points depict days that have been classified as having abnormally high and low returns.</span><a class="headerlink" href="#fig-gbdm-returns-timeseries" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="example-2-hidden-markov-model-the-baum-welch-algorithm">
+<h4><span class="section-number">5.5.5.3. </span>Example 2: Hidden Markov Model (the Baum - Welch algorithm)<a class="headerlink" href="#example-2-hidden-markov-model-the-baum-welch-algorithm" title="Permalink to this heading">#</a></h4>
+<p>Let us turn now to Hidden Markov Models (HMMs). The complete log-likelihood looks:</p>
+<div class="math notranslate nohighlight">
+\[\log P(y_{1}) P(x_{1}|y_{1})\Pi_{t=2}^T P(y_{t}|y_{t-1})P(x_{t} | y_{t}) = \left(\log P(y_{1}) + \log P(x_{1}|y_{1}) + \sum_{t=2}  \log \left(P(y_{t}|y_{t-1}) + \log P(x_{t} | y_{t})\right) \right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(t\)</span> is the index for the time series observations. The parameters of the model <span class="math notranslate nohighlight">\(\theta\)</span> are the ones defining the transition and observation probabilities. These are time-independent since the distributions are stationary. Given an estimation of the parameters <span class="math notranslate nohighlight">\(\theta^{(s)}\)</span> (we use <span class="math notranslate nohighlight">\(s\)</span> for the EM iterations in this case), we can infer the latent variables of the model given the observations as:</p>
+<div class="math notranslate nohighlight">
+\[P(y_{1}, ..., y_{T}| x_{1}, ..., x_{T}, \theta^{(s)})\]</div>
+<p>Let us consider discrete variables and introduce some convenient notation:</p>
+<div class="math notranslate nohighlight">
+\[a_{i,j} = P(y_{t} = Y_j|y_{t-1} = Y_i)\]</div>
+<div class="math notranslate nohighlight">
+\[\pi_i = P(y_1 = Y_i)\]</div>
+<div class="math notranslate nohighlight">
+\[b_{k,i} = P(x_t = X_k|y_t = Y_i)\]</div>
+<p>Using indicator functions:</p>
+<div class="math notranslate nohighlight">
+\[P(y_{1}) = \sum_i \pi_i^{\delta_{y_{1}, Y_i}}\]</div>
+<div class="math notranslate nohighlight">
+\[P(y_{t}|y_{t-1}) = \sum_{i,j} a_{i,j}^{\delta_{y_{t}, Y_i} \delta_{y_{t-1}, Y_j}}\]</div>
+<div class="math notranslate nohighlight">
+\[P(x_{t} | y_{t}) = \sum_{k,i} b_{k,i}^{\delta_{x_{t}, X_k}\delta_{y_{t}, Y_i}}\]</div>
+<p>The complete log-likelihood can be then written as:</p>
+<div class="math notranslate nohighlight">
+\[\sum_i \delta_{y_{1}, Y_i} \log \pi_i + \sum_{k,i} \delta_{x_{1}, X_k}\delta_{y_{1}, Y_i} \log b_{k,i} + \sum_{t=2} \left(\sum_{i,j} \delta_{y_{t}, Y_i} \delta_{y_{t-1}, Y_i} \log a_{i,j} + \sum_{k,i} \delta_{x_{t}, X_k}\delta_{y_{t}, Y_i} \log b_{k,i}\right)\]</div>
+<p>We calculate the expected log-likelihood:</p>
+<div class="math notranslate nohighlight">
+\[Q(\theta|\theta^{(s)}) = \sum_i \mathbb{E}_s[\delta_{y_{1}, Y_i}]\log \pi_i + \sum_{k,i} \delta_{x_{1}, X_k}\mathbb{E}_s[\delta_{y_{1}, Y_i}] \log b_{k,i} + \sum_{t=2} \left(\sum_{i,j} \mathbb{E}_s[\delta_{y_{t}, Y_i} \delta_{y_{t-1}, Y_j}] \log a_{i,j} + \sum_{k,i} \delta_{x_{t}, X_k} \mathbb{E}_s[\delta_{y_{t}, Y_i}]\log b_{k,i}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(E_s\)</span> is the expectation with respect to the distribution of latent variables at iteration <span class="math notranslate nohighlight">\(s\)</span>, shown above. We define:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{t}^{s,i} \equiv  E_s[\delta_{y_{t}, Y_i}] = P(y_{t} = Y_i| x_{1}, ..., x_{T},\theta^{(s)})\]</div>
+<div class="math notranslate nohighlight">
+\[\chi_{t}^{s,i,j} \equiv E_s[\delta_{y_{t}, Y_i} \delta_{y_{t-1}, Y_j}] = P(y_{t}= Y_i, y_{t-1}= Y_j| x_{1}, ..., x_{T},\theta^{(s)})\]</div>
+<p>Substituting it into the expected log-likelihood:</p>
+<div class="math notranslate nohighlight">
+\[Q(\theta|\theta^{(s)}) = \sum_n \left(\sum_i \gamma_{1,n}^{s,i} \log \pi_i + \sum_{k,j} \delta_{x_{1,n}, X_k}\gamma_{t,n}^{s,i} \log b_{k,i} + \sum_{t=2} \left(\sum_{i,j} \chi_{t,n}^{s,i,j}  \log a_{i,j} + \sum_{k,i} \delta_{x_{t,n}, X_k}\gamma_{t,n}^{s,i}\log b_{k,i}\right)\right)\]</div>
+<p>Now we can maximize the function with respect to parameters <span class="math notranslate nohighlight">\(\pi_i, a_{i,j}, b_{k,i}\)</span> to find the estimators at iteration <span class="math notranslate nohighlight">\(s+1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\pi^{s+1}_i =  \gamma_{1}^{s,i} \]</div>
+<div class="math notranslate nohighlight">
+\[a_{i,j}^{s+1} = \frac{\sum_{t=1}^{T-1}\chi_{t}^{s,i,j}}{\sum_{t=1}^{T-1}\gamma_{t}^{s,i}}\]</div>
+<div class="math notranslate nohighlight">
+\[b_{i,k}^{s+1} = \frac{\sum_{t=1}^T \delta_{x_{t}, X_k} \gamma_{t}^{s,i}}{\sum_{t=1}^{T-1}\gamma_{t}^{s,i}}\]</div>
+<p>It remains to show how to calculate at each iteration the expectations from the E-step. This can be done by introducing a set of two helper probabilities. The forward probability:</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i}^s(t) \equiv P(x_{1} = X_{k_1}, ..., x_{t} = X_{k_t}, y_{t} = Y_i| \theta^{(s)})\]</div>
+<p>which can be calculated recursively:</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i}^s(1) = P(x_{1} = X_{k_1}, y_{1} = Y_i| \theta^{(s)})\]</div>
+<div class="math notranslate nohighlight">
+\[= P(x_{1} = X_{k_1}| y_{1}=Y_i,  \theta^{(s)}) P (y_{1} = Y_i| \theta^{(s)}) = b_{k_1,i}^s \pi_i^s\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\alpha_{i}^s(t+1) = P(x_{1} = X_{k_1}, ..., x_{t+1} = X_{k_{t+1}}, y_{t+1} = Y_i| \theta^{(s)}) \]</div>
+<div class="math notranslate nohighlight">
+\[= \sum_{i'} P(x_{1} = X_{k_1}, ..., x_{t+1} = X_{k_{t+1}}, y_{t} = Y_{i'}, y_{t+1} = Y_i| \theta^{(s)})\]</div>
+<div class="math notranslate nohighlight">
+\[ = \sum_{i'} P(x_{t+1} = X_{k_{t+1}}, y_{t+1} = Y_i| x_{1} = X_{k_1}, ..., x_{t} = X_{k_{t}}, y_{t} = Y_{i'}, \theta^{(s)}) P(x_{1} = X_{k_1}, ..., x_{t} = X_{k_{t}}, y_{t} = Y_{i'}| \theta^{(s)}) \]</div>
+<div class="math notranslate nohighlight">
+\[= \sum_{i'} P(x_{t+1} = X_{k_{t+1}}, y_{t+1} = Y_i| y_{t} = Y_{i'}, \theta^{(s)}) \alpha_{i'}^s(t) \]</div>
+<div class="math notranslate nohighlight">
+\[= \sum_{i'} P(x_{t+1} = X_{k_{t+1}}| y_{t+1} = Y_i, \theta^{(s)})P(y_{t+1} = Y_i | y_{t} = Y_{i'}, \theta^{(s)}) \alpha_{i'}^s(t) \]</div>
+<div class="math notranslate nohighlight">
+\[= b_{k_{t+1},i}^s \sum_{i'} a_{i,i'}^s \alpha_{i',n}^s(t)\]</div>
+<p>And the backward probability:</p>
+<div class="math notranslate nohighlight">
+\[\beta_{i}^s(t) \equiv P(x_{t+1} = X_{k_{t+1}}, ..., x_{T} = X_{k_T}| y_{t} = Y_i, \theta^{(s)})\]</div>
+<p>As an exercise, we let the student to derive the recursive formulae for its calculation:</p>
+<div class="math notranslate nohighlight">
+\[\beta_{i}^s(T) = 1\]</div>
+<div class="math notranslate nohighlight">
+\[\beta_{i}^s(t) = \sum_{i'} \beta_{i'}^s(t+1) a_{i',i}^s b_{k_{t+1},i'}^s\]</div>
+<p>We can now write the probabilities of the latent variables as a function of these helper probabilities using Bayes’ theorem:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{t}^{s,i}  = P(y_{t} = Y_i| x_{1}, ..., x_{T},\theta^{(s)}) = \frac{P(y_{t} = Y_i, x_{1}, ..., x_{T}|\theta^{(s)})}{P(y_{t} = Y_i|\theta^{(s)})} \]</div>
+<div class="math notranslate nohighlight">
+\[= \frac{P(x_{t+1}, ..., x_{T}|y_{t} = Y_i,x_{1}, ..., x_{t}, \theta^{(s)}) P(y_{t} = Y_i,x_{1}, ..., x_{t}| \theta^{(s)})}{\sum_{i'}P(y_{t} = Y_{i'}, x_{1}, ..., x_{T}|\theta^{(s)})} \]</div>
+<div class="math notranslate nohighlight">
+\[= \frac{\alpha_{i}^s(t) \beta_{i}^s(t)}{\sum_{i'}\alpha_{i'}^s(t) \beta_{i'}^s(t)}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\chi_{t}^{s,i,j} = P(y_{t}= Y_i, y_{t-1}= Y_j| x_{1}, ..., x_{T},\theta^{(s)}) = \frac{P(y_{t}= Y_i, y_{t-1}= Y_j, x_{1}, ..., x_{T}|\theta^{(s)})}{P(x_{1}, ..., x_{T}|\theta^{(s)})} \]</div>
+<div class="math notranslate nohighlight">
+\[= \frac{P(x_{t}, ..., x_{T}| y_{t}= Y_i,  y_{t-1}= Y_j, x_{1}, ..., x_{t-1},\theta^{(s)}) P(y_{t}= Y_i, y_{t-1}= Y_j, x_{1}, ..., x_{t-1}|\theta^{(s)}}{P(x_{1}, ..., x_{T}|\theta^{(s)})} \]</div>
+<div class="math notranslate nohighlight">
+\[= \frac{P(x_{t}, ..., x_{T}| y_{t}= Y_i,\theta^{(s)}) P(y_{t}= Y_i| y_{t-1}= Y_j, x_{1}, ..., x_{t-1},\theta^{(s)})P(y_{t-1}= Y_j, x_{1}, ..., x_{t-1},\theta^{(s)})}{P(x_{1}, ..., x_{T}|\theta^{(s)}) } \]</div>
+<div class="math notranslate nohighlight">
+\[=\frac{P(x_{t}|y_{t}= Y_i,\theta^{(s)}) P(x_{t+1}, ..., x_{T}, y_{t}= Y_i,\theta^{(s)}) a_{i,j}^s \alpha_{j}^s(t-1)}{P(x_{1}, ..., x_{T}|\theta^{(s)}) } \]</div>
+<div class="math notranslate nohighlight">
+\[= \frac{b_{k_t, i}^s \beta_{i}^s(t) a_{i,j}^s \alpha_{j}^s(t-1)}{\sum_{i',j'} b_{k_t, i'}^s \beta_{i'}^s(t) a_{i',j'}^s \alpha_{j'}^s(t-1)}\]</div>
+<p>This completes all the ingredients need to perform EM in the Baum-Welch algorithm. Given the set of parameters <span class="math notranslate nohighlight">\(\theta^{(s)}\)</span> we use the forward and backward probabilities to update the estimations of the latent variables (E-step) which then are plugged in the estimators of <span class="math notranslate nohighlight">\(\theta^{(s+1)}\)</span> (M-step) and we iterate until convergence. The only thing needed are initial estimates of the parameters, <span class="math notranslate nohighlight">\(\theta^{(0)}\)</span>, which could be random numbers or based on prior knowledge. A good choice of initialization can help to increase the speed of convergence.</p>
+<section id="gaussian-observation-probabilities">
+<h5><span class="section-number">5.5.5.3.1. </span>Gaussian observation probabilities<a class="headerlink" href="#gaussian-observation-probabilities" title="Permalink to this heading">#</a></h5>
+<p>So far we have considered only discrete transition and observation probabilities. We can consider different probability models within the HMM framework and Baum - Welch EM learning. If the observations are continuous variables, we can model their conditional distributions as Gaussian:</p>
+<div class="math notranslate nohighlight">
+\[b_{i}(x_t) = P(x_t|y_t = Y_i) = {\mathcal N}(x|\mu_i, \sigma_i)\]</div>
+<p>The extension to multi-variate Gaussian should be easy to derive. The expected log-likelihood now reads:</p>
+<div class="math notranslate nohighlight">
+\[Q(\theta|\theta^{(s)}) = \left(\sum_i \gamma_{1}^{s,i} \log \pi_i -\frac{1}{2} \sum_{j} \gamma_{t}^{s,i} (\frac{(x_{1} - \mu_i)^2}{\sigma_i^2} + \log( 2\pi \sigma_i^2)) + \sum_{t=2} \left(\sum_{i,j} \chi_{t}^{s,i,j}  \log a_{i,j} -\frac{1}{2} \sum_{i} \gamma_{t}^{s,i}(\frac{(x_{t} - \mu_i)^2}{\sigma_i^2} + \log( 2\pi \sigma_i^2)) \right)\right)\]</div>
+<p>We leave as an exercise to work the expressions for the EM estimators of the parameters of the Gaussian (the rest of estimators don’t change):</p>
+<div class="math notranslate nohighlight">
+\[\mu_i^{(s+1)} = \frac{ \sum_{t=1}^T \gamma_{t}^{s,i} x_{t}}{\sum_{t=1}^{T}\gamma_{t}^{s,i}}\]</div>
+<div class="math notranslate nohighlight">
+\[(\sigma_i^{(s+1)})^2 = \frac{\sum_{t=1}^T \gamma_{t}^{s,i} (x_{t} - \mu_i^{(s+1)})^2}{\sum_{t=1}^{T}\gamma_{t}^{s,i}}\]</div>
+<p>which are similar to the GMM ones –in fact HMM models can be interpreted as time-series Gaussian Mixture Models.</p>
+</section>
+</section>
+<section id="example-3-local-level-model-simple-case-of-a-kalman-filter">
+<h4><span class="section-number">5.5.5.4. </span>Example 3: Local Level Model (simple case of a Kalman Filter)<a class="headerlink" href="#example-3-local-level-model-simple-case-of-a-kalman-filter" title="Permalink to this heading">#</a></h4>
+<p>Recall that the local level model equations are given by:</p>
+<div class="math notranslate nohighlight">
+\[y_{t+1} = y_t + w_t, w_t \sim {\mathcal N}(0, \sigma_w^2)\]</div>
+<div class="math notranslate nohighlight">
+\[x_t = y_t + v_t, v_t \sim {\mathcal N}(0, \sigma_v^2)\]</div>
+<p>Assume we have observations <span class="math notranslate nohighlight">\(x_{0:T}\)</span>. The complete log-likelihood is similar to the one for the HMM, only now we exploit the properties of the Gaussian distributions:</p>
+<div class="math notranslate nohighlight">
+\[l= \sum_{t=1}^T \log P(x_t|y_t)P(y_t|y_{t-1}) = -\sum_{t=1}^T \left(\frac{1}{2} \log 2\pi \sigma_v^2 + \frac{(x_t-y_t)^2 }{2\sigma_v^2}+ \frac{1}{2} \log 2\pi \sigma_w^2 + \frac{(y_{t+1}-y_t)^2}{2\sigma_w^2} \right)\]</div>
+<p>As usual with EM we derive the iterative equations using induction: we assume we have already a set of parameters estimated at iteration <span class="math notranslate nohighlight">\(s\)</span>, <span class="math notranslate nohighlight">\(\theta^{(s)} =\{\sigma_v^{(s)}, \sigma_w^{(s)}\}\)</span> and derive the updates for iteration <span class="math notranslate nohighlight">\(s+1\)</span>. To initialize the algorithm we need a parameter seed that can be based on general heuristics or prior information. We start with the E-step, where we compute the expectation of the log-likelihood using the best inference available on the latent variables at the current iteration, <span class="math notranslate nohighlight">\(P(y_t|x_{0:T}, \theta^{(s)})\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[Q(\theta|\theta^{(s)}) = -\sum_{t=1}^T \left(\frac{1}{2} \log 2\pi \sigma_v^2 + \frac{\mathbb{E}_s[(x_t-y_t)^2] }{2\sigma_v^2}+ \frac{1}{2} \log 2\pi \sigma_w^2 + \frac{\mathbb{E}_s[(y_{t+1}-y_t)^2]}{2\sigma_w^2} \right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbb{E}_s[...] \equiv \mathbb{E}[... |x_{0:T}, \theta^{(s)}]\)</span>. Let us compute the first of the expectations:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}_s[(x_t-y_t)^2] = \mathbb{E}_s[x_t^2 + y_t^2 - 2x_t y_t] = x_t^2 + \mathbb{E}_s[y_t^2] - 2 x_t \mathbb{E}_s[y_t] = x_t^2 + (\hat{y}_{t|T}^{(s)})^2 + (\sigma_{t|T}^{(s)})^2 - 2 x_t \hat{y}_{t|T}^{(s)} \]</div>
+<p>where we have used the smoothing equations introduced previously, only their iterative computation is done using parameters <span class="math notranslate nohighlight">\(\theta^{(s)}\)</span>. The second one can be computed as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbb{E}_s[(y_{t+1}-y_t)^2] = \mathbb{E}_s[y_{t+1}^2 + y_t^2 - 2y_{t+1} y_t] = \mathbb{E}_s[y_{t+1}^2] + \mathbb{E}_s[y_t^2] - 2 \mathbb{E}_s[y_{t+1} y_t] \\= (\hat{y}_{t+1|T}^{(s)})^2 + (\sigma_{t+1|T}^{(s)})^2  + (\hat{y}_{t|T}^{(s)})^2 + (\sigma_{t|T}^{(s)})^2 - 2 \sigma^{(s)}_{t+1,t|T}  -  2 \hat{y}_{t+1|T}^{(s)} \hat{y}_{t|T}^{(s)} \\ = (\hat{y}_{t+1|T}^{(s)} - \hat{y}_{t|T}^{(s)})^2 +  (\sigma_{t+1|T}^{(s)})^2 + (\sigma_{t|T}^{(s)})^2 - 2 \sigma^{(s)}_{t+1,t|T} \end{split}\]</div>
+<p>where we have introduced the smoothed estimation of the one-lag covariance <span class="math notranslate nohighlight">\(\sigma_{t+1,t|T}^{(s)} \equiv \mathbb{E}_s[y_{t+1} y_t] - \hat{y}_{t+1|T}^{(s)} \hat{y}_{t|T}^{(s)}\)</span>. A derivation of the recursive equation to compute this covariance can be checked in <span id="id10">[<a class="reference internal" href="references.html#id19" title="Kevin P. Murphy. Machine learning : a probabilistic perspective. MIT Press, Cambridge, Mass. [u.a.], 2013. ISBN 9780262018029 0262018020.">3</a>]</span>:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{t+1,t|T}^{(s)} =  J_t (\sigma_{t+1|T}^{(s)})^2 \]</div>
+<p>where we have introduced the smoother gain <span class="math notranslate nohighlight">\(J_t\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[J_t \equiv \frac{ (\sigma_{t|t}^{(s)})^2}{ (\sigma_{t+1|t}^{(s)})^2}\]</div>
+<p>Let us move now into the M-step, where we obtain new estimators for the parameters of the model by maximizing the expected complete likelihood. We compute the extremes and leave the interested reader the evaluation of the second derivatives to verify that they are indeed maxima:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial}{\partial \sigma_v^2} Q(\theta|\theta^{(s)}) = \sum_{t=1}^T \left(\frac{1}{2\sigma_v^2} -\frac{\mathbb{E}_s[(x_t-y_t)^2] }{2\sigma_v^4}\right) =0 \rightarrow (\sigma_v^{(s+1)})^2 =  \frac{1}{T}\sum_{t=1}^T \mathbb{E}_s[(x_t-y_t)^2] \]</div>
+<div class="math notranslate nohighlight">
+\[\frac{\partial}{\partial \sigma_w^2} Q(\theta|\theta^{(s)}) = \sum_{t=1}^{T-1} \left(\frac{1}{2\sigma_w^2} -\frac{\mathbb{E}_s[(y_{t+1}-y_t)^2] }{2\sigma_w^4}\right) =0 \rightarrow (\sigma_w^{(s+1)})^2 = \frac{1}{T-1} \sum_{t=1}^{T-1} \mathbb{E}_s[(y_{t+1}-y_t)^2] \]</div>
+<p>The new estimators depend on the expectations calculated in the E-step, which themselves are calculated doing a forward and smoothing passes over the data.</p>
+<p>This completes the derivation of the EM algorithm for the local level model, since now starting from a seed for the parameters, we can iteratively refine our estimators until we reach a convergence in terms of parameters or log-likelihood.</p>
+<p>To see the algorithm in action we simulate a local level model over 200 time-steps, with <span class="math notranslate nohighlight">\(\sigma_v^2 = 1.0\)</span> and <span class="math notranslate nohighlight">\(\sigma_w^2 = 0.05\)</span>. Then we use the simulated data to find the parameters using Expectation Maximization. The algorithm reach quickly convergence, as seen in the figure below. As a sanity check of the implementation, we see that the log-likelihood over EM iterations never decreases.</p>
+<figure class="align-default" id="fig-local-level-em-convergence">
+<a class="reference internal image-reference" href="../_images/local_level_em_convergence.png"><img alt="../_images/local_level_em_convergence.png" src="../_images/local_level_em_convergence.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.10 </span><span class="caption-text">Log-likelihood of the local level model evaluated with the estimation of the parameters using EM for each iteration. We see that log-likelihood never decreases, which is a sanity check for the correctneess of the implementation.```</span><a class="headerlink" href="#fig-local-level-em-convergence" title="Permalink to this image">#</a></p>
+<div class="legend">
+<p>The converged parameters for this simulation are <span class="math notranslate nohighlight">\(\hat{\sigma}_v^2 = 0.872\)</span> and <span class="math notranslate nohighlight">\(\hat{\sigma}_w^2 = 0.054\)</span>, which are reasonable approximations although not exact, since EM does not guarantee to reach the maximum of the likelihood. Finally, we run the smoother using the converged parameters and compare it with the observations and the true latent state variable. The smoother provides a good approximation for the true latent state, which remains within a two sigma band for the full simulation.</p>
+<figure class="align-default" id="fig-gbdm-returns-timelocal-level-em-smoothingseries">
+<a class="reference internal image-reference" href="../_images/local_level_em_smoothing.png"><img alt="../_images/local_level_em_smoothing.png" src="../_images/local_level_em_smoothing.png" style="width: 8in;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5.11 </span><span class="caption-text">Simulated latent state variable and observations for the local level model with <span class="math notranslate nohighlight">\(\sigma_v^2 = 1.0\)</span> and <span class="math notranslate nohighlight">\(\sigma_w^2 = 0.05\)</span>. The green line shows the inferred latent state using the smoothing algorithm, with a two sigma confidence interval shaded.```</span><a class="headerlink" href="#fig-gbdm-returns-timelocal-level-em-smoothingseries" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</figcaption>
+</figure>
 </section>
 </section>
 </section>
@@ -923,12 +1340,32 @@ we can write the product rule either way in terms of X or Y:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-linear-regression">5.3. Bayesian Linear Regression</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-models">5.4. Probabilistic Graphical Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-models">5.5. Latent variable models</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.1. The Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.1.1. The local level model</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.1.1.1. Derivation of the forward filtering equations: predict and update</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.1.1.2. Derivation of the smoothing equations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partially-observable-latent-variable-models">5.5.1. Partially observable latent variable models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#full-latent-variable-models">5.5.2. Full latent variable models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-latent-variable-models">5.5.3. Examples of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-models-gmms">5.5.3.1. Gaussian Mixture Models (GMMs)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hidden-markov-model-hmm">5.5.3.2. Hidden Markov Model (HMM)</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.4. The Kalman Filter</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.4.1. The local level model</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.4.1.1. Derivation of the forward filtering equations: predict and update</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.4.1.2. Derivation of the smoothing equations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">5.5.5. Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimation-mle">5.5.5.1. Maximum Likelihood Estimation (MLE)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization-em">5.5.5.2. Expectation Maximization (EM)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-model">5.5.5.2.1. Example 1: Gaussian Mixture Model</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-hidden-markov-model-the-baum-welch-algorithm">5.5.5.3. Example 2: Hidden Markov Model (the Baum - Welch algorithm)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-observation-probabilities">5.5.5.3.1. Gaussian observation probabilities</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model-simple-case-of-a-kalman-filter">5.5.5.4. Example 3: Local Level Model (simple case of a Kalman Filter)</a></li>
 </ul>
 </li>
 </ul>

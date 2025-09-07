@@ -222,6 +222,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="stochastic_calculus.html">Stochastic Calculus</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Bayesian Modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="market_microstructure.html">Market Microstructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rfq_models.html">Modelling RfQs in Dealer to Client Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">Fair Price Estimation</a></li>
 </ul>
 
@@ -420,6 +421,14 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-probability">Bayesian probability</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">Example: estimating the probability of heads in a coin toss experiment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization">Expectation Maximization</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-models">Example 1: Gaussian Mixture Models</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model">Example 3: Local Level Model</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -577,6 +586,470 @@ document.write(`
 </div>
 </div>
 </section>
+<section id="estimation-of-latent-variable-models">
+<h3>Estimation of Latent Variable Models<a class="headerlink" href="#estimation-of-latent-variable-models" title="Permalink to this heading">#</a></h3>
+<section id="expectation-maximization">
+<h4>Expectation Maximization<a class="headerlink" href="#expectation-maximization" title="Permalink to this heading">#</a></h4>
+<section id="example-1-gaussian-mixture-models">
+<h5>Example 1: Gaussian Mixture Models<a class="headerlink" href="#example-1-gaussian-mixture-models" title="Permalink to this heading">#</a></h5>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">TheGoodAndBadDataModel</span><span class="p">():</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prior_p_good</span><span class="p">,</span> <span class="n">prior_mean</span><span class="p">,</span> <span class="n">prior_std_good</span><span class="p">,</span> <span class="n">prior_std_bad</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">p_good</span> <span class="o">=</span> <span class="n">prior_p_good</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">prior_mean</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">std_good</span> <span class="o">=</span> <span class="n">prior_std_good</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">std_bad</span> <span class="o">=</span> <span class="n">prior_std_bad</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">loglik_history</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># store likelihood values</span>
+
+  <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+    <span class="n">p_x_bad_pbad</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_good</span><span class="p">)</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">std_bad</span><span class="p">)</span>
+    <span class="n">p_x_good_pgood</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_good</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">std_good</span><span class="p">)</span>
+    <span class="n">p_bad_x</span> <span class="o">=</span> <span class="n">p_x_bad_pbad</span> <span class="o">/</span> <span class="p">(</span><span class="n">p_x_good_pgood</span> <span class="o">+</span> <span class="n">p_x_bad_pbad</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p_bad_x</span>
+
+  <span class="k">def</span> <span class="nf">compute_loglik</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+    <span class="n">mixture_pdf</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_good</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">std_good</span><span class="p">)</span> <span class="o">+</span>
+        <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_good</span><span class="p">)</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">std_bad</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">mixture_pdf</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">))</span>  <span class="c1"># add epsilon to avoid log(0)</span>
+
+  <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">print_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">track_likelihood</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+      <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="c1"># E-step</span>
+      <span class="n">p_bad_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+      <span class="n">p_good_s</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">p_bad_s</span>
+
+      <span class="c1"># M-step</span>
+      <span class="n">p_good_sp1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">p_good_s</span><span class="p">)</span>
+      <span class="n">std_good_sp1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_good_s</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="n">p_good_sp1</span><span class="p">))</span>
+      <span class="n">std_bad_sp1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_bad_s</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_good_sp1</span><span class="p">)))</span>
+
+      <span class="c1"># compute change (for stopping)</span>
+      <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">p_good_sp1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_good</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">p_good</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+                      <span class="o">+</span> <span class="p">((</span><span class="n">std_good_sp1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">std_good</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">std_good</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+                      <span class="o">+</span> <span class="p">((</span><span class="n">std_bad_sp1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">std_bad</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">std_bad</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+      <span class="c1"># update parameters</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">p_good</span> <span class="o">=</span> <span class="n">p_good_sp1</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">std_good</span> <span class="o">=</span> <span class="n">std_good_sp1</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">std_bad</span> <span class="o">=</span> <span class="n">std_bad_sp1</span>
+
+      <span class="c1"># track log-likelihood</span>
+      <span class="k">if</span> <span class="n">track_likelihood</span><span class="p">:</span>
+        <span class="n">ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loglik</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loglik_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ll</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">print_error</span><span class="p">:</span>
+          <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iter </span><span class="si">{</span><span class="nb">iter</span><span class="si">}</span><span class="s2">: error=</span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">, loglik=</span><span class="si">{</span><span class="n">ll</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+      <span class="c1"># stopping condition</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">error</span> <span class="o">&lt;</span> <span class="n">tolerance</span> <span class="ow">or</span> <span class="nb">iter</span> <span class="o">&gt;=</span> <span class="n">max_iter</span><span class="p">):</span>
+        <span class="k">break</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Define ticker</span>
+<span class="n">bbva_tkr</span> <span class="o">=</span> <span class="n">yf</span><span class="o">.</span><span class="n">Ticker</span><span class="p">(</span><span class="s2">&quot;BBVA.MC&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get 10 years of daily adjusted close prices</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="s2">&quot;2025-07-31&quot;</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="s2">&quot;2015-07-31&quot;</span>  <span class="c1"># 10 years earlier</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">bbva_tkr</span><span class="o">.</span><span class="n">history</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="s2">&quot;1d&quot;</span><span class="p">)[</span><span class="s2">&quot;Close&quot;</span><span class="p">]</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">bbva_tkr</span><span class="o">.</span><span class="n">history</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="s2">&quot;10y&quot;</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="s2">&quot;1d&quot;</span><span class="p">)[</span><span class="s2">&quot;Close&quot;</span><span class="p">]</span>
+
+<span class="c1"># Calculate daily returns</span>
+<span class="n">bbva_ret</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="c1"># Print mean and standard deviation of returns</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean return:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bbva_ret</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Std deviation:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bbva_ret</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mean return: 0.0006867420397232735
+Std deviation: 0.021392342218226022
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We learn the model over the historical data. As a prior we assume there are only 10% anomalies in the dataset</span>
+<span class="c1"># The result is relatively robust to the choice of prior</span>
+<span class="n">gbdm</span> <span class="o">=</span> <span class="n">TheGoodAndBadDataModel</span><span class="p">(</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bbva_ret</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bbva_ret</span><span class="p">),</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bbva_ret</span><span class="p">))</span>
+<span class="n">gbdm</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">bbva_ret</span><span class="p">)</span>
+
+<span class="c1"># We have a look at the results: according to the model, there are 15% anomalies, with roughly a 3x standard deviation</span>
+<span class="c1"># This means the model detects that the distribution of returns is not accurately described by a single Gaussian</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gbdm</span><span class="o">.</span><span class="n">p_good</span><span class="p">,</span> <span class="n">gbdm</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">gbdm</span><span class="o">.</span><span class="n">std_good</span><span class="p">,</span> <span class="n">gbdm</span><span class="o">.</span><span class="n">std_bad</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.8494092741093464 0.0006867420397232735 0.01482171389384633 0.04242390635242809
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the log-likelihood history</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gbdm</span><span class="o">.</span><span class="n">loglik_history</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Log-likelihood&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;EM Log-likelihood evolution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/055034c8fce51771af9f1bb3f18e897e1ec8c531383a2e7f4b3c4b9826313b54.png" src="../_images/055034c8fce51771af9f1bb3f18e897e1ec8c531383a2e7f4b3c4b9826313b54.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">bbva_ret</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Daily Return&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Histogram of BBVA Daily Returns (10y)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e824526f0f6a8aaf7ef55a05c5655f1bdbc34df4632ed0ad863c6265bef01150.png" src="../_images/e824526f0f6a8aaf7ef55a05c5655f1bdbc34df4632ed0ad863c6265bef01150.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let us flag anomalies as those with 50% of more probability of belonging to the &quot;bad data&quot; mixture component</span>
+<span class="n">anomalies</span> <span class="o">=</span> <span class="p">(</span><span class="n">gbdm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">bbva_ret</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="c1"># Add anomaly flag to DataFrame</span>
+<span class="n">pd_bbva_ret</span> <span class="o">=</span> <span class="n">bbva_ret</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">pd_bbva_ret</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Returns&quot;</span><span class="p">]</span>
+<span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;anomaly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">anomalies</span>
+
+<span class="c1"># Plot histogram of returns, segmented by anomaly flag</span>
+<span class="n">pd_bbva_ret</span><span class="p">[</span><span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;anomaly&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">][</span><span class="s2">&quot;Returns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
+    <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Anomalies&quot;</span><span class="p">)</span>
+<span class="n">pd_bbva_ret</span><span class="p">[</span><span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;anomaly&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">][</span><span class="s2">&quot;Returns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
+    <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Daily Return&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Histogram of BBVA Daily Returns&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/910c0c70bbc4e8481586e82b25ef20e635dc6ab613361f98852561f3c7802598.png" src="../_images/910c0c70bbc4e8481586e82b25ef20e635dc6ab613361f98852561f3c7802598.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In terms of time-series, we flat the anomalies in the following plot</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="kc">False</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}</span>
+<span class="n">pd_bbva_ret</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Returns&quot;</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;anomaly&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Time Series of BBVA Daily Returns&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: title={&#39;center&#39;: &#39;Time Series of BBVA Daily Returns&#39;}, xlabel=&#39;Date&#39;, ylabel=&#39;Returns&#39;&gt;
+</pre></div>
+</div>
+<img alt="../_images/f8a012cebb7c0d536b376469338c74ddda075a32ca211797a18cf403498e8b4f.png" src="../_images/f8a012cebb7c0d536b376469338c74ddda075a32ca211797a18cf403498e8b4f.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># An interesting question is whether these anomalies tend to cluster. Looking at the auto-correlation it hints this is a possibility</span>
+<span class="c1"># This means it could make sense to analyse these anomalies as regime changes, i.e. use a hidden markov model</span>
+<span class="kn">from</span> <span class="nn">pandas.plotting</span> <span class="kn">import</span> <span class="n">autocorrelation_plot</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">autocorrelation_plot</span><span class="p">(</span><span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;anomaly&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.0, 100.0)
+</pre></div>
+</div>
+<img alt="../_images/acf3d940573e8fef8126a55e70ac1c8cb6b7b67d546fce0827589153960db1b7.png" src="../_images/acf3d940573e8fef8126a55e70ac1c8cb6b7b67d546fce0827589153960db1b7.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check that relevant periods of financial stress have been correctly classified</span>
+<span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+
+<span class="c1"># Define event dates</span>
+<span class="n">event_dates</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s2">&quot;2020-03-16&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>  <span class="c1"># COVID lockdown Spain</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s2">&quot;2016-06-24&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span>  <span class="c1"># Brexit referendum (first trading day)</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s2">&quot;2016-11-09&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>   <span class="c1"># Trump election (first trading day after)</span>
+<span class="p">]</span>
+
+<span class="c1"># Filter rows that match event dates</span>
+<span class="n">events_df</span> <span class="o">=</span> <span class="n">pd_bbva_ret</span><span class="p">[</span><span class="n">pd_bbva_ret</span><span class="p">[</span><span class="s2">&quot;Date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">event_dates</span><span class="p">)][[</span><span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Returns&quot;</span><span class="p">,</span> <span class="s2">&quot;anomaly&quot;</span><span class="p">]]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">events_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            Date   Returns  anomaly
+214   2016-06-24 -0.161792     True
+312   2016-11-09 -0.057011     True
+1166  2020-03-16 -0.133684     True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="example-3-local-level-model">
+<h5>Example 3: Local Level Model<a class="headerlink" href="#example-3-local-level-model" title="Permalink to this heading">#</a></h5>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">simulate_local_level</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">sigma_v2</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sigma_w2</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma_w2</span><span class="p">))</span>
+    <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma_v2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma_w2</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma_v2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+
+
+<span class="k">def</span> <span class="nf">kf_rts_identity_cross</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_v2</span><span class="p">,</span> <span class="n">sigma_w2</span><span class="p">,</span> <span class="n">m0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">P0</span><span class="o">=</span><span class="mf">1e6</span><span class="p">):</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">m_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">P_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">m_filt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">P_filt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">innov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="n">m_prev</span><span class="p">,</span> <span class="n">P_prev</span> <span class="o">=</span> <span class="n">m0</span><span class="p">,</span> <span class="n">P0</span>
+    <span class="n">loglik</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+        <span class="c1"># predict</span>
+        <span class="n">m_pred</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_prev</span>
+        <span class="n">P_pred</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_prev</span> <span class="o">+</span> <span class="n">sigma_w2</span>
+        <span class="c1"># update</span>
+        <span class="n">innov</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-</span> <span class="n">m_pred</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">S</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_pred</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">sigma_v2</span>
+        <span class="n">K</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_pred</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">/</span> <span class="n">S</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">m_filt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_pred</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">K</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">*</span> <span class="n">innov</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">P_filt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">K</span><span class="p">[</span><span class="n">t</span><span class="p">])</span> <span class="o">*</span> <span class="n">P_pred</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="c1"># log-likelihood</span>
+        <span class="n">loglik</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">S</span><span class="p">[</span><span class="n">t</span><span class="p">])</span> <span class="o">+</span> <span class="n">innov</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">S</span><span class="p">[</span><span class="n">t</span><span class="p">])</span>
+        <span class="n">m_prev</span><span class="p">,</span> <span class="n">P_prev</span> <span class="o">=</span> <span class="n">m_filt</span><span class="p">[</span><span class="n">t</span><span class="p">],</span> <span class="n">P_filt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+
+    <span class="c1"># RTS smoother</span>
+    <span class="n">m_smooth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">P_smooth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">m_smooth</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_filt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">P_smooth</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_filt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">J</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_filt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">/</span> <span class="n">P_pred</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">m_smooth</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_filt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m_smooth</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">m_pred</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">P_smooth</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">P_filt</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+</span> <span class="n">J</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">P_smooth</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">P_pred</span><span class="p">[</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># lag-one smoothed covariance via identity: P_{t-1,t|T} = J_{t-1} P_{t|T}</span>
+    <span class="n">P_cross</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+        <span class="n">P_cross</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">J</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">P_smooth</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;m_pred&quot;</span><span class="p">:</span> <span class="n">m_pred</span><span class="p">,</span> <span class="s2">&quot;P_pred&quot;</span><span class="p">:</span> <span class="n">P_pred</span><span class="p">,</span>
+        <span class="s2">&quot;m_filt&quot;</span><span class="p">:</span> <span class="n">m_filt</span><span class="p">,</span> <span class="s2">&quot;P_filt&quot;</span><span class="p">:</span> <span class="n">P_filt</span><span class="p">,</span>
+        <span class="s2">&quot;m_smooth&quot;</span><span class="p">:</span> <span class="n">m_smooth</span><span class="p">,</span> <span class="s2">&quot;P_smooth&quot;</span><span class="p">:</span> <span class="n">P_smooth</span><span class="p">,</span>
+        <span class="s2">&quot;innov&quot;</span><span class="p">:</span> <span class="n">innov</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">K</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="n">J</span><span class="p">,</span>
+        <span class="s2">&quot;P_cross&quot;</span><span class="p">:</span> <span class="n">P_cross</span><span class="p">,</span> <span class="s2">&quot;loglik&quot;</span><span class="p">:</span> <span class="n">loglik</span>
+    <span class="p">}</span>
+
+
+
+<span class="k">def</span> <span class="nf">em_local_level</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_v2_init</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">sigma_w2_init</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">m0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">P0</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+    <span class="n">sigma_v2</span><span class="p">,</span> <span class="n">sigma_w2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sigma_v2_init</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">sigma_w2_init</span><span class="p">)</span>
+    <span class="n">ll_hist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">kf_rts_identity_cross</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_v2</span><span class="p">,</span> <span class="n">sigma_w2</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">P0</span><span class="p">)</span>
+        <span class="n">mu</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Pc</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;m_smooth&quot;</span><span class="p">],</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;P_smooth&quot;</span><span class="p">],</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;P_cross&quot;</span><span class="p">]</span>
+        <span class="n">ll_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;loglik&quot;</span><span class="p">])</span>
+
+        <span class="c1"># E-step expectations</span>
+        <span class="n">E1</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">P</span>
+        <span class="n">diff_mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">mu</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">E2</span> <span class="o">=</span> <span class="n">diff_mu</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">P</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">Pc</span>
+
+        <span class="c1"># M-step (MLE scaling)</span>
+        <span class="n">sigma_v2_new</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">E1</span><span class="p">),</span> <span class="mf">1e-12</span><span class="p">)</span>
+        <span class="n">sigma_w2_new</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">E2</span><span class="p">),</span> <span class="mf">1e-12</span><span class="p">)</span>
+
+        <span class="c1"># convergence</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sigma_v2_new</span> <span class="o">-</span> <span class="n">sigma_v2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma_v2</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">),</span>
+                  <span class="nb">abs</span><span class="p">(</span><span class="n">sigma_w2_new</span> <span class="o">-</span> <span class="n">sigma_w2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma_w2</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">))</span>
+        <span class="n">sigma_v2</span><span class="p">,</span> <span class="n">sigma_w2</span> <span class="o">=</span> <span class="n">sigma_v2_new</span><span class="p">,</span> <span class="n">sigma_w2_new</span>
+        <span class="k">if</span> <span class="n">rel</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="n">ll_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kf_rts_identity_cross</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_v2</span><span class="p">,</span> <span class="n">sigma_w2</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">P0</span><span class="p">)[</span><span class="s2">&quot;loglik&quot;</span><span class="p">])</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;sigma_v2&quot;</span><span class="p">:</span> <span class="n">sigma_v2</span><span class="p">,</span> <span class="s2">&quot;sigma_w2&quot;</span><span class="p">:</span> <span class="n">sigma_w2</span><span class="p">,</span> <span class="s2">&quot;ll_history&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ll_hist</span><span class="p">)}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># --- Configuration ---</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">sigma_v2_true</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">sigma_w2_true</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
+
+<span class="c1"># EM seeds</span>
+<span class="n">sigma_v2_init</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">sigma_w2_init</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="c1"># --- Simulate ---</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">simulate_local_level</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">sigma_v2_true</span><span class="p">,</span> <span class="n">sigma_w2_true</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+
+<span class="c1"># --- Run EM ---</span>
+<span class="n">em</span> <span class="o">=</span> <span class="n">em_local_level</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_v2_init</span><span class="o">=</span><span class="n">sigma_v2_init</span><span class="p">,</span> <span class="n">sigma_w2_init</span><span class="o">=</span><span class="n">sigma_w2_init</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+<span class="n">sigma_v2_hat</span><span class="p">,</span> <span class="n">sigma_w2_hat</span> <span class="o">=</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;sigma_v2&quot;</span><span class="p">],</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;sigma_w2&quot;</span><span class="p">]</span>
+<span class="n">ll</span> <span class="o">=</span> <span class="n">em</span><span class="p">[</span><span class="s2">&quot;ll_history&quot;</span><span class="p">]</span>
+
+<span class="c1"># --- Smooth with estimated params ---</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">kf_rts_identity_cross</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_v2_hat</span><span class="p">,</span> <span class="n">sigma_w2_hat</span><span class="p">)</span>
+
+<span class="c1"># --- Compare parameters ---</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;Parameter&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;$\sigma_v^2$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\sigma_w^2$&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;True&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">sigma_v2_true</span><span class="p">,</span> <span class="n">sigma_w2_true</span><span class="p">],</span>
+    <span class="s2">&quot;EM estimate&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">sigma_v2_hat</span><span class="p">,</span> <span class="n">sigma_w2_hat</span><span class="p">],</span>
+<span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Parameter</th>
+      <th>True</th>
+      <th>EM estimate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>$\sigma_v^2$</td>
+      <td>1.00</td>
+      <td>0.871882</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>$\sigma_w^2$</td>
+      <td>0.05</td>
+      <td>0.054226</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Log-likelihood (should be non-decreasing up to numerical noise)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ll</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;EM log-likelihood over iterations&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;iteration&quot;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;log-likelihood&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Data and smoothed state with ±1σ band</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="s2">&quot;m_smooth&quot;</span><span class="p">]</span>
+<span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s2">&quot;P_smooth&quot;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;observations $x_t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;true state $y_t$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;smoothed mean $\hat</span><span class="si">{y}</span><span class="s2">_{t|T}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">std</span><span class="p">,</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">std</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span> 
+                  <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;smoother ±2σ&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Local level model simulation and estimation&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;&gt;:17: SyntaxWarning: invalid escape sequence &#39;\h&#39;
+&lt;&gt;:17: SyntaxWarning: invalid escape sequence &#39;\h&#39;
+/var/folders/d5/k0x6wwx97k7_73_1cz5q38t40000gn/T/ipykernel_39762/1804985963.py:17: SyntaxWarning: invalid escape sequence &#39;\h&#39;
+  plt.plot(m, label=&quot;smoothed mean $\hat{y}_{t|T}$&quot;)
+</pre></div>
+</div>
+<img alt="../_images/a7330a2795b597a14f420a174bb04898c4d6039753d11f13abfce7fd3c84e090.png" src="../_images/a7330a2795b597a14f420a174bb04898c4d6039753d11f13abfce7fd3c84e090.png" />
+<img alt="../_images/09e35432afb545cddb662bf18c525361e09b05d3614cb261685ac3ec19da65fc.png" src="../_images/09e35432afb545cddb662bf18c525361e09b05d3614cb261685ac3ec19da65fc.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
 </section>
 </section>
 
@@ -645,6 +1118,14 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-probability">Bayesian probability</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">Example: estimating the probability of heads in a coin toss experiment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization">Expectation Maximization</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-models">Example 1: Gaussian Mixture Models</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model">Example 3: Local Level Model</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
