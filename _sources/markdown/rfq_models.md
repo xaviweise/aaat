@@ -6,7 +6,7 @@ In the context of platforms where the client identity is known, like Dealer to C
 
 ## Probabilistic graphical model for RfQs
 
-A model that captures the Request for Quote process discussed in the [Market Microstructure](market_microstructure.md) chapter is the probabilistic graphical model proposed by [@marin2025causalmd2c], which we reproduce in the following figure:
+A model that captures the Request for Quote process discussed in the [Market Microstructure](market_microstructure.md) chapter is the probabilistic graphical model proposed by {cite:p}`marin2025causalmd2c`, which we reproduce in the following figure:
 
 ```{figure} figures/pgm_rfq.png
 :name: fig:pgm_rfq
@@ -115,7 +115,7 @@ $$P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|F_t) = P(\tau_{\text{RfQ}
 
 where we have implicitly used the fact that $P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|a = 0, F_t) = 0$, i.e. we don't expect the arrival of RfQs for clients that are inactive. We are therefore interested in characterizing $P(a = 1|F_t)$ or most typically $P(a = 0|F_t) = 1- P(a = 1|F_t)$, which is known in the marketing analytics literature as the *attrition risk* model. 
 
-Inferences of attrition risk can be done by analyzing the historical patterns of client trading activity.  A simple albeit elegant model is that from Fader et al [@fader2010customer], where they consider daily (or any other time scale) client activity as a set of independent identically distributed Bernoulli random variables $Y_t$ with probability $p$. In our RfQ setup, this means $Y_t = 1$ if the client sends any RfQ, or $Y_t = 0$ otherwise.  Additionally, a client can become inactive at the beginning of the day with probability $\theta$. Given a pattern of historical daily activity $D$ of a client we can compute the probability that the client is active using Bayes' theorem:
+Inferences of attrition risk can be done by analyzing the historical patterns of client trading activity.  A simple albeit elegant model is that from Fader et al {cite:p}`fader2010customer`, where they consider daily (or any other time scale) client activity as a set of independent identically distributed Bernoulli random variables $Y_t$ with probability $p$. In our RfQ setup, this means $Y_t = 1$ if the client sends any RfQ, or $Y_t = 0$ otherwise.  Additionally, a client can become inactive at the beginning of the day with probability $\theta$. Given a pattern of historical daily activity $D$ of a client we can compute the probability that the client is active using Bayes' theorem:
 
 $$P(a = 1|D, p, \theta) = \frac{P(D|a=1, p, \theta)P(a = 1|p, \theta)}{P(D|a=1, p, \theta)P(a=1|p, \theta) + P(D|a=0, p, \theta)P(a=0|p, \theta)}$$
 
@@ -137,7 +137,7 @@ $$P(a = 1|D, p, \theta) = \frac{p(1-p)p(1-p)^2(1-\theta)^5}{p(1-p)p(1-p)^2(1-\th
 
 $$ =  \frac{(1-p)^2(1-\theta)^2}{(1-p)^2(1-\theta)^2+ (1-p)(1-\theta) \theta +  \theta}$$
 
-As pointed out by the authors, any other trading pattern with the same number of active days --denoted as $x$ (*frequency* in the marketing jargon), and the same number of days since the last RfQ --the *recency* $r$, has the same likelihood. For instance, $P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)$. see the exercise at the end of the chapter. This is an interesting insight that naturally links the model with the traditional heuristics based on recency and frequency in the Marketing Analytics literature, see for example [@GrigsbyMarketing]. The general result for a pattern consisting of $n$ days of trading activity, frequency $x$ and recency $r$, we have:
+As pointed out by the authors, any other trading pattern with the same number of active days --denoted as $x$ (*frequency* in the marketing jargon), and the same number of days since the last RfQ --the *recency* $r$, has the same likelihood. For instance, $P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)$. see the exercise at the end of the chapter. This is an interesting insight that naturally links the model with the traditional heuristics based on recency and frequency in the Marketing Analytics literature, see for example {cite:p}`GrigsbyMarketing`. The general result for a pattern consisting of $n$ days of trading activity, frequency $x$ and recency $r$, we have:
 
 $$P(D|a=1, p, \theta)P(a = 1|p, \theta)= p^{x}(1-p)^{n-x} (1-\theta)^n$$
 
@@ -258,7 +258,7 @@ This model can be easily adapted to work as an anomaly detector for clients that
 $$f(p |\alpha, \beta) = q_g \frac{p^{\alpha_g - 1}(1 - p)^{\beta_g - 1}}{B(\alpha_g, \beta_g)}  + (1-q_g) \frac{p^{\alpha_b - 1}(1 - p)^{\beta_b - 1}}{B(\alpha_b, \beta_b)} $$
 
 In order to ensure we capture tail anomalies in both sides, we force that both Beta distributions have the same mean: $\frac{\alpha_g}{\alpha_g + \beta_g} = \frac{\alpha_b}{\alpha_b+\alpha_g}$.
-This is an instance of a Good and Bad Data Model for anomaly detection, see [@SilvaBayesian]. In this generative model, a trading observation can originate from either the good distribution — representing the expected behavior of a client segment — or from the bad distribution, which is fitted to capture tail anomalies such as drops in activity, attrition, or bursts in trading activity. Anomaly detection involves inferring the segment (good or bad) based on recent observations $D$ over a window of size $n$ for a specific client. Following the attrition model, these observations are represented as a binary indicator series: a value of 1 if the client traded on a given day, and 0 otherwise. Using Bayes' theorem:
+This is an instance of a Good and Bad Data Model for anomaly detection, see {cite:p}`SilviaBayesian`, which we also briefly introduced in Chapter (intro_bayesian.md). In this generative model, a trading observation can originate from either the good distribution — representing the expected behavior of a client segment — or from the bad distribution, which is fitted to capture tail anomalies such as drops in activity, attrition, or bursts in trading activity. Anomaly detection involves inferring the segment (good or bad) based on recent observations $D$ over a window of size $n$ for a specific client. Following the attrition model, these observations are represented as a binary indicator series: a value of 1 if the client traded on a given day, and 0 otherwise. Using Bayes' theorem:
 
 $$p({\rm good}|D) = \frac{p(D|{\rm good}) q_g}{p(D|{\rm good}) q_g + p(D|{\rm bad}) (1-q_g)}$$
 

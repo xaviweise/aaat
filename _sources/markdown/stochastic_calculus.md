@@ -1130,7 +1130,7 @@ where $f(\cdot)$ is function of the distance to the mean, for instance a power l
 Another simple extension of the Wiener process is the Brownian bridge, that we denote as $B_t$. It defines a stochastic process within a time interval $[0,T]$ that behaves as a Wiener process with the exception of
 having an extra constraint, namely that $B_T = 0$ (in addition to $B_0 = 0$ as in the Wiener process). Such process can be constructed from a single Wiener process $W_t$ as follows:
 
-$$B_t =  W_t - \frac{t}{T} W_T$$ 
+$$B_t =  W_t - \frac{t}{T} W_T$$
 
 In order to derive the distribution of $B_t$, we decompose it in two independent Gaussian variables:
 
@@ -1138,7 +1138,7 @@ $$B_t =  W_t - \frac{t}{T} (W_T - W_t + W_t) = (1-\frac{t}{T})W_t - \frac{t}{T}(
 
 where the two terms of the expression are independent by using the property that non overlapping differences of Wiener processes are independent. This is therefore the distribution of two independent Gaussian variables, which we know is also Gaussian:
 
-$$B_t \sim N(0, t(1 - \frac{t}{T}))$$ 
+$$B_t \sim N(0, t(1 - \frac{t}{T}))$$
 
 where we have used:
 

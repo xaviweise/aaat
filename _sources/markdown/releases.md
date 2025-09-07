@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 09.25
+Completed the section on latent variable models within the Introduction to Bayesian Probability chapter. Added EM derivations for the Gaussian Mixture Model, the Hidden Markov Model and the Local Level Model (simple version of the Kalman Filter). Provided simulations in the accompanying notebooks. 
+
 ## 08.25
 Started section on RfQ models, describing a general model for the RfQ process, as well as models for the arrival of RfQs, attrition risk and abnormal client behavior. A new notebook has been uploaded with the full code for the simulation of synthetic client data and implementations of the models. Additionally, worked on Gen AI and Bayesian chapters. 
 
