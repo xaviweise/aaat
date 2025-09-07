@@ -436,7 +436,7 @@ As a graphical model, the so-called plate notation is usually employed to simpli
 
 ```{figure} figures/gmm_model.png
 :name: fig:gmm_model
-:width: 8in
+:width: 3in
 Gaussian Mixture Model in plate notation.
 ```
 
@@ -481,11 +481,11 @@ As a graphical model, the HMM has the following structure:
 
 ```{figure} figures/hmm_model.png
 :name: fig:hmm_model
-:width: 8in
+:width: 4in
 Graph representation of the Hidden Markov Model
 ```
 
-The hidden (latent) and observed variables can be either discrete or continuous. In many applications of HMMs, the latent variable is discrete. In this case, learning and inference is more tractable for general distributions. An example in the financial markets is explaining price returns as generated from a Gaussian noise whose volatility depends on a discret hidden state, which is interpreted as a market or volatility regime. 
+The hidden (latent) and observed variables can be either discrete or continuous. In many applications of HMMs, the latent variable is discrete. In this case, learning and inference is more tractable for general distributions. An example in the financial markets is explaining price returns as generated from a Gaussian noise whose volatility depends on a discrete hidden state, which is interpreted as a market or volatility regime. 
 
 A typical question when studying HMMs is to infer the most likely sequency of hidden states given a time-series of observations. There are specialized algorithms to do this task efficiently, the most popular one being the Viterbi algorithm {cite:p}`murphy2013machine`. For learning, a special case of the Expectation Maximization algorithms (EM) is used, called the Baum - Welch algorithm. 
 
