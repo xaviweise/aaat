@@ -812,7 +812,7 @@ we can write the product rule either way in terms of X or Y:</p>
 <p>which is a linear combination of Gaussian distributions, hence the name mixture of Gaussians. Mixture models are actually more general in that other distributions can be used to model the mixture components, namely a Binomial, Dirichlet, Poisson, Exponential, etc.</p>
 <p>As a graphical model, the so-called plate notation is usually employed to simplify the representation of the <span class="math notranslate nohighlight">\(N\)</span> random variables <span class="math notranslate nohighlight">\(\vec{x_n}\)</span> and their associated <span class="math notranslate nohighlight">\(K\)</span> latent random variables <span class="math notranslate nohighlight">\(z_n\)</span> categorizing their mixture component membership. The following figure represents the mode in plate notation:</p>
 <figure class="align-default" id="fig-gmm-model">
-<a class="reference internal image-reference" href="../_images/gmm_model.png"><img alt="../_images/gmm_model.png" src="../_images/gmm_model.png" style="width: 8in;" /></a>
+<a class="reference internal image-reference" href="../_images/gmm_model.png"><img alt="../_images/gmm_model.png" src="../_images/gmm_model.png" style="width: 3in;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 5.5 </span><span class="caption-text">Gaussian Mixture Model in plate notation.</span><a class="headerlink" href="#fig-gmm-model" title="Permalink to this image">#</a></p>
 </figcaption>
@@ -847,12 +847,12 @@ distributions with the same mean but different standard deviations to capture an
 \[P(x_1, ..., x_N, y_1, ..., y_N)=P(y_1) P(x_1|y_1)\Pi_{t=2}^T P(y_t|y_{t-1})P(x_t | y_t)\]</div>
 <p>As a graphical model, the HMM has the following structure:</p>
 <figure class="align-default" id="fig-hmm-model">
-<a class="reference internal image-reference" href="../_images/hmm_model.png"><img alt="../_images/hmm_model.png" src="../_images/hmm_model.png" style="width: 8in;" /></a>
+<a class="reference internal image-reference" href="../_images/hmm_model.png"><img alt="../_images/hmm_model.png" src="../_images/hmm_model.png" style="width: 4in;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 5.6 </span><span class="caption-text">Graph representation of the Hidden Markov Model</span><a class="headerlink" href="#fig-hmm-model" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>The hidden (latent) and observed variables can be either discrete or continuous. In many applications of HMMs, the latent variable is discrete. In this case, learning and inference is more tractable for general distributions. An example in the financial markets is explaining price returns as generated from a Gaussian noise whose volatility depends on a discret hidden state, which is interpreted as a market or volatility regime.</p>
+<p>The hidden (latent) and observed variables can be either discrete or continuous. In many applications of HMMs, the latent variable is discrete. In this case, learning and inference is more tractable for general distributions. An example in the financial markets is explaining price returns as generated from a Gaussian noise whose volatility depends on a discrete hidden state, which is interpreted as a market or volatility regime.</p>
 <p>A typical question when studying HMMs is to infer the most likely sequency of hidden states given a time-series of observations. There are specialized algorithms to do this task efficiently, the most popular one being the Viterbi algorithm <span id="id4">[<a class="reference internal" href="references.html#id19" title="Kevin P. Murphy. Machine learning : a probabilistic perspective. MIT Press, Cambridge, Mass. [u.a.], 2013. ISBN 9780262018029 0262018020.">3</a>]</span>. For learning, a special case of the Expectation Maximization algorithms (EM) is used, called the Baum - Welch algorithm.</p>
 </section>
 </section>
