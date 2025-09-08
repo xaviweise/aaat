@@ -544,7 +544,7 @@ $$y_{t+1} = y_t + w_t, w_t \sim {\mathcal N}(0, \sigma_w^2)$$
 $$x_t = y_t + v_t, v_t \sim {\mathcal N}(0, \sigma_v^2)$$
 
 
-###### Derivation of the forward filtering equations: predict and update 
+**Derivation of the forward filtering equations: predict and update**
 
 The predict equation can be derived by computing the  distribution of $y_{t+1}$ conditional to the previous observations, which we denote $x_{0:t}$:
 
@@ -610,7 +610,7 @@ $$p(y_{t+1}|x_{0:t+1}) = {\mathcal N}(y_{t+1}|\hat{y}_{t+1|t+1}, \sigma_{t+1|t+1
 
 As a consequence, we have proven by induction that $p(y_t|x_{0:t})$ follows a Gaussian distribution, as long as the initial condition $p(y_0)$ is also Gaussian. 
 
-###### Derivation of the smoothing equations
+**Derivation of the smoothing equations**
 
 The derivation of the smoothing equations follows the same lines as the forward filtering equations. In this case, we are interested in computing:
 

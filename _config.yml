@@ -20,7 +20,6 @@ bibtex_bibfiles:
 
 # Information about where the book exists on the web
 repository:
-  cname: www.datasciencealgotrading.com # CNAME
   url: https://github.com/xaviweise/aaat   # Online location of your book
   path_to_book: docs  # Optional path to your book, relative to the repository root
   branch: master  # Which branch of the repository should be used when creating links (optional)
@@ -30,3 +29,9 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+
+sphinx:
+  extra_extensions:
+    - sphinx.ext.githubpages
+  config:
+    html_baseurl: https://www.datasciencealgotrading.com/

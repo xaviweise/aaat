@@ -65,6 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'markdown/intro_bayesian';</script>
+    <link rel="canonical" href="https://www.datasciencealgotrading.com/markdown/intro_bayesian.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="6. Causal inference" href="intro_causal.html" />
@@ -216,7 +217,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Glossary and References</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">27. Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
@@ -439,11 +440,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-models-gmms">5.5.3.1. Gaussian Mixture Models (GMMs)</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hidden-markov-model-hmm">5.5.3.2. Hidden Markov Model (HMM)</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.3.3. The Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.3.3.1. The local level model</a><ul class="nav section-nav flex-column">
-<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.3.3.1.1. Derivation of the forward filtering equations: predict and update</a></li>
-<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.3.3.1.2. Derivation of the smoothing equations</a></li>
-</ul>
-</li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.3.3.1. The local level model</a></li>
 </ul>
 </li>
 </ul>
@@ -897,8 +894,7 @@ distributions with the same mean but different standard deviations to capture an
 \[y_{t+1} = y_t + w_t, w_t \sim {\mathcal N}(0, \sigma_w^2)\]</div>
 <div class="math notranslate nohighlight">
 \[x_t = y_t + v_t, v_t \sim {\mathcal N}(0, \sigma_v^2)\]</div>
-<section id="derivation-of-the-forward-filtering-equations-predict-and-update">
-<h6><span class="section-number">5.5.3.3.1.1. </span>Derivation of the forward filtering equations: predict and update<a class="headerlink" href="#derivation-of-the-forward-filtering-equations-predict-and-update" title="Permalink to this heading">#</a></h6>
+<p><strong>Derivation of the forward filtering equations: predict and update</strong></p>
 <p>The predict equation can be derived by computing the  distribution of <span class="math notranslate nohighlight">\(y_{t+1}\)</span> conditional to the previous observations, which we denote <span class="math notranslate nohighlight">\(x_{0:t}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[p(y_{t+1}|x_{0:t})\]</div>
@@ -947,9 +943,7 @@ distributions with the same mean but different standard deviations to capture an
 <div class="math notranslate nohighlight">
 \[p(y_{t+1}|x_{0:t+1}) = {\mathcal N}(y_{t+1}|\hat{y}_{t+1|t+1}, \sigma_{t+1|t+1}^2)\]</div>
 <p>As a consequence, we have proven by induction that <span class="math notranslate nohighlight">\(p(y_t|x_{0:t})\)</span> follows a Gaussian distribution, as long as the initial condition <span class="math notranslate nohighlight">\(p(y_0)\)</span> is also Gaussian.</p>
-</section>
-<section id="derivation-of-the-smoothing-equations">
-<h6><span class="section-number">5.5.3.3.1.2. </span>Derivation of the smoothing equations<a class="headerlink" href="#derivation-of-the-smoothing-equations" title="Permalink to this heading">#</a></h6>
+<p><strong>Derivation of the smoothing equations</strong></p>
 <p>The derivation of the smoothing equations follows the same lines as the forward filtering equations. In this case, we are interested in computing:</p>
 <div class="math notranslate nohighlight">
 \[p(y_t|x_{0:T})\]</div>
@@ -976,7 +970,6 @@ distributions with the same mean but different standard deviations to capture an
 <div class="math notranslate nohighlight">
 \[\sigma^2_{t|T} = \sigma^2_{t|t} + (\frac{\sigma^2_{t|t}}{ \sigma^2_{t+1|t}})^2(\sigma^2_{t+1|T} - \sigma^2_{t+1|t})\]</div>
 <p>As mentioned, we compute first the forward filtering equations until <span class="math notranslate nohighlight">\(T\)</span>, which are used to initialize the smoothing equations and proceed backwards. The smoothing equations provide a better estimation than the filtering ones, since they use the full information set up to <span class="math notranslate nohighlight">\(T\)</span>. This translates into smaller estimation variances. They cannot be used in an online context, though, which is where Kalman filters find a large number of applications. Their main application is parameter estimation, since they are required to compute the likelihood of the data when using maximum likelihood estimation.</p>
-</section>
 </section>
 </section>
 </section>
@@ -1349,11 +1342,7 @@ These steps are repeated until convergence.</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-models-gmms">5.5.3.1. Gaussian Mixture Models (GMMs)</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hidden-markov-model-hmm">5.5.3.2. Hidden Markov Model (HMM)</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.3.3. The Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.3.3.1. The local level model</a><ul class="nav section-nav flex-column">
-<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.3.3.1.1. Derivation of the forward filtering equations: predict and update</a></li>
-<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.3.3.1.2. Derivation of the smoothing equations</a></li>
-</ul>
-</li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.3.3.1. The local level model</a></li>
 </ul>
 </li>
 </ul>
