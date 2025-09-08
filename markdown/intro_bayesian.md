@@ -403,7 +403,7 @@ As mentioned above, in this case we are dealing with a problem of missing data, 
 
 The use of probabilistic methods for missing data is called multiple imputation and is described extensively in {cite:p}`little2019statistical`. The idea is essentially to estimate the model from the observed data using the techniques we will explore below in this section, and use it as a generative model for the unobserved variables, namely computing: 
 
-$p({\rm x_{missing}} | {\rm x_{observed}}, \theta)$
+$$p({\rm x_{missing}} | {\rm x_{observed}}, \theta)$$
 
 Imputation of missing data can then be done using some statistic of the distribution like the mean or the median, or generating random samples from the distribution. 
 
@@ -489,7 +489,7 @@ The hidden (latent) and observed variables can be either discrete or continuous.
 
 A typical question when studying HMMs is to infer the most likely sequency of hidden states given a time-series of observations. There are specialized algorithms to do this task efficiently, the most popular one being the Viterbi algorithm {cite:p}`murphy2013machine`. For learning, a special case of the Expectation Maximization algorithms (EM) is used, called the Baum - Welch algorithm. 
 
-### The Kalman Filter
+#### The Kalman Filter
 
 A Kalman filter is a particular instance of a filtering algorithm first proposed by Rudolf E. Kalman in 1960 in his seminal paper "A New Approach to Linear Filtering and Prediction Problems" {cite:p}`kalman1960`. It is a particular case of a Hidden Markov Model where both the hidden and observed variables are continuous and follow Gaussian distributions. In this simple case, inference and learning becomes tractable, making it a very efficient estimation algorithm. Actually, the term Kalman Filter applies rigorously to an estimation algorithm that takes a series of noisy observations and produces  estimations of the underlying variable by combining its previous estimate and the current observation. In order to be optimal, transition and observation noises have to be Gaussian.  
 
@@ -535,7 +535,7 @@ In the next subsection, we will derive both the filtering and the smoothing equa
 
 Kalman filters have many applications in multiple domains. In financial markets, they can be used to combine different noisy observations of spot prices to infer a consistent estimate of a fair or mid price, to be used typically in the market-making of relatively illiquid instruments like bonds or some derivatives {cite:p}`synclair2010option`. Another use case is to infer prices of instruments when markets are closed, which can be useful for hedging indexes that have components with different time zones. In reference {cite:p}`javaheri2003filtering`, they have been applied to the estimation of term structure models. And in the context of investment strategies, they have a relatively popular application to improve pairs trading strategies {cite:p}`chan2013algorithmic`. We will delve into some of these applications later in this book.
 
-#### The local level model
+##### The local level model
 
 A simple tractable model that illustrates well the general theory of the Kalman filter is the local level model, which despite its simplicity can have relevant applications, for instance in pricing. The model has the structure:
 
@@ -544,7 +544,7 @@ $$y_{t+1} = y_t + w_t, w_t \sim {\mathcal N}(0, \sigma_w^2)$$
 $$x_t = y_t + v_t, v_t \sim {\mathcal N}(0, \sigma_v^2)$$
 
 
-##### Derivation of the forward filtering equations: predict and update 
+###### Derivation of the forward filtering equations: predict and update 
 
 The predict equation can be derived by computing the  distribution of $y_{t+1}$ conditional to the previous observations, which we denote $x_{0:t}$:
 
@@ -610,7 +610,7 @@ $$p(y_{t+1}|x_{0:t+1}) = {\mathcal N}(y_{t+1}|\hat{y}_{t+1|t+1}, \sigma_{t+1|t+1
 
 As a consequence, we have proven by induction that $p(y_t|x_{0:t})$ follows a Gaussian distribution, as long as the initial condition $p(y_0)$ is also Gaussian. 
 
-##### Derivation of the smoothing equations
+###### Derivation of the smoothing equations
 
 The derivation of the smoothing equations follows the same lines as the forward filtering equations. In this case, we are interested in computing:
 
@@ -656,11 +656,11 @@ Given observations and a latent variables model  typically represented as a prob
 
 The presence of latent variables does not preclude the use of MLE. Our goal is still to find the parameters that maximize the probability of the observations given the parameters (or likelihood). If we could observe the latent variables, that would mean maximizing the so-called (in the context of latent variable models) complete likelihood:
 
-$\Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)$
+$$\Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)$$
 
 Sine the latter are not observed, we need to integrate them out: 
 
-$\sum_{z_1, ..., z_N} \Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)$
+$$\sum_{z_1, ..., z_N} \Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)$$
 
 where we have assumed discrete distributions for the latent variables. For continuous ones, the sums have to be replaced by integrals. The latter is called the incomplete likelihood. 
 
@@ -806,7 +806,7 @@ Time-series of daily returns of BBVA's stock over 10 years. Again, red points de
 ```
 
 
-#### Example 2: Hidden Markov Model (the Baum - Welch algorithm)
+##### Example 2: Hidden Markov Model (the Baum - Welch algorithm)
 
 Let us turn now to Hidden Markov Models (HMMs). The complete log-likelihood looks:
 
@@ -914,7 +914,7 @@ $$= \frac{b_{k_t, i}^s \beta_{i}^s(t) a_{i,j}^s \alpha_{j}^s(t-1)}{\sum_{i',j'} 
 
 This completes all the ingredients need to perform EM in the Baum-Welch algorithm. Given the set of parameters $\theta^{(s)}$ we use the forward and backward probabilities to update the estimations of the latent variables (E-step) which then are plugged in the estimators of $\theta^{(s+1)}$ (M-step) and we iterate until convergence. The only thing needed are initial estimates of the parameters, $\theta^{(0)}$, which could be random numbers or based on prior knowledge. A good choice of initialization can help to increase the speed of convergence.
 
-##### Gaussian observation probabilities
+###### Gaussian observation probabilities
 
 So far we have considered only discrete transition and observation probabilities. We can consider different probability models within the HMM framework and Baum - Welch EM learning. If the observations are continuous variables, we can model their conditional distributions as Gaussian:
 
@@ -932,7 +932,7 @@ $$(\sigma_i^{(s+1)})^2 = \frac{\sum_{t=1}^T \gamma_{t}^{s,i} (x_{t} - \mu_i^{(s+
 
 which are similar to the GMM ones --in fact HMM models can be interpreted as time-series Gaussian Mixture Models.
 
-#### Example 3: Local Level Model (simple case of a Kalman Filter)
+##### Example 3: Local Level Model (simple case of a Kalman Filter)
 
 Recall that the local level model equations are given by:
 
