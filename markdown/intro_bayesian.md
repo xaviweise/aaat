@@ -391,7 +391,7 @@ $$p({\rm x}, {\rm z}| \theta)$$
 
 where ${\rm x}$ are the set of observable variables and ${\rm z}$ the latent ones. $\theta$ are the parameters of the probability distribution, which we state explicitly for convenience later. 
 
-#### Partially observable latent variable models
+### Partially observable latent variable models
 
 As mentioned above, in this case we are dealing with a problem of missing data, where some of the data points of a set of variables have not been recorded for potentially various reasons. Rubin {cite:p}`little2019statistical` distinguishes between tree different situations regarding the generative model (i.e. the full probability distribution) for missing data:
 
@@ -409,7 +409,7 @@ Imputation of missing data can then be done using some statistic of the distribu
 
 Multiple imputation works well for MCAR and reasonably (with some negligible bias) for MAR. The case of MNAR is more complicated, and can only be properly dealt with by introducing full latent variables that properly capture the MNAR mechanism, which is difficult if there is not a prior knowledge of the missing data mechanism. 
 
-#### Full latent variable models
+### Full latent variable models
 
 In this case, there are not available observations of the latent variables. Models with full latent variables are closely related to probabilistic graphical models, since in many situations latent variables are introduced as prior knowledge in the structure of a model about a certain process, particularly when trying to model causal relationships. For instance, a model of two variables that are correlated but we believe not to be directly causally related, can be naturally extended by introducing a latent variable, a confounder, that influences both. 
 
