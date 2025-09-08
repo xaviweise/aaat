@@ -438,27 +438,27 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-latent-variable-models">5.5.3. Examples of Latent Variable Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-models-gmms">5.5.3.1. Gaussian Mixture Models (GMMs)</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hidden-markov-model-hmm">5.5.3.2. Hidden Markov Model (HMM)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.3.3. The Kalman Filter</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.3.3.1. The local level model</a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.3.3.1.1. Derivation of the forward filtering equations: predict and update</a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.3.3.1.2. Derivation of the smoothing equations</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.4. The Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.4.1. The local level model</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.4.1.1. Derivation of the forward filtering equations: predict and update</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.4.1.2. Derivation of the smoothing equations</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">5.5.5. Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimation-mle">5.5.5.1. Maximum Likelihood Estimation (MLE)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization-em">5.5.5.2. Expectation Maximization (EM)</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-model">5.5.5.2.1. Example 1: Gaussian Mixture Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">5.5.4. Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimation-mle">5.5.4.1. Maximum Likelihood Estimation (MLE)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization-em">5.5.4.2. Expectation Maximization (EM)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-model">5.5.4.2.1. Example 1: Gaussian Mixture Model</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-hidden-markov-model-the-baum-welch-algorithm">5.5.4.2.2. Example 2: Hidden Markov Model (the Baum - Welch algorithm)</a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-observation-probabilities">5.5.4.2.2.1. Gaussian observation probabilities</a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-hidden-markov-model-the-baum-welch-algorithm">5.5.5.3. Example 2: Hidden Markov Model (the Baum - Welch algorithm)</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-observation-probabilities">5.5.5.3.1. Gaussian observation probabilities</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model-simple-case-of-a-kalman-filter">5.5.4.2.3. Example 3: Local Level Model (simple case of a Kalman Filter)</a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model-simple-case-of-a-kalman-filter">5.5.5.4. Example 3: Local Level Model (simple case of a Kalman Filter)</a></li>
 </ul>
 </li>
 </ul>
@@ -784,7 +784,8 @@ we can write the product rule either way in terms of X or Y:</p>
 <li><p>Missing Not at Random (MNAR): in this case there is also a pattern in the missing data, but can only be explained using unobserved data (e.g. full latent variables). In the example of the booking database, if the issue comes from a certain sales person as in MAR, but the booking database does not record in any case the sales person identity.</p></li>
 </ul>
 <p>The use of probabilistic methods for missing data is called multiple imputation and is described extensively in <span id="id2">[<a class="reference internal" href="references.html#id23" title="Roderick J. A. Little and Donald B. Rubin. Statistical Analysis with Missing Data. Wiley, 2019.">1</a>]</span>. The idea is essentially to estimate the model from the observed data using the techniques we will explore below in this section, and use it as a generative model for the unobserved variables, namely computing:</p>
-<p><span class="math notranslate nohighlight">\(p({\rm x_{missing}} | {\rm x_{observed}}, \theta)\)</span></p>
+<div class="math notranslate nohighlight">
+\[p({\rm x_{missing}} | {\rm x_{observed}}, \theta)\]</div>
 <p>Imputation of missing data can then be done using some statistic of the distribution like the mean or the median, or generating random samples from the distribution.</p>
 <p>Multiple imputation works well for MCAR and reasonably (with some negligible bias) for MAR. The case of MNAR is more complicated, and can only be properly dealt with by introducing full latent variables that properly capture the MNAR mechanism, which is difficult if there is not a prior knowledge of the missing data mechanism.</p>
 </section>
@@ -855,9 +856,8 @@ distributions with the same mean but different standard deviations to capture an
 <p>The hidden (latent) and observed variables can be either discrete or continuous. In many applications of HMMs, the latent variable is discrete. In this case, learning and inference is more tractable for general distributions. An example in the financial markets is explaining price returns as generated from a Gaussian noise whose volatility depends on a discrete hidden state, which is interpreted as a market or volatility regime.</p>
 <p>A typical question when studying HMMs is to infer the most likely sequency of hidden states given a time-series of observations. There are specialized algorithms to do this task efficiently, the most popular one being the Viterbi algorithm <span id="id4">[<a class="reference internal" href="references.html#id19" title="Kevin P. Murphy. Machine learning : a probabilistic perspective. MIT Press, Cambridge, Mass. [u.a.], 2013. ISBN 9780262018029 0262018020.">3</a>]</span>. For learning, a special case of the Expectation Maximization algorithms (EM) is used, called the Baum - Welch algorithm.</p>
 </section>
-</section>
 <section id="the-kalman-filter">
-<h3><span class="section-number">5.5.4. </span>The Kalman Filter<a class="headerlink" href="#the-kalman-filter" title="Permalink to this heading">#</a></h3>
+<h4><span class="section-number">5.5.3.3. </span>The Kalman Filter<a class="headerlink" href="#the-kalman-filter" title="Permalink to this heading">#</a></h4>
 <p>A Kalman filter is a particular instance of a filtering algorithm first proposed by Rudolf E. Kalman in 1960 in his seminal paper “A New Approach to Linear Filtering and Prediction Problems” <span id="id5">[<a class="reference internal" href="references.html#id7" title="Rudolf Emil Kalman. A new approach to linear filtering and prediction problems. Journal of Basic Engineering, 82(1):35–45, 1960.">4</a>]</span>. It is a particular case of a Hidden Markov Model where both the hidden and observed variables are continuous and follow Gaussian distributions. In this simple case, inference and learning becomes tractable, making it a very efficient estimation algorithm. Actually, the term Kalman Filter applies rigorously to an estimation algorithm that takes a series of noisy observations and produces  estimations of the underlying variable by combining its previous estimate and the current observation. In order to be optimal, transition and observation noises have to be Gaussian.</p>
 <p>The model in its graphical form is the same as shown in the HMM, being a particular case of this one. Mathematically, and considering for generality a vector of observations and hidden states, it can be written as:</p>
 <div class="math notranslate nohighlight">
@@ -891,14 +891,14 @@ distributions with the same mean but different standard deviations to capture an
 <p>In the next subsection, we will derive both the filtering and the smoothing equations computing these probability distributions for a simple instance of the Kalman filter: the local level model.</p>
 <p>Kalman filters have many applications in multiple domains. In financial markets, they can be used to combine different noisy observations of spot prices to infer a consistent estimate of a fair or mid price, to be used typically in the market-making of relatively illiquid instruments like bonds or some derivatives <span id="id6">[<a class="reference internal" href="references.html#id20" title="E. Synclair. Option Trading: Pricing and Volatility Strategies and Techniques. Wiley, 1st edition, 2010.">5</a>]</span>. Another use case is to infer prices of instruments when markets are closed, which can be useful for hedging indexes that have components with different time zones. In reference <span id="id7">[<a class="reference internal" href="references.html#id21" title="A. Javaheri, D. Lautier, and A. E. Galli. Filtering in finance. Wilmott Magazine, 2003.">6</a>]</span>, they have been applied to the estimation of term structure models. And in the context of investment strategies, they have a relatively popular application to improve pairs trading strategies <span id="id8">[<a class="reference internal" href="references.html#id22" title="Ernest P. Chan. Algorithmic Trading: Winning Strategies and Their Rationale. Wiley Trading. John Wiley &amp; Sons, 2013.">7</a>]</span>. We will delve into some of these applications later in this book.</p>
 <section id="the-local-level-model">
-<h4><span class="section-number">5.5.4.1. </span>The local level model<a class="headerlink" href="#the-local-level-model" title="Permalink to this heading">#</a></h4>
+<h5><span class="section-number">5.5.3.3.1. </span>The local level model<a class="headerlink" href="#the-local-level-model" title="Permalink to this heading">#</a></h5>
 <p>A simple tractable model that illustrates well the general theory of the Kalman filter is the local level model, which despite its simplicity can have relevant applications, for instance in pricing. The model has the structure:</p>
 <div class="math notranslate nohighlight">
 \[y_{t+1} = y_t + w_t, w_t \sim {\mathcal N}(0, \sigma_w^2)\]</div>
 <div class="math notranslate nohighlight">
 \[x_t = y_t + v_t, v_t \sim {\mathcal N}(0, \sigma_v^2)\]</div>
 <section id="derivation-of-the-forward-filtering-equations-predict-and-update">
-<h5><span class="section-number">5.5.4.1.1. </span>Derivation of the forward filtering equations: predict and update<a class="headerlink" href="#derivation-of-the-forward-filtering-equations-predict-and-update" title="Permalink to this heading">#</a></h5>
+<h6><span class="section-number">5.5.3.3.1.1. </span>Derivation of the forward filtering equations: predict and update<a class="headerlink" href="#derivation-of-the-forward-filtering-equations-predict-and-update" title="Permalink to this heading">#</a></h6>
 <p>The predict equation can be derived by computing the  distribution of <span class="math notranslate nohighlight">\(y_{t+1}\)</span> conditional to the previous observations, which we denote <span class="math notranslate nohighlight">\(x_{0:t}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[p(y_{t+1}|x_{0:t})\]</div>
@@ -949,7 +949,7 @@ distributions with the same mean but different standard deviations to capture an
 <p>As a consequence, we have proven by induction that <span class="math notranslate nohighlight">\(p(y_t|x_{0:t})\)</span> follows a Gaussian distribution, as long as the initial condition <span class="math notranslate nohighlight">\(p(y_0)\)</span> is also Gaussian.</p>
 </section>
 <section id="derivation-of-the-smoothing-equations">
-<h5><span class="section-number">5.5.4.1.2. </span>Derivation of the smoothing equations<a class="headerlink" href="#derivation-of-the-smoothing-equations" title="Permalink to this heading">#</a></h5>
+<h6><span class="section-number">5.5.3.3.1.2. </span>Derivation of the smoothing equations<a class="headerlink" href="#derivation-of-the-smoothing-equations" title="Permalink to this heading">#</a></h6>
 <p>The derivation of the smoothing equations follows the same lines as the forward filtering equations. In this case, we are interested in computing:</p>
 <div class="math notranslate nohighlight">
 \[p(y_t|x_{0:T})\]</div>
@@ -979,20 +979,23 @@ distributions with the same mean but different standard deviations to capture an
 </section>
 </section>
 </section>
+</section>
 <section id="estimation-of-latent-variable-models">
-<h3><span class="section-number">5.5.5. </span>Estimation of Latent Variable Models<a class="headerlink" href="#estimation-of-latent-variable-models" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">5.5.4. </span>Estimation of Latent Variable Models<a class="headerlink" href="#estimation-of-latent-variable-models" title="Permalink to this heading">#</a></h3>
 <p>Given observations and a latent variables model  typically represented as a probabilistic graphical model, we would like to estimate the parameters of the model. The difficulty, here, comes from the latent variables, for which we don’t have observations. There are different ways to estimate parameters in this case, but we will focus on the most popular ones: maximum likelihood estimation (MLE) and expectation maximization (EM), which computes an approximation of the MLE solution.</p>
 <section id="maximum-likelihood-estimation-mle">
-<h4><span class="section-number">5.5.5.1. </span>Maximum Likelihood Estimation (MLE)<a class="headerlink" href="#maximum-likelihood-estimation-mle" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">5.5.4.1. </span>Maximum Likelihood Estimation (MLE)<a class="headerlink" href="#maximum-likelihood-estimation-mle" title="Permalink to this heading">#</a></h4>
 <p>The presence of latent variables does not preclude the use of MLE. Our goal is still to find the parameters that maximize the probability of the observations given the parameters (or likelihood). If we could observe the latent variables, that would mean maximizing the so-called (in the context of latent variable models) complete likelihood:</p>
-<p><span class="math notranslate nohighlight">\(\Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)\)</span></p>
+<div class="math notranslate nohighlight">
+\[\Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)\]</div>
 <p>Sine the latter are not observed, we need to integrate them out:</p>
-<p><span class="math notranslate nohighlight">\(\sum_{z_1, ..., z_N} \Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)\)</span></p>
+<div class="math notranslate nohighlight">
+\[\sum_{z_1, ..., z_N} \Pi_{n=1}^N P({\rm x}_n, {\rm z}_n| \theta)\]</div>
 <p>where we have assumed discrete distributions for the latent variables. For continuous ones, the sums have to be replaced by integrals. The latter is called the incomplete likelihood.</p>
 <p>Whereas maximizing incomplete likelihoods with respect to the parameters is in theory possible, in practice it is usually a computationally expensive method. Therefore the need to develop more efficient estimation methods like Expectation Maximization.</p>
 </section>
 <section id="expectation-maximization-em">
-<h4><span class="section-number">5.5.5.2. </span>Expectation Maximization (EM)<a class="headerlink" href="#expectation-maximization-em" title="Permalink to this heading">#</a></h4>
+<h4><span class="section-number">5.5.4.2. </span>Expectation Maximization (EM)<a class="headerlink" href="#expectation-maximization-em" title="Permalink to this heading">#</a></h4>
 <p>If we were to have observations of the latent variables, we could then maximize the complete likelihood and get maximum likelihood estimators for the parameters <span class="math notranslate nohighlight">\(\theta\)</span>. However, we don’t have those observations and we need to maximize the incomplete likelihood, which is a harder problem.</p>
 <p>The intuition behind the Expectation Maximization (EM) method lies in this idea of maximizing the complete likelihood. Since we don’t have observations of the latent variables, EM seeks to maximize the incomplete likelihood breaking the problem in two easier steps:</p>
 <ul class="simple">
@@ -1059,7 +1062,7 @@ These steps are repeated until convergence.</p></li>
 \[||\theta^{(s+1)} - \theta^(s)||_2 &lt;= \text{threshold}\]</div>
 <p>In the following examples we will see examples of a general rule when using EM, namely that the estimators of the parameters <span class="math notranslate nohighlight">\(\theta\)</span> obtained in the M-step are the ones that we would get by optimizing the incomplete likelihood but with the values of the latent variables replaced by their expectations under <span class="math notranslate nohighlight">\(P(z_n | x_n, \theta^{(s)})\)</span></p>
 <section id="example-1-gaussian-mixture-model">
-<h5><span class="section-number">5.5.5.2.1. </span>Example 1: Gaussian Mixture Model<a class="headerlink" href="#example-1-gaussian-mixture-model" title="Permalink to this heading">#</a></h5>
+<h5><span class="section-number">5.5.4.2.1. </span>Example 1: Gaussian Mixture Model<a class="headerlink" href="#example-1-gaussian-mixture-model" title="Permalink to this heading">#</a></h5>
 <p>As a first example we derive EM for the Gaussian Mixture Model (GMM). The complete log-likelihood for this model reads:</p>
 <div class="math notranslate nohighlight">
 \[\log \Pi_n P(\vec{x_n}, z_n|\theta) = \log \Pi_n \Pi_{k=1}^K \left(\pi_k {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\right)^{\delta_{z_n,k}} =  \sum_n \sum_{k=1}^K  \delta_{z_n,k} \left( \log \pi_k + \log {\mathcal N}(\vec{x_n}|\vec{\mu}_k, \Sigma_k)\right) \]</div>
@@ -1104,9 +1107,8 @@ These steps are repeated until convergence.</p></li>
 </figcaption>
 </figure>
 </section>
-</section>
 <section id="example-2-hidden-markov-model-the-baum-welch-algorithm">
-<h4><span class="section-number">5.5.5.3. </span>Example 2: Hidden Markov Model (the Baum - Welch algorithm)<a class="headerlink" href="#example-2-hidden-markov-model-the-baum-welch-algorithm" title="Permalink to this heading">#</a></h4>
+<h5><span class="section-number">5.5.4.2.2. </span>Example 2: Hidden Markov Model (the Baum - Welch algorithm)<a class="headerlink" href="#example-2-hidden-markov-model-the-baum-welch-algorithm" title="Permalink to this heading">#</a></h5>
 <p>Let us turn now to Hidden Markov Models (HMMs). The complete log-likelihood looks:</p>
 <div class="math notranslate nohighlight">
 \[\log P(y_{1}) P(x_{1}|y_{1})\Pi_{t=2}^T P(y_{t}|y_{t-1})P(x_{t} | y_{t}) = \left(\log P(y_{1}) + \log P(x_{1}|y_{1}) + \sum_{t=2}  \log \left(P(y_{t}|y_{t-1}) + \log P(x_{t} | y_{t})\right) \right)\]</div>
@@ -1197,7 +1199,7 @@ These steps are repeated until convergence.</p></li>
 \[= \frac{b_{k_t, i}^s \beta_{i}^s(t) a_{i,j}^s \alpha_{j}^s(t-1)}{\sum_{i',j'} b_{k_t, i'}^s \beta_{i'}^s(t) a_{i',j'}^s \alpha_{j'}^s(t-1)}\]</div>
 <p>This completes all the ingredients need to perform EM in the Baum-Welch algorithm. Given the set of parameters <span class="math notranslate nohighlight">\(\theta^{(s)}\)</span> we use the forward and backward probabilities to update the estimations of the latent variables (E-step) which then are plugged in the estimators of <span class="math notranslate nohighlight">\(\theta^{(s+1)}\)</span> (M-step) and we iterate until convergence. The only thing needed are initial estimates of the parameters, <span class="math notranslate nohighlight">\(\theta^{(0)}\)</span>, which could be random numbers or based on prior knowledge. A good choice of initialization can help to increase the speed of convergence.</p>
 <section id="gaussian-observation-probabilities">
-<h5><span class="section-number">5.5.5.3.1. </span>Gaussian observation probabilities<a class="headerlink" href="#gaussian-observation-probabilities" title="Permalink to this heading">#</a></h5>
+<h6><span class="section-number">5.5.4.2.2.1. </span>Gaussian observation probabilities<a class="headerlink" href="#gaussian-observation-probabilities" title="Permalink to this heading">#</a></h6>
 <p>So far we have considered only discrete transition and observation probabilities. We can consider different probability models within the HMM framework and Baum - Welch EM learning. If the observations are continuous variables, we can model their conditional distributions as Gaussian:</p>
 <div class="math notranslate nohighlight">
 \[b_{i}(x_t) = P(x_t|y_t = Y_i) = {\mathcal N}(x|\mu_i, \sigma_i)\]</div>
@@ -1213,7 +1215,7 @@ These steps are repeated until convergence.</p></li>
 </section>
 </section>
 <section id="example-3-local-level-model-simple-case-of-a-kalman-filter">
-<h4><span class="section-number">5.5.5.4. </span>Example 3: Local Level Model (simple case of a Kalman Filter)<a class="headerlink" href="#example-3-local-level-model-simple-case-of-a-kalman-filter" title="Permalink to this heading">#</a></h4>
+<h5><span class="section-number">5.5.4.2.3. </span>Example 3: Local Level Model (simple case of a Kalman Filter)<a class="headerlink" href="#example-3-local-level-model-simple-case-of-a-kalman-filter" title="Permalink to this heading">#</a></h5>
 <p>Recall that the local level model equations are given by:</p>
 <div class="math notranslate nohighlight">
 \[y_{t+1} = y_t + w_t, w_t \sim {\mathcal N}(0, \sigma_w^2)\]</div>
@@ -1260,6 +1262,7 @@ These steps are repeated until convergence.</p></li>
 </div>
 </figcaption>
 </figure>
+</section>
 </section>
 </section>
 </section>
@@ -1345,27 +1348,27 @@ These steps are repeated until convergence.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-latent-variable-models">5.5.3. Examples of Latent Variable Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-mixture-models-gmms">5.5.3.1. Gaussian Mixture Models (GMMs)</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hidden-markov-model-hmm">5.5.3.2. Hidden Markov Model (HMM)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.3.3. The Kalman Filter</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.3.3.1. The local level model</a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.3.3.1.1. Derivation of the forward filtering equations: predict and update</a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.3.3.1.2. Derivation of the smoothing equations</a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-kalman-filter">5.5.4. The Kalman Filter</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-local-level-model">5.5.4.1. The local level model</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-forward-filtering-equations-predict-and-update">5.5.4.1.1. Derivation of the forward filtering equations: predict and update</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-of-the-smoothing-equations">5.5.4.1.2. Derivation of the smoothing equations</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">5.5.5. Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimation-mle">5.5.5.1. Maximum Likelihood Estimation (MLE)</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization-em">5.5.5.2. Expectation Maximization (EM)</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-model">5.5.5.2.1. Example 1: Gaussian Mixture Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-of-latent-variable-models">5.5.4. Estimation of Latent Variable Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-likelihood-estimation-mle">5.5.4.1. Maximum Likelihood Estimation (MLE)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expectation-maximization-em">5.5.4.2. Expectation Maximization (EM)</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-gaussian-mixture-model">5.5.4.2.1. Example 1: Gaussian Mixture Model</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-hidden-markov-model-the-baum-welch-algorithm">5.5.4.2.2. Example 2: Hidden Markov Model (the Baum - Welch algorithm)</a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-observation-probabilities">5.5.4.2.2.1. Gaussian observation probabilities</a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-hidden-markov-model-the-baum-welch-algorithm">5.5.5.3. Example 2: Hidden Markov Model (the Baum - Welch algorithm)</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-observation-probabilities">5.5.5.3.1. Gaussian observation probabilities</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model-simple-case-of-a-kalman-filter">5.5.4.2.3. Example 3: Local Level Model (simple case of a Kalman Filter)</a></li>
 </ul>
 </li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-local-level-model-simple-case-of-a-kalman-filter">5.5.5.4. Example 3: Local Level Model (simple case of a Kalman Filter)</a></li>
 </ul>
 </li>
 </ul>
