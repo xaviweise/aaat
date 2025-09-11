@@ -12,7 +12,7 @@ These makes all these price observations noisy estimates of the fair price, so i
 
 ### The Kalman Filter model for pricing
 
-The Kalman filter was introduced in the chapter on [Bayesian Theory](#intro_bayesian). It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM). 
+The Kalman filter was introduced in the chapter on [Bayesian Theory](intro_bayesian.md). It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM). 
 
 Recall that a *State Space Model (SSM)* is a model to describe dynamic systems where we have a non or partially observable state, a vector $\mathbf{x}$, whose dynamics in time is described by a so-called transition equation:
 
