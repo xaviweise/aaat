@@ -62,7 +62,7 @@ $$d_t \equiv p_{t+\Delta t} - p_t = (m_{t+\Delta t}- m_t) + (\nu_{t+\Delta t} - 
 
 which depend only on observed trades. First we compute the variance:
 
-$$Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2\$$
+$$Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2$$
 
 where we have used that $\epsilon_t$, $\nu_{t+\Delta t}$ and $\nu_t$ are independent random variables. This expression links the variance of the first differences in trade prices with the parameters to estimate. We need though a second expression to solve for each parameters separately. For that we compute the lag-1 auto-covariance of $d_t$:
 

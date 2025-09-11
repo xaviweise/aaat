@@ -525,7 +525,7 @@ document.write(`
 \[d_t \equiv p_{t+\Delta t} - p_t = (m_{t+\Delta t}- m_t) + (\nu_{t+\Delta t} - \nu_t) = \epsilon_t + (\nu_{t+\Delta t} - \nu_t)\]</div>
 <p>which depend only on observed trades. First we compute the variance:</p>
 <div class="math notranslate nohighlight">
-\[Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2\\]</div>
+\[Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2\]</div>
 <p>where we have used that <span class="math notranslate nohighlight">\(\epsilon_t\)</span>, <span class="math notranslate nohighlight">\(\nu_{t+\Delta t}\)</span> and <span class="math notranslate nohighlight">\(\nu_t\)</span> are independent random variables. This expression links the variance of the first differences in trade prices with the parameters to estimate. We need though a second expression to solve for each parameters separately. For that we compute the lag-1 auto-covariance of <span class="math notranslate nohighlight">\(d_t\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[Cov[d_t,d_{t-\Delta t}]=Cov[\epsilon_t + (\nu_{t+\Delta t} - \nu_t), \epsilon_{t-\Delta t} + (\nu_t - \nu_{t-\Delta t})] = -Var[\nu_t] = -\sigma_\nu^2\]</div>

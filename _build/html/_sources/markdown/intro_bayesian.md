@@ -377,6 +377,123 @@ Posterior probability for the probability of heads on a random simulation of a c
 
 ## Bayesian Machine Learning
 
+One of the main advantages of Bayesian theory is its simplicity and coherence. The toolkit presented in the previous section can be used in principle to evaluate the probability of any hypotheses conditional to the available information. In modern Machine Learning (ML), specific emphasis is placed on two families of hypotheses:
+* Hypotheses on the value of parameters of a given model. This is the *learning* task in the ML jargon. From a Bayesian point of view, as we saw in the previous section, they are simply stated as posterior distributions of parameters given the available information, in particular observations in a *training set*: $P(\theta|D)$. Recall that the outcome are probability distributions. If we want to reduce parameter estimation to point estimators, Bayesian theory needs to be complemented with Decision theory.
+* Hypotheses on the future value of observations. This is the *prediction* task in the ML jargon. In Bayesian theory, this can be again written in terms of a posterior probability, in this case on the values of unobserved data $\bf{x}$ given the available observed data: $P({\bf x}|D)$
+
+Bayesian Machine Learning is therefore an application of Bayesian theory to the hypotheses of interest in Machine Learning, namely learning and prediction. Let us have a closer look to them. 
+
+### Bayesian learning
+
+As mentioned, in Bayesian theory, learning from data is a result of the application of the Bayes' theorem to an existing prior probability distribution. In terms of Machine Learning problems, it can be applied both to supervised  learning problems, where we model the probability of a target $t$ (continuous in regression, discrete in classification) conditional to a set of features $\bf{x}$ and some observed data $\it{D}$:
+
+$$p(t|\bf{x}, \it{D})$$
+
+or to unsupervised machine learning problems, where we model the probability of a data point $\bf{x}$ given some observed data $\it{D}$:
+
+$$p(\bf{x}| \it{D})$$
+
+We start by modelling these probability distributions with a prior distribution, specified by a set of parameters $\bf{\theta}$. Recall that in the Bayesian paradigm, these parameters are also modelled with a probability distribution, whose prior is:
+
+$$P(\bf{\theta} | \bf{\alpha})$$
+
+where $\bf{\alpha}$ are hyper-parameters of this prior distribution.
+Now we observe some data $\it{D}$ which includes observations of the target and the features. Bayesian learning means updating the distribution of the parameters that define the predictive distribution after observing new data, i.e.:
+
+$$P(\bf{\theta} | \it{D}, \bf{\alpha}) = \frac{P(\it{D}| \bf{\theta}, \bf{\alpha}) P(\bf{\theta}|\bf{\alpha})}{P(\it{D}| \bf{\alpha})} $$
+
+In general, the posterior distribution of the parameters will not have a closed-form, due to the difficulty of computing the denominators (the evidence). There are typically four approaches to tackle this problem:
+* As we saw in the previous section, in the particular case where we use conjugate priors, the posterior can be computed analytically. For a conjugate prior, the posterior belongs to the same to the same family of distributions as the prior, with updated parameters.
+* Laplace approximation: in this case the posterior distribution is approximated by a Gaussian by using a second order expansion of the log probability of the posterior around its maximum (MAP, *Maximum a Posteriori*). We will discuss it later in this section
+* Monte Carlo methods, which aim to generate samples from the posterior distribution, despite not having a closed form. In particular, Markov Chain Monte Carlo (MCMC) methods are the most popular ones, which rely on building a Markov Chain that asymptotically converges to the posterior.
+* Variational methods, which seek to analytically approximate the posterior by finding the closest one from a more simple family of distributions (e.g. Gaussian ones). For a distance between distributions, the Kullback–Leibler divergence is typically used. A particular case of a variational methods is that of Mean Field Theory, widely used in Statistical Physics, in which the posterior distribution is approximated by the distribution of a set of independent latent factors. 
+
+For an introduction to the most computational demanding methods like MCMC and Variational Methods, a good starting reference is [ONLINE BAYESIAN BOOK]
+
+#### Bayesian online learning
+
+Bayesian learning is particularly suitable for online (or mini batch) learning. In this case, the prior distribution is the result of previous learning, and the posterior updates this prior as new data arrives. In the strictly online limit, this means every time a new observation arrives. Formally, this means:
+
+$$P(\bf{\theta} | \it{D}_t, \bf{\alpha}) = P(\bf{\theta} | \it{d}_t,\it{D}_{t-1}, \bf{\alpha}) = \frac{P(\it{d}_t| \it{D}_{t-1}, \bf{\theta}, \bf{\alpha}) P(\bf{\theta}|\it{D}_{t-1},\bf{\alpha})}{P(\it{d}_t| \it{D}_{t-1}, \bf{\alpha})} $$
+
+where $\it{D}_t = \{\it{d}_t, \it{d}_{t-1}, ..., \it{d}_0\} = \{\it{d}_t, \it{D}_{t-1}\} $ represents the dataset indexed by the time $t$ of arrival of new information, being $\it{d}_t$ the data acquired at time $t$.
+
+### Bayesian prediction
+
+After observing some data and updating the probability distribution of the parameters of the model, the model can be used to perform inferences in supervised and unsupervised problems. The peculiarity of the Bayesian Machine Learning paradigm is that we don't have a single predictive model, but a family of them parametrized by $\bf{\theta}$. By learning we aim to narrow down which of the possible models within this family explain better the observed data. But in contrast to classical statistics, we don't need to narrow our choice to one of these models (like the most likely one), but we use the whole posterior distribution over parameters to improve predictions.
+
+In the supervised machine learning problem, this translates in the following predictive distribution for the target: 
+
+$$p(t|{\bf x}, {\it D}) = \int d \theta p(t|{\bf x}, {\it D}, \theta) p(\theta|{\it D})$$
+
+Similarly, in the unsupervised machine learning problem, the distribution of the target data given observations is calculated as:
+
+$$p({\bf x}| {\it D}) = \int d \theta p({\bf x}| {\it D}, \theta) p({\bf \theta}|{\it D})$$
+
+These integrals are typically difficult to solve, except for some particular choices for the family of distributions. In case the integrals are intractable, one can resort either to numerical approximations or analytical ones. 
+
+Among the analytical approximations, the most simple one is using the MAP (**Maximum a Posteriori*+) solution, which as discussed in the previous section means calculating the most likely value of the parameters using the posterior distribution:
+
+$$\theta_{MAP} = {\bf argmax}_{\theta}  p(\theta | {\it D})$$
+
+Then we do the approximation:
+
+$$p(\theta | {\it D}) \simeq \delta (\theta - \theta_{MAP})$$
+
+and therefore:
+
+$$p(t|{\bf x}, {\it D}) = p(t|{\bf x}, \theta_{MAP})$$
+
+$$p({\bf x}, {\it D}) = p({\bf x}| \theta_{MAP})$$
+
+An improvement upon this approximation is using the Laplace approximation for the posterior, which essentially consists on approximating the posterior using a second order Taylor series around the MAP estimator. Instead of dealing, though, directly with the posterior, it is better to work with its logarithm $L$. For simplicity, let us consider the case of a single parameter to estimate:
+
+$$L = \log p(\theta | {\it D}) \simeq L(\theta_{MAP}) + \frac{1}{2} \frac{d L^2}{d \theta} |_{\theta_{MAP}} (\theta - \theta_{MAP})^2$$
+
+where the first order term is zero since we are expanding around the maximum, and the second derivative is negative. The Laplace approximation for the posterior then reads:
+
+$$ p(\theta | {\it D}) \simeq A \exp \left[ \frac{1}{2} \frac{d L^2}{d \theta} |_{\theta_{MAP}} (\theta - \theta_{MAP})^2 \right] $$
+
+which is a Gaussian distribution. The predictive distribution in this case cannot be derived generally, it will depend on the shape of the likelihood function. 
+
+Notice that in both approximations we are assuming that we are dealing with uni-modal distribution. In case of multi-modal distributions, these approximations no longer approximate well the posterior, and other techniques must be used.
+
+### Example: coin toss experiment
+
+Let us come back to our previous example of estimating the probability of a coin toss resulting in heads or tails. By using a Beta conjugate prior to the likelihood, the posterior had a closed-form which is an updated Beta distribution: 
+
+$$f(p|D_N) = \frac{1}{B(\alpha + n_H, \beta + N - n_H)} p^{\alpha + n_H-1} (1-p)^{\beta + N - n_H -1} $$
+
+With the information available so far, we want to predict the result of the next coin toss. The predictive distribution reads:
+
+$$P(t_{N+1} = H| D_N) = \int dp P(t_{N+1} = H | p, D_N) f(p |D_N) = \int dp p f(p |D_N) \\ = \int dp \frac{1}{B(\alpha + n_H, \beta + N - n_H)} p^{\alpha + n_H} (1-p)^{\beta + N - n_H -1}  = \frac{ \alpha + n_H} {\alpha + \beta + N}$$
+
+which in this case is the mean of the Beta distribution. Notice that this is not the same result that we would obtain in classical statistics using maximum likelihood even if we had a uniform prior ($\alpha = \beta = 1$), since the mean and the mode of the Beta distribution don't coincide, the mode being $\frac{\alpha - 1}{\alpha + \beta - 2}$ for $\beta > 1$
+
+In this case, due to the choice of a conjugate prior, we have a closed-form for the posterior and the predictive distribution can also be analytically calculated. However, let us assume this is not possible and use the Laplace approximation to obtain the predictive distribution. The MAP estimator for the posterior is, by finding the maximum of the Beta distribution: 
+
+$$p_{MAP} = \frac{n_H + \alpha -1}{N + \alpha + \beta - 2} $$
+
+$$q_{MAP} \equiv 1 - p_{MAP} = \frac{ N - n_H + \beta -1}{N + \alpha + \beta - 2} $$
+
+The second order derivative of the log-likelihood evaluated at the maximum MAP then reads:
+
+$$\frac{d L^2}{d p^2} |_{p_{MAP}} = - \frac{N + \alpha + \beta - 2}{p_{MAP} q_{MAP}}$$
+
+The posterior distribution is therefore approximated by the following Gaussian distribution:
+
+$$f(p | {\it D}) \simeq N(p_{MAP}, \sqrt{\frac{p_{MAP} q_{MAP}}{N + \alpha + \beta - 2}})$$
+
+The predictive distribution is now easy to evaluate since it is just the mean of a Gaussian:
+
+$$P(t_{N+1} = H| D_N) \simeq p_{MAP} = \frac{n_H + \alpha -1}{N + \alpha + \beta - 2}$$
+
+The result differs slightly from the exact one, but for $N, n_H >> 1$ and / or $\alpha, \beta >> 1$ they converge, as it is actually expected since in this regime the Beta distribution has the Gaussian distribution as a limit, as discussed in the previous section.
+
+We can test the validity of this result numerically by plotting the actual posterior and the Laplace approximation, for different number of observations and specification of the prior: 
+
+CONTINUE
+
 ## Bayesian Linear Regression
 
 ## Probabilistic Graphical Models
