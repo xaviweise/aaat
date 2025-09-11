@@ -430,7 +430,15 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">5.1.5. Example: estimating the probability of heads in a coin toss experiment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-machine-learning">5.2. Bayesian Machine Learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-machine-learning">5.2. Bayesian Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-learning">5.2.1. Bayesian learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-online-learning">5.2.1.1. Bayesian online learning</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-prediction">5.2.2. Bayesian prediction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-coin-toss-experiment">5.2.3. Example: coin toss experiment</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-linear-regression">5.3. Bayesian Linear Regression</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-models">5.4. Probabilistic Graphical Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-models">5.5. Latent variable models</a><ul class="nav section-nav flex-column">
@@ -472,7 +480,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="bayesian-modelling">
-<span id="intro-bayesian"></span><h1><span class="section-number">5. </span>Bayesian Modelling<a class="headerlink" href="#bayesian-modelling" title="Permalink to this heading">#</a></h1>
+<h1><span class="section-number">5. </span>Bayesian Modelling<a class="headerlink" href="#bayesian-modelling" title="Permalink to this heading">#</a></h1>
 <section id="bayesian-probability">
 <h2><span class="section-number">5.1. </span>Bayesian probability<a class="headerlink" href="#bayesian-probability" title="Permalink to this heading">#</a></h2>
 <p>The greek philosopher Aristotle formally introduced the field of Logic as the tool of deduction and therefore one of the the main tools of scientific progress.  Logic allows to derive conclusions based on propositions that are taken for granted. Those propositions might have been themselves derived in a logical way, or might be principles that cannot be derived themselves, the starting building blocks of any theory or discipline.</p>
@@ -630,7 +638,7 @@ we can write the product rule either way in terms of X or Y:</p>
 <li><p><span class="math notranslate nohighlight">\(D_j\)</span> enumerates the set of possible decisions that can be made. In the first example, the positions taken by the trader to benefit from the inflation forecast. In our second example, the decision is the price that will be quoted for the instrument.Notice that nothing in the framework prevents that the probabilities <span class="math notranslate nohighlight">\(P(\theta_i |I)\)</span> depend on the decision taken, since the decision is taken as well using information contained in <span class="math notranslate nohighlight">\(I\)</span>. For example, when choosing a price for an instrument, the actual demand will likely depend on the price chosen, i.e. the state of the world is affected by our decision.</p></li>
 <li><p><span class="math notranslate nohighlight">\(L_{ij}\)</span> is a function that assigns a numerical loss (or gain, if negative) to making decision <span class="math notranslate nohighlight">\(j\)</span> when the state of the world turns out to be <span class="math notranslate nohighlight">\(i\)</span>. In the example of the trader, we can quantify the profit or loss associated to the positions taken after the actual inflation indicator is released and the market moves accordingly. The dealer quoting a financial instrument might want to maximize profits, i.e. price times realized demand at this price, in a full round trip in which the instrument is bought and later sold.</p></li>
 </ul>
-<p>In our present discussion of decision theory, we will limit ourselves to setups where we can isolate the effect of a single decision in the loss function, i.e. future decisions are considered independently. If the loss function depends not only on current decisions but also future ones, the problem becomes more complex and is the subject of <em>Stochastic Optimal Control Theory</em>, that we will address in a separate chapter. Such a problem is also the domain of <em>Reinforcement Learning Theory</em>, which we will also address later, but the approach is different in the sense that this framework skips the explicit probabilistic modelling of the environment and directly tries to find which decisions minimize losses.</p>
+<p>In our present discussion of decision theory, we will limit ourselves to setups where we can isolate the effect of a single decision in the loss function, i.e. future decisions are considered independently. If the loss function depends not only on current decisions but also future ones, the problem becomes more complex and is the subject of <em>Stochastic Optimal Control Theory</em>, that we will addressed in a separate chapter. Such a problem is also the domain of <em>Reinforcement Learning Theory</em>, which we will also address later, but the approach is different in the sense that this framework skips the explicit probabilistic modelling of the environment and directly tries to find which decisions minimize losses.</p>
 <p>Once we have specified the elements necessary for decision making, we need a specific criterion to evaluate the quality of the decisions. A natural one is minimization of expected loss under the posterior probability distribution:</p>
 <div class="math notranslate nohighlight">
 \[D^* = \text{argmin}_{D_j} \sum_i P(\theta_i|D_j, I) L_{ij}\]</div>
@@ -758,6 +766,100 @@ we can write the product rule either way in terms of X or Y:</p>
 </section>
 <section id="bayesian-machine-learning">
 <h2><span class="section-number">5.2. </span>Bayesian Machine Learning<a class="headerlink" href="#bayesian-machine-learning" title="Permalink to this heading">#</a></h2>
+<p>One of the main advantages of Bayesian theory is its simplicity and coherence. The toolkit presented in the previous section can be used in principle to evaluate the probability of any hypotheses conditional to the available information. In modern Machine Learning (ML), specific emphasis is placed on two families of hypotheses:</p>
+<ul class="simple">
+<li><p>Hypotheses on the value of parameters of a given model. This is the <em>learning</em> task in the ML jargon. From a Bayesian point of view, as we saw in the previous section, they are simply stated as posterior distributions of parameters given the available information, in particular observations in a <em>training set</em>: <span class="math notranslate nohighlight">\(P(\theta|D)\)</span>. Recall that the outcome are probability distributions. If we want to reduce parameter estimation to point estimators, Bayesian theory needs to be complemented with Decision theory.</p></li>
+<li><p>Hypotheses on the future value of observations. This is the <em>prediction</em> task in the ML jargon. In Bayesian theory, this can be again written in terms of a posterior probability, in this case on the values of unobserved data <span class="math notranslate nohighlight">\(\bf{x}\)</span> given the available observed data: <span class="math notranslate nohighlight">\(P({\bf x}|D)\)</span></p></li>
+</ul>
+<p>Bayesian Machine Learning is therefore an application of Bayesian theory to the hypotheses of interest in Machine Learning, namely learning and prediction. Let us have a closer look to them.</p>
+<section id="bayesian-learning">
+<h3><span class="section-number">5.2.1. </span>Bayesian learning<a class="headerlink" href="#bayesian-learning" title="Permalink to this heading">#</a></h3>
+<p>As mentioned, in Bayesian theory, learning from data is a result of the application of the Bayes’ theorem to an existing prior probability distribution. In terms of Machine Learning problems, it can be applied both to supervised  learning problems, where we model the probability of a target <span class="math notranslate nohighlight">\(t\)</span> (continuous in regression, discrete in classification) conditional to a set of features <span class="math notranslate nohighlight">\(\bf{x}\)</span> and some observed data <span class="math notranslate nohighlight">\(\it{D}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[p(t|\bf{x}, \it{D})\]</div>
+<p>or to unsupervised machine learning problems, where we model the probability of a data point <span class="math notranslate nohighlight">\(\bf{x}\)</span> given some observed data <span class="math notranslate nohighlight">\(\it{D}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[p(\bf{x}| \it{D})\]</div>
+<p>We start by modelling these probability distributions with a prior distribution, specified by a set of parameters <span class="math notranslate nohighlight">\(\bf{\theta}\)</span>. Recall that in the Bayesian paradigm, these parameters are also modelled with a probability distribution, whose prior is:</p>
+<div class="math notranslate nohighlight">
+\[P(\bf{\theta} | \bf{\alpha})\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bf{\alpha}\)</span> are hyper-parameters of this prior distribution.
+Now we observe some data <span class="math notranslate nohighlight">\(\it{D}\)</span> which includes observations of the target and the features. Bayesian learning means updating the distribution of the parameters that define the predictive distribution after observing new data, i.e.:</p>
+<div class="math notranslate nohighlight">
+\[P(\bf{\theta} | \it{D}, \bf{\alpha}) = \frac{P(\it{D}| \bf{\theta}, \bf{\alpha}) P(\bf{\theta}|\bf{\alpha})}{P(\it{D}| \bf{\alpha})} \]</div>
+<p>In general, the posterior distribution of the parameters will not have a closed-form, due to the difficulty of computing the denominators (the evidence). There are typically four approaches to tackle this problem:</p>
+<ul class="simple">
+<li><p>As we saw in the previous section, in the particular case where we use conjugate priors, the posterior can be computed analytically. For a conjugate prior, the posterior belongs to the same to the same family of distributions as the prior, with updated parameters.</p></li>
+<li><p>Laplace approximation: in this case the posterior distribution is approximated by a Gaussian by using a second order expansion of the log probability of the posterior around its maximum (MAP, <em>Maximum a Posteriori</em>). We will discuss it later in this section</p></li>
+<li><p>Monte Carlo methods, which aim to generate samples from the posterior distribution, despite not having a closed form. In particular, Markov Chain Monte Carlo (MCMC) methods are the most popular ones, which rely on building a Markov Chain that asymptotically converges to the posterior.</p></li>
+<li><p>Variational methods, which seek to analytically approximate the posterior by finding the closest one from a more simple family of distributions (e.g. Gaussian ones). For a distance between distributions, the Kullback–Leibler divergence is typically used. A particular case of a variational methods is that of Mean Field Theory, widely used in Statistical Physics, in which the posterior distribution is approximated by the distribution of a set of independent latent factors.</p></li>
+</ul>
+<p>For an introduction to the most computational demanding methods like MCMC and Variational Methods, a good starting reference is [ONLINE BAYESIAN BOOK]</p>
+<section id="bayesian-online-learning">
+<h4><span class="section-number">5.2.1.1. </span>Bayesian online learning<a class="headerlink" href="#bayesian-online-learning" title="Permalink to this heading">#</a></h4>
+<p>Bayesian learning is particularly suitable for online (or mini batch) learning. In this case, the prior distribution is the result of previous learning, and the posterior updates this prior as new data arrives. In the strictly online limit, this means every time a new observation arrives. Formally, this means:</p>
+<div class="math notranslate nohighlight">
+\[P(\bf{\theta} | \it{D}_t, \bf{\alpha}) = P(\bf{\theta} | \it{d}_t,\it{D}_{t-1}, \bf{\alpha}) = \frac{P(\it{d}_t| \it{D}_{t-1}, \bf{\theta}, \bf{\alpha}) P(\bf{\theta}|\it{D}_{t-1},\bf{\alpha})}{P(\it{d}_t| \it{D}_{t-1}, \bf{\alpha})} \]</div>
+<p>where <span class="math notranslate nohighlight">\(\it{D}_t = \{\it{d}_t, \it{d}_{t-1}, ..., \it{d}_0\} = \{\it{d}_t, \it{D}_{t-1}\} \)</span> represents the dataset indexed by the time <span class="math notranslate nohighlight">\(t\)</span> of arrival of new information, being <span class="math notranslate nohighlight">\(\it{d}_t\)</span> the data acquired at time <span class="math notranslate nohighlight">\(t\)</span>.</p>
+</section>
+</section>
+<section id="bayesian-prediction">
+<h3><span class="section-number">5.2.2. </span>Bayesian prediction<a class="headerlink" href="#bayesian-prediction" title="Permalink to this heading">#</a></h3>
+<p>After observing some data and updating the probability distribution of the parameters of the model, the model can be used to perform inferences in supervised and unsupervised problems. The peculiarity of the Bayesian Machine Learning paradigm is that we don’t have a single predictive model, but a family of them parametrized by <span class="math notranslate nohighlight">\(\bf{\theta}\)</span>. By learning we aim to narrow down which of the possible models within this family explain better the observed data. But in contrast to classical statistics, we don’t need to narrow our choice to one of these models (like the most likely one), but we use the whole posterior distribution over parameters to improve predictions.</p>
+<p>In the supervised machine learning problem, this translates in the following predictive distribution for the target:</p>
+<div class="math notranslate nohighlight">
+\[p(t|{\bf x}, {\it D}) = \int d \theta p(t|{\bf x}, {\it D}, \theta) p(\theta|{\it D})\]</div>
+<p>Similarly, in the unsupervised machine learning problem, the distribution of the target data given observations is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[p({\bf x}| {\it D}) = \int d \theta p({\bf x}| {\it D}, \theta) p({\bf \theta}|{\it D})\]</div>
+<p>These integrals are typically difficult to solve, except for some particular choices for the family of distributions. In case the integrals are intractable, one can resort either to numerical approximations or analytical ones.</p>
+<p>Among the analytical approximations, the most simple one is using the MAP (*<em>Maximum a Posteriori</em>+) solution, which as discussed in the previous section means calculating the most likely value of the parameters using the posterior distribution:</p>
+<div class="math notranslate nohighlight">
+\[\theta_{MAP} = {\bf argmax}_{\theta}  p(\theta | {\it D})\]</div>
+<p>Then we do the approximation:</p>
+<div class="math notranslate nohighlight">
+\[p(\theta | {\it D}) \simeq \delta (\theta - \theta_{MAP})\]</div>
+<p>and therefore:</p>
+<div class="math notranslate nohighlight">
+\[p(t|{\bf x}, {\it D}) = p(t|{\bf x}, \theta_{MAP})\]</div>
+<div class="math notranslate nohighlight">
+\[p({\bf x}, {\it D}) = p({\bf x}| \theta_{MAP})\]</div>
+<p>An improvement upon this approximation is using the Laplace approximation for the posterior, which essentially consists on approximating the posterior using a second order Taylor series around the MAP estimator. Instead of dealing, though, directly with the posterior, it is better to work with its logarithm <span class="math notranslate nohighlight">\(L\)</span>. For simplicity, let us consider the case of a single parameter to estimate:</p>
+<div class="math notranslate nohighlight">
+\[L = \log p(\theta | {\it D}) \simeq L(\theta_{MAP}) + \frac{1}{2} \frac{d L^2}{d \theta} |_{\theta_{MAP}} (\theta - \theta_{MAP})^2\]</div>
+<p>where the first order term is zero since we are expanding around the maximum, and the second derivative is negative. The Laplace approximation for the posterior then reads:</p>
+<div class="math notranslate nohighlight">
+\[ p(\theta | {\it D}) \simeq A \exp \left[ \frac{1}{2} \frac{d L^2}{d \theta} |_{\theta_{MAP}} (\theta - \theta_{MAP})^2 \right] \]</div>
+<p>which is a Gaussian distribution. The predictive distribution in this case cannot be derived generally, it will depend on the shape of the likelihood function.</p>
+<p>Notice that in both approximations we are assuming that we are dealing with uni-modal distribution. In case of multi-modal distributions, these approximations no longer approximate well the posterior, and other techniques must be used.</p>
+</section>
+<section id="example-coin-toss-experiment">
+<h3><span class="section-number">5.2.3. </span>Example: coin toss experiment<a class="headerlink" href="#example-coin-toss-experiment" title="Permalink to this heading">#</a></h3>
+<p>Let us come back to our previous example of estimating the probability of a coin toss resulting in heads or tails. By using a Beta conjugate prior to the likelihood, the posterior had a closed-form which is an updated Beta distribution:</p>
+<div class="math notranslate nohighlight">
+\[f(p|D_N) = \frac{1}{B(\alpha + n_H, \beta + N - n_H)} p^{\alpha + n_H-1} (1-p)^{\beta + N - n_H -1} \]</div>
+<p>With the information available so far, we want to predict the result of the next coin toss. The predictive distribution reads:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}P(t_{N+1} = H| D_N) = \int dp P(t_{N+1} = H | p, D_N) f(p |D_N) = \int dp p f(p |D_N) \\ = \int dp \frac{1}{B(\alpha + n_H, \beta + N - n_H)} p^{\alpha + n_H} (1-p)^{\beta + N - n_H -1}  = \frac{ \alpha + n_H} {\alpha + \beta + N}\end{split}\]</div>
+<p>which in this case is the mean of the Beta distribution. Notice that this is not the same result that we would obtain in classical statistics using maximum likelihood even if we had a uniform prior (<span class="math notranslate nohighlight">\(\alpha = \beta = 1\)</span>), since the mean and the mode of the Beta distribution don’t coincide, the mode being <span class="math notranslate nohighlight">\(\frac{\alpha - 1}{\alpha + \beta - 2}\)</span> for <span class="math notranslate nohighlight">\(\beta &gt; 1\)</span></p>
+<p>In this case, due to the choice of a conjugate prior, we have a closed-form for the posterior and the predictive distribution can also be analytically calculated. However, let us assume this is not possible and use the Laplace approximation to obtain the predictive distribution. The MAP estimator for the posterior is, by finding the maximum of the Beta distribution:</p>
+<div class="math notranslate nohighlight">
+\[p_{MAP} = \frac{n_H + \alpha -1}{N + \alpha + \beta - 2} \]</div>
+<div class="math notranslate nohighlight">
+\[q_{MAP} \equiv 1 - p_{MAP} = \frac{ N - n_H + \beta -1}{N + \alpha + \beta - 2} \]</div>
+<p>The second order derivative of the log-likelihood evaluated at the maximum MAP then reads:</p>
+<div class="math notranslate nohighlight">
+\[\frac{d L^2}{d p^2} |_{p_{MAP}} = - \frac{N + \alpha + \beta - 2}{p_{MAP} q_{MAP}}\]</div>
+<p>The posterior distribution is therefore approximated by the following Gaussian distribution:</p>
+<div class="math notranslate nohighlight">
+\[f(p | {\it D}) \simeq N(p_{MAP}, \sqrt{\frac{p_{MAP} q_{MAP}}{N + \alpha + \beta - 2}})\]</div>
+<p>The predictive distribution is now easy to evaluate since it is just the mean of a Gaussian:</p>
+<div class="math notranslate nohighlight">
+\[P(t_{N+1} = H| D_N) \simeq p_{MAP} = \frac{n_H + \alpha -1}{N + \alpha + \beta - 2}\]</div>
+<p>The result differs slightly from the exact one, but for <span class="math notranslate nohighlight">\(N, n_H &gt;&gt; 1\)</span> and / or <span class="math notranslate nohighlight">\(\alpha, \beta &gt;&gt; 1\)</span> they converge, as it is actually expected since in this regime the Beta distribution has the Gaussian distribution as a limit, as discussed in the previous section.</p>
+<p>We can test the validity of this result numerically by plotting the actual posterior and the Laplace approximation, for different number of observations and specification of the prior:</p>
+<p>CONTINUE</p>
+</section>
 </section>
 <section id="bayesian-linear-regression">
 <h2><span class="section-number">5.3. </span>Bayesian Linear Regression<a class="headerlink" href="#bayesian-linear-regression" title="Permalink to this heading">#</a></h2>
@@ -1332,7 +1434,15 @@ These steps are repeated until convergence.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-estimating-the-probability-of-heads-in-a-coin-toss-experiment">5.1.5. Example: estimating the probability of heads in a coin toss experiment</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-machine-learning">5.2. Bayesian Machine Learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-machine-learning">5.2. Bayesian Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-learning">5.2.1. Bayesian learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-online-learning">5.2.1.1. Bayesian online learning</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-prediction">5.2.2. Bayesian prediction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-coin-toss-experiment">5.2.3. Example: coin toss experiment</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-linear-regression">5.3. Bayesian Linear Regression</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probabilistic-graphical-models">5.4. Probabilistic Graphical Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-models">5.5. Latent variable models</a><ul class="nav section-nav flex-column">

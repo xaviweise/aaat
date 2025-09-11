@@ -12,7 +12,7 @@ These makes all these price observations noisy estimates of the fair price, so i
 
 ### The Kalman Filter model for pricing
 
-The Kalman filter was introduced in the chapter on [Bayesian Theory](#intro_bayesian). It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM). 
+The Kalman filter was introduced in the chapter on [Bayesian Theory](intro_bayesian.md). It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM). 
 
 Recall that a *State Space Model (SSM)* is a model to describe dynamic systems where we have a non or partially observable state, a vector $\mathbf{x}$, whose dynamics in time is described by a so-called transition equation:
 
@@ -42,7 +42,7 @@ We don't observe this mid-price, only trades which we consider noisy observation
 
 $$p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)$$
 
-Readers will recognize that this is the local level model discussed extensively in the Chapter on [Bayesian Modelling](#intro_bayesian). For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
+Readers will recognize that this is the local level model discussed extensively in the Chapter on [Bayesian Modelling](intro_bayesian.md). For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
 
 $$\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+$$
 
@@ -54,7 +54,7 @@ where $v_0$ in this case is a size scale that separates the regimes where the in
 
 #### Estimation of the simple pricing model
 
-As discussed in [Bayesian Modelling](#intro_bayesian), the standard way to estimate the parameters of a Kalman Filter is using the Expectation Maximization (EM) algorithm, suitable for probabilistic models with latent variables. However, the properties of the simple pricing model can be exploited to obtain closed-form estimators for its parameters using moment matching.
+As discussed in [Bayesian Modelling](intro_bayesian.md), the standard way to estimate the parameters of a Kalman Filter is using the Expectation Maximization (EM) algorithm, suitable for probabilistic models with latent variables. However, the properties of the simple pricing model can be exploited to obtain closed-form estimators for its parameters using moment matching.
 
 Let us start by working with a model where observation errors have no dependency on the volume: $\sigma_\nu (v) = \sigma_\nu$. The key is to compute statistics of:
 
@@ -62,7 +62,7 @@ $$d_t \equiv p_{t+\Delta t} - p_t = (m_{t+\Delta t}- m_t) + (\nu_{t+\Delta t} - 
 
 which depend only on observed trades. First we compute the variance:
 
-$$Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2\$$
+$$Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2$$
 
 where we have used that $\epsilon_t$, $\nu_{t+\Delta t}$ and $\nu_t$ are independent random variables. This expression links the variance of the first differences in trade prices with the parameters to estimate. We need though a second expression to solve for each parameters separately. For that we compute the lag-1 auto-covariance of $d_t$:
 
@@ -103,7 +103,7 @@ In this simple case, the estimation of the parameters $\sigma_p$ and $\sigma_\ep
 
 #### Inference on the simple pricing model
 
-We can use the general Kalman filter equations described in [Bayesian Modelling](#intro_bayesian) to derive the distribution of our mid - price at the next time $t + \Delta t$ where a trade happens.
+We can use the general Kalman filter equations described in [Bayesian Modelling](intro_bayesian.md) to derive the distribution of our mid - price at the next time $t + \Delta t$ where a trade happens.
 
 The Kalman filter algorithm operates sequentially over observation steps applying two steps, the *predict* step, where we compute the distribution of the mid-price based purely on the random walk model, and the *update* step in which we incorporate the information provided by the observation of a new trade. We define $m_{t+\Delta t}^t$ as the distribution of the mid-price at $t+\Delta t$ before observing the trade, and $m_{t+\Delta}^{t+\Delta t}$ afterwards. 
 
@@ -136,11 +136,12 @@ If we look at the new standard deviation, we also find similar limiting behavior
 * If $\sigma_\eta \gg \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_{m,t+\Delta t}^t$, i.e. we stick with the estimation from the predict step
 
 One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite $\sigma_\eta$ is always smaller: the information from the trade always contributes to improve our estimation of the mid-price.  This is easily seen writing:
-$$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}$$ 
+
+$$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}$$
+
 Since $\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1. 
 
-
-TO DO: MENTION ROLE OF SMOOTHING: eg flow value computation a posteriori, calibraiton etc
+TO DO: MENTION ROLE OF SMOOTHING: eg flow value computation a posteriori, calibration etc
 
 #### Two correlated instruments
 

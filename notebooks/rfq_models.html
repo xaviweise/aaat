@@ -458,7 +458,7 @@ document.write(`
                    <span class="n">lambda_std</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                    <span class="n">prior_mean</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
                    <span class="n">prior_std</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                   <span class="n">reservation_price_noise_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">res_price_noise_std_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                    <span class="n">hit_rate_target</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
                    <span class="n">window_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                    <span class="n">attrition_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
@@ -478,7 +478,7 @@ document.write(`
                                   <span class="n">reservation_price_mean</span> <span class="o">*</span> <span class="n">reservation_price_std_pct</span><span class="p">,</span>
                                   <span class="n">N_clients</span><span class="p">)</span>
     <span class="c1"># Reservation prices are noisy given potential changing market conditions</span>
-    <span class="n">res_price_noise_std</span> <span class="o">=</span> <span class="n">res_price_noise_std</span> <span class="ow">or</span> <span class="p">(</span><span class="n">fair_price</span> <span class="o">*</span> <span class="n">reservation_price_std_pct</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">res_price_noise_std</span> <span class="o">=</span> <span class="n">res_price_noise_std_pct</span> <span class="o">*</span> <span class="n">reservation_price_mean</span>
     <span class="n">res_price_noise_var</span> <span class="o">=</span> <span class="n">res_price_noise_std</span><span class="o">**</span><span class="mi">2</span>
     <span class="c1"># Generate distribution of RfQ intensities for the segment of clients</span>
     <span class="n">lambdas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">lambda_mean</span><span class="p">,</span> <span class="n">lambda_std</span><span class="p">,</span> <span class="n">N_clients</span><span class="p">))</span>
@@ -588,7 +588,9 @@ document.write(`
 <span class="c1"># Workflow: Simulate, Train, Test</span>
 <span class="c1"># ----------------------</span>
 <span class="n">T_train</span><span class="p">,</span> <span class="n">T_test</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span>
-<span class="n">rfq_all</span><span class="p">,</span> <span class="n">active_all</span><span class="p">,</span> <span class="n">Y_all</span><span class="p">,</span> <span class="n">active_df</span> <span class="o">=</span> <span class="n">run_simulation</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">T_train</span><span class="o">+</span><span class="n">T_test</span><span class="p">)</span>
+<span class="n">T_tot</span> <span class="o">=</span> <span class="n">T_train</span> <span class="o">+</span> <span class="n">T_test</span>
+<span class="n">N_clients</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">rfq_all</span><span class="p">,</span> <span class="n">active_all</span><span class="p">,</span> <span class="n">Y_all</span><span class="p">,</span> <span class="n">active_df</span> <span class="o">=</span> <span class="n">run_simulation</span><span class="p">(</span><span class="n">N_clients</span> <span class="o">=</span> <span class="n">N_clients</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="n">T_train</span><span class="o">+</span><span class="n">T_test</span><span class="p">)</span>
 
 <span class="n">Y_train</span> <span class="o">=</span> <span class="n">Y_all</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">T_train</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">Y_test</span>  <span class="o">=</span> <span class="n">Y_all</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">T_train</span><span class="p">:]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -675,7 +677,7 @@ Recall   : 0.8803
 AUC      : 0.9884
 </pre></div>
 </div>
-<img alt="../_images/a1c383a632cdff355a8c4859778c6d56075ce7d81c10aea7ffad09ad1f4d96c5.png" src="../_images/a1c383a632cdff355a8c4859778c6d56075ce7d81c10aea7ffad09ad1f4d96c5.png" />
+<img alt="../_images/dfc582116691cbf2ce91f9502cd45738ddefc5d3ba39583012ec1bfba3d3df2c.png" src="../_images/dfc582116691cbf2ce91f9502cd45738ddefc5d3ba39583012ec1bfba3d3df2c.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -703,7 +705,7 @@ AUC      : 0.9884
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Day&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Hit Rate&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="c1"># Attrition rate over time</span>
-<span class="n">attr_rate</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Y_all</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">Y_all</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">active_all</span><span class="p">]</span>
+<span class="n">attr_rate</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">Y_all</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">Y_all</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">active_all</span><span class="p">]</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">days</span><span class="p">,</span> <span class="n">attr_rate</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;% Inactive&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Cumulative Attrition Rate Over Time&#39;</span><span class="p">)</span>
@@ -712,11 +714,11 @@ AUC      : 0.9884
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1779a2280&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x31037edf0&gt;
 </pre></div>
 </div>
-<img alt="../_images/978111306bff7064fba9c3415818aac974930ff83823c0e4a1860dc96f2c3e75.png" src="../_images/978111306bff7064fba9c3415818aac974930ff83823c0e4a1860dc96f2c3e75.png" />
-<img alt="../_images/55325b553d03192a83b00aa0fac6eb35be8fee2bbc9f09974ec4cfa4b2214374.png" src="../_images/55325b553d03192a83b00aa0fac6eb35be8fee2bbc9f09974ec4cfa4b2214374.png" />
+<img alt="../_images/05c9c7aa5098a6463bc01f4c28ef067b5f8537e190f312f9cd20d5013c2d652f.png" src="../_images/05c9c7aa5098a6463bc01f4c28ef067b5f8537e190f312f9cd20d5013c2d652f.png" />
+<img alt="../_images/00df5c45b747c5781d672ac7b8a47af6ff4ddac8212d7f225090f815d186c214.png" src="../_images/00df5c45b747c5781d672ac7b8a47af6ff4ddac8212d7f225090f815d186c214.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -726,9 +728,9 @@ AUC      : 0.9884
 <span class="c1"># ----------------------</span>
 <span class="c1"># Compare predicted attrition vs actual on test</span>
 <span class="n">pred_rate</span> <span class="o">=</span> <span class="n">risk_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)[</span><span class="s1">&#39;p_inactive&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">actual_rate</span> <span class="o">=</span> <span class="p">[(</span><span class="n">N_clients</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">N_clients</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">active_test</span><span class="p">]</span>
+<span class="n">actual_rate</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="n">N_clients</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">N_clients</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">active_test</span><span class="p">]</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pred_rate</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">pred_rate</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Predicted % Inactive&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pred_rate</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">pred_rate</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Predicted % Inactive&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">actual_rate</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual % Inactive&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Predicted vs Actual Attrition (Test Set)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Day&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;% Inactive&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -736,7 +738,7 @@ AUC      : 0.9884
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1dc9e99aa946f6053c404213325fd08f18e49c7f1b57059794bae74f4f3466e3.png" src="../_images/1dc9e99aa946f6053c404213325fd08f18e49c7f1b57059794bae74f4f3466e3.png" />
+<img alt="../_images/d137c85f3ef48d476e5fa07603a94a61f77574ad85f0cebc66f61ff3b4fcb38b.png" src="../_images/d137c85f3ef48d476e5fa07603a94a61f77574ad85f0cebc66f61ff3b4fcb38b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -815,7 +817,7 @@ AUC      : 0.9884
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2d95c74966bb87611535a84f6e41935dc6cecd946946310f1c9b9f329cf9a99e.png" src="../_images/2d95c74966bb87611535a84f6e41935dc6cecd946946310f1c9b9f329cf9a99e.png" />
+<img alt="../_images/41c869da6de3e027316759a5512b58c54fb18b4a028df91fdd8bc7e01ebe4872.png" src="../_images/41c869da6de3e027316759a5512b58c54fb18b4a028df91fdd8bc7e01ebe4872.png" />
 </div>
 </div>
 </section>

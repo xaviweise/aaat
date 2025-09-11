@@ -487,7 +487,7 @@ document.write(`
 <p>These makes all these price observations noisy estimates of the fair price, so if we want to estimate a fair price out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what, under certain model assumptions, a Kalman filter does.</p>
 <section id="the-kalman-filter-model-for-pricing">
 <h3><span class="section-number">16.2.1. </span>The Kalman Filter model for pricing<a class="headerlink" href="#the-kalman-filter-model-for-pricing" title="Permalink to this heading">#</a></h3>
-<p>The Kalman filter was introduced in the chapter on <span class="xref myst">Bayesian Theory</span>. It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM).</p>
+<p>The Kalman filter was introduced in the chapter on <a class="reference internal" href="intro_bayesian.html"><span class="doc std std-doc">Bayesian Theory</span></a>. It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM).</p>
 <p>Recall that a <em>State Space Model (SSM)</em> is a model to describe dynamic systems where we have a non or partially observable state, a vector <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, whose dynamics in time is described by a so-called transition equation:</p>
 <div class="math notranslate nohighlight">
 \[ \mathbf{x}_{t+\Delta t} = f(\mathbf{x}_t, \mathbf{u}_t) + \mathbf{\epsilon}_t\]</div>
@@ -509,7 +509,7 @@ document.write(`
 <p>We don’t observe this mid-price, only trades which we consider noisy observation of the mid since they include transaction costs and potentially other external factors like dealer inventory positions, etc:</p>
 <div class="math notranslate nohighlight">
 \[p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)\]</div>
-<p>Readers will recognize that this is the local level model discussed extensively in the Chapter on <span class="xref myst">Bayesian Modelling</span>. For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading’s book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, <span class="math notranslate nohighlight">\(v\)</span>:</p>
+<p>Readers will recognize that this is the local level model discussed extensively in the Chapter on <a class="reference internal" href="intro_bayesian.html"><span class="doc std std-doc">Bayesian Modelling</span></a>. For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading’s book, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, <span class="math notranslate nohighlight">\(v\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+\]</div>
 <p>where <span class="math notranslate nohighlight">\(\sigma_p\)</span> is a baseline observation noise and <span class="math notranslate nohighlight">\(v_\text{max}\)</span> is an input to the model, the trade size we believe saturates information the information provided in the sense that our mid estimation will essentially move the price of the trade. In contrast, trades of small size, <span class="math notranslate nohighlight">\(v \ll v_\text{max}\)</span>, will have <span class="math notranslate nohighlight">\(\sigma_p \rightarrow \infty\)</span> and will provide a negligible pricing information. An alternative simple model is:</p>
@@ -519,13 +519,13 @@ document.write(`
 </section>
 <section id="estimation-of-the-simple-pricing-model">
 <h4><span class="section-number">16.2.1.2. </span>Estimation of the simple pricing model<a class="headerlink" href="#estimation-of-the-simple-pricing-model" title="Permalink to this heading">#</a></h4>
-<p>As discussed in <span class="xref myst">Bayesian Modelling</span>, the standard way to estimate the parameters of a Kalman Filter is using the Expectation Maximization (EM) algorithm, suitable for probabilistic models with latent variables. However, the properties of the simple pricing model can be exploited to obtain closed-form estimators for its parameters using moment matching.</p>
+<p>As discussed in <a class="reference internal" href="intro_bayesian.html"><span class="doc std std-doc">Bayesian Modelling</span></a>, the standard way to estimate the parameters of a Kalman Filter is using the Expectation Maximization (EM) algorithm, suitable for probabilistic models with latent variables. However, the properties of the simple pricing model can be exploited to obtain closed-form estimators for its parameters using moment matching.</p>
 <p>Let us start by working with a model where observation errors have no dependency on the volume: <span class="math notranslate nohighlight">\(\sigma_\nu (v) = \sigma_\nu\)</span>. The key is to compute statistics of:</p>
 <div class="math notranslate nohighlight">
 \[d_t \equiv p_{t+\Delta t} - p_t = (m_{t+\Delta t}- m_t) + (\nu_{t+\Delta t} - \nu_t) = \epsilon_t + (\nu_{t+\Delta t} - \nu_t)\]</div>
 <p>which depend only on observed trades. First we compute the variance:</p>
 <div class="math notranslate nohighlight">
-\[Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2\\]</div>
+\[Var[d_t]= Var[\epsilon_t] + Var[(\nu_{t+\Delta t} - \nu_t)]= \sigma_\epsilon^2 \Delta t + 2 \sigma_\nu^2\]</div>
 <p>where we have used that <span class="math notranslate nohighlight">\(\epsilon_t\)</span>, <span class="math notranslate nohighlight">\(\nu_{t+\Delta t}\)</span> and <span class="math notranslate nohighlight">\(\nu_t\)</span> are independent random variables. This expression links the variance of the first differences in trade prices with the parameters to estimate. We need though a second expression to solve for each parameters separately. For that we compute the lag-1 auto-covariance of <span class="math notranslate nohighlight">\(d_t\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[Cov[d_t,d_{t-\Delta t}]=Cov[\epsilon_t + (\nu_{t+\Delta t} - \nu_t), \epsilon_{t-\Delta t} + (\nu_t - \nu_{t-\Delta t})] = -Var[\nu_t] = -\sigma_\nu^2\]</div>
@@ -559,7 +559,7 @@ document.write(`
 </section>
 <section id="inference-on-the-simple-pricing-model">
 <h4><span class="section-number">16.2.1.3. </span>Inference on the simple pricing model<a class="headerlink" href="#inference-on-the-simple-pricing-model" title="Permalink to this heading">#</a></h4>
-<p>We can use the general Kalman filter equations described in <span class="xref myst">Bayesian Modelling</span> to derive the distribution of our mid - price at the next time <span class="math notranslate nohighlight">\(t + \Delta t\)</span> where a trade happens.</p>
+<p>We can use the general Kalman filter equations described in <a class="reference internal" href="intro_bayesian.html"><span class="doc std std-doc">Bayesian Modelling</span></a> to derive the distribution of our mid - price at the next time <span class="math notranslate nohighlight">\(t + \Delta t\)</span> where a trade happens.</p>
 <p>The Kalman filter algorithm operates sequentially over observation steps applying two steps, the <em>predict</em> step, where we compute the distribution of the mid-price based purely on the random walk model, and the <em>update</em> step in which we incorporate the information provided by the observation of a new trade. We define <span class="math notranslate nohighlight">\(m_{t+\Delta t}^t\)</span> as the distribution of the mid-price at <span class="math notranslate nohighlight">\(t+\Delta t\)</span> before observing the trade, and <span class="math notranslate nohighlight">\(m_{t+\Delta}^{t+\Delta t}\)</span> afterwards.</p>
 <p>Let us apply first the predict step. The distribution of <span class="math notranslate nohighlight">\(m_{t+\Delta t}^t\)</span> is Gaussian with mean and variance given by:</p>
 <div class="math notranslate nohighlight">
@@ -586,10 +586,11 @@ document.write(`
 <li><p>If <span class="math notranslate nohighlight">\(\sigma_\eta \ll \sigma_{m,t+\Delta t}\)</span>, then <span class="math notranslate nohighlight">\(\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_\eta\)</span>, since as we discussed above, we essentially use the trade information to inform our estimation of the mid.</p></li>
 <li><p>If <span class="math notranslate nohighlight">\(\sigma_\eta \gg \sigma_{m,t+\Delta t}\)</span>, then <span class="math notranslate nohighlight">\(\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_{m,t+\Delta t}^t\)</span>, i.e. we stick with the estimation from the predict step</p></li>
 </ul>
-<p>One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite <span class="math notranslate nohighlight">\(\sigma_\eta\)</span> is always smaller: the information from the trade always contributes to improve our estimation of the mid-price.  This is easily seen writing:
-$<span class="math notranslate nohighlight">\(\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}\)</span><span class="math notranslate nohighlight">\( 
-Since \)</span>\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1.</p>
-<p>TO DO: MENTION ROLE OF SMOOTHING: eg flow value computation a posteriori, calibraiton etc</p>
+<p>One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite <span class="math notranslate nohighlight">\(\sigma_\eta\)</span> is always smaller: the information from the trade always contributes to improve our estimation of the mid-price.  This is easily seen writing:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}\)</span> is non-negative, then the denominator is never lower than 1.</p>
+<p>TO DO: MENTION ROLE OF SMOOTHING: eg flow value computation a posteriori, calibration etc</p>
 </section>
 <section id="two-correlated-instruments">
 <h4><span class="section-number">16.2.1.4. </span>Two correlated instruments<a class="headerlink" href="#two-correlated-instruments" title="Permalink to this heading">#</a></h4>
