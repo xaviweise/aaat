@@ -141,25 +141,104 @@ $$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\f
 
 Since $\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1. 
 
-TO DO: MENTION ROLE OF SMOOTHING: eg flow value computation a posteriori, calibration etc
+In some applications of the local level model to pricing we might also be interested in the Kalman smoothing algorithm. Recall that the difference with the Kalman filtering we have just seen is that in smoothing we estimate the latent variable using all the available data, including the future. Of course this means Kalman smoothing does not make sense for online price inference, but there are other applications of this pricing model where using the best estimation of the latent mid-price is relevant:
 
-#### Two correlated instruments
+* Estimation of parameters when using Expectation Maximization, as discussed in in [Bayesian Modelling](intro_bayesian.md)
+* Calibration of pricing models, for instance as we will discuss in the chapter on [RfQ Modelling](rfq_models.md), when we seek to estimate the hit rate probability, or the probability that a client trades an RfQ from a dealer given the quoted price. In this case, we are interested in having the best estimation possible of the mid-price to isolate the effect of the spread, which is the one that puts dealers in competition. In the same chapter we will also discuss models to evaluate the toxicity of clients' flows, i.e. when clients seem to have more information than the dealer when trading, so the dealer seems to be later in the wrong side of the market. Estimating such models typically relies on analyzing how the mid-price of the instrument moves before and after a client intends to trade. 
 
-In this case, the Kalman gain has the following structure:
+#### Multiple correlated instruments
+
+The Kalman filter model for pricing becomes even more relevant when we include information from other financial instruments that are historically correlated with the one whose mid-price we are estimated. Typical situations are:
+
+* Instruments that are more liquid, i.e. they trade more often and with smaller bid and ask spreads. This allows us to improve the estimation of the mid-price until we observe a new trade from the instrument, anticipating potential relevant movements derived from common market factors. 
+
+* Instruments that trade in markets that are open when markets where our instrument of interest is traded are closed. This allows us to reduce the uncertainty from the overnight gap in trading data. 
+
+The simple pricing model we have analyzed so far can be easily extended to include information from a set of N instruments. Notice that in this case what we are actually doing is estimating the mid-prices of all the instruments in the set, not necessarily only the one of interest. The evolution of the mid-prices is now modelled using:
+
+$$\vec{m}_{t+\Delta t} = \vec{m}_t + \vec{\epsilon}_t, \vec{\epsilon}_t \sim N(\vec{0}, \Sigma_\epsilon \Delta t)$$
+
+where $\Sigma_\epsilon$ is now a covariance matrix that takes into account the effect of correlations in the pricing movements. Price observations follow the model: 
+
+$$\vec{p}_t = \vec{m}_t + \vec{\nu}_t, \vec{\nu}_t \sim N(0, \Sigma_\nu)$$
+
+In this case, since we are already modelling correlations at mid-price level, a typical choice is to take $\Sigma_\nu$ diagonal, i.e. $\Sigma_\nu = \text{diag}(\sigma_{\nu,1}^2, ..., \sigma_{\nu_N}^2)$, although in certain setups one might want to include some of form of bid-ask spread correlation between instruments. 
+
+With this model specification, we can directly use the filtering, smoothing and EM equations discussed in the [Bayesian Modelling](intro_bayesian.md) chapter. Let us though specifically focus on the case of $N=2$ instruments, where we can work out in detail the Kalman filter equations to get further insights into the model's inner workings. 
+
+The predict step in the Kalman filter is given by the following equations:
+
+$$\vec{m}_{t|t-1} = \vec{m}_{t-1|t-1}$$
+
+$$\Sigma_{t|t-1} = \Sigma_{t-1|t-1} + \Sigma_\epsilon \Delta t$$
+
+which are relatively simple, as expected. The update step equations are more interesting, since they include the effect of observations, and critically the impact of one instrument's trades into the mid-price or the other:
+
+$$\vec{m}_{t|t} = \vec{m}_{t|t-1} + K_t ( \vec{P}_t-\vec{m}_{t|t-1})$$
+
+$$\Sigma_{t|t} = (1-K_t) \Sigma_{t|t-1} $$
+
+with the Kalman gain being:
+
+$$K_t =  \Sigma_{t|t-1} ( \Sigma_{t|t-1} + \Sigma_\nu)^{-1}$$
+
+For the two instrument case, the Kalman gain can be expanded into:
 
 $$\begin{aligned}
-K_t = \frac{1}{(\sigma_{v,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{v,2}^2 + (\sigma_{2,t}^{t-1})^2) -  (\rho_t^{t-1}\sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1})^2} \nonumber \\
+K_t = 
+\frac{1}{(\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2) -  (\rho_t^{t-1}\sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1})^2} \nonumber \\
 \begin{pmatrix} 
-(\sigma_{1,t}^{t-1})^2 \sigma_{v,2}^2 + (\sigma_{1,t}^{t-1})^2(\sigma_{2,t}^{t-1})^2(1- (\rho_t^{t-1})^2) &  \rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}\sigma_{v,1}^2 \\ 
-  \rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}\sigma_{v,1}^2 & (\sigma_{2,t}^{t-1})^2\sigma_{v,1}^2 + (\sigma_{1,t}^{t-1})^2 (\sigma_{2,t}^{t-1})^2)(1-(\rho_t^{t-1})^2)
+(\sigma_{1,t}^{t-1})^2 \sigma_{\nu,2}^2 + (\sigma_{1,t}^{t-1})^2(\sigma_{2,t}^{t-1})^2(1- (\rho_t^{t-1})^2) &  \rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}\sigma_{\nu,1}^2 \\ 
+  \rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}\sigma_{\nu,2}^2 & (\sigma_{2,t}^{t-1})^2\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2 (\sigma_{2,t}^{t-1})^2(1-(\rho_t^{t-1})^2)
   \nonumber \\
 \end{pmatrix}
 \end{aligned}$$
 
-For the case in which $\sigma_{v,2} = 0$ let us see the effect of the
-observation of the second instrument on the first one: $$\begin{aligned}
-\hat{P}^{t}_{1,t} = \hat{P}^{t-1}_{1,t} + \frac{1}{1-(\rho_t^{t-1})^2 + (\frac{\sigma_{v,1}}{\sigma_{1,t}^{t-1}})^2}\left((1-(\rho_t^{t-1})^2)(O_{1,t} - \hat{P}^{t}_{1,t}) + \rho_t^{t-1} \frac{\sigma_{v,1}^2}{\sigma_{1,t}^{t-1} \sigma_{2,t}^{t-1}}(O_{2,t} - \hat{P}^{t}_{2,t})  \right)  \nonumber \\
-\end{aligned}$$
+Let us analyze some particular cases:
+
+* If we set the correlation to zero, $\rho_t^{t-1} = 0$, the Kalman gain becomes: 
+  $$\begin{aligned}
+  K_t = 
+  \frac{1}{(\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2)}
+  \begin{pmatrix} 
+  (\sigma_{1,t}^{t-1})^2 \sigma_{\nu,2}^2 + (\sigma_{1,t}^{t-1})^2(\sigma_{2,t}^{t-1})^2 & 0 \\ 
+  0 & (\sigma_{2,t}^{t-1})^2\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2 (\sigma_{2,t}^{t-1})^2
+  \end{pmatrix}  \nonumber 
+  \end{aligned}$$
+
+  $$\begin{aligned}
+   = 
+  \begin{pmatrix} 
+  \frac{(\sigma_{1,t}^{t-1})^2}{\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2}  & 0 \\ 
+  0 & \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2}
+  \end{pmatrix}  \nonumber 
+  \end{aligned}$$
+
+  i.e. we recover the equations of the Kalman gain for a single instrument for each diagonal, and the update equation factors in two independent updates. 
+
+* If we set $\sigma_{\nu, 1}^{-1} = 0$, which simulates the case in which we don't have an observation of a trade in the first financial instrument --by considering its observation error so large that it's effect is negligible, the Kalman gain becomes:
+
+  $$\begin{aligned}
+  K_t = 
+  \begin{pmatrix} 
+  0 &  \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} \\ 
+    0 & \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} 
+    \nonumber \\
+  \end{pmatrix}
+  \end{aligned}$$
+
+  The update equations for each instruments mid-price read:
+
+  $$m_{1,t|t} = m_{1,t|t-1} + \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t})$$
+
+
+  $$m_{2,t|t} = m_{2,t|t-1} + \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t}) $$
+
+  Notice that these equations are equivalent to the ones that we would derive if we use an observation matrix $H = (0, 1)$ and compute the update step for arbitrary values of the parameters. Going into the results, the second equation is the same update equation we had for a single instrument for which we have observed a trade. The first equation is more interesting, since it isolates the effect that an observation of a trade in an instrument has in our mid-price estimation of a correlated instrument. As expected, the influence is proportional to the estimated correlation between the instruments, $\rho_t^{t-1}$. The effect of the influence depends on the relative sizes of the variances in play. It helps to rewrite the equation as:
+
+  $$m_{1,t|t} = m_{1,t|t-1} + \beta_{12,t}^{t-1} \frac{1}{1+ \frac{\sigma_{\nu,2}^2}{ (\sigma_{2,t}^{t-1})^2}} (m_{2,t|t-1} - P_{2,t})$$
+
+  where $\beta_{12,t}^{t-1} \equiv \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}}{\sigma_{2,t}^{t-1}}$ is the linear regression coefficient between $m_{1,t}$ and $m_{2,t}$. It provides an upper bound on the Kalman gain between the two instruments, which happens when the observation in the second instrument has no error $\sigma_{\nu, 2} = 0$. This makes sense, since in the absence of noise in the observation of the second instrument, the update equation becomes the best linear prediction of $m_{1,t}$ using $m_{2,t}$.
 
 
 
