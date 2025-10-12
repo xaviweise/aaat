@@ -10,12 +10,9 @@ In the banking system the center is the bank, an institution or private company 
 with excess funds, and long-term loans to those who need funds. A capital cushion based on short-term loans or directly cash is maintained in order to fulfills withdrawals. Their activity is not exempt from
 risks:
 
--   liquidity risk, which can happens if the demand to withdraw deposits
-    exceeds the capital cushion, and depositors cannot be satisfied
-    (bank run)
+-   liquidity risk, which can happens if the demand to withdraw deposits exceeds the capital cushion, and depositors cannot be satisfied(bank run)
 
--   credit risk, which happens when borrowers of funds default on their
-    obligations and don't give back those funds.
+-   credit risk, which happens when borrowers of funds default on their obligations and don't give back those funds.
 
 Banks compensate those risks by charging a spread between interest of
 loans and interest of deposits, on top of a margin to pay for their
@@ -24,12 +21,10 @@ of the financial system in Europe.
 
 ## Financial markets
 
-In financial markets, those who need funds issue financial instruments,
-legally binding contracts that articulate the terms in which those funds
+In financial markets, those who need funds issue financial instruments,legally binding contracts that articulate the terms in which those funds
 will be returned to the investor, as well as the compensation for the service. So far that is not that different from traditional banking loans. The key for financial instruments is the possibility of
 transferring the property of the contract, i.e. the right to receive back those future cash-flows and compensations. This provides a mechanism for the lender to potentially recover the funds before the
-contract ends, solving the problem of liquidity even if contracts are
-issued with long-term horizons.
+contract ends, solving the problem of liquidity even if contracts are issued with long-term horizons.
 
 Of course, for that the lender needs to find a counterpart that is willing to purchase the financial instrument, and agree to the price.
 Pricing financial instruments is however not a simple task, since their value depend on assumptions about the certainty of those future cash-flows (for instance, what if the borrower cannot commit in the future to pay back?). There are also considerations of opportunity costs, since the potential investor will necessarily compare the return
@@ -65,7 +60,9 @@ The most well-known financial instruments are **stocks** and **bonds**, which fo
 
 - **Stocks** represent ownership in a corporation and give investors a claim on a portion of the company's assets and earnings. Stocks are part of the **equity asset class**, providing potential for capital appreciation and dividends. However, they also expose investors to market volatility and business risk, making them a relatively high-risk, high-reward investment.
   
-- **Bonds**, on the other hand, are debt securities issued by governments, corporations, or other entities to raise capital. Investors in bonds lend money to the issuer in exchange for periodic interest payments and the return of the bond's face value at maturity. Bonds belong to the **fixed income asset class**, which generally offers stable and predictable returns, although they are still subject to risks such as interest rate fluctuations and credit defaults.
+- **Bonds**, on the other hand, are debt securities issued by governments, corporations, or other entities to raise capital. Investors in bonds lend money to the issuer in exchange for periodic interest payments and the return of the bond's face value at maturity. Bonds belong to the **fixed income asset class**, which generally offers stable and predictable returns, although they are still subject to risks such as interest rate fluctuations and credit defaults. Actually, within the fixed income asset class we typically distinguish between rates and credit instruments:
+    * **Rates instruments** are instruments whose value is primarily driven by changes in interest rates (e.g. government bonds yields, central bank policy rates). In the case of bonds, government bonds are rates instruments. 
+    * **Credit instruments** are primarily driven by the creditworthiness of the issuer. In the case of bonds, corporate bonds. As we will discuss in chapter {ref}`intro_financial_instruments`, in the case of corporate bonds, their value is also influenced by interest rates, although in general the effect is more marginal.
 
 Both stocks and bonds are often referred to as **cash instruments**, meaning their value derives directly from the underlying market dynamics, without the need for an intermediary asset.
 
@@ -83,8 +80,11 @@ Derivatives are versatile and serve several purposes, such as **hedging** risks,
 
 The **foreign exchange (FX)** market is a critical component of the global financial system, where participants trade currencies. Transactions in the FX market are generally categorized as either **spot** or **derivative** transactions.
 
-- **Spot transactions** involve the immediate exchange of currencies, typically settling within two business days. While FX spot transactions are essential for international trade and finance, they are not classified as financial instruments under **MiFID II**, as they do not involve contractual obligations extending beyond the settlement period.
-  
+- **Spot transactions** involve the immediate exchange of currencies, typically settling within two business days. While FX spot transactions are essential for international trade and finance, they are not classified as financial instruments under **MiFID II**, as they do not involve contractual obligations extending beyond the settlement period. The price of spot FX transactions is driven by multiple macro-economical drivers, some of them related to other asset classes, for example: 
+    * *Real Interest Rate Differentials*: Real interest rates (nominal rates adjusted for inflation) between two economies can significantly influence currency valuation. When one economy offers higher real yields, global investors may shift capital to take advantage of the better return, increasing demand for that currency and driving its spot FX price higher.
+    * *Local Stock Market Performance*: Strong performance in a country’s stock market can attract foreign investment, as investors seek higher returns. To purchase local stocks, they must first acquire the domestic currency, boosting its demand and potentially appreciating its spot FX value.
+    * *Trade Balance (Exports vs. Imports)*: The balance of trade between countries also impacts currency valuation. If a country exports more than it imports, foreign buyers must convert their currency into the exporter’s currency to pay for goods. Over time, sustained trade surpluses can increase demand for the exporter’s currency, appreciating its value. Conversely, persistent deficits may weaken it.
+
 - FX **derivatives**, such as **forwards**, **options**, and **swaps**, are used to hedge currency risk or speculate on currency movements. Unlike spot transactions, these contracts involve specific obligations between parties and are therefore considered financial instruments.
 
 FX markets are used by a wide range of participants, including **central banks** (to manage currency reserves), **corporations** (to hedge currency risk in international operations), and **investors** looking to profit from currency fluctuations.

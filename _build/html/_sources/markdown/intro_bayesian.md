@@ -623,7 +623,7 @@ $$P_{t|t-1} = \Phi P_{t-1|t-1} \Phi^t + Q$$
 
 where we use the suffix $\{t|t-1\}$ to distinguish between the optimal estimations and the underlying random variables. Then, given an observation at $t$, we update the estimation as:
 
-$$\vec{y}_{t|t} = \vec{y}_{t|t-1} + K_t (\vec{y}_{t|t-1} - H \vec{x}_t) = (I-K_t) \vec{y}_{t|t-1} + K_t H \vec{x}_t$$
+$$\vec{y}_{t|t} = \vec{y}_{t|t-1} + K_t (\vec{x}_t - H\vec{y}_{t|t-1} ) = (I-K_t H) \vec{y}_{t|t-1} + K_t \vec{x}_t$$
 
 $$P_{t|t} = (1-K_t H) P_{t|t-1} $$
 
