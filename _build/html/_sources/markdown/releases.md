@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 10.25
+Completed the section Kalman filter for fair estimation, including an example with simulated data. Working on the introduction to the mechanics of financial instruments.
+
 ## 09.25
 Completed the section on latent variable models within the Introduction to Bayesian Probability chapter. Added EM derivations for the Gaussian Mixture Model, the Hidden Markov Model and the Local Level Model (simple version of the Kalman Filter). Provided simulations in the accompanying notebooks. 
 

@@ -1,3 +1,4 @@
+(intro_financial_instruments)=
 # Mechanics of Financial Instruments
 
 ## Introduction
