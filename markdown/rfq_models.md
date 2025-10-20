@@ -92,9 +92,8 @@ $$ P(\tau_{\text{RfQ}(\text{c, p, s, v})} \in [t, t+dt]|F_t) = \lambda_t (c, p, 
 with the so-called intensity $\lambda_t$ being a general function of time, RfQ variables and any relevant information contained in $F_t$, for instance, previous RfQs. This is an instance of a non-homogeneous Poisson process. If it also depends on previous times of arrivals of RfQs, i.e. it is a self-exciting process, we have a Hawkes process. Such counting processes are natural candidates to model the arrival of RfQs.
 
 Alternatively, we can rewrite the model using the product rule of probability as: 
-$$ P(\tau_{\text{RfQ}(\text{c, p, s, v})} \in [t, t+dt]|F_t) =  P(v| s, c, p, \text{RfQ}_{t,t+dt}, F_t) P(s|c, p, \text{RfQ}:
 
-_{t,t+dt}, F_t) P(c, p| \text{RfQ}_{t,t+dt}, F_t) P(\text{RfQ}_{t,t+dt}|F_t) $$
+$$ P(\tau_{\text{RfQ}(\text{c, p, s, v})} \in [t, t+dt]|F_t) =  P(v| s, c, p, \text{RfQ}_{t,t+dt}, F_t) \\  P(s|c, p, \text{RfQ}_{t,t+dt}, F_t)  P(c, p| \text{RfQ}_{t,t+dt}, F_t) P(\text{RfQ}_{t,t+dt}|F_t) $$
 
 where we have used the compact notation: $\text{RfQ}_{t,t+dt}$ instead of $\tau_{\text{RfQ}} \in [t, t+dt]$. This way, we can explicitly model the statistics of each of the probabilities in the product. A typical hypothesis is to make the conditional probabilities independent of time and use simple distributions to model them. For instance, volumes are modelled in many cases as continuous distribution following a power law or a log-normal probability density, since volumes are positive and heavy tailed in their distribution:
 
