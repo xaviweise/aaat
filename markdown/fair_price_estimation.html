@@ -432,11 +432,15 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-sources-and-models">16.2.2. Pricing sources and models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lob-traded">16.2.2.1. LOB traded</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lob-traded">16.2.2.1. LOB traded</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#mid-price-information">16.2.2.1.1. Mid-price information</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">16.2.2.1.2. Trades</a></li>
+</ul>
+</li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rfq-traded">16.2.2.2. RfQ traded</a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#composites">16.2.2.2.1. Composites</a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#rfqs">16.2.2.2.2. RfQs</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">16.2.2.2.3. Trades</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">16.2.2.2.3. Trades</a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#hitmiss">16.2.2.2.4. HitMiss</a></li>
 </ul>
 </li>
@@ -453,8 +457,8 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-arbitrage-free-theory-of-derivatives-pricing">16.3.2. The arbitrage-free theory of derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">16.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">16.3.2.2. Example: European Call Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">16.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">16.3.2.2. Example: European Call Options</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-model">16.3.2.3. The Black - Scholes - Merton Model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">16.3.2.4. Solving the Black-Scholes-Merton equation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#an-alternative-derivation-the-market-price-of-risk">16.3.2.5. An alternative derivation: the market price of risk</a></li>
@@ -637,17 +641,15 @@ K_t =
 \end{aligned}\end{split}\]</div>
 <p>Let us analyze some particular cases:</p>
 <ul>
-<li><p>If we set the correlation to zero, <span class="math notranslate nohighlight">\(\rho_t^{t-1} = 0\)</span>, the Kalman gain becomes:
-$<span class="math notranslate nohighlight">\(\begin{aligned}
-K_t = 
-\frac{1}{(\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2)}
-\begin{pmatrix} 
-(\sigma_{1,t}^{t-1})^2 \sigma_{\nu,2}^2 + (\sigma_{1,t}^{t-1})^2(\sigma_{2,t}^{t-1})^2 &amp; 0 \\ 
-0 &amp; (\sigma_{2,t}^{t-1})^2\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2 (\sigma_{2,t}^{t-1})^2
-\end{pmatrix}  \nonumber 
-\end{aligned}\)</span>$</p>
+<li><p>If we set the correlation to zero, <span class="math notranslate nohighlight">\(\rho_t^{t-1} = 0\)</span>, the Kalman gain becomes:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{aligned}
+  K_t = 
+  \frac{1}{(\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2)} \nonumber \\
+  \begin{pmatrix} 
+  (\sigma_{1,t}^{t-1})^2 \sigma_{\nu,2}^2 + (\sigma_{1,t}^{t-1})^2(\sigma_{2,t}^{t-1})^2 &amp; 0 \\ 
+  0 &amp; (\sigma_{2,t}^{t-1})^2\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2 (\sigma_{2,t}^{t-1})^2
+  \end{pmatrix}  \\ \nonumber 
    = 
   \begin{pmatrix} 
   \frac{(\sigma_{1,t}^{t-1})^2}{\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2}  &amp; 0 \\ 
@@ -678,39 +680,69 @@ K_t =
 </li>
 </ul>
 <p>Let’s evaluate this model in one of the typical scenarios for fair price discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair prices for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.</p>
-<p>For that, we first generate synthetic mid-prices using a correlated Brownian motion with <span class="math notranslate nohighlight">\(\rho = 0.8\)</span>, <span class="math notranslate nohighlight">\(\sigma_1 = 5e-4\)</span> and <span class="math notranslate nohighlight">\(\sigma_2 = 4e-4\)</span>. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the mid, so correlation is driven exclusively by mid-price correlations. To generate the trades, we use standard deviations in the observation covariance of <span class="math notranslate nohighlight">\(0.032\)</span> and <span class="math notranslate nohighlight">\(0.045\)</span>, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the mid-price to the real simulated values. The results can be seen in the following figure:</p>
+<p>For that, we first generate synthetic mid-prices using a correlated Brownian motion with <span class="math notranslate nohighlight">\(\rho = 0.9\)</span>, <span class="math notranslate nohighlight">\(\sigma_1 = 5e-4\)</span> and <span class="math notranslate nohighlight">\(\sigma_2 = 4e-4\)</span>. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the mid, so correlation is driven exclusively by mid-price correlations. To generate the trades, we use standard deviations in the observation covariance of <span class="math notranslate nohighlight">\(0.032\)</span> and <span class="math notranslate nohighlight">\(0.045\)</span>, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the mid-price to the real simulated values. The results can be seen in the following figure:</p>
 <figure class="align-default" id="fig-kalmancorrelated">
 <a class="reference internal image-reference" href="../_images/kalman_correlated.png"><img alt="../_images/kalman_correlated.png" src="../_images/kalman_correlated.png" style="width: 8in;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 16.1 </span><span class="caption-text">Estimation of the fair price of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the mid-prices are generated (blue lines) and trades (blue dots) are simulated when the market is open, which. happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the mid-prices estimated using the Kalman filter, which is trained with half of the data using EM and the run over the second half of the data. The figure focus on four days of test data.</span><a class="headerlink" href="#fig-kalmancorrelated" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>As we see, the Kalman filter successfully exploits the correlation between instruments to update the mid-price of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument.</p>
+<p>As we see, the Kalman filter successfully exploits the correlation between instruments to update the mid-price of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument. In general, the estimated mid-prices include the true mid-prices within one standard deviation, depicted as the shaded grey area in the figure.</p>
 </section>
 </section>
 <section id="pricing-sources-and-models">
 <h3><span class="section-number">16.2.2. </span>Pricing sources and models<a class="headerlink" href="#pricing-sources-and-models" title="Permalink to this heading">#</a></h3>
 <p>When it comes to feeding the Kalman filter with information to improve the estimations of the fair price, there is a variety of sources that is typically used. Let us discuss the most typical sources, those based on Limit Order Book (LOB) data and those based on Request for Quote (RfQ) data. As we have seen, these sources can be used both if they belong to the instrument of interest or correlated ones. However, there are some considerations to take into account when using correlated instruments, which we discuss in the end.</p>
+<p>One point that will become a common theme in this section is the information content of the observations. Intuitively, not every source of pricing is equally informative. For example, as we discussed above, we expect that trades with larger volumes are more informative than small trades. In the same way, a cancellation of a limit order deep in a Limit Order Book might not carry meaningful new pricing information. These effects need to be incorporated case by case into the pricing model.</p>
 <section id="lob-traded">
 <h4><span class="section-number">16.2.2.1. </span>LOB traded<a class="headerlink" href="#lob-traded" title="Permalink to this heading">#</a></h4>
+<p>Limit Order Books are complex structures that contain extensive pricing information. Nevertheless, as discussed in Chapter <span class="xref std std-ref">market_microstructure</span>, the primary references for price discovery are the best bid and ask quotes, the mid-price—defined as the average of these two—and the prices of executed trades. To improve robustness and reduce the impact of potential market manipulation, it is standard practice to compute volume-weighted averages of the first K levels on both the bid and ask sides, and to define a robust mid-price based on these averages.</p>
+<section id="mid-price-information">
+<h5><span class="section-number">16.2.2.1.1. </span>Mid-price information<a class="headerlink" href="#mid-price-information" title="Permalink to this heading">#</a></h5>
+<p>As mentioned, a robust mid-price indicator in a LOB is:</p>
+<div class="math notranslate nohighlight">
+\[P_{mid}^{\text{LOB}} = \frac{1}{2} \left(\frac{\sum_{i=1}^K v_{b,i} P_{b,i}}{\sum_{i=1}^K v_{b,i}} + \frac{\sum_{i=1}^K v_{a,i} P_{a,i}}{\sum_{i=1}^K v_{a,i}}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(v_{b/a, i}\)</span> and <span class="math notranslate nohighlight">\(P_{b/a, i}\)</span> are volumes and prices of bid and ask, respectively, and <span class="math notranslate nohighlight">\(K\)</span> is the number of levels that are taken into account, for instance <span class="math notranslate nohighlight">\(K = 4\)</span>.</p>
+</section>
+<section id="trades">
+<h5><span class="section-number">16.2.2.1.2. </span>Trades<a class="headerlink" href="#trades" title="Permalink to this heading">#</a></h5>
+</section>
 </section>
 <section id="rfq-traded">
 <h4><span class="section-number">16.2.2.2. </span>RfQ traded<a class="headerlink" href="#rfq-traded" title="Permalink to this heading">#</a></h4>
 <section id="composites">
 <h5><span class="section-number">16.2.2.2.1. </span>Composites<a class="headerlink" href="#composites" title="Permalink to this heading">#</a></h5>
+<p>same as lob</p>
 </section>
 <section id="rfqs">
 <h5><span class="section-number">16.2.2.2.2. </span>RfQs<a class="headerlink" href="#rfqs" title="Permalink to this heading">#</a></h5>
+<ul class="simple">
+<li><p>done</p></li>
+<li><p>cover price info</p></li>
+<li><p>missed</p></li>
+</ul>
 </section>
-<section id="trades">
-<h5><span class="section-number">16.2.2.2.3. </span>Trades<a class="headerlink" href="#trades" title="Permalink to this heading">#</a></h5>
+<section id="id1">
+<h5><span class="section-number">16.2.2.2.3. </span>Trades<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h5>
+<ul class="simple">
+<li><p>volume dependency</p></li>
+</ul>
 </section>
 <section id="hitmiss">
 <h5><span class="section-number">16.2.2.2.4. </span>HitMiss<a class="headerlink" href="#hitmiss" title="Permalink to this heading">#</a></h5>
+<ul class="simple">
+<li><p>missprices</p></li>
+</ul>
 </section>
 </section>
 <section id="correlated-instruments">
 <h4><span class="section-number">16.2.2.3. </span>Correlated instruments<a class="headerlink" href="#correlated-instruments" title="Permalink to this heading">#</a></h4>
+<p>correlation choices</p>
+<ul class="simple">
+<li><p>sampling</p></li>
+<li><p>fourier, citar chino</p></li>
+<li><p>bayesian</p></li>
+</ul>
 </section>
 </section>
 </section>
@@ -763,7 +795,7 @@ K_t =
 </section>
 <section id="example-forward-on-a-non-dividend-paying-stock">
 <h4><span class="section-number">16.3.1.2. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#example-forward-on-a-non-dividend-paying-stock" title="Permalink to this heading">#</a></h4>
-<p>Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. The buyer of a forward has the obligation to buy a stock at the expire <span class="math notranslate nohighlight">\(T\)</span> at a pre-agreed price <span class="math notranslate nohighlight">\(K\)</span>. Therefore, the payoff function reads:</p>
+<p>Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. The buyer of a forward has the obligation to buy a stock at the expire <span class="math notranslate nohighlight">\(T\)</span> at a pre-agreed price <span class="math notranslate nohighlight">\(K\)</span>. Therefore, the payoff function reads:</p>
 <div class="math notranslate nohighlight">
 \[ f(S_T) = S_T - K\]</div>
 <p>The maximum premium that the investor is willing to pay reads then:</p>
@@ -850,8 +882,8 @@ K_t =
 <p>As we discussed in the first part of this chapter, if we are in the first situation, we might not need a derivatives pricing model since we can extract the prices of derivatives directly from observations of trades or request for quotes that are not closed. It is the second case where we need a theory of derivatives pricing that takes into account potential hedging strategies that mitigate the risk of the dealer. We anticipate then that in this framework, the minimum price or premium that the dealer will accept to sell the derivative will be one that compensates it for the costs of hedging plus the residual risk.</p>
 <p>More interestingly, we will see that in some cases, under certain theoretical situations, a perfect hedging strategy might exist, so the minimum price will be exactly the cost of the hedging strategy, which in this setup is also called the perfect replication strategy (since a perfect hedging implies no risk, and therefore a replication of the payoff using other financial instruments). A consequence of the existence of such replication strategy is that dealers are forced to price derivatives consistently, otherwise they would be generating risk-free arbitrage opportunities where other dealers who price correctly the derivative trade with the one miss-pricing it, and pocket the difference without risk. Hence, this theory of derivatives pricing is also called the arbitrage-free theory of derivatives pricing.</p>
 <p>Let us revisit the case of forwards and options under this optic.</p>
-<section id="id2">
-<h4><span class="section-number">16.3.2.1. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h4>
+<section id="id3">
+<h4><span class="section-number">16.3.2.1. </span>Example: Forward on a non-dividend paying stock<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h4>
 <p>Under the modelling hypothesis used in the previous sections to value the premium of a forward, namely, that 1) the interest risk is locked during the period of the forward, 2) there is no counter-party risk, i.e. no risk that the investor will not satisfy its obligations, then there is actually a simple replication strategy that hedges all the risk of the contract. If the dealer is selling the forward to the investor, therefore guaranteeing a price <span class="math notranslate nohighlight">\(K\)</span> to buy a share at time <span class="math notranslate nohighlight">\(T\)</span>, then:</p>
 <ul class="simple">
 <li><p>Borrows <span class="math notranslate nohighlight">\(S_t\)</span> dollars in the repo monetary markets at interest rate <span class="math notranslate nohighlight">\(r\)</span> during the period of the forward. We assume that interest accrues daily but is settled at the expiry. The stock bought is used as collateral in the repo.</p></li>
@@ -877,8 +909,8 @@ K_t =
 \[  S_t e^{r(T-t)} - \bar{K}_t &gt;  S_t e^{r(T-t)} - S_t e^{r(T-t)}  = 0\]</div>
 <p>i.e. a risk-free profit!</p>
 </section>
-<section id="id3">
-<h4><span class="section-number">16.3.2.2. </span>Example: European Call Options<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h4>
+<section id="id4">
+<h4><span class="section-number">16.3.2.2. </span>Example: European Call Options<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h4>
 <p>In the case of options there is no such obvious static replication strategy if we are only allowed to use the underlying stock and repo contracts. By static replication strategy we mean that we don’t need to modify the positions of the replication portfolio (the stock and the repo) during the life of the forward. If we are able to trade other derivatives there is actually a static replication strategy. If the dealer sells the call option to an investor, then immediately</p>
 <ul class="simple">
 <li><p>Buys to other dealer a put option with the same strike and expiry</p></li>
@@ -1010,7 +1042,7 @@ d C_t = \frac{\partial C_t}{\partial t} dt + \frac{\partial C_t}{\partial S_t} d
 <ul class="simple">
 <li><p>The BSM theory does not take into account liquidity and transaction costs of the hedging instruments, which will increase the costs of the replication strategy in a non-deterministic way. The premium becomes dependent on specific market microstructure details of how the instruments of the hedging portfolio are traded, for instance if they are traded in limit order book based markets, the fees of orders, the bid-ask spread, the tick size, etc. How the dealer executes those trades becomes also relevant, for instance, which types or orders are used, or if execution algorithms are to be used, in whose case the theory needs to incorporate an estimation of the cost of execution of those strategies, based on transaction cost analysis (TCA)</p></li>
 <li><p>The BSM theory assumes continuous hedging, which is not feasible in practice, both because of the costs mentioned in the previous point, and because markets in financial instruments usually are not open 24 hours per day. Even when they do, liquidity tends to vary widely across trading hours. In practice, dealers tend to hedge less frequently (e.g. daily), deviating from the pure BSM paradigm</p></li>
-<li><p>The BSM theory assumes a specific dynamics for the evolution of the underlyings, namely the Geometric Brownian Motion in the case of stocks (for underlyings that can become negative, like interest rates or inflation, a Brownian Motion is also typically used). Markets in practice follow more complicated dynamics, for instance they exhibit fatter tails in the distribution of returns or they might show sudden jumps, particularly in the overnight gap <a class="footnote-reference brackets" href="#id6" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
+<li><p>The BSM theory assumes a specific dynamics for the evolution of the underlyings, namely the Geometric Brownian Motion in the case of stocks (for underlyings that can become negative, like interest rates or inflation, a Brownian Motion is also typically used). Markets in practice follow more complicated dynamics, for instance they exhibit fatter tails in the distribution of returns or they might show sudden jumps, particularly in the overnight gap <a class="footnote-reference brackets" href="#id7" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
 <li><p>The original BSM theory assumes hedging strategies based on the underlying. The theory can be applied equally if we assume hedging with other derivatives as far as they share the same underlyings, or in a more fundamental level, the same risk factors driving the underlyings. In practice, dealers might use liquid derivatives to hedge non-liquid ones. For instance, european options with non-standard strikes or maturities with respect to liquid ones traded in exchanges. As an exercise for the reader, we propose to prove that the Black-Scholes-Merton differential equation can be derived using a hedging portfolio where instead of the underlying we trade another option with a different strike.</p></li>
 </ul>
 <p>In general, these deviations from the assumptions make the premium no longer deterministic, since they introduce uncertainty in its estimation. Dealers typically will need to estimate how much do they need to increase the BSM premium to compensate for those risks. In the following plots we show the histogram of differences between the replication portfolio and the option payoff at maturity, when different assumptions of Black - Scholes - Merton theory are violated, namely:</p>
@@ -1042,12 +1074,12 @@ d V_t = \kappa (\theta - V_t) + \chi \sqrt{V_t} dW_{2,t} \\
 <li><p>Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike <span class="math notranslate nohighlight">\(K_1\)</span> and maturity <span class="math notranslate nohighlight">\(T\)</span>, using another (liquid) option tradable in the market with strike <span class="math notranslate nohighlight">\(K_2\)</span> and same maturity <span class="math notranslate nohighlight">\(T\)</span>. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is <span class="math notranslate nohighlight">\(\Pi_t = \Delta_t C_2(S_t, t) + \beta_t\)</span>, with the terminal condition <span class="math notranslate nohighlight">\(\Pi_T = C_1(S_T, T)\)</span>. Hint: link the result with the market price of risk for options introduced in this chapter.</p></li>
 </ul>
 <hr class="footnotes docutils" />
-<aside class="footnote brackets" id="id5" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
 <p>We consider non-dividend paying stocks for simplicity, the extension of the theory to dividend paying stocks is relatively straightforward</p>
 </aside>
-<aside class="footnote brackets" id="id6" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">2</a><span class="fn-bracket">]</span></span>
+<aside class="footnote brackets" id="id7" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">2</a><span class="fn-bracket">]</span></span>
 <p>A well-known historical short-coming of the BSM framework is the implication that european options on the same underlying with different strikes and maturities should have the same implied volatility, equal to the expected volatility of the stock. The implied volatility is the one obtained by inverting the BSM formula given prices observed in the market, assuming for instance that there is a set of standard options that are traded in an exchange. In the first years of application of the BSM theory to price options, around the 1980s, this had the consequence of having very small premiums for options, particularly put options, with strikes very deep out-the-money (i.e. far from the underlying price at the time of quoting). This was a consequence of a Gaussian assumption on price returns, that predicted a very low probability of such options being exercised. In 1989, such prediction was contradicted when the market dramatically crashed, forcing dealers to readjust the prices with respect to the BSM formula. Multiple models such as local or stochastic volatility models, or models with jumps in the dynamics, have been proposed later to address these issues. One point to bear in mind is that the logic applied in the BSM framework can be still applied when introducing these more complex dynamics, and deterministic premiums can be derived as far as we add extra instruments in the hedging portfolio that allows the dealer to neutralize those risks (stochastic volatility, jumps, etc)</p>
 </aside>
 </section>
@@ -1126,11 +1158,15 @@ d V_t = \kappa (\theta - V_t) + \chi \sqrt{V_t} dW_{2,t} \\
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pricing-sources-and-models">16.2.2. Pricing sources and models</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lob-traded">16.2.2.1. LOB traded</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lob-traded">16.2.2.1. LOB traded</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#mid-price-information">16.2.2.1.1. Mid-price information</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">16.2.2.1.2. Trades</a></li>
+</ul>
+</li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rfq-traded">16.2.2.2. RfQ traded</a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#composites">16.2.2.2.1. Composites</a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#rfqs">16.2.2.2.2. RfQs</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#trades">16.2.2.2.3. Trades</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">16.2.2.2.3. Trades</a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#hitmiss">16.2.2.2.4. HitMiss</a></li>
 </ul>
 </li>
@@ -1147,8 +1183,8 @@ d V_t = \kappa (\theta - V_t) + \chi \sqrt{V_t} dW_{2,t} \\
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-arbitrage-free-theory-of-derivatives-pricing">16.3.2. The arbitrage-free theory of derivatives pricing</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">16.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">16.3.2.2. Example: European Call Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">16.3.2.1. Example: Forward on a non-dividend paying stock</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">16.3.2.2. Example: European Call Options</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-black-scholes-merton-model">16.3.2.3. The Black - Scholes - Merton Model</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-black-scholes-merton-equation">16.3.2.4. Solving the Black-Scholes-Merton equation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#an-alternative-derivation-the-market-price-of-risk">16.3.2.5. An alternative derivation: the market price of risk</a></li>
