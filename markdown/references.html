@@ -196,7 +196,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Market Making Algorithms</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">15. Market Making fundamentals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">16. Fair price estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">16. Fair value estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">17. Liquidity modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rfq_models.html">18. Modelling RfQs in Dealer to Client Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">19. The Avellaneda and Stoikov Framework</a></li>
@@ -425,56 +425,100 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="references">
 <span id="id1"></span><h1>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h1>
 <div class="docutils container" id="id2">
-<div class="citation" id="id23" role="doc-biblioentry">
+<div class="citation" id="id34" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Office of Financial Research. Repo and securities lending data collection. Technical Report, U.S. Department of the Treasury, 2023. Comprehensive data on U.S. repo market segments indicating daily balances exceeding \$5 trillion. URL: <a class="reference external" href="https://www.financialresearch.gov/data/repo-and-securities-lending/">https://www.financialresearch.gov/data/repo-and-securities-lending/</a>.</p>
+</div>
+<div class="citation" id="id33" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>U.S. Securities and Exchange Commission. Staff report on equity and options market structure conditions in early 2021. October 2021. URL: <a class="reference external" href="https://www.sec.gov/news/studies/2021/eq-market-structure-conditions-early-2021.pdf">https://www.sec.gov/news/studies/2021/eq-market-structure-conditions-early-2021.pdf</a>.</p>
+</div>
+<div class="citation" id="id32" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Michael Lewis. <em>The Big Short: Inside the Doomsday Machine</em>. W. W. Norton &amp; Company, New York, 2010.</p>
+</div>
+<div class="citation" id="id24" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>Bank for International Settlements. High-frequency trading in the foreign exchange market. Technical Report, Markets Committee, 2011. URL: <a class="reference external" href="https://www.bis.org/publ/mktc09.pdf">https://www.bis.org/publ/mktc09.pdf</a>.</p>
+</div>
+<div class="citation" id="id25" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
+<p>European Parliament and Council of the European Union. Directive 2014/65/eu of the european parliament and of the council on markets in financial instruments (mifid ii). June 2014. Official Journal of the European Union, L173/349. URL: <a class="reference external" href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32014L0065">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32014L0065</a>.</p>
+</div>
+<div class="citation" id="id26" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
+<p>European Securities and Markets Authority (ESMA). Commission delegated regulation (eu) 2017/589 — regulatory technical standards (rts 6) specifying organisational requirements of investment firms engaged in algorithmic trading. Technical Report, European Securities and Markets Authority (ESMA), June 2016. RTS 6 under MiFID II/MiFIR framework. URL: <a class="reference external" href="https://www.esma.europa.eu/document/technical-standards-mifid-ii-mifir">https://www.esma.europa.eu/document/technical-standards-mifid-ii-mifir</a>.</p>
+</div>
+<div class="citation" id="id27" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
+<p>Federal Financial Supervisory Authority (BaFin). German high-frequency trading act (hochfrequenzhandelsgesetz). Technical Report, Federal Financial Supervisory Authority (BaFin), May 2013. Implementation of MiFID II high-frequency trading provisions in Germany. URL: <a class="reference external" href="https://www.bafin.de/EN/Aufsicht/HandelMarkt/HighFrequencyTrading/highfrequencytrading_node_en.html">https://www.bafin.de/EN/Aufsicht/HandelMarkt/HighFrequencyTrading/highfrequencytrading_node_en.html</a>.</p>
+</div>
+<div class="citation" id="id28" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<p>Michael Lewis. <em>Flash Boys: A Wall Street Revolt</em>. W. W. Norton &amp; Company, New York, 2014.</p>
+</div>
+<div class="citation" id="id29" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<p>U.S. Commodity Futures Trading Commission and U.S. Securities and Exchange Commission. Findings regarding the market events of may 6, 2010. Technical Report, U.S. Commodity Futures Trading Commission and U.S. Securities and Exchange Commission, September 2010. Joint report on the May 6, 2010 “Flash Crash”. URL: <a class="reference external" href="https://www.sec.gov/news/studies/2010/marketevents-report.pdf">https://www.sec.gov/news/studies/2010/marketevents-report.pdf</a>.</p>
+</div>
+<div class="citation" id="id30" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
+<p>European Securities and Markets Authority (ESMA). Esma report on high-frequency trading activity in eu equity markets. Technical Report, European Securities and Markets Authority (ESMA), October 2019. Analysis of HFT activity and market impact under MiFID II. URL: <a class="reference external" href="https://www.esma.europa.eu/document/esma-report-high-frequency-trading-activity-eu-equity-markets">https://www.esma.europa.eu/document/esma-report-high-frequency-trading-activity-eu-equity-markets</a>.</p>
+</div>
+<div class="citation" id="id31" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></span>
+<p>Bank for International Settlements (BIS). Monitoring of fast-paced electronic markets. Technical Report, Bank for International Settlements (BIS), September 2018. Markets Committee report on high-frequency trading risks. URL: <a class="reference external" href="https://www.bis.org/publ/mktc13.pdf">https://www.bis.org/publ/mktc13.pdf</a>.</p>
+</div>
+<div class="citation" id="id23" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></span>
 <p>Roderick J. A. Little and Donald B. Rubin. <em>Statistical Analysis with Missing Data</em>. Wiley, 2019.</p>
 </div>
 <div class="citation" id="id5" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></span>
 <p>D.S. Silvia. <em>Data Analysis: A Bayesian Tutorial</em>. Oxford Science Publications, second edition, 2006.</p>
 </div>
 <div class="citation" id="id19" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></span>
 <p>Kevin P. Murphy. <em>Machine learning : a probabilistic perspective</em>. MIT Press, Cambridge, Mass. [u.a.], 2013. ISBN 9780262018029 0262018020.</p>
 </div>
 <div class="citation" id="id7" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></span>
 <p>Rudolf Emil Kalman. A new approach to linear filtering and prediction problems. <em>Journal of Basic Engineering</em>, 82(1):35–45, 1960.</p>
 </div>
 <div class="citation" id="id20" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>16<span class="fn-bracket">]</span></span>
 <p>E. Synclair. <em>Option Trading: Pricing and Volatility Strategies and Techniques</em>. Wiley, 1st edition, 2010.</p>
 </div>
 <div class="citation" id="id21" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>17<span class="fn-bracket">]</span></span>
 <p>A. Javaheri, D. Lautier, and A. E. Galli. Filtering in finance. <em>Wilmott Magazine</em>, 2003.</p>
 </div>
 <div class="citation" id="id22" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>18<span class="fn-bracket">]</span></span>
 <p>Ernest P. Chan. <em>Algorithmic Trading: Winning Strategies and Their Rationale</em>. Wiley Trading. John Wiley &amp; Sons, 2013.</p>
 </div>
 <div class="citation" id="id6" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>19<span class="fn-bracket">]</span></span>
 <p>A. Einstein. Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen. <em>Annalen der Physik</em>, 322(8):549–560, January 1905. <a class="reference external" href="https://doi.org/10.1002/andp.19053220806">doi:10.1002/andp.19053220806</a>.</p>
 </div>
 <div class="citation" id="id13" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>20<span class="fn-bracket">]</span></span>
 <p>Robert Merton. Option pricing when underlying stock returns are discontinuous. <em>Journal of Financial Economics</em>, 3(1-2):125–144, 1976.</p>
 </div>
 <div class="citation" id="id15" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>21<span class="fn-bracket">]</span></span>
 <p>Rama Cont and Peter Tankov. <em>Financial Modelling with Jump Processes</em>. Chapman &amp; Hall/CRC, 2004.</p>
 </div>
 <div class="citation" id="id14" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>22<span class="fn-bracket">]</span></span>
 <p>Paloma Marín, Sergio Ardanza-Trevijano, and Javier Sabio. Causal interventions in bond multi-dealer-to-client platforms. 2025. URL: <a class="reference external" href="https://arxiv.org/abs/2506.18147">https://arxiv.org/abs/2506.18147</a>, <a class="reference external" href="https://arxiv.org/abs/2506.18147">arXiv:2506.18147</a>.</p>
 </div>
 <div class="citation" id="id16" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>23<span class="fn-bracket">]</span></span>
 <p>Peter S. Fader, Bruce G. S. Hardie, and Jen Shang. Customer-base analysis in a discrete-time noncontractual setting. <em>Marketing Science</em>, 29(6):1086–1108, 2010.</p>
 </div>
 <div class="citation" id="id17" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>24<span class="fn-bracket">]</span></span>
 <p>Mike Grigsby. <em>Marketing Analytics: A Practical Guide to Improving Consumer Insights Using Data Techniques</em>. Kogan Page Ltd., GBR, 2nd edition, 2018. ISBN 0749482168.</p>
 </div>
 </div>
