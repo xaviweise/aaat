@@ -55,9 +55,23 @@ Cash instruments represent direct claims on an asset, income stream, or borrower
 
     * Certificates of deposit
 
-    * Repurchase agreements (repos and reverse repos)
+#### Repurchase Agreements (Repos)
 
-* Repo mechanics: collateral, haircut, repo rate, rehypothecation.
+Repurchase agreements, or repos, are among the most important instruments in modern money markets. A repo is a short-term secured loan: one party sells a security—typically a government bond—with the commitment to repurchase it at a later date and a slightly higher price. The difference between the sale and repurchase price reflects the repo rate, analogous to an interest rate on a collateralized borrowing. From the counterparty’s point of view, the transaction is a reverse repo, meaning it lends cash against the security as collateral.
+
+Repos are fundamental to liquidity management and collateral circulation. They enable financial institutions to fund positions efficiently, manage short-term liquidity, and facilitate price discovery in fixed income markets. Central banks also rely on repos as a primary instrument of monetary policy, using them to inject or withdraw liquidity and to influence short-term interest rates. The global repo market is vast: outstanding balances are estimated in the tens of trillions of dollars, with the U.S. segment alone exceeding $5 trillion in daily transactions {cite:p}`OFR2023repo`.
+
+Mechanically, two key parameters define the economics of a repo: the repo rate and the haircut—the percentage discount applied to the market value of the collateral. A higher haircut protects the lender against a fall in collateral value but increases the borrower’s funding cost. Haircuts vary with the perceived credit quality and liquidity of the collateral: Treasury securities typically carry haircuts close to zero, while corporate bonds or structured products may require 5–20%. In stressed conditions, haircuts often rise sharply, forcing deleveraging and amplifying market instability, as seen during the 2008 financial crisis.
+
+For example, consider a repo in which a bank borrows $98 million in cash for one week and pledges $100 million in Treasury bonds as collateral. The haircut is therefore 2%. If the agreed repo rate is 3% per annum, the repurchase price after seven days will be:
+
+$$98,000,000×(1+0.03×\frac{7}{360})≈98,057,166\$ $$
+
+At maturity, the bank repays $98.06 million and receives back its $100 million in bonds. For the cash lender, the repo rate represents the secured yield on the transaction, while for the borrower, it represents the funding cost of holding the securities.
+
+Repos are also integral to the market-making business. Suppose a dealer sells a bond to an asset manager such as Amundi, but does not hold the bond in inventory. The dealer can borrow the bond in the repo market, for instance from another asset manager like BlackRock, who lends it against cash collateral. The dealer delivers the bond to the client and must then either wait for another client to take the opposite position, renew the repo agreement upon maturity, or buy the bond in the interbank market to close the position. This continuous use of repos allows dealers to provide liquidity and make markets without holding large inventories of bonds.
+
+Repos also underpin short selling, as they provide the mechanism by which short sellers borrow securities to sell them in anticipation of price declines. However, short positions carry significant risk if prices rise. Public data on open short positions—such as the short‐interest reports published by FINRA, NYSE, and Nasdaq—allow regulators and market participants to monitor short activity and its potential influence on price pressure and funding conditions. For example, the GameStop short squeeze in early 2021 {cite:p}`SEC2021gamestop demonstrated how short sellers can face extreme pressure when prices move unexpectedly, forcing them to cover positions at large losses. Earlier examples, such as those portrayed in The Big Short {cite:p}`Lewis2010bigshort`, show that even when short sellers are correct in their analysis, they can face severe liquidity and timing risks.
 
 * Role in monetary policy implementation.
 
@@ -70,6 +84,25 @@ Cash instruments represent direct claims on an asset, income stream, or borrower
 * Issuers: sovereign, corporate, municipal, supranational.
 
 * Coupon types: fixed, floating, zero-coupon.
+
+#### Reference Rates 
+
+Modern financial markets rely on reference interest rates—benchmarks used to determine floating-rate payments in loans, bonds, and derivatives. These rates serve as the foundation for trillions of dollars of financial contracts, ensuring a consistent and transparent mechanism for pricing and settlement.
+
+The London Interbank Offered Rate (LIBOR) became the dominant global benchmark during the 1980s, but its roots date back to the late 1960s. The first recorded use of a LIBOR-like rate appeared in 1969, when a group of London-based banks agreed to price a syndicated loan to the Shah of Iran at a margin over the rate at which they could borrow short-term funds in the interbank market. This convention proved practical for cross-border lending, allowing banks to align loan pricing with their own funding costs. As syndicated lending expanded in the 1970s and derivatives markets emerged in the 1980s, LIBOR was formalized by the British Bankers’ Association (BBA) as a standard daily benchmark, calculated as the average rate at which major banks believed they could borrow from one another on an unsecured basis.
+
+However, the credibility of LIBOR was deeply undermined during the LIBOR manipulation scandal uncovered between 2011 and 2012. Investigations revealed that several panel banks had deliberately altered their submissions, either to profit from derivative positions or to disguise funding stress during the global financial crisis. The scandal exposed structural weaknesses: submissions were often based on expert judgment rather than actual transactions, making the benchmark vulnerable to manipulation. Regulatory responses included substantial fines, criminal prosecutions, and the establishment of new oversight frameworks for benchmark administration. Yet, the damage to trust was profound and accelerated global efforts to reform reference rate frameworks.
+
+In the aftermath, regulators and market participants collaborated to design risk-free rates (RFRs) rooted in observable market transactions. These new benchmarks aim to eliminate reliance on subjective quotes and to reflect nearly risk-free overnight funding costs. Examples include:
+* the Secured Overnight Financing Rate (SOFR) in the United States
+* the Euro Short-Term Rate (€STR) in the euro area
+* SONIA in the United Kingdom. 
+
+Unlike LIBOR, which was unsecured and term-based, these rates are overnight and transaction-based, typically derived from repo or wholesale funding markets. Over time, derivatives markets have developed conventions for compounded-in-arrears calculations to build synthetic term structures compatible with existing financial products.
+
+The transition from LIBOR to alternative rates has profound contractual implications. Because LIBOR was embedded in an enormous range of financial instruments—from corporate loans to floating-rate notes and interest-rate swaps—its cessation required robust fallback provisions. Industry bodies such as ISDA introduced standardized fallback methodologies and spread adjustments to account for the credit and term premia embedded in LIBOR. Market participants had to amend legacy contracts, update systems, and reprice instruments to maintain consistency and avoid legal uncertainty.
+
+Beyond the technical aspects, benchmark reform also carries broader implications for market integrity and stability. The transition underscores the importance of transparent, transaction-based benchmarks and the need for international coordination in benchmark governance. It also highlights the evolving relationship between private benchmark providers and public regulators, where oversight has become a critical element of maintaining confidence in financial reference data.
 
 * Yields and pricing: present value, yield-to-maturity, clean/dirty price.
 

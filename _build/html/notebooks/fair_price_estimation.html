@@ -455,7 +455,7 @@ document.write(`
 <span class="c1"># Use 22 days × 60 steps/day = 1320 timesteps (faster but pattern preserved).</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">make_obs_pattern</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">steps_per_day</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="p">[]</span>
@@ -569,7 +569,7 @@ document.write(`
 <span class="n">days</span> <span class="o">=</span> <span class="mi">22</span><span class="p">;</span> <span class="n">steps_per_day</span> <span class="o">=</span> <span class="mi">60</span>
 <span class="n">obs_pattern</span> <span class="o">=</span> <span class="n">make_obs_pattern</span><span class="p">(</span><span class="n">days</span><span class="p">,</span> <span class="n">steps_per_day</span><span class="p">);</span> <span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">obs_pattern</span><span class="p">)</span>
 <span class="c1"># Parameters</span>
-<span class="n">rho</span> <span class="o">=</span> <span class="mf">0.8</span>   <span class="c1"># correlation</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">0.9</span>   <span class="c1"># correlation</span>
 <span class="n">sigma1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">5e-4</span><span class="p">)</span>   <span class="c1"># std of instrument 1</span>
 <span class="n">sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">4e-4</span><span class="p">)</span>   <span class="c1"># std of instrument 2</span>
 <span class="c1"># Construct covariance matrix</span>
@@ -603,40 +603,69 @@ document.write(`
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RMSE on second half:&quot;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
 
 <span class="c1"># Plot window without showing trades when market closed</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">w0</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span> <span class="n">w1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">w0</span><span class="o">+</span><span class="mi">200</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">w0</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">w1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">w0</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T_half</span> <span class="o">+</span> <span class="n">w0</span><span class="p">,</span> <span class="n">T_half</span> <span class="o">+</span> <span class="n">w1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True mid 0&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Estimated mid 0&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="n">mask_plot</span> <span class="o">=</span> <span class="n">obs_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">mask_plot</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">0</span><span class="p">][</span><span class="n">mask_plot</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Trades 0 (open)&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Instrument 0&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True mid 1&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Estimated mid 1&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
-<span class="n">mask_plot1</span> <span class="o">=</span> <span class="n">obs_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">mask_plot1</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span><span class="mi">1</span><span class="p">][</span><span class="n">mask_plot1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Trades 1 (open)&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Instrument 1&#39;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Rerun filter on test to get covariance sequence for error bars</span>
+<span class="n">mids_est</span><span class="p">,</span> <span class="n">Ps_est</span> <span class="o">=</span> <span class="n">kalman_filter_timevarying</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">R_time_test</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">Q_est</span><span class="p">)</span>
+
+<span class="c1"># Extract ±1 std from diagonal of P (filter uncertainty)</span>
+<span class="n">stds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="k">for</span> <span class="n">P</span> <span class="ow">in</span> <span class="n">Ps_est</span><span class="p">]))</span>
+
+<span class="c1"># --- Instrument 1 ---</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True mid 1&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Estimated mid 1&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">,</span>
+    <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">stds</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">stds</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;±1 std (KF)&#39;</span>
+<span class="p">)</span>
+<span class="n">mask_plot</span> <span class="o">=</span> <span class="n">obs_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">mask_plot</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">0</span><span class="p">][</span><span class="n">mask_plot</span><span class="p">],</span>
+            <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Trades 1 (open)&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Instrument 1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="c1"># --- Instrument 2 ---</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True mid 2&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Estimated mid 2&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">,</span>
+    <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">stds</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">mids_est</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">stds</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;±1 std (KF)&#39;</span>
+<span class="p">)</span>
+<span class="n">mask_plot1</span> <span class="o">=</span> <span class="n">obs_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">mask_plot1</span><span class="p">],</span> <span class="n">y_test</span><span class="p">[</span><span class="n">w0</span><span class="p">:</span><span class="n">w1</span><span class="p">,</span> <span class="mi">1</span><span class="p">][</span><span class="n">mask_plot1</span><span class="p">],</span>
+            <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Trades 2 (open)&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Instrument 2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>T (timesteps): 1320
 True Q:
- [[0.0005     0.00035777]
- [0.00035777 0.0004    ]]
+ [[0.0005     0.00040249]
+ [0.00040249 0.0004    ]]
 Estimated Q:
- [[0.00026176 0.00011076]
- [0.00011076 0.00018142]]
+ [[0.00031037 0.0001628 ]
+ [0.0001628  0.00022782]]
 True R diag: [0.001 0.002]
-Estimated R diag: [0.00112302 0.00209805]
-Final approx loglik: -3064.4240865168413
-RMSE on second half: [0.04516242 0.04299883]
+Estimated R diag: [0.00117355 0.00253554]
+Final approx loglik: -3121.7461477103247
+RMSE on second half: [0.03244913 0.09017213]
 </pre></div>
 </div>
-<img alt="../_images/52ea875bd9f648b431aa2533554171b48a4b85b63f3be970c72815bef6bb2223.png" src="../_images/52ea875bd9f648b431aa2533554171b48a4b85b63f3be970c72815bef6bb2223.png" />
+<img alt="../_images/94748b3fdf8debf5cc16957b48dc2162be6dc2f8d2ffea6ebb566ff4636476f9.png" src="../_images/94748b3fdf8debf5cc16957b48dc2162be6dc2f8d2ffea6ebb566ff4636476f9.png" />
 </div>
 </div>
 </section>

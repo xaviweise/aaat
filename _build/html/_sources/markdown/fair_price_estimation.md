@@ -197,16 +197,14 @@ K_t =
 Let us analyze some particular cases:
 
 * If we set the correlation to zero, $\rho_t^{t-1} = 0$, the Kalman gain becomes: 
+
   $$\begin{aligned}
   K_t = 
-  \frac{1}{(\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2)}
+  \frac{1}{(\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2)(\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2)} \nonumber \\
   \begin{pmatrix} 
   (\sigma_{1,t}^{t-1})^2 \sigma_{\nu,2}^2 + (\sigma_{1,t}^{t-1})^2(\sigma_{2,t}^{t-1})^2 & 0 \\ 
   0 & (\sigma_{2,t}^{t-1})^2\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2 (\sigma_{2,t}^{t-1})^2
-  \end{pmatrix}  \nonumber 
-  \end{aligned}$$
-
-  $$\begin{aligned}
+  \end{pmatrix}  \\ \nonumber 
    = 
   \begin{pmatrix} 
   \frac{(\sigma_{1,t}^{t-1})^2}{\sigma_{\nu,1}^2 + (\sigma_{1,t}^{t-1})^2}  & 0 \\ 
@@ -242,7 +240,7 @@ Let us analyze some particular cases:
 
 Let’s evaluate this model in one of the typical scenarios for fair price discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair prices for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.
 
-For that, we first generate synthetic mid-prices using a correlated Brownian motion with $\rho = 0.8$, $\sigma_1 = 5e-4$ and $\sigma_2 = 4e-4$. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the mid, so correlation is driven exclusively by mid-price correlations. To generate the trades, we use standard deviations in the observation covariance of $0.032$ and $0.045$, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the mid-price to the real simulated values. The results can be seen in the following figure:
+For that, we first generate synthetic mid-prices using a correlated Brownian motion with $\rho = 0.9$, $\sigma_1 = 5e-4$ and $\sigma_2 = 4e-4$. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the mid, so correlation is driven exclusively by mid-price correlations. To generate the trades, we use standard deviations in the observation covariance of $0.032$ and $0.045$, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the mid-price to the real simulated values. The results can be seen in the following figure:
 
 ```{figure} figures/kalman_correlated.png
 :name: fig:KalmanCorrelated
@@ -250,26 +248,54 @@ For that, we first generate synthetic mid-prices using a correlated Brownian mot
 Estimation of the fair price of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the mid-prices are generated (blue lines) and trades (blue dots) are simulated when the market is open, which. happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the mid-prices estimated using the Kalman filter, which is trained with half of the data using EM and the run over the second half of the data. The figure focus on four days of test data. 
 ```
 
-As we see, the Kalman filter successfully exploits the correlation between instruments to update the mid-price of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument. 
+As we see, the Kalman filter successfully exploits the correlation between instruments to update the mid-price of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument. In general, the estimated mid-prices include the true mid-prices within one standard deviation, depicted as the shaded grey area in the figure. 
 
 ### Pricing sources and models
 
 When it comes to feeding the Kalman filter with information to improve the estimations of the fair price, there is a variety of sources that is typically used. Let us discuss the most typical sources, those based on Limit Order Book (LOB) data and those based on Request for Quote (RfQ) data. As we have seen, these sources can be used both if they belong to the instrument of interest or correlated ones. However, there are some considerations to take into account when using correlated instruments, which we discuss in the end. 
 
+One point that will become a common theme in this section is the information content of the observations. Intuitively, not every source of pricing is equally informative. For example, as we discussed above, we expect that trades with larger volumes are more informative than small trades. In the same way, a cancellation of a limit order deep in a Limit Order Book might not carry meaningful new pricing information. These effects need to be incorporated case by case into the pricing model. 
+
 #### LOB traded
+
+Limit Order Books are complex structures that contain extensive pricing information. Nevertheless, as discussed in Chapter {ref}`market_microstructure`, the primary references for price discovery are the best bid and ask quotes, the mid-price—defined as the average of these two—and the prices of executed trades. To improve robustness and reduce the impact of potential market manipulation, it is standard practice to compute volume-weighted averages of the first K levels on both the bid and ask sides, and to define a robust mid-price based on these averages. 
+
+##### Mid-price information
+As mentioned, a robust mid-price indicator in a LOB is:
+
+$$P_{mid}^{\text{LOB}} = \frac{1}{2} \left(\frac{\sum_{i=1}^K v_{b,i} P_{b,i}}{\sum_{i=1}^K v_{b,i}} + \frac{\sum_{i=1}^K v_{a,i} P_{a,i}}{\sum_{i=1}^K v_{a,i}}\right)$$
+
+where $v_{b/a, i}$ and $P_{b/a, i}$ are volumes and prices of bid and ask, respectively, and $K$ is the number of levels that are taken into account, for instance $K = 4$. 
+
+##### Trades
+
 
 #### RfQ traded
 
 ##### Composites
 
+same as lob
+
 ##### RfQs
+
+- done
+- cover price info
+- missed
 
 ##### Trades
 
+- volume dependency
+
 ##### HitMiss
+
+- missprices
 
 #### Correlated instruments
 
+correlation choices
+- sampling
+- fourier, citar chino
+- bayesian
 
 ## Derivatives pricing
 
@@ -307,23 +333,23 @@ $$ 1- \mathbb{E}[e^{-\gamma_d \left(P_t - e^{-r(T-t)}f(S_T) \right)}] = 0$$
 
 We can now obtain a general expression for the premium:
 
-$$ P_t^d =  \frac{1}{\gamma_d} \log \mathbb{E}[e^{\gamma_d \left(e^{-r(T-t)}f(S_T)\right)}] = \frac{1}{\gamma_d} \log \int dS_T g(S_T) e^{\gamma_d \left(e^{-r(T-t)}f(S_T)\right)} $$ 
+$$ P_t^d =  \frac{1}{\gamma_d} \log \mathbb{E}[e^{\gamma_d \left(e^{-r(T-t)}f(S_T)\right)}] = \frac{1}{\gamma_d} \log \int dS_T g(S_T) e^{\gamma_d \left(e^{-r(T-t)}f(S_T)\right)} $$
 
 For those dealers that have zero risk aversion, i.e. they are <em>risk neutral</em>, by taking the limit $\gamma_d \rightarrow 0$ we get:
 
-$$ P_{0,t} = \mathbb{E}[ e^{-r(T-t)}f(S_T)] = \int dS_T g(S_T) e^{-r(T-t)}f(S_T)$$ 
+$$ P_{0,t} = \mathbb{E}[ e^{-r(T-t)}f(S_T)] = \int dS_T g(S_T) e^{-r(T-t)}f(S_T)$$
 
 And for small, but positive risk aversion:
 
-$$ P_t^d = P_{0,t} +  \frac{\gamma_d}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_d^2)$$ 
+$$ P_t^d = P_{0,t} +  \frac{\gamma_d}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_d^2)$$
 
 We can derive the same expression for a investor we get:
 
-$$ P_t^i =  -\frac{1}{\gamma_i} \log \mathbb{E}[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)}] = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)} $$ 
+$$ P_t^i =  -\frac{1}{\gamma_i} \log \mathbb{E}[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)}] = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)} $$
 
 If the investor has a small but positive risk aversion:
 
-$$ P_t^i = P_{0,t} - \frac{\gamma_i}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_i^2)$$ 
+$$ P_t^i = P_{0,t} - \frac{\gamma_i}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_i^2)$$
 
 We see immediately that $P_t^i \leq P_d^i$, so there is only agreement if both investor and dealer are risk neutral, or at least one is risk prone, which is not a normal situation. Therefore, according to this theory of pricing, there would not be trading of derivatives! However, we know empirically that it is not the case. So what was wrong in our theory? We will see that the dealer is not simply taking the opposite bet than the investor, and therefore we need to modify this analysis. Before that, though, let us see particular examples of the computation of the premium for investors.
 
