@@ -3,7 +3,7 @@
 # Release Notes
 
 ## 11.25
-Started chapter introducing the generalities of Algorithmic Trading. Worked on financial instruments chapter and extended the discussion of fair value estimation using Kalman filters.
+Started chapter introducing the generalities of Algorithmic Trading. Continued working on financial instruments chapter and extended the discussion of fair value estimation using Kalman filters to add a discussion on specific pricing sources.
 
 ## 10.25
 Completed the section Kalman filter for fair estimation, including an example with simulated data. Working on the introduction to the mechanics of financial instruments.
