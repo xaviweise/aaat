@@ -1,0 +1,73 @@
+version: 1
+project:
+  title: Advanced Analytics and Algorithmic Trading
+  authors:
+    - name: Javier Sabio González
+  github: xaviweise/aaat
+  bibliography:
+    - references.bib
+  exports:
+    - format: pdf
+      template: plain_latex_book
+      output: exports/aaat.pdf
+  toc:
+    - file: welcome.md
+    - title: Introduction
+      children:
+        - file: markdown/releases.md
+        - file: markdown/dedication.md
+        - file: markdown/preface.md
+        - file: markdown/symbollist.md
+    - title: Financial Markets Fundamentals
+      children:
+        - file: markdown/intro_financial_markets.md
+        - file: markdown/intro_financial_instruments.md
+        - file: markdown/market_microstructure.md
+        - file: markdown/algorithmic_trading.md
+    - title: Financial Modelling Fundamentals
+      children:
+        - file: markdown/intro_bayesian.md
+        - file: markdown/intro_causal.md
+        - file: markdown/stochastic_calculus.md
+        - file: markdown/stochastic_optimal_control.md
+        - file: markdown/data_driven_methods.md
+        - file: markdown/generative_ai.md
+    - title: Execution Algorithms
+      children:
+        - file: markdown/execution_fundamentals.md
+        - file: markdown/lob_models.md
+        - file: markdown/almgren_chriss.md
+        - file: markdown/execution_tactics.md
+    - title: Market Making Algorithms
+      children:
+        - file: markdown/market_making_fundamentals.md
+        - file: markdown/fair_price_estimation.md
+        - file: markdown/liquidity_modelling.md
+        - file: markdown/rfq_models.md
+        - file: markdown/avellaneda_stoikov.md
+        - file: markdown/enriching_avellaneda.md
+        - file: markdown/hedging.md
+        - file: markdown/market_making_rl.md
+    - title: Investment Algorithms
+      children:
+        - file: markdown/quant_investment_fundamentals.md
+        - file: markdown/mean_reversion_strategies.md
+        - file: markdown/trend_following.md
+        - file: markdown/arbitrage.md
+        - file: markdown/factor_investing.md
+        - file: markdown/optimal_portfolios.md
+    - title: Glossary and References
+      children:
+        - file: markdown/glossary.md
+        - file: markdown/references.md
+    - title: Notebooks
+      children:
+        - file: notebooks/stochastic_calculus.ipynb
+        - file: notebooks/bayesian_theory.ipynb
+        - file: notebooks/market_microstructure.ipynb
+        - file: notebooks/rfq_models.ipynb
+        - file: notebooks/fair_price_estimation.ipynb
+site:
+  options:
+    folders: true
+  template: book-theme
