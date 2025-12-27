@@ -1,14 +1,16 @@
-# Fair price estimation
+# Fair value estimation
 
 ## Introduction
+
+In this chapter we introduce techniques to estimate the fair value of a financial instrument exploiting the pricing information available in financial markets. The fair value is a theoretical concept that tries to remove from prices observed in the market all the idiosyncratic components like transaction costs, dealer spreads and skews, liquidity premiums, etc. The remaining price or fair value would be the price at which market participants would theoretically trade in perfect markets, where there are not trading frictions. When instruments trade in liquid markets, we can use statistical techniques like Kalman filters to remove these components, which are modeled as noise on top of the theoretical fair value. When the instruments are not frequently, those estimations might have large uncertainties, and economical models, if available, are used in combination with the available pricing information to estimate the fair value. A particular relevant case are models for derivatives pricing based on non-arbitrage conditions. These models, based on the award-winning Black-Scholes-Merton theory, exploit information from the underlyings in the derivatives in combination with non-arbitrage constraints to estimate the fair value. 
 
 ## Pricing of flow products
 
 For flow products that are relatively liquid, we can aim at extracting all the pricing information from price indications and trades in the market, without having to resort to economic theories of fair value. In this setup, we consider their price the one that market participants are willing to pay for. 
 
-The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair price, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair price is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide of liquidity is thin in the first levels, such estimation is not necessary very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability. 
+The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair value, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair value is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide of liquidity is thin in the first levels, such estimation is not necessary very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability. 
 
-These makes all these price observations noisy estimates of the fair price, so if we want to estimate a fair price out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what, under certain model assumptions, a Kalman filter does. 
+These makes all these price observations noisy estimates of the fair value, so if we want to estimate a fair value out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what, under certain model assumptions, a Kalman filter does. 
 
 ### The Kalman Filter model for pricing
 
@@ -117,7 +119,7 @@ Since our model uses a drift-less random walk dynamics for the evolution of the 
 
 Now we use the update step to incorporate the information from a trade happening at $t + \Delta t$:
 
-$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t} + K_t (p_t - \bar{m}_{t}^{t+\Delta t}) $$
+$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t} + K_t (p_{t +\Delta t}  - \bar{m}_{t}^{t+\Delta t}) $$
 
 $$(\sigma_{m,t+\Delta t}^{t+\Delta t})^2 = \frac{(\sigma_{m,t+\Delta t}^t)^2  \sigma_\eta^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma_\eta^2}$$
 
@@ -127,7 +129,7 @@ $$K_t = \frac{(\sigma_{m,t+\Delta t}^t)^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma
 
 The updated mean is an interpolation between the predicted mean and the trade observation, weighted by the Kalman gain
 
-* If the observation noise is much smaller than the uncertainty in the mean in the prediction step, namely $\sigma_\eta \ll \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 1$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = p_t$, i.e. since our confidence on the information from the trade is much higher than our best estimation of the mean, we essentially update the mean with the trade price. 
+* If the observation noise is much smaller than the uncertainty in the mean in the prediction step, namely $\sigma_\eta \ll \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 1$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = p_{t+\Delta t}$, i.e. since our confidence on the information from the trade is much higher than our best estimation of the mean, we essentially update the mean with the trade price. 
 * On the contrary, if $\sigma_\eta \gg \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 0$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t}$. In this case, our confidence on the information provided by the trade is very low, so essentially we ignore the trade information and use the predicted mean. 
 * In between those two limiting cases, the updated mean combines the information from the prediction using the internal dynamics and our last update, and the trade information. 
 
@@ -145,6 +147,29 @@ In some applications of the local level model to pricing we might also be intere
 
 * Estimation of parameters when using Expectation Maximization, as discussed in in [Bayesian Modelling](intro_bayesian.md)
 * Calibration of pricing models, for instance as we will discuss in the chapter on [RfQ Modelling](rfq_models.md), when we seek to estimate the hit rate probability, or the probability that a client trades an RfQ from a dealer given the quoted price. In this case, we are interested in having the best estimation possible of the mid-price to isolate the effect of the spread, which is the one that puts dealers in competition. In the same chapter we will also discuss models to evaluate the toxicity of clients' flows, i.e. when clients seem to have more information than the dealer when trading, so the dealer seems to be later in the wrong side of the market. Estimating such models typically relies on analyzing how the mid-price of the instrument moves before and after a client intends to trade. 
+
+#### Multiple observations of the same instrument
+
+In many real pricing situations, we might have different sources that reveal information about the fair value of an instrument, for example trades in different platforms, information from composites, or pricing information derived indirectly from trading indicators like the hit&miss. We will explore later those sources in detail. If they happen asynchronously, we can just use the simple pricing model introduced in the previous section, adjusting the observation error depending on the pricing source. 
+
+If they happen synchronously, though, we need to expand the Kalman filter to cope with simultaneous observations. This requires to change the observation model to a system of equations:
+
+$$p_{t,i} = m_t + \nu_{t,i}, \vec{\nu}_{t,i} \sim N(0, \sigma_{\nu, i}^2)$$
+
+We can compute the Kalman gain in this case, which is a vector matrix: 
+
+$$K_{t,i} = \frac{(\sigma_{m,t+\Delta t}^{\,t})^2/\sigma_{\nu,i}^2}{1 + (\sigma_{m,t+\Delta t}^{\,t})^2/\Lambda}$$
+
+where: 
+
+$$\Lambda = \sum_{i=1}^n \frac{1}{\sigma_{\nu,i}^2}$$
+
+is the total observation *precision*. Notice that, as a sanity check, in the case of a single observation we recover the Kalman gain derived in the previous section. For multiple observations, the update equation then reads:
+
+$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t} + \sum_{i=1}^n K_{t,i} (p_{t + \Delta t ,i} - \bar{m}_{t}^{t+\Delta t}) $$
+
+The relative weight of influence of each observation depends on the fraction of the total variance that the observation variance represents, with more noisy observations having a smaller effect in the update. 
+
 
 #### Multiple correlated instruments
 
@@ -174,7 +199,7 @@ $$\Sigma_{t|t-1} = \Sigma_{t-1|t-1} + \Sigma_\epsilon \Delta t$$
 
 which are relatively simple, as expected. The update step equations are more interesting, since they include the effect of observations, and critically the impact of one instrument's trades into the mid-price or the other:
 
-$$\vec{m}_{t|t} = \vec{m}_{t|t-1} + K_t ( \vec{P}_t-\vec{m}_{t|t-1})$$
+$$\vec{m}_{t|t} = \vec{m}_{t|t-1} + K_t ( \vec{P}_{t+\Delta t}-\vec{m}_{t|t-1})$$
 
 $$\Sigma_{t|t} = (1-K_t) \Sigma_{t|t-1} $$
 
@@ -227,45 +252,138 @@ Let us analyze some particular cases:
 
   The update equations for each instruments mid-price read:
 
-  $$m_{1,t|t} = m_{1,t|t-1} + \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t})$$
+  $$m_{1,t|t} = m_{1,t|t-1} + \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t + \Delta t})$$
 
 
-  $$m_{2,t|t} = m_{2,t|t-1} + \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t}) $$
+  $$m_{2,t|t} = m_{2,t|t-1} + \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t + \Delta t}) $$
 
   Notice that these equations are equivalent to the ones that we would derive if we use an observation matrix $H = (0, 1)$ and compute the update step for arbitrary values of the parameters. Going into the results, the second equation is the same update equation we had for a single instrument for which we have observed a trade. The first equation is more interesting, since it isolates the effect that an observation of a trade in an instrument has in our mid-price estimation of a correlated instrument. As expected, the influence is proportional to the estimated correlation between the instruments, $\rho_t^{t-1}$. The effect of the influence depends on the relative sizes of the variances in play. It helps to rewrite the equation as:
 
-  $$m_{1,t|t} = m_{1,t|t-1} + \beta_{12,t}^{t-1} \frac{1}{1+ \frac{\sigma_{\nu,2}^2}{ (\sigma_{2,t}^{t-1})^2}} (m_{2,t|t-1} - P_{2,t})$$
+  $$m_{1,t|t} = m_{1,t|t-1} + \beta_{12,t}^{t-1} \frac{1}{1+ \frac{\sigma_{\nu,2}^2}{ (\sigma_{2,t}^{t-1})^2}} (m_{2,t|t-1} - P_{2,t + \Delta t})$$
 
   where $\beta_{12,t}^{t-1} \equiv \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}}{\sigma_{2,t}^{t-1}}$ is the linear regression coefficient between $m_{1,t}$ and $m_{2,t}$. It provides an upper bound on the Kalman gain between the two instruments, which happens when the observation in the second instrument has no error $\sigma_{\nu, 2} = 0$. This makes sense, since in the absence of noise in the observation of the second instrument, the update equation becomes the best linear prediction of $m_{1,t}$ using $m_{2,t}$.
 
-Let’s evaluate this model in one of the typical scenarios for fair price discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair prices for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.
+Let’s evaluate this model in one of the typical scenarios for fair value discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair values for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.
 
 For that, we first generate synthetic mid-prices using a correlated Brownian motion with $\rho = 0.9$, $\sigma_1 = 5e-4$ and $\sigma_2 = 4e-4$. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the mid, so correlation is driven exclusively by mid-price correlations. To generate the trades, we use standard deviations in the observation covariance of $0.032$ and $0.045$, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the mid-price to the real simulated values. The results can be seen in the following figure:
 
 ```{figure} figures/kalman_correlated.png
 :name: fig:KalmanCorrelated
 :width: 8in
-Estimation of the fair price of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the mid-prices are generated (blue lines) and trades (blue dots) are simulated when the market is open, which. happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the mid-prices estimated using the Kalman filter, which is trained with half of the data using EM and the run over the second half of the data. The figure focus on four days of test data. 
+Estimation of the fair value of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the mid-prices are generated (blue lines) and trades (blue dots) are simulated when the market is open, which. happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the mid-prices estimated using the Kalman filter, which is trained with half of the data using EM and the run over the second half of the data. The figure focus on four days of test data. 
 ```
 
 As we see, the Kalman filter successfully exploits the correlation between instruments to update the mid-price of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument. In general, the estimated mid-prices include the true mid-prices within one standard deviation, depicted as the shaded grey area in the figure. 
 
 ### Pricing sources and models
 
-When it comes to feeding the Kalman filter with information to improve the estimations of the fair price, there is a variety of sources that is typically used. Let us discuss the most typical sources, those based on Limit Order Book (LOB) data and those based on Request for Quote (RfQ) data. As we have seen, these sources can be used both if they belong to the instrument of interest or correlated ones. However, there are some considerations to take into account when using correlated instruments, which we discuss in the end. 
+When it comes to feeding the Kalman filter with information to improve the estimations of the fair value, there is a variety of sources that is typically used. Let us discuss the most typical sources, those based on Limit Order Book (LOB) data and those based on Request for Quote (RfQ) data. As we have seen, these sources can be used both if they belong to the instrument of interest or correlated ones. However, there are some considerations to take into account when using correlated instruments, which we discuss in the end. 
 
 One point that will become a common theme in this section is the information content of the observations. Intuitively, not every source of pricing is equally informative. For example, as we discussed above, we expect that trades with larger volumes are more informative than small trades. In the same way, a cancellation of a limit order deep in a Limit Order Book might not carry meaningful new pricing information. These effects need to be incorporated case by case into the pricing model. 
 
 #### LOB traded
 
-Limit Order Books are complex structures that contain extensive pricing information. Nevertheless, as discussed in Chapter {ref}`market_microstructure`, the primary references for price discovery are the best bid and ask quotes, the mid-price—defined as the average of these two—and the prices of executed trades. To improve robustness and reduce the impact of potential market manipulation, it is standard practice to compute volume-weighted averages of the first K levels on both the bid and ask sides, and to define a robust mid-price based on these averages. 
+Limit Order Books (LOBs) are complex structures that contain extensive pricing information. Nevertheless, as discussed in Chapter {ref}`market_microstructure`, the primary references for price discovery are the best bid and ask quotes, the mid-price—defined as the average of these two—and the prices of executed trades. To improve robustness and reduce the impact of potential market manipulation, it is standard practice to compute volume-weighted averages of the first K levels on both the bid and ask sides, and to define a robust mid-price based on these averages. 
 
 ##### Mid-price information
-As mentioned, a robust mid-price indicator in a LOB is:
+As mentioned above, a robust mid-price indicator in a LOB is:
 
-$$P_{mid}^{\text{LOB}} = \frac{1}{2} \left(\frac{\sum_{i=1}^K v_{b,i} P_{b,i}}{\sum_{i=1}^K v_{b,i}} + \frac{\sum_{i=1}^K v_{a,i} P_{a,i}}{\sum_{i=1}^K v_{a,i}}\right)$$
+$$P_{\text{mid},t}^{\text{LOB}} = \frac{1}{2} \left(\frac{\sum_{i=1}^K v_{b,i} P_{b,i}}{\sum_{i=1}^K v_{b,i}} + \frac{\sum_{i=1}^K v_{a,i} P_{a,i}}{\sum_{i=1}^K v_{a,i}}\right)$$
 
-where $v_{b/a, i}$ and $P_{b/a, i}$ are volumes and prices of bid and ask, respectively, and $K$ is the number of levels that are taken into account, for instance $K = 4$. 
+where $v_{b/a, i}$ and $P_{b/a, i}$ are volumes and prices of bid and ask, respectively, and $K$ is the number of levels that are taken into account, for instance $K = 4$. We have omitted the time subscript in volumes and prices but they are also time dependent. Similarly, we can compute a robust bid-ask spread in the form:
+
+$$S_t^{\text{LOB}} =  \frac{\sum_{i=1}^K v_{a,i} P_{a,i}}{\sum_{i=1}^K v_{a,i}} - \frac{\sum_{i=1}^K v_{b,i} P_{b,i}}{\sum_{i=1}^K v_{b,i}}$$
+
+which has to be positive since any bid and ask limit orders with the same price are automatically matched in the LOB. With this information, we can compute a simple model of fair value based on LOB information:
+
+$$m_t^{\text{LOB}} \sim N(P_{\text{mid},t}^\text{LOB}, (S_t^{\text{LOB}})^2 ) $$
+
+The choice of a Gaussian distribution is for simplicity, since it captures well our subjective view of the pricing information that the LOB contains, i.e. as we saw in chapter {ref}`intro_bayesian`, since we only identify the mean and variance as the constraints, the maximum entropy distribution associated with these constraints in the Gaussian distribution --admittedly, there is an extra constraint in the form of positivity of the fair price, but for prices far from the zero boundary we can safely omit this constraint.  A more grounded criticism of this model could be that the Gaussian distribution allows the fair value to be beyond the best bid and ask prices, and those prices are tradeable: if the market consensus of fair value was beyond those prices, market participants would be willing to trade at those prices until they the fair value lies between the bid and ask spread. However, since liquidity might be thin at the first levels, and therefore those prices might not be available for bulk transactions, we consider a soft constraint as more appropriate, even when we use the robust bid-ask spread instead of the best bid and ask spread.
+
+Of course, in many situations this pricing source might not be sufficient for actual applications, since in illiquid markets the bid-ask spreads are large and therefore the pricing source has a large uncertainty. In those situations is precisely where the Kalman filter model plays a part. 
+
+Using directly $m_t^{\text{LOB}}$ as an observation in the Kalman filter is problematic, since the feed is available in streaming and therefore, even if we limit the updates to the Kalman filter to the moments in which the LOB gets updates (i.e. arriving of new orders, cancellations, modifications), the pricing observations might jam the Kalman filter estimation, making the model to consider that $m_t^{\text{LOB}}$ is a perfect source of pricing information. To see this, let us see the effect of a second observation following an initial one. Recall that the first predict plus update gave: 
+
+$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t} + K_t (p_{t+\Delta t} - \bar{m}_{t}^{t}) $$
+
+$$(\sigma_{m,t+\Delta t}^{t+\Delta t})^2 = \frac{((\sigma_{m,t}^t)^2 + \sigma_\epsilon^2 \Delta t)  \sigma_\eta^2}{(\sigma_{m,t}^t)^2 + \sigma_\epsilon^2 \Delta t + \sigma_\eta^2}$$
+
+with:
+
+$$K_t = \frac{(\sigma_{m,t}^t)^2 + \sigma_\epsilon^2 \Delta t }{(\sigma_{m,t}^t)^2 + \sigma_\epsilon^2 \Delta t + \sigma_\eta^2} $$
+
+If we approach the limit $\Delta t \rightarrow 0$ this simplifies to:
+
+$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t} +  K_t (p_{t+\Delta t} - \bar{m}_{t}^{t}) $$
+
+$$(\sigma_{m,t+\Delta t}^{t+\Delta t})^2 = \frac{(\sigma_{m,t}^t)^2  \sigma_\eta^2}{(\sigma_{m,t}^t)^2  + \sigma_\eta^2}$$
+
+$$K_t = \frac{(\sigma_{m,t}^t)^2  }{(\sigma_{m,t}^t)^2 + \sigma_\eta^2} $$
+
+Let us apply a second predict plus update steps on top of this, keeping the $\Delta t \rightarrow 0$ limit:
+
+$$\bar{m}_{t+2\Delta t}^{t+2\Delta t} = \bar{m}_{t}^{t} + K_t (p_{t+\Delta t} - \bar{m}_{t}^{t}) + K_{t+\Delta t} (p_{t+2\Delta t} - \bar{m}_{t+\Delta t}^{t +\Delta t}) \nonumber \\ 
+=  \bar{m}_{t}^{t} (1- K_t (1-K_{t+\Delta t}) - K_{t+\Delta t}) + K_t(1-K_{t+\Delta t}) p_{t+\Delta t}+ K_{t+\Delta t} p_{t+2\Delta t}$$
+
+$$(\sigma_{m,t+2\Delta t}^{t+2\Delta t})^2 = \frac{(\sigma_{m,t}^{t})^2   \sigma_\eta^2}{2 (\sigma_{m,t}^{t})^2 + \sigma_\eta^2}$$
+
+Since:
+
+$$K_{t+\Delta t} = \frac{(\sigma_{m,t+\Delta t}^{t+\Delta t})^2}{(\sigma_{m,t+\Delta t}^{t+\Delta t})^2  + \sigma_\eta^2} = 
+ \frac{(\sigma_{m,t}^t)^2 }{2 (\sigma_{m,t}^t)^2  + \sigma_\eta^2} $$
+
+$$1-K_{t+\Delta t}  = 
+ \frac{(\sigma_{m,t}^t)^2 +\sigma_\eta^2}{2 (\sigma_{m,t}^t)^2  + \sigma_\eta^2} $$
+ 
+$$K_t (1-K_{t+\Delta t}) =  \frac{(\sigma_{m,t}^t)^2  }{2(\sigma_{m,t}^t)^2 + \sigma_\eta^2} = K_{t+\Delta t}$$
+
+then:
+
+$$\bar{m}_{t+2\Delta t}^{t+2\Delta t} = (1-2K_{t+\Delta t}) \bar{m}_{t}^{t}  + K_{t+\Delta t}(p_{t+\Delta t} + p_{t+2\Delta t})  \nonumber \\ =   \frac{\sigma_\eta^2}{2 (\sigma_{m,t}^t)^2  + \sigma_\eta^2}  \bar{m}_{t}^{t}  + 
+ \frac{(\sigma_{m,t}^t)^2 }{2 (\sigma_{m,t}^t)^2  + \sigma_\eta^2} (p_{t+\Delta t} + p_{t+2\Delta t}) $$
+
+If we continue applying $n$ predict plus update steps in the $\Delta \rightarrow 0$ limit, by using the induction principle we arrive at the following result:
+
+$$\bar{m}_{t+n\Delta t}^{t+n\Delta t} = \frac{\sigma_\eta^2}{n (\sigma_{m,t}^t)^2  + \sigma_\eta^2}  \bar{m}_{t}^{t}  + 
+ \frac{(\sigma_{m,t}^t)^2 }{n (\sigma_{m,t}^t)^2  + \sigma_\eta^2} \sum_{i=1}^n p_{t+n \Delta t} $$
+
+$$(\sigma_{m,t+n\Delta t}^{t+n\Delta t})^2 = \frac{(\sigma_{m,t}^{t})^2   \sigma_\eta^2}{n (\sigma_{m,t}^{t})^2 + \sigma_\eta^2}$$
+
+If we now take the limit $n\rightarrow \infty$ we converge to:
+
+$$\bar{m}_{t+n\Delta t}^{t+n\Delta t} \rightarrow 
+ \frac{1}{n} \sum_{i=1}^n p_{t+n \Delta t} $$
+
+$$(\sigma_{m,t+n\Delta t}^{t+n\Delta t})^2 \rightarrow 0$$
+
+Therefore, in the case of LOB updates that don't significantly provide new pricing information but happen with a high frequency, as in the case in LOBs for liquid instruments, the Kalman filter will converge to the mid-price with zero uncertainty. 
+
+A simple way to fix this issue is to estimate the Kalman filter with other pricing information (trades, RfQs, see next section) and combine it as two separate fair value estimations at any time. The best linear combination of two estimators is the one that minimizes the variance:
+
+$$\hat{m}_t = \alpha m_t^{\text{LOB}} + (1-\alpha) m_t^{\text{kalman}}$$
+
+$$\text{Var}(\hat{m}_t) =  \alpha^2 (S_t^{\text{LOB}})^2 + (1-\alpha)^2 (\sigma_{m,t}^t)^2$$
+
+which is achieved for: 
+
+$$ \hat{\alpha} = \frac{(\sigma_{m,t}^t)^2}{(S_t^{\text{LOB}})^2 + (\sigma_{m,t}^t)^2}$$
+
+Notice that we have considered them independent estimators, otherwise there would be an extra term accounting for the correlation. Therefore, the best linear estimator is:
+
+$$\hat{m}_t = \frac{(\sigma_{m,t}^t)^2}{(S_t^{\text{LOB}})^2 + (\sigma_{m,t}^t)^2} m_t^{\text{LOB}} + \frac{(S_t^{\text{LOB}})^2 }{(S_t^{\text{LOB}})^2 + (\sigma_{m,t}^t)^2} m_t^{\text{kalman}}$$
+
+This makes intuitive sense: the smaller the relative error of one estimator compared to the other, the more weight the combined estimate assigns to it. Importantly, the resulting variance is lower than that of either individual estimator.
+
+$$\text{Var}(\hat{m}_t) =  \frac{(S_t^{\text{LOB}})^2(\sigma_{m,t}^t)^2}{(S_t^{\text{LOB}})^2 + (\sigma_{m,t}^t)^2}$$
+
+To check it, simply take the ratio of the final variance with any of the variances of the independent predictors, for example: 
+
+$$\frac{\text{Var}(\hat{m}_t)}{(S_t^{\text{LOB}})^2} =  \frac{(\sigma_{m,t}^t)^2}{(S_t^{\text{LOB}})^2 + (\sigma_{m,t}^t)^2} \leq 1$$
+
+the equality happening when $(S_t^{\text{LOB}})^2 = 0$ i.e. it was already a perfect predictor and therefore there is no way to improve the prediction. 
+
+Notice that, since the combined fair value estimator is reconstructed independently at each point in time—without relying on past estimates—it is not affected by the high-frequency sampling issue observed when using the LOB mid-price as an observation.
+
 
 ##### Trades
 
@@ -299,7 +417,7 @@ correlation choices
 
 ## Derivatives pricing
 
-Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name "derivative". It is therefore logic to assume that their pricing should be somehow restricted by that of the underlying. Of course if a derivative trades in relatively liquid markets, to compute its fair price we can simply resort to the techniques discussed above, unless we are trying to identify arbitrage opportunities so we aim at challenging those market prices. Of course, precisely because of the existence of investors that seek to capitalize on those opportunities, one could expect that in those cases markets tend to reflect, at least on average, prices that are consistent with such "relative pricing models". In the absence of liquidity, though, such models become critical to be able to quote prices of derivatives to clients. 
+Derivatives are financial instruments whose value depends on the price of an underlying instrument, hence the name "derivative". It is therefore logic to assume that their pricing should be somehow restricted by that of the underlying. Of course if a derivative trades in relatively liquid markets, to compute its fair value we can simply resort to the techniques discussed above, unless we are trying to identify arbitrage opportunities so we aim at challenging those market prices. Of course, precisely because of the existence of investors that seek to capitalize on those opportunities, one could expect that in those cases markets tend to reflect, at least on average, prices that are consistent with such "relative pricing models". In the absence of liquidity, though, such models become critical to be able to quote prices of derivatives to clients. 
 
 A comprehensive description of techniques for derivatives pricing is out of the scope of this book. Let us concentrate on some of the most popular and liquid contracts, which are more relevant for algorithmic trading
 

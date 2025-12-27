@@ -198,7 +198,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Market Making Algorithms</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="market_making_fundamentals.html">15. Market Making fundamentals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">16. Fair price estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fair_price_estimation.html">16. Fair value estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="liquidity_modelling.html">17. Liquidity modelling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rfq_models.html">18. Modelling RfQs in Dealer to Client Markets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="avellaneda_stoikov.html">19. The Avellaneda and Stoikov Framework</a></li>
@@ -425,8 +425,14 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">2.1. Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cash-instruments">2.2. Cash Instruments</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#equities">2.2.1. Equities</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#money-market-instruments">2.2.2. Money Market Instruments</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income">2.2.3. Fixed Income</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#money-market-instruments">2.2.2. Money Market Instruments</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#repurchase-agreements-repos">2.2.2.1. Repurchase Agreements (Repos)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income">2.2.3. Fixed Income</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-rates">2.2.3.1. Reference Rates</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foreign-exchange-fx-instruments">2.2.4. Foreign Exchange (FX) Instruments</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-spot-transactions">2.2.4.1. FX Spot Transactions</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-forward-contracts">2.2.4.2. FX Forward Contracts</a></li>
@@ -508,13 +514,25 @@ document.write(`
 <li><p>Treasury bills</p></li>
 <li><p>Commercial paper</p></li>
 <li><p>Certificates of deposit</p></li>
-<li><p>Repurchase agreements (repos and reverse repos)</p></li>
 </ul>
 </li>
-<li><p>Repo mechanics: collateral, haircut, repo rate, rehypothecation.</p></li>
+</ul>
+<section id="repurchase-agreements-repos">
+<h4><span class="section-number">2.2.2.1. </span>Repurchase Agreements (Repos)<a class="headerlink" href="#repurchase-agreements-repos" title="Permalink to this heading">#</a></h4>
+<p>Repurchase agreements, or repos, are among the most important instruments in modern money markets. A repo is a short-term secured loan: one party sells a security—typically a government bond—with the commitment to repurchase it at a later date and a slightly higher price. The difference between the sale and repurchase price reflects the repo rate, analogous to an interest rate on a collateralized borrowing. From the counterparty’s point of view, the transaction is a reverse repo, meaning it lends cash against the security as collateral.</p>
+<p>Repos are fundamental to liquidity management and collateral circulation. They enable financial institutions to fund positions efficiently, manage short-term liquidity, and facilitate price discovery in fixed income markets. Central banks also rely on repos as a primary instrument of monetary policy, using them to inject or withdraw liquidity and to influence short-term interest rates. The global repo market is vast: outstanding balances are estimated in the tens of trillions of dollars, with the U.S. segment alone exceeding $5 trillion in daily transactions <span id="id1">[<a class="reference internal" href="references.html#id34" title="Office of Financial Research. Repo and securities lending data collection. Technical Report, U.S. Department of the Treasury, 2023. Comprehensive data on U.S. repo market segments indicating daily balances exceeding \$5 trillion. URL: https://www.financialresearch.gov/data/repo-and-securities-lending/.">1</a>]</span>.</p>
+<p>Mechanically, two key parameters define the economics of a repo: the repo rate and the haircut—the percentage discount applied to the market value of the collateral. A higher haircut protects the lender against a fall in collateral value but increases the borrower’s funding cost. Haircuts vary with the perceived credit quality and liquidity of the collateral: Treasury securities typically carry haircuts close to zero, while corporate bonds or structured products may require 5–20%. In stressed conditions, haircuts often rise sharply, forcing deleveraging and amplifying market instability, as seen during the 2008 financial crisis.</p>
+<p>For example, consider a repo in which a bank borrows <span class="math notranslate nohighlight">\(98 million in cash for one week and pledges \)</span>100 million in Treasury bonds as collateral. The haircut is therefore 2%. If the agreed repo rate is 3% per annum, the repurchase price after seven days will be:</p>
+<div class="math notranslate nohighlight">
+\[98,000,000×(1+0.03×\frac{7}{360})≈98,057,166\$ \]</div>
+<p>At maturity, the bank repays <span class="math notranslate nohighlight">\(98.06 million and receives back its \)</span>100 million in bonds. For the cash lender, the repo rate represents the secured yield on the transaction, while for the borrower, it represents the funding cost of holding the securities.</p>
+<p>Repos are also integral to the market-making business. Suppose a dealer sells a bond to an asset manager such as Amundi, but does not hold the bond in inventory. The dealer can borrow the bond in the repo market, for instance from another asset manager like BlackRock, who lends it against cash collateral. The dealer delivers the bond to the client and must then either wait for another client to take the opposite position, renew the repo agreement upon maturity, or buy the bond in the interbank market to close the position. This continuous use of repos allows dealers to provide liquidity and make markets without holding large inventories of bonds.</p>
+<p>Repos also underpin short selling, as they provide the mechanism by which short sellers borrow securities to sell them in anticipation of price declines. However, short positions carry significant risk if prices rise. Public data on open short positions—such as the short‐interest reports published by FINRA, NYSE, and Nasdaq—allow regulators and market participants to monitor short activity and its potential influence on price pressure and funding conditions. For example, the GameStop short squeeze in early 2021 <span id="id2">[<a class="reference internal" href="references.html#id33" title="U.S. Securities and Exchange Commission. Staff report on equity and options market structure conditions in early 2021. October 2021. URL: https://www.sec.gov/news/studies/2021/eq-market-structure-conditions-early-2021.pdf.">2</a>]</span> demonstrated how short sellers can face extreme pressure when prices move unexpectedly, forcing them to cover positions at large losses. Earlier examples, such as those portrayed in The Big Short <span id="id3">[<a class="reference internal" href="references.html#id32" title="Michael Lewis. The Big Short: Inside the Doomsday Machine. W. W. Norton &amp; Company, New York, 2010.">3</a>]</span>, show that even when short sellers are correct in their analysis, they can face severe liquidity and timing risks.</p>
+<ul class="simple">
 <li><p>Role in monetary policy implementation.</p></li>
 <li><p>Yield conventions (discount rate, money market yield).</p></li>
 </ul>
+</section>
 </section>
 <section id="fixed-income">
 <h3><span class="section-number">2.2.3. </span>Fixed Income<a class="headerlink" href="#fixed-income" title="Permalink to this heading">#</a></h3>
@@ -522,12 +540,29 @@ document.write(`
 <li><p>Definition: Debt instruments promising fixed or variable payments.</p></li>
 <li><p>Issuers: sovereign, corporate, municipal, supranational.</p></li>
 <li><p>Coupon types: fixed, floating, zero-coupon.</p></li>
+</ul>
+<section id="reference-rates">
+<h4><span class="section-number">2.2.3.1. </span>Reference Rates<a class="headerlink" href="#reference-rates" title="Permalink to this heading">#</a></h4>
+<p>Modern financial markets rely on reference interest rates—benchmarks used to determine floating-rate payments in loans, bonds, and derivatives. These rates serve as the foundation for trillions of dollars of financial contracts, ensuring a consistent and transparent mechanism for pricing and settlement.</p>
+<p>The London Interbank Offered Rate (LIBOR) became the dominant global benchmark during the 1980s, but its roots date back to the late 1960s. The first recorded use of a LIBOR-like rate appeared in 1969, when a group of London-based banks agreed to price a syndicated loan to the Shah of Iran at a margin over the rate at which they could borrow short-term funds in the interbank market. This convention proved practical for cross-border lending, allowing banks to align loan pricing with their own funding costs. As syndicated lending expanded in the 1970s and derivatives markets emerged in the 1980s, LIBOR was formalized by the British Bankers’ Association (BBA) as a standard daily benchmark, calculated as the average rate at which major banks believed they could borrow from one another on an unsecured basis.</p>
+<p>However, the credibility of LIBOR was deeply undermined during the LIBOR manipulation scandal uncovered between 2011 and 2012. Investigations revealed that several panel banks had deliberately altered their submissions, either to profit from derivative positions or to disguise funding stress during the global financial crisis. The scandal exposed structural weaknesses: submissions were often based on expert judgment rather than actual transactions, making the benchmark vulnerable to manipulation. Regulatory responses included substantial fines, criminal prosecutions, and the establishment of new oversight frameworks for benchmark administration. Yet, the damage to trust was profound and accelerated global efforts to reform reference rate frameworks.</p>
+<p>In the aftermath, regulators and market participants collaborated to design risk-free rates (RFRs) rooted in observable market transactions. These new benchmarks aim to eliminate reliance on subjective quotes and to reflect nearly risk-free overnight funding costs. Examples include:</p>
+<ul class="simple">
+<li><p>the Secured Overnight Financing Rate (SOFR) in the United States</p></li>
+<li><p>the Euro Short-Term Rate (€STR) in the euro area</p></li>
+<li><p>SONIA in the United Kingdom.</p></li>
+</ul>
+<p>Unlike LIBOR, which was unsecured and term-based, these rates are overnight and transaction-based, typically derived from repo or wholesale funding markets. Over time, derivatives markets have developed conventions for compounded-in-arrears calculations to build synthetic term structures compatible with existing financial products.</p>
+<p>The transition from LIBOR to alternative rates has profound contractual implications. Because LIBOR was embedded in an enormous range of financial instruments—from corporate loans to floating-rate notes and interest-rate swaps—its cessation required robust fallback provisions. Industry bodies such as ISDA introduced standardized fallback methodologies and spread adjustments to account for the credit and term premia embedded in LIBOR. Market participants had to amend legacy contracts, update systems, and reprice instruments to maintain consistency and avoid legal uncertainty.</p>
+<p>Beyond the technical aspects, benchmark reform also carries broader implications for market integrity and stability. The transition underscores the importance of transparent, transaction-based benchmarks and the need for international coordination in benchmark governance. It also highlights the evolving relationship between private benchmark providers and public regulators, where oversight has become a critical element of maintaining confidence in financial reference data.</p>
+<ul class="simple">
 <li><p>Yields and pricing: present value, yield-to-maturity, clean/dirty price.</p></li>
 <li><p>Interest rate sensitivity: duration, convexity.</p></li>
 <li><p>Credit risk and ratings.</p></li>
 <li><p>Benchmark yield curves.</p></li>
 <li><p>Secondary market trading and repo link.</p></li>
 </ul>
+</section>
 </section>
 <section id="foreign-exchange-fx-instruments">
 <h3><span class="section-number">2.2.4. </span>Foreign Exchange (FX) Instruments<a class="headerlink" href="#foreign-exchange-fx-instruments" title="Permalink to this heading">#</a></h3>
@@ -735,8 +770,14 @@ The balance of trade between countries also impacts currency valuation. If a cou
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">2.1. Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cash-instruments">2.2. Cash Instruments</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#equities">2.2.1. Equities</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#money-market-instruments">2.2.2. Money Market Instruments</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income">2.2.3. Fixed Income</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#money-market-instruments">2.2.2. Money Market Instruments</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#repurchase-agreements-repos">2.2.2.1. Repurchase Agreements (Repos)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-income">2.2.3. Fixed Income</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-rates">2.2.3.1. Reference Rates</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#foreign-exchange-fx-instruments">2.2.4. Foreign Exchange (FX) Instruments</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-spot-transactions">2.2.4.1. FX Spot Transactions</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fx-forward-contracts">2.2.4.2. FX Forward Contracts</a></li>

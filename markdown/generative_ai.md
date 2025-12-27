@@ -1,10 +1,8 @@
-# Generative Artificial Intelligence
-
-Since the release in 2022 of Chat GPT, the field of Artificial Intelligence has been radically transformed. Chat GPT was based on the third version of the Generalized Pre-trained Transformer (GPT) model, a so-called large language model, with surprising capabilities for reasoning and conversation in a creative way. Since then, new versions of the model have been released, as well as competition in the space, with other providers catching up on the capabilities. Moreover, multi-modal so-called foundational models that extend their understanding beyond language to images and video, blending them. For instance, models like Stable Diffusion are able to convert text into highly realistic (although not necessarily consistent) images. This type of models, which mostly share a common neural-network architecture, the Transformer, that has boosted its capabilities together with a large number of parameters and training data, form the backbone of the emerging field of Generative Artificial Intelligence (Gen AI). In order to understand them and make an efficient use of them, particularly in business applications, it is convenient to understand their fundamentals. 
+# Generative Artificial Intelligence 
 
 ## What is Gen AI?
 
-In simple conceptual terms, Gen AI consists on the application of generative probabilistic models to the domain of Artificial Intelligence. Let us understand each of these concepts to shed light on the term. 
+In simple terms, Generative AI consists of training sophisticated *generative probabilistic models* on large corpora of data and applying them to tasks traditionally associated with intelligence—such as content generation and reasoning—thereby constituting *Artificial Intelligence* systems. Let us understand each of these concepts to shed light on the term. 
 
 ### Artificial Intelligence
 
