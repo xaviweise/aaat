@@ -35,9 +35,7 @@ Equities are financial instruments through which investors provide capital to a 
 
 From a balance sheet perspective, equity represents shareholders’ capital and is defined residually through the fundamental accounting identity
 
-
 $$\text{Assets} = \text{Liabilities} + \text{Equity}$$
-
 
 This identity must always hold. Consequently, any change in the value of a firm’s assets or liabilities is mechanically reflected in equity. In practice, the nominal value of debt is largely fixed by contract, so short-term fluctuations in firm value are absorbed almost entirely by equity. When asset values decline, equity is reduced first; only after equity is exhausted do losses begin to impair debt holders. This asymmetric position explains both the higher volatility of equity prices and the shareholders’ claim on the firm’s upside.
 
@@ -69,15 +67,15 @@ where $P$ denotes the share price and $N$ the number of outstanding shares. Mark
 
 ##### Discounted dividend approach ##### 
 
-Conceptually, a share can be viewed as a claim on an uncertain stream of future dividends. Under this perspective, the price of a stock satisfies
+Conceptually, a share can be viewed as a claim on an uncertain stream of future dividends. Under this perspective, and using the ideas of fair value that will be thoroughly discussed in chapter {ref}`fair_price_estimation`, a fundamental model for the price of a stock satisfies
 
 $$P_t = \mathbb{E}_t\left[ \sum_{k=1}^{\infty} \frac{d_{t+k}}{(1+r)^k} \right]$$
 
-where $d_{t+k}$ denotes dividends paid in the future and $r$ is the required rate of return on equity. This formulation parallels bond valuation, but differs in two key respects: dividends are uncertain, and there is no fixed maturity. Estimating expected dividends and the appropriate discount rate therefore lies at the core of equity valuation.
+where $d_{t+k}$ denotes dividends paid in the future, which are brought into present value using discount factors at a rate $r$. This rate cannot, in general, be identified with the risk-free rate if the price is to reflect the risk borne by investors. Instead, $r$ should be interpreted as a risk-adjusted discount rate that compensates investors for both the time value of money and the uncertainty associated with future dividends.
 
-The discounted dividend framework has been subject to important critiques, though. Shiller’s volatility argument considers the implication of the present-value relation under rational expectations. Let
+The discounted dividend framework has been subject to important critiques, though. Shiller’s volatility argument {cite:p}`Shiller1981` considers the implication of the present-value relation under rational expectations. Let
 
-$$P_t^* = \sum_{k=1}^{\infty} \frac{D_{t+k}}{(1+r)^k}$$
+$$P_t^* = \sum_{k=1}^{\infty} \frac{d_{t+k}}{(1+r)^k}$$
 
 denote the ex post realized present value of future dividends. Under rational expectations, the observed price satisfies $P_t = \mathbb{E}_t[P_t^*]$. A basic variance inequality then implies
 
@@ -184,11 +182,7 @@ Across all cases, the dominant fixed income instrument is the **bond**, characte
 
 #### Valuation of fixed income instruments
 
-The theoretical foundation of fixed income valuation is the **time value of money**. The basic idea is that a unit of currency received today is worth more than the same unit received in the future, because it can be invested in the interim. Consider a risk-free deposit that pays a deterministic interest rate $r$. An amount of one unit invested today grows to $(1+r)^t$ units after $t$ periods, as far as interest rate payments are reinvested at the same rate (compounded interest). Conversely, receiving one unit in $t$ periods is economically equivalent to receiving $1/(1+r)^t$ units today. This opportunity cost argument implies that any future cash flow must be discounted by the factor $(1+r)^t$ to make it comparable with cash today.
-
-Formally, for an investment that delivers a future cash flow $C_t$ at time $t$, the present value $PV$ satisfies
-
-$$PV = \frac{C_t}{(1+r)^t}$$
+As we will discuss in chapter {ref}`fair_price_estimation`,  The theoretical foundation of fixed income valuation is the **time value of money**.
 
 This logic extends naturally to bonds, which deliver multiple future cash flows. For a bond with maturity $T$, coupon payments $C_t$, and face value $N$, the price $P$ is given by the sum of discounted promised payments:
 

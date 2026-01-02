@@ -21,17 +21,14 @@ of the financial system in Europe.
 
 ## Financial markets
 
-In financial markets, those who need funds issue financial instruments,legally binding contracts that articulate the terms in which those funds
-will be returned to the investor, as well as the compensation for the service. So far that is not that different from traditional banking loans. The key for financial instruments is the possibility of
-transferring the property of the contract, i.e. the right to receive back those future cash-flows and compensations. This provides a mechanism for the lender to potentially recover the funds before the
-contract ends, solving the problem of liquidity even if contracts are issued with long-term horizons.
+In financial markets, those who need funds issue financial instruments,legally binding contracts that articulate the terms in which those funds will be returned to the investor, as well as the compensation for the service. So far that is not that different from traditional banking loans. The key for financial instruments is the possibility of
+transferring the property of the contract, i.e. the right to receive back those future cash-flows and compensations. This provides a mechanism for the lender to potentially recover the funds before the contract ends, solving the problem of liquidity even if contracts are issued with long-term horizons.
 
 Of course, for that the lender needs to find a counterpart that is willing to purchase the financial instrument, and agree to the price.
 Pricing financial instruments is however not a simple task, since their value depend on assumptions about the certainty of those future cash-flows (for instance, what if the borrower cannot commit in the future to pay back?). There are also considerations of opportunity costs, since the potential investor will necessarily compare the return
 on its investment when acquiring the financial instrument with other potential productive uses of her money. Financial markets developed precisely to solve these two problems: 1) finding counterparts, 2) setting a price.
 
-Financial markets are the place where interested parties meet and negotiate the prices of financial instruments. In *primary markets*, financial instruments are issued by the borrowers and acquire initially by investors, sometimes via intermediaries like banks. In *secondary
-markets*, already issued financial instruments are negotiated between investors, with the original borrower not playing any part any more in the process. Most of trading nowadays occurs in secondary markets.
+Financial markets are the place where interested parties meet and negotiate the prices of financial instruments. In *primary markets*, financial instruments are issued by the borrowers and acquire initially by investors, sometimes via intermediaries like banks. In *secondary markets*, already issued financial instruments are negotiated between investors, with the original borrower not playing any part any more in the process. Most of trading nowadays occurs in secondary markets.
 
 In this process, financial markets not only provide of a mechanism for investors to obtain liquidity from their investments, but also serve as a mechanism for price discovery. In the end, in financial markets (as in
 other markets), the price of a financial instrument is what two willing parties agree to transact, independently of the subjective value that each of them place on the instrument. Of course, by pulling multiple investors in the same place to negotiate, financial markets channel multiple speculative ways about the value of a financial instrument into

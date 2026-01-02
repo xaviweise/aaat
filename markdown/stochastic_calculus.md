@@ -11,7 +11,7 @@ We start the chapter introducing the study of dynamical systems, focusing initia
 
 We model a dynamical system a a set of variables that follow a time dynamics law
 
-$$y = f(t,{X_t})$$ 
+$$y = f(t,{X_t})$$
 
 where $\{X_t\}$ is a set of external factors that influence the trajectory of the system.
 
@@ -31,7 +31,7 @@ Modelization can be done empirically or using fundamental laws if available, we 
 
 As mentioned, the dynamics of the system might not be deterministic. In this case we need to model the source of randomness in the dynamical system, for which we use  stochastic differential equations (SDE) of the form:
 
-$$d X_t = \mu(X_t, t) dt + \sigma (X_t, t) d W_t$$ 
+$$d X_t = \mu(X_t, t) dt + \sigma (X_t, t) d W_t$$
 
 where $d W_t$ is the Wiener process (Brownian motion) that will be introduced later.
 
@@ -43,21 +43,20 @@ We will introduce the topic by looking at some relevant deterministic differenti
 
 A first example comes from Newton's laws applied to the dynamics of particles in a gravitational field. The second law of Newton states:
 
-$$F = m a$$ 
+$$F = m a$$
 
-We consider an object of mass m drop at initial height
-$h(0)$ with speed zero. It is only subjected to the gravitational force:
+We consider an object of mass m drop at initial height $h(0)$ with speed zero. It is only subjected to the gravitational force:
 $F = m g$ where g is the gravitational constant close to Earth's surface: $g \approx 9.81 m/s^2$. The dynamics for the speed is therefore a first order differential equation with constant coefficients:
 
-$$m \frac{d v}{d t} = - m g \rightarrow \frac{d v}{d t} = - g$$ 
+$$m \frac{d v}{d t} = - m g \rightarrow \frac{d v}{d t} = - g$$
 
 where we have taken into account that the force is exerted in the opposite direction to which the height axis grows. This equation is simple to integrate: 
 
-$$v(t) = v(0) - \int_0^t g dt = v(0) + g t = - gt$$ 
+$$v(t) = v(0) - \int_0^t g dt = v(0) + g t = - gt$$
 
 since in our case, $v(0) = 0$. The dynamics of the position reads:
 
-$$\frac{d h}{dt} = v(t) = - g t$$ 
+$$\frac{d h}{dt} = v(t) = - g t$$
 
 which can be again be easily integrated: 
 
@@ -66,7 +65,7 @@ $$h(t) = h(0) - \int_0^t g t' dt' = h(0) - g \frac{t^2}{2}$$
 These are particular examples of a general family of differential
 equations: 
 
-$$\frac{d^n y}{d t^n} = f(t)$$ 
+$$\frac{d^n y}{d t^n} = f(t)$$
 
 which can be simply integrated step by step by defining intermediate variables, e.g.:
 
@@ -77,7 +76,7 @@ $$z \equiv \frac{d^{n-1} y}{d t^{n-1}} \rightarrow \frac{d z}{dt} = f(t) \righta
 A simple model of the dynamics of inflation takes into account Central Bank interventions using monetary policy in order to adjust inflation to a given target. When inflation deviates from the target, monetary policy
 is used to bring it back to the target. This can be modelled using the following differential equation:
 
-$$\frac{d \pi_t}{d t} = \theta (\hat{\pi} - \pi_t)$$ 
+$$\frac{d \pi_t}{d t} = \theta (\hat{\pi} - \pi_t)$$
 
 where $\pi$ is the current level of inflation, $\hat{\pi}$ is the inflation target, and $\theta > 0$ is a constant that models the speed at which monetary
 policy takes effect. This is an example of a mean - reverting equation, a process whose dynamics is controlled by an external force that drives
@@ -85,7 +84,7 @@ back the system towards a stable level (the mean).
 
 This equation is a particular example of a general family of differential equations which we call separable, with the form
 
-$$\frac{d y}{d t} = g(y)f(t)$$ 
+$$\frac{d y}{d t} = g(y)f(t)$$
 
 They can be solved by exploiting the
 separability:
@@ -112,12 +111,12 @@ a force proportional to the speed of the object, namely $F = \eta v$, where $\et
 $$\begin{aligned}
 m \frac{dv} {dt} = mg - \eta v \\
 \frac{d h} {dt} = v
-\end{aligned}$$ 
+\end{aligned}$$
 
 Which is a system of two equations. We can combine it to
 get a differential equation on the particle's trajectory:
 
-$$m \frac{d^2 h}{d t^2} + \eta \frac{dh}{dt} = mg$$ 
+$$m \frac{d^2 h}{d t^2} + \eta \frac{dh}{dt} = mg$$
 
 which is, particularly, a second order non-homogeneous ODE with constant coefficients. A general non-homogeneous linear ODE with constant coefficients reads:
 
@@ -125,9 +124,7 @@ $$a_n \frac{d^n y}{dt^n} + a_{n-1} \frac{d^{n-1} y}{dt^{n-1}} + ... + a_0 y = f(
 
 To solve this equation first we find a general solution for the homogeneous equation, and then a particular solution for the non-homogeneous one.
 
-For the general solution of the homogeneous we can actually exploit its connection to a system of first order differential equations, an example
-of which we saw when introducing the problem of a particle in free-fall with friction. In general, we can define auxiliary variables
-$y_i = \frac{d^i y}{dt^i}$ for $i < n$. We get the following system:
+For the general solution of the homogeneous we can actually exploit its connection to a system of first order differential equations, an example of which we saw when introducing the problem of a particle in free-fall with friction. In general, we can define auxiliary variables $y_i = \frac{d^i y}{dt^i}$ for $i < n$. We get the following system:
 
 $$\begin{aligned}
  \frac{d y_{n-1}}{dt} + \frac{a_{n-1}}{a_n} y_{n-1} + ... + \frac{a_0}{a_n} y_0 = 0 \nonumber \\
@@ -138,11 +135,11 @@ $$\begin{aligned}
 
 which has the structure:
 
-$$\frac{d {\bf y}}{dt} + A {\bf y} = 0$$ 
+$$\frac{d {\bf y}}{dt} + A {\bf y} = 0$$
 
 where ${\bf y} = (y_0, ..., y_{n-1})$ and A is the matrix form with the coefficients of the system of equations above. The general solution to this equation is: 
 
-$${\bf y} =  e^{-A t} {\bf y_0}$$ 
+$${\bf y} =  e^{-A t} {\bf y_0}$$
 
 This is the formal solution, but to get a workable solution we need to diagonalize the matrix A, i.e. finding $A = C \Lambda C^{-1}$ where $\Lambda$ is a diagonal matrix with the eigenvalues of A, and C has its eigenvectors $\vec{w}$ as columns. One can then project the solution in the space of eigenvectors:
 
@@ -150,27 +147,26 @@ $${\bf y_t} =  C C^{-1} e^{-A t} C C^{-1} {\bf y_0} = C e^{-\Lambda t} C^{-1} {\
 
 This is equivalent to writing:
 
-$${\bf y_t} = \sum_i w_i e^{-\lambda_i t}  {\bf c_i}$$ 
+$${\bf y_t} = \sum_i w_i e^{-\lambda_i t}  {\bf c_i}$$
 
 where ${\bf c_i}$ is the ith eigenvector with eigenvalue $\lambda_i$ and $w_i = (C^{-1} {\bf y_0})_i$ is the projection of the initial state into
 the eigenvectors basis. In such basis, the dynamics is simple, driven by the exponential of its eigenvalue: $e^{-\lambda_i t}$
 
 Coming back to the particle in free-fall, we can obtain the general solution of the homogeneous equation, namely:
 
-$$\frac{d^2h}{dt} + \frac{\eta}{m} \frac{dh}{dt} = 0$$ 
+$$\frac{d^2h}{dt} + \frac{\eta}{m} \frac{dh}{dt} = 0$$
 
 by applying directly the ansatz $e^{\lambda t}$:
 
-$$\lambda^2 + \frac{\eta}{m} \lambda = 0$$ 
+$$\lambda^2 + \frac{\eta}{m} \lambda = 0$$
 
 which is equivalent to finding the eigenvalues of the matrix of the system of equations. This equation has two eigenvalues, $\lambda = 0$ and $\lambda = -\frac{\eta}{m}$, so the general solution reads:
 
-$$h_t = C_0 + C_1 e^{-\frac{\eta}{m}t}$$ 
+$$h_t = C_0 + C_1 e^{-\frac{\eta}{m}t}$$
 
-A particular solution is a linear function $h_t = \frac{m g}{\eta} t$. Therefore, the solution for
-the full equation is:
+A particular solution is a linear function $h_t = \frac{m g}{\eta} t$. Therefore, the solution for the full equation is:
 
-$$h_t = \frac{m g}{\eta} t + C_0 + C_1 e^{-\frac{\eta}{m}t}$$ 
+$$h_t = \frac{m g}{\eta} t + C_0 + C_1 e^{-\frac{\eta}{m}t}$$
 
 The speed is therefore:
 
@@ -215,7 +211,7 @@ better convergence properties (speed, accuracy).
 
 Let us see an example. Previously, we introduced the following model for inflation targeting:
 
-$$\frac{d \pi_t}{d t} = \theta (\hat{\pi} - \pi_t)$$ 
+$$\frac{d \pi_t}{d t} = \theta (\hat{\pi} - \pi_t)$$
 
 A forward Euler scheme yields the following discrete equation:
 
@@ -300,19 +296,19 @@ models. Such toolkit can be useful when building models for dynamical systems us
 
 The Wiener process satisfies the Martingale property, meaning that if we have a series of observations of the process $W_{t_1}, W_{t_2}, ... W_{t_n}$ then the expected value of an observation $t_{n+1} > t_n > ... > t_1$ conditioned to the previous observations only depends on the last observation:
 
-$$\mathbb{E}[W_{t_{n+1}}|W_{t_1}, W_{t_2}, ... W_{t_n}] = W_{t_n}$$ 
+$$\mathbb{E}[W_{t_{n+1}}|W_{t_1}, W_{t_2}, ... W_{t_n}] = W_{t_n}$$
 
 i.e., the information from previous observations is irrelevant. We can generalize the martingale property by introducing the notion of filtration $F_t$ at
 time $t$, which contains all the information set available until time $t$. We can rewrite the Martingale property using the filtration as:
 
-$$\mathbb{E}[W_{t_{n+1}}|F_{t_n}] = W_{t_n}$$ 
+$$\mathbb{E}[W_{t_{n+1}}|F_{t_n}] = W_{t_n}$$
 
 We can prove the Martingale property using the defining properties of the Wiener process:
 
 $$\begin{aligned}
 \mathbb{E}[W_{t_{n+1}}|F_{t_n}] = \mathbb{E}[W_{t_{n+1}} - W_{t_n} + W_{t_n}|F_{t_n}] = \nonumber \\
  \mathbb{E}[W_{t_{n+1}} - W_{t_n}|F_{t_n}]+ \mathbb{E}[W_{t_n}|F_{t_n}] = W_{t_n}
-\end{aligned}$$ 
+\end{aligned}$$
 
 where we have used that the increments of the Wiener
 process have zero mean.
@@ -321,7 +317,7 @@ process have zero mean.
 
 A useful property that exploits the concept of filtration in many applications is the so-called Law of Iterated Expectations or Tower Law. It simply states that for any random variable Y, if $t_m > t_n$:
 
-$$\mathbb{E}[\mathbb{E}[Y|F_{t_m}]|F_{t_n}] = \mathbb{E}[Y|F_{t_n}]$$ 
+$$\mathbb{E}[\mathbb{E}[Y|F_{t_m}]|F_{t_n}] = \mathbb{E}[Y|F_{t_n}]$$
 
 This is a useful property to compute expectations using a divide and conquer philosophy: maybe the
 full expectation $\mathbb{E}[Y|F_{t_n}]$ is not obviously tractable, but by conditioning it at intermediate filtrations
@@ -412,7 +408,7 @@ d y = (\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial 
 
 A firs relevant integral of the Wiener process is:
 
-$$I_{1t} = \int_0^t f(u) dW_u$$ 
+$$I_{1t} = \int_0^t f(u) dW_u$$
 
 What is the distribution of $I_{1t}$? A simple way to deduce it is to discretize the integral and then take again the continuous limit:
 
@@ -438,26 +434,26 @@ $$\mathbb{E}[I_{1t}^2|F_0] = \lim_{\Delta \rightarrow 0} \Delta \sum_{i=0}^{N-1}
 
 Therefore, the distribution of $I_{1t}$ is given by:
 
-$$I_{1t} \sim N(0, \int_0^t du f^2(u))$$ 
+$$I_{1t} \sim N(0, \int_0^t du f^2(u))$$
 
 Notice that once we have motivated the solution by using a discretization of the equation, we can directly skip it and use the continuous version, for instance:
 
 $$\begin{aligned}
 \mathbb{E}[I_{1t}^2|F_0] = \int_0^t \int_0^t f(u) f(u') \mathbb{E}[dW_u dW_{u'}] \nonumber \\ = \int_0^t \int_0^t du du' f(u) f(u') \delta(u-u') du = \int_0^t f^2(u) du
-\end{aligned}$$ 
+\end{aligned}$$
 
 Let us now move into the second relevant integral of the
 Wiener process, namely: 
 
-$$I_{2t} = \int_0^t du f(W_u)$$ 
+$$I_{2t} = \int_0^t du f(W_u)$$
 
 What is the distribution of this random variable? In this case, applying the discretization argument does not provide a direct simple path to figure out the distribution, since we have a sum of correlated variables (e.g. $f(W_{u_i})$ and $f(W_{u_j})$ are correlated over the common paths shared by them, say if $u_i < u_j$, the path below $u_i$). We can use Ito's lemma to advance our comprehension:
 
-$$d(u f(W_u)) = u df(W_u) + f(W_u) du$$ 
+$$d(u f(W_u)) = u df(W_u) + f(W_u) du$$
 
 which being linear it does not have the Ito's convexity terms. Essentially we can then use integration by parts: 
 
-$$\int_0^t du f(W_u) = t f(W_t) - \int_0^t u df(W_u)$$ 
+$$\int_0^t du f(W_u) = t f(W_t) - \int_0^t u df(W_u)$$
 
 Using again Ito's lemma, now on $f(W_u)$:
 
@@ -473,7 +469,7 @@ $$\int_0^t W_u du = t W_t - \int_0^t u dW_u = \int_0^t (t - u) dW_u$$
 
 which now we can identify as a specific case of the previous integral, with $f(u) = t - u$. The distribution is therefore:
 
-$$\int_0^t W_u du \sim N(0, \frac{t^3}{3})$$ 
+$$\int_0^t W_u du \sim N(0, \frac{t^3}{3})$$
 
 where we have used $\int_0^t (t-u)^2 du = \frac{t^3}{3}$
 
@@ -482,11 +478,11 @@ where we have used $\int_0^t (t-u)^2 du = \frac{t^3}{3}$
 
 We can simulate the Wiener process using a discretization like the Euler scheme for deterministic processes. Again, defining a grid $t_i = t_0 + \Delta * i$, $i = 0, .., N$, where $\Delta = \frac{t_N - t_0}{N}$, we can exploit directly the Wiener process properties to get:
 
-$$dW_t \rightarrow W_{t_{i+1}} - W_{t_i} \sim N(0, \Delta)$$ 
+$$dW_t \rightarrow W_{t_{i+1}} - W_{t_i} \sim N(0, \Delta)$$
 
 So we can simulate numerically the Wiener process simply as:
 
-$$W_{t_{i+1}} =  W_{t_i} + \sqrt{\Delta} Z$$ 
+$$W_{t_{i+1}} =  W_{t_i} + \sqrt{\Delta} Z$$
 
 where $Z$ is a standard normal distribution. The following plot simulates the Wiener process numerically for a few different paths:
 
@@ -508,7 +504,7 @@ Simulation of five different paths of the the Wiener process using the same para
 Let us now simulate a multivariate Wiener process of dimension N. The strategy in this case is to start simulating N independent Wiener processes and then use them to generate the correlated paths. This can
 be done using the Cholesky decomposition of the correlation matrix $\Sigma$. Since $\Sigma$ is symmetric and positive define, the decomposition reads: 
 
-$$\Sigma = L L^T$$ 
+$$\Sigma = L L^T$$
 
 where $L$ is a lower triangular matrix. If we now we have a vector of N uncorrelated Wiener increments
 $d \hat{{\bf W_t}}$, we can obtain the correlated process by using $L$ such as $d {\bf W_t} = L d \hat{{\bf W_t}}$. We can see that this vector has the distribution of the multivariate Wiener process increment:
@@ -616,7 +612,7 @@ i.e. $Y_t$ is a martingale. But this is actually the Feynman - Kac solution if w
 
 The most simple stochastic process using the Wiener process as a building block is the Brownian motion with drift:
 
-$$d S_t = \mu_t dt + \sigma_t d W_t$$ 
+$$d S_t = \mu_t dt + \sigma_t d W_t$$
 
 Here we are essentially shifting and rescaling the Wiener process to describe dynamical systems whose stochastic fluctuations have a deterministic non-zero mean $mu_t$
 (drift) and arbitrary variance, the latter controlled by the so-called volatility $\sigma_t$. In practice, this is the process to use for any real application of stochastic calculus to model random time-series, since the simple Wiener process is simply too restrictive to describe
@@ -627,15 +623,15 @@ respective field.
 The distribution of $dS_t$ is easily derived by using the property that multiplying and summing scalars to a Gaussian random variable ($dW_t$) yields another Gaussian variable. Hence since $dW_t \sim N(0, t)$ then
 we have: 
 
-$$d S_t \sim N(\mu_t, \sigma_t^2 dt)$$ 
+$$d S_t \sim N(\mu_t, \sigma_t^2 dt)$$
 
 This stochastic differential equation can be integrated to get the solution for arbitrary times:
 
-$$S_t = S_0 + \int_0^t \mu_u du + \int_0^t \sigma_u d W_u$$ 
+$$S_t = S_0 + \int_0^t \mu_u du + \int_0^t \sigma_u d W_u$$
 
 which again follows a Gaussian distribution:
 
-$$S_t \sim N(S_0 + \int_0^t \mu_u du, \int_0^t \sigma_u^2 du)$$ 
+$$S_t \sim N(S_0 + \int_0^t \mu_u du, \int_0^t \sigma_u^2 du)$$
 
 where we have used the properties of the stochastic integral discussed in section {ref}`sde`:
 
@@ -785,7 +781,7 @@ of two terms: the first one coming from the intrinsic noise of the Brownian proc
 In order to reason about stochastic processes it is important to keep track or the units of their parameters. This can also be useful as a consistency check on the estimators derived, for instance. We will use a
 brackets notation for dimensional analysis. For the case of the Brownian motion we write: 
 
-$$[dS_t]= [\mu_t] [dt] + [\sigma_t] [dW_t]$$ 
+$$[dS_t]= [\mu_t] [dt] + [\sigma_t] [dW_t]$$
 
 In here, we know that $[dt]$ has time units, for instance seconds, hours, or days. We denote them generically as $[t]$ The Wiener process being distributed as $dW_t \sim N(0, dt)$ has therefore units of $[t]^{1/2}$, i.e. the square root of time. Therefore, the parameters have the following units:
 
@@ -812,7 +808,7 @@ prices in a time - domain such as the probability of reaching negative values is
 The geometric Brownian motion is a simple extension of the Brownian motion that introduces a constraint in the domain of the process, allowing only positive values. The stochastic differential equation is
 the following one: 
 
-$$d S_t = \mu_t S_t dt + \sigma_t S_t d W_t$$ 
+$$d S_t = \mu_t S_t dt + \sigma_t S_t d W_t$$
 
 In order to find the distribution of $S_t$ for arbitrary times, let us apply Ito's lemma over the function $f(S_t) = \log S_t$. Such ansatz is motivated by looking at the deterministic part of the equation,
 $dS_t = \mu_t S_t dt$, which can be rewritten as
@@ -910,7 +906,7 @@ M_t = \frac{t S_t}{t} - \frac{1}{t}\int_0^t u d S_u
 
 In this form, it is easy to derive the distribution, which is normal. Assuming for simplicity constant mean and volatility:
 
-$$M_t \sim N(S_0 + \frac{1}{2} \mu t, \frac{1}{3}\sigma^2t)$$ 
+$$M_t \sim N(S_0 + \frac{1}{2} \mu t, \frac{1}{3}\sigma^2t)$$
 
 Notice that the variance of the average process is smaller than the variance of the process itself, by a factor $1/3$. This makes sense, since taking averages smooths out the random behavior of the process.
 
@@ -976,7 +972,7 @@ In the financial modelling domain, arithmetic means of stochastic processes are 
 The Orstein - Uhlenbeck process is an extension of the Brownian motion process in which the drift term is modified to prevent large deviations from the mean $\mu$. This is achieved by making the drift penalize those
 deviations: 
 
-$$d S_t = \theta (\mu - S_t) dt + \sigma d W_t$$ 
+$$d S_t = \theta (\mu - S_t) dt + \sigma d W_t$$
 
 The strength of the penalty is controlled by a parameter $\theta > 0$, which is called the mean reversion speed: the larger this parameter, the faster the process $S_t$ reverts to the mean. Such property of mean
 reversion is not unique to the Orstein - Uhlenbeck process, but the latter is probably the most simple way to achieve this effect in a stochastic differential equation, allowing for the computation of
