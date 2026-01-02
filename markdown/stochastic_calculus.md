@@ -637,7 +637,7 @@ where we have used the properties of the stochastic integral discussed in sectio
 
 **Connection to Gaussian processes**
 
-The Brownian motion is also a Gaussian process, since any finite set $S_{†_1}, S_{t_2}, S_{t_3}, ..., S_{t_n}$ follows a multivariate Gaussian process. The kernel of the Brownian process is simply to
+The Brownian motion is also a Gaussian process, since any finite set $S_{t_1}, S_{t_2}, S_{t_3}, ..., S_{t_n}$ follows a multivariate Gaussian process. The kernel of the Brownian process is simply to
 derive: 
 
 $$\begin{aligned}

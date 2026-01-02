@@ -1,3 +1,4 @@
+(fair_price_estimation)=
 # Fair value estimation
 
 ## Introduction
@@ -6,19 +7,19 @@ In this chapter we introduce techniques to estimate the fair value of a financia
 
 > Fair value is the price at which a financial instrument is economically equivalent, at a given time and under a given information set, to its future cash flows or payoffs, once transactions costs, opportunity costs and risk are appropriately accounted for
 
-In this chapter we will focus on two conceptually different ways to estimate fair value. The first one assumes markets are efficient enough so that prices observed in the market are our best estimation of fair value, bar some idiosyncratic components coming from trading fictions like liquidity premiums, dealer spreads, and transaction costs. In this case, fair price estimation can be seen as a *filtering problem*, and we will study a simple albeit powerful model to carry out this task: the Kalman filter. 
+In this chapter we will focus on two conceptually different ways to estimate fair value. The first one assumes markets are efficient enough so that prices observed in the market are our best estimation of fair value, bar some idiosyncratic components coming from trading fictions like liquidity premiums, dealer spreads, and transaction costs. In this case, fair value estimation can be seen as a *filtering problem*, and we will study a simple albeit powerful model to carry out this task: the Kalman filter. 
 
-When financial instruments are highly illiquid or do not trade directly in organized markets, fair price estimation must rely on economic—often referred to as fundamental—valuation models. These models infer the value of a financial instrument from the future cash flows specified by its contractual structure. Central to this approach is the concept of the time value of money, which states that a payment received in the future is not economically equivalent to the same payment received today, due to opportunity costs. As a result, future cash flows must be converted into present values through the application of a discount factor, which renders cash flows occurring at different points in time comparable.
+When financial instruments are highly illiquid or do not trade directly in organized markets, fair value estimation must rely on economic—often referred to as fundamental—valuation models. These models infer the value of a financial instrument from the future cash flows specified by its contractual structure. Central to this approach is the concept of the time value of money, which states that a payment received in the future is not economically equivalent to the same payment received today, due to opportunity costs. As a result, future cash flows must be converted into present values through the application of a discount factor, which renders cash flows occurring at different points in time comparable.
 
 Time discounting, however, is not the only challenge faced by fundamental valuation models. Future cash flows are frequently contingent on information that is not known at the valuation date, such as future prices of financial assets or macroeconomic variables. Examples include dividends paid by a company or the value of the underlying asset referenced by a derivative contract. A simple, albeit theoretically naive, approach consists in valuing the instrument as the expected value of its future cash flows, treated as random variables. This approach, however, fails to account for heterogeneity in investors’ risk preferences. Once cash flows are stochastic, the realized return on the investment becomes uncertain, and uncertainty is not valued equally by all investors. To address this limitation, one can adopt a *utility indifference pricing framework*, in which risk preferences explicitly enter the valuation.
 
-In many situations, particularly for illiquid flow instruments, this is the most refined valuation approach available. However, for the specific case of derivative instruments, stronger theoretical results can be obtained under additional assumptions. As shown by Fischer Black, Myron Scholes, and Robert C. Merton in the 1970s, it is possible to construct dynamic replication portfolios that reproduce the payoffs of a derivative using traded instruments. In such settings, the fair price of the derivative becomes independent of investors’ risk aversion, since any deviation from this price would give rise to risk-free arbitrage opportunities. This insight leads to the *arbitrage-free pricing framework*, which will be introduced in the final section of this chapter.
+In many situations, particularly for illiquid flow instruments, this is the most refined valuation approach available. However, for the specific case of derivative instruments, stronger theoretical results can be obtained under additional assumptions. As shown by Fischer Black, Myron Scholes, and Robert C. Merton in the 1970s, it is possible to construct dynamic replication portfolios that reproduce the payoffs of a derivative using traded instruments. In such settings, the fair value of the derivative becomes independent of investors’ risk aversion, since any deviation from this price would give rise to risk-free arbitrage opportunities. This insight leads to the *arbitrage-free pricing framework*, which will be introduced in the final section of this chapter.
 
 Finally, a unifying pricing framework that can accommodate both the risk-aversion profile of the investor and the arbitrage-free constraints is the *stochastic discount factor* pricing framework {cite:p}`Cochrane2005AssetPricing`, which we will briefly describe at the end of the chapter. 
 
-## Filtering models for fair price estimation
+## Filtering models for fair value estimation
 
-As mentioned in the introduction, for financial instruments that are relatively liquid, we can aim at extracting all the pricing information from price indications and trades in the market, without having to resort to economic theories of fair value. In this setup, we consider as their fair price the one that market participants are willing to pay for. 
+As mentioned in the introduction, for financial instruments that are relatively liquid, we can aim at extracting all the pricing information from price indications and trades in the market, without having to resort to economic theories of fair value. In this setup, we consider as their fair value the one that market participants are willing to pay for. 
 
 The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair value, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair value is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide of liquidity is thin in the first levels, such estimation is not necessary very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability. 
 
@@ -44,15 +45,15 @@ For non-Linear Gaussian Models, there are extensions of the Kalman filter that c
 
 * Unscented Kalman Filter (UKF): Avoids linearization by using deterministic sampling to approximate the state distribution.
 
-* Particle filtering / sequential Monte Carlo: it uses directly Monte Carlo methods to find the posterior distribution of the fair price. See {cite:p}`gueantMidPrice` for more details of this approach applied to the fair-price estimation problem in corporate bonds. 
+* Particle filtering / sequential Monte Carlo: it uses directly Monte Carlo methods to find the posterior distribution of the fair value. See {cite:p}`gueantMidPrice` for more details of this approach applied to the fair-price estimation problem in corporate bonds. 
 
 ### A simple pricing model
 
-Let us consider a simple setup where we aim to infer the distribution of the fair price $m_t$ of a financial instrument that follows a random walk:
+Let us consider a simple setup where we aim to infer the distribution of the fair value $m_t$ of a financial instrument that follows a random walk:
 
 $$m_{t+\Delta t} = m_t + \epsilon_t, \epsilon_t \sim N(0, \sigma_\epsilon^2 \Delta t)$$
 
-We don't observe this fair price, only trades which we consider noisy observation of the mid since they include transaction costs and potentially other external factors like dealer inventory positions, etc:
+We don't observe this fair value, only trades which we consider noisy observation of the mid since they include transaction costs and potentially other external factors like dealer inventory positions, etc:
 
 $$p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)$$
 
@@ -89,7 +90,7 @@ $$ \hat{\sigma}_\epsilon^2 \Delta t = \frac{1}{N-1} \sum_{i=1}^{N-1} d_{t_i}^2 -
 $$ \hat{\sigma}_\nu^2 = -\frac{1}{N-2}\sum_{i=2}^{N-1} d_{t_i} d_{t_{i}-\Delta t}$$
 
 The results have an interesting interpretation:
-*  Starting from the first equation: the variance of the fair price must be lower than the variance of the observed trades, given the additional noise in the observation equation. Or, in other words, since the fair price is filtered from the trades, which means that we estimate it by removing noise from the trades, it has to have a lower variance. 
+*  Starting from the first equation: the variance of the fair value must be lower than the variance of the observed trades, given the additional noise in the observation equation. Or, in other words, since the fair value is filtered from the trades, which means that we estimate it by removing noise from the trades, it has to have a lower variance. 
 * The second equation can be recognized as a form of the Roll estimator for effective bid-ask spreads, a typical measure of liquidity. Of course, by construction of the model, the noise that is filtered is essentially the bid-ask spread that liquidity providers request as a compensation for the liquidity provision. 
 
 In the case of volume dependent observation errors, we can still compute these statistics, which now read:
@@ -119,7 +120,7 @@ In this simple case, the estimation of the parameters $\sigma_p$ and $\sigma_\ep
 
 We can use the general Kalman filter equations described in [Bayesian Modelling](intro_bayesian.md) to derive the distribution of our mid - price at the next time $t + \Delta t$ where a trade happens.
 
-The Kalman filter algorithm operates sequentially over observation steps applying two steps, the *predict* step, where we compute the distribution of the fair price based purely on the random walk model, and the *update* step in which we incorporate the information provided by the observation of a new trade. We define $m_{t+\Delta t}^t$ as the distribution of the fair price at $t+\Delta t$ before observing the trade, and $m_{t+\Delta}^{t+\Delta t}$ afterwards. 
+The Kalman filter algorithm operates sequentially over observation steps applying two steps, the *predict* step, where we compute the distribution of the fair value based purely on the random walk model, and the *update* step in which we incorporate the information provided by the observation of a new trade. We define $m_{t+\Delta t}^t$ as the distribution of the fair value at $t+\Delta t$ before observing the trade, and $m_{t+\Delta}^{t+\Delta t}$ afterwards. 
 
 Let us apply first the predict step. The distribution of $m_{t+\Delta t}^t$ is Gaussian with mean and variance given by:
 
@@ -127,7 +128,7 @@ $$\bar{m}_{t+\Delta t}^t = \bar{m}_{t}^t$$
 
 $$(\sigma_{m,t+\Delta t}^t)^2 = (\sigma_{m,t}^t)^2 + \sigma_\epsilon^2 \Delta t$$
 
-Since our model uses a drift-less random walk dynamics for the evolution of the fair price, the updated mean does not change and the variance increases proportionally to the time step $\Delta t$. 
+Since our model uses a drift-less random walk dynamics for the evolution of the fair value, the updated mean does not change and the variance increases proportionally to the time step $\Delta t$. 
 
 Now we use the update step to incorporate the information from a trade happening at $t + \Delta t$:
 
@@ -149,16 +150,16 @@ If we look at the new standard deviation, we also find similar limiting behavior
 * If $\sigma_\eta \ll \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_\eta$, since as we discussed above, we essentially use the trade information to inform our estimation of the mid.
 * If $\sigma_\eta \gg \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_{m,t+\Delta t}^t$, i.e. we stick with the estimation from the predict step
 
-One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite $\sigma_\eta$ is always smaller: the information from the trade always contributes to improve our estimation of the fair price.  This is easily seen writing:
+One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite $\sigma_\eta$ is always smaller: the information from the trade always contributes to improve our estimation of the fair value.  This is easily seen writing:
 
 $$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}$$
 
 Since $\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1. 
 
-In some applications of the local level model to pricing we might also be interested in the Kalman smoothing algorithm. Recall that the difference with the Kalman filtering we have just seen is that in smoothing we estimate the latent variable using all the available data, including the future. Of course this means Kalman smoothing does not make sense for online price inference, but there are other applications of this pricing model where using the best estimation of the latent fair price is relevant:
+In some applications of the local level model to pricing we might also be interested in the Kalman smoothing algorithm. Recall that the difference with the Kalman filtering we have just seen is that in smoothing we estimate the latent variable using all the available data, including the future. Of course this means Kalman smoothing does not make sense for online price inference, but there are other applications of this pricing model where using the best estimation of the latent fair value is relevant:
 
 * Estimation of parameters when using Expectation Maximization, as discussed in in [Bayesian Modelling](intro_bayesian.md)
-* Calibration of pricing models, for instance as we will discuss in the chapter on [RfQ Modelling](rfq_models.md), when we seek to estimate the hit rate probability, or the probability that a client trades an RfQ from a dealer given the quoted price. In this case, we are interested in having the best estimation possible of the fair price to isolate the effect of the spread, which is the one that puts dealers in competition. In the same chapter we will also discuss models to evaluate the toxicity of clients' flows, i.e. when clients seem to have more information than the dealer when trading, so the dealer seems to be later in the wrong side of the market. Estimating such models typically relies on analyzing how the fair price of the instrument moves before and after a client intends to trade. 
+* Calibration of pricing models, for instance as we will discuss in the chapter on [RfQ Modelling](rfq_models.md), when we seek to estimate the hit rate probability, or the probability that a client trades an RfQ from a dealer given the quoted price. In this case, we are interested in having the best estimation possible of the fair value to isolate the effect of the spread, which is the one that puts dealers in competition. In the same chapter we will also discuss models to evaluate the toxicity of clients' flows, i.e. when clients seem to have more information than the dealer when trading, so the dealer seems to be later in the wrong side of the market. Estimating such models typically relies on analyzing how the fair value of the instrument moves before and after a client intends to trade. 
 
 ### Multiple observations of the same instrument
 
@@ -185,13 +186,13 @@ The relative weight of influence of each observation depends on the fraction of 
 
 ### Multiple correlated instruments
 
-The Kalman filter model for pricing becomes even more relevant when we include information from other financial instruments that are historically correlated with the one whose fair price we are estimated. Typical situations are:
+The Kalman filter model for pricing becomes even more relevant when we include information from other financial instruments that are historically correlated with the one whose fair value we are estimated. Typical situations are:
 
-* Instruments that are more liquid, i.e. they trade more often and with smaller bid and ask spreads. This allows us to improve the estimation of the fair price until we observe a new trade from the instrument, anticipating potential relevant movements derived from common market factors. 
+* Instruments that are more liquid, i.e. they trade more often and with smaller bid and ask spreads. This allows us to improve the estimation of the fair value until we observe a new trade from the instrument, anticipating potential relevant movements derived from common market factors. 
 
 * Instruments that trade in markets that are open when markets where our instrument of interest is traded are closed. This allows us to reduce the uncertainty from the overnight gap in trading data. 
 
-The simple pricing model we have analyzed so far can be easily extended to include information from a set of N instruments. Notice that in this case what we are actually doing is estimating the fair prices of all the instruments in the set, not necessarily only the one of interest. The evolution of the fair prices is now modelled using:
+The simple pricing model we have analyzed so far can be easily extended to include information from a set of N instruments. Notice that in this case what we are actually doing is estimating the fair values of all the instruments in the set, not necessarily only the one of interest. The evolution of the fair values is now modelled using:
 
 $$\vec{m}_{t+\Delta t} = \vec{m}_t + \vec{\epsilon}_t, \vec{\epsilon}_t \sim N(\vec{0}, \Sigma_\epsilon \Delta t)$$
 
@@ -199,7 +200,7 @@ where $\Sigma_\epsilon$ is now a covariance matrix that takes into account the e
 
 $$\vec{p}_t = \vec{m}_t + \vec{\nu}_t, \vec{\nu}_t \sim N(0, \Sigma_\nu)$$
 
-In this case, since we are already modelling correlations at fair price level, a typical choice is to take $\Sigma_\nu$ diagonal, i.e. $\Sigma_\nu = \text{diag}(\sigma_{\nu,1}^2, ..., \sigma_{\nu_N}^2)$, although in certain setups one might want to include some of form of bid-ask spread correlation between instruments. 
+In this case, since we are already modelling correlations at fair value level, a typical choice is to take $\Sigma_\nu$ diagonal, i.e. $\Sigma_\nu = \text{diag}(\sigma_{\nu,1}^2, ..., \sigma_{\nu_N}^2)$, although in certain setups one might want to include some of form of bid-ask spread correlation between instruments. 
 
 With this model specification, we can directly use the filtering, smoothing and EM equations discussed in the [Bayesian Modelling](intro_bayesian.md) chapter. Let us though specifically focus on the case of $N=2$ instruments, where we can work out in detail the Kalman filter equations to get further insights into the model's inner workings. 
 
@@ -209,7 +210,7 @@ $$\vec{m}_{t|t-1} = \vec{m}_{t-1|t-1}$$
 
 $$\Sigma_{t|t-1} = \Sigma_{t-1|t-1} + \Sigma_\epsilon \Delta t$$
 
-which are relatively simple, as expected. The update step equations are more interesting, since they include the effect of observations, and critically the impact of one instrument's trades into the fair price or the other:
+which are relatively simple, as expected. The update step equations are more interesting, since they include the effect of observations, and critically the impact of one instrument's trades into the fair value or the other:
 
 $$\vec{m}_{t|t} = \vec{m}_{t|t-1} + K_t ( \vec{P}_{t+\Delta t}-\vec{m}_{t|t-1})$$
 
@@ -262,30 +263,30 @@ Let us analyze some particular cases:
   \end{pmatrix}
   \end{aligned}$$
 
-  The update equations for each instruments fair price read:
+  The update equations for each instruments fair value read:
 
   $$m_{1,t|t} = m_{1,t|t-1} + \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t + \Delta t})$$
 
 
   $$m_{2,t|t} = m_{2,t|t-1} + \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t + \Delta t}) $$
 
-  Notice that these equations are equivalent to the ones that we would derive if we use an observation matrix $H = (0, 1)$ and compute the update step for arbitrary values of the parameters. Going into the results, the second equation is the same update equation we had for a single instrument for which we have observed a trade. The first equation is more interesting, since it isolates the effect that an observation of a trade in an instrument has in our fair price estimation of a correlated instrument. As expected, the influence is proportional to the estimated correlation between the instruments, $\rho_t^{t-1}$. The effect of the influence depends on the relative sizes of the variances in play. It helps to rewrite the equation as:
+  Notice that these equations are equivalent to the ones that we would derive if we use an observation matrix $H = (0, 1)$ and compute the update step for arbitrary values of the parameters. Going into the results, the second equation is the same update equation we had for a single instrument for which we have observed a trade. The first equation is more interesting, since it isolates the effect that an observation of a trade in an instrument has in our fair value estimation of a correlated instrument. As expected, the influence is proportional to the estimated correlation between the instruments, $\rho_t^{t-1}$. The effect of the influence depends on the relative sizes of the variances in play. It helps to rewrite the equation as:
 
   $$m_{1,t|t} = m_{1,t|t-1} + \beta_{12,t}^{t-1} \frac{1}{1+ \frac{\sigma_{\nu,2}^2}{ (\sigma_{2,t}^{t-1})^2}} (m_{2,t|t-1} - P_{2,t + \Delta t})$$
 
   where $\beta_{12,t}^{t-1} \equiv \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}}{\sigma_{2,t}^{t-1}}$ is the linear regression coefficient between $m_{1,t}$ and $m_{2,t}$. It provides an upper bound on the Kalman gain between the two instruments, which happens when the observation in the second instrument has no error $\sigma_{\nu, 2} = 0$. This makes sense, since in the absence of noise in the observation of the second instrument, the update equation becomes the best linear prediction of $m_{1,t}$ using $m_{2,t}$.
 
-priceLet’s evaluate this model in one of the typical scenarios for fair price discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair values for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.
+priceLet’s evaluate this model in one of the typical scenarios for fair value discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair values for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.
 
-For that, we first generate synthetic fair prices using a correlated Brownian motion with $\rho = 0.9$, $\sigma_1 = 5e-4$ and $\sigma_2 = 4e-4$. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the fair price, so correlation is driven exclusively by fair price correlations. To generate the trades, we use standard deviations in the observation covariance of $0.032$ and $0.045$, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the fair price to the real simulated values. The results can be seen in the following figure:
+For that, we first generate synthetic fair values using a correlated Brownian motion with $\rho = 0.9$, $\sigma_1 = 5e-4$ and $\sigma_2 = 4e-4$. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the fair value, so correlation is driven exclusively by fair value correlations. To generate the trades, we use standard deviations in the observation covariance of $0.032$ and $0.045$, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the fair value to the real simulated values. The results can be seen in the following figure:
 
 ```{figure} figures/kalman_correlated.png
 :name: fig:KalmanCorrelated
 :width: 8in
-Estimation of the fair value of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the fair prices are generated (blue lines) and trades (blue dots) are simulated when the market is open, which. happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the fair prices estimated using the Kalman filter, which is trained with half of the data using EM and the run over the second half of the data. The figure focus on four days of test data. 
+Estimation of the fair value of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the fair values are generated (blue lines) and trades (blue dots) are simulated when the market is open, which. happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the fair values estimated using the Kalman filter, which is trained with half of the data using EM and the run over the second half of the data. The figure focus on four days of test data. 
 ```
 
-As we see, the Kalman filter successfully exploits the correlation between instruments to update the fair price of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument. In general, the estimated fair prices include the true fair prices within one standard deviation, depicted as the shaded grey area in the figure. 
+As we see, the Kalman filter successfully exploits the correlation between instruments to update the fair value of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument. In general, the estimated fair values include the true fair values within one standard deviation, depicted as the shaded grey area in the figure. 
 
 ### Pricing sources and models
 
@@ -310,7 +311,7 @@ which has to be positive since any bid and ask limit orders with the same price 
 
 $$m_t^{\text{LOB}} \sim N(P_{\text{mid},t}^\text{LOB}, (S_t^{\text{LOB}})^2 ) $$
 
-The choice of a Gaussian distribution is for simplicity, since it captures well our subjective view of the pricing information that the LOB contains, i.e. as we saw in chapter {ref}`intro_bayesian`, since we only identify the mean and variance as the constraints, the maximum entropy distribution associated with these constraints in the Gaussian distribution --admittedly, there is an extra constraint in the form of positivity of the fair price, but for prices far from the zero boundary we can safely omit this constraint.  A more grounded criticism of this model could be that the Gaussian distribution allows the fair value to be beyond the best bid and ask prices, and those prices are tradeable: if the market consensus of fair value was beyond those prices, market participants would be willing to trade at those prices until they the fair value lies between the bid and ask spread. However, since liquidity might be thin at the first levels, and therefore those prices might not be available for bulk transactions, we consider a soft constraint as more appropriate, even when we use the robust bid-ask spread instead of the best bid and ask spread.
+The choice of a Gaussian distribution is for simplicity, since it captures well our subjective view of the pricing information that the LOB contains, i.e. as we saw in chapter {ref}`intro_bayesian`, since we only identify the mean and variance as the constraints, the maximum entropy distribution associated with these constraints in the Gaussian distribution --admittedly, there is an extra constraint in the form of positivity of the fair value, but for prices far from the zero boundary we can safely omit this constraint.  A more grounded criticism of this model could be that the Gaussian distribution allows the fair value to be beyond the best bid and ask prices, and those prices are tradeable: if the market consensus of fair value was beyond those prices, market participants would be willing to trade at those prices until they the fair value lies between the bid and ask spread. However, since liquidity might be thin at the first levels, and therefore those prices might not be available for bulk transactions, we consider a soft constraint as more appropriate, even when we use the robust bid-ask spread instead of the best bid and ask spread.
 
 Of course, in many situations this pricing source might not be sufficient for actual applications, since in illiquid markets the bid-ask spreads are large and therefore the pricing source has a large uncertainty. In those situations is precisely where the Kalman filter model plays a part. 
 
@@ -398,18 +399,18 @@ Notice that, since the combined fair value estimator is reconstructed independen
 
 ##### Trades
 
-Trades happening in the LOB are a valuable source of pricing information, since they correspond to real transaction prices and not only interests to trade as limit orders. When a trade happens, the exchange reports publicly the time, the size and the price, but not the parties or the orders involved. The latter is particularly relevant since a relevant pricing information is the side (buy or sell) of the order that was aggressive, meaning the one that consumed the liquidity in the order book. As we discussed in {ref}`market_microstructure.md`, this can typically a market order or a limit order at a price that is equal or better that prices available in the opposite side. Reverse engineering the side from a trade is an inference problem, and requires a model. A simple one widely used is the so-called *tick-rule model* which consists on comparing the price of the trade with the mid-price available in the order book just before the trade:
+Trades happening in the LOB are a valuable source of pricing information, since they correspond to real transaction prices and not only interests to trade as limit orders. When a trade happens, the exchange reports publicly the time, the size and the price, but not the parties or the orders involved. The latter is particularly relevant since a relevant pricing information is the side (buy or sell) of the order that was aggressive, meaning the one that consumed the liquidity in the order book. As we discussed in {ref}`market_microstructure`, this can typically a market order or a limit order at a price that is equal or better that prices available in the opposite side. Reverse engineering the side from a trade is an inference problem, and requires a model. A simple one widely used is the so-called *tick-rule model* which consists on comparing the price of the trade with the mid-price available in the order book just before the trade:
 
 * If the price of the trade is below the mid-price, then we assume it was an aggressive sell order, since the the trade price has to be an average weighted by size of the limit orders available. Therefore, it makes sense to assume the trade consumed liquidity in the side closer to the trade price using the mid-price as a reference.
 * If the price of the trade is above the mid-price, we assume it was an aggressive buy order
 
 This model is not perfect, however. It does not account for hidden liquidity that might exist at more favorable prices than those displayed, which would alter the reference mid-price and, consequently, the trade classification logic. Moreover, it assumes a sequential processing of orders, whereas in practice, multiple orders may arrive simultaneously. In such cases, the exchange’s internal matching engine determines execution priority and order pairing through mechanisms that are not observable externally, meaning the apparent sequence of trades and quote updates in public data may not reflect the true matching process. This lack of transparency can lead to misclassification when applying the tick rule or similar models.
 
-Once we have the relevant pricing information for the trade, namely time, side, size and or course price, it can be used to update the current fair price estimation of the financial instrument. The size information is useful to include some measure of information content in the order, as discussed in the simple pricing model section when introducing the Sinclair model: intuitively, a very small size trade should not be as relevant as a large size trade when updating our fair price estimation. Sinclair proposes to model a trade observation as a Gaussian random variable ${\mathcal N}(P_t^{\text{trade}}, \sigma^2(v))$, where $P_t^{\text{trade}}$ is the observed trade price at time $t$, and $\sigma(v)$ is given by:
+Once we have the relevant pricing information for the trade, namely time, side, size and or course price, it can be used to update the current fair value estimation of the financial instrument. The size information is useful to include some measure of information content in the order, as discussed in the simple pricing model section when introducing the Sinclair model: intuitively, a very small size trade should not be as relevant as a large size trade when updating our fair value estimation. Sinclair proposes to model a trade observation as a Gaussian random variable ${\mathcal N}(P_t^{\text{trade}}, \sigma^2(v))$, where $P_t^{\text{trade}}$ is the observed trade price at time $t$, and $\sigma(v)$ is given by:
 
 $$\sigma (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+$$
 
-where $\sigma_p$ is a constant to be estimated, and $v_{\text{max}}$ is an exogenous parameters that provides a typical scale for which trades are considered informative. It can be given by business prior knowledge or estimated from the statistical distribution of trade sizes. Notice that this error has the desirable properties of becoming zero at the scale $v_{\text{max}}$ and above, i.e. trades above this scale are considered maximally informative and the fair price is instantaneously update to this value. It also becomes infinitely large as the volume tends to zero, which makes the Kalman filter model to essentially ignore those observations. 
+where $\sigma_p$ is a constant to be estimated, and $v_{\text{max}}$ is an exogenous parameters that provides a typical scale for which trades are considered informative. It can be given by business prior knowledge or estimated from the statistical distribution of trade sizes. Notice that this error has the desirable properties of becoming zero at the scale $v_{\text{max}}$ and above, i.e. trades above this scale are considered maximally informative and the fair value is instantaneously update to this value. It also becomes infinitely large as the volume tends to zero, which makes the Kalman filter model to essentially ignore those observations. 
 
 Sinclair's model is not the only way to introduce this behavior into the model. Other choices of $\sigma(v)$ are also valid. For example, the model:
 
@@ -421,11 +422,11 @@ $$\sigma (v)= \sigma_{\min} + (\sigma_0 - \sigma_{\min}) e^{-\frac{v}{v_0}}$$
 
 which tends to $\sigma_{\min}$ as $v \rightarrow \infty$.
 
-So far we have not used the side information inferred from the tick-rule model. There are different ways this information can be factored into the pricing. In markets that are quite unbalanced, the observation of a trade in the opposite side where the market is prevalently trading might be considered more informative. This means potentially adjusting the error function with the side information. Another alternative is directly building separate Kalman filters for buy and sell information, which are then combined in a final fair price estimation using the model discussed in the previous section for optimally combining two predictors, although in this case neglecting correlation between bid and ask estimations might not be a solid modelling choice. We leave as an exercise to the reader to derive the optimal linear predictor with correlation.
+So far we have not used the side information inferred from the tick-rule model. There are different ways this information can be factored into the pricing. In markets that are quite unbalanced, the observation of a trade in the opposite side where the market is prevalently trading might be considered more informative. This means potentially adjusting the error function with the side information. Another alternative is directly building separate Kalman filters for buy and sell information, which are then combined in a final fair value estimation using the model discussed in the previous section for optimally combining two predictors, although in this case neglecting correlation between bid and ask estimations might not be a solid modelling choice. We leave as an exercise to the reader to derive the optimal linear predictor with correlation.
 
 #### RfQ traded
 
-We have discussed the Request for Quote (RfQ) protocol in the chapter on [Market Microstructure](market_microstructure.md). In terms of pricing information, the main difference with LOBs is the asymmetry in information between the different participants in the process: dealers and clients. Let us focus on the case of negotiation via Multi-Dealer-to-Client platforms, which has the richer casuistic, from the point of view of the dealer, who is typically the one actively trying to calculate the fair price of the instruments. The pricing information that the dealer receives is the following:
+We have discussed the Request for Quote (RfQ) protocol in the chapter on [Market Microstructure](market_microstructure.md). In terms of pricing information, the main difference with LOBs is the asymmetry in information between the different participants in the process: dealers and clients. Let us focus on the case of negotiation via Multi-Dealer-to-Client platforms, which has the richer casuistic, from the point of view of the dealer, who is typically the one actively trying to calculate the fair value of the instruments. The pricing information that the dealer receives is the following:
 * **Platform composites**: the platform does not provide individual streaming bid and ask prices from other dealers, this is an information only available to clients. However, the platform typically offers a composite price, and index calculated aggregating the individual feeds from the dealers and applying proprietary rules. A composite typically consists on a stream of bid and ask prices that roughly represent average indicative or sometimes executable streamed prices from the dealers active in the platform. For example:
   * Bloombergs' CBBT for bonds (Composite Bloomberg Bond Trader), using executable bid and ask streams from dealers
   * Tradeweb's TW Composite, using both indicative and executable prices
@@ -447,7 +448,7 @@ Apart from the pricing information gained via the trading platform, in order to 
 
 ##### Composites
 
-Modelling composites is similar to modelling mid-prices from order books, since they share in common the structure of information in terms of a continuous feed of bid and ask prices, only that for composites are indicative prices. Again, given that the frequent updates in the feed might not carry new pricing information, it makes sense to model it as an independent fair price source, that can be then aggregated with other estimations, like those using Kalman filters on trades and other information. 
+Modelling composites is similar to modelling mid-prices from order books, since they share in common the structure of information in terms of a continuous feed of bid and ask prices, only that for composites are indicative prices. Again, given that the frequent updates in the feed might not carry new pricing information, it makes sense to model it as an independent fair value source, that can be then aggregated with other estimations, like those using Kalman filters on trades and other information. 
 
 The model is therefore:
 
@@ -471,7 +472,7 @@ Intuitively, the closer the cover and the trade price, the more confidence we mi
 
 where $d_t^{\text{cover}} = |P_t^\text{trade} - P_t^\text{cover}|$ is the distance to the cover, and $g(\cdot)$ a modulating function with a minimum at zero.
 
-A second case is the one in which the dealer misses the RfQ, but the price was the second best quoted. The fact that among the number of dealers quoting competitively the price quoted was the second best carries some significant information that can be used to adjust the fair price. One way to do this is to fit a probabilistic model that predicts the distance to cover based on features $f_i$ available in the negotiation, for example, a simple linear regression model on $d_t^\text{cover}$:
+A second case is the one in which the dealer misses the RfQ, but the price was the second best quoted. The fact that among the number of dealers quoting competitively the price quoted was the second best carries some significant information that can be used to adjust the fair value. One way to do this is to fit a probabilistic model that predicts the distance to cover based on features $f_i$ available in the negotiation, for example, a simple linear regression model on $d_t^\text{cover}$:
 
 $$d_t^\text{cover} = \sum_i w_i f_i + \epsilon $$
 
@@ -485,7 +486,7 @@ A third case happens when the client trades, the dealer misses the RfQ but her q
 
 ##### Hit & Miss
 
-Another source of pricing information comes from analyzing patterns of trading information from the dealer. In particular, it is useful to analyze the hit & miss, i.e. the ratio between won RfQs over the total traded by the client with any dealer (i.e. excluding those where the client did not trade at all), over a certain window of time. Intuitively, a dealer that has an abnormally high or low hit & miss might be using an incorrect fair price estimation from the quoting. Of course, the tricky question here is to assess what are the normal levels of hit & miss, which have to take into account the influence of factors like, for example, inventory levels in the spreads quoted: if a dealer has relatively high inventory holdings, it is likely that she will skew quotes to reduce inventory risk, hence the hit & miss will be higher if there are more quotes overall in the direction of risk reduction. 
+Another source of pricing information comes from analyzing patterns of trading information from the dealer. In particular, it is useful to analyze the hit & miss, i.e. the ratio between won RfQs over the total traded by the client with any dealer (i.e. excluding those where the client did not trade at all), over a certain window of time. Intuitively, a dealer that has an abnormally high or low hit & miss might be using an incorrect fair value estimation from the quoting. Of course, the tricky question here is to assess what are the normal levels of hit & miss, which have to take into account the influence of factors like, for example, inventory levels in the spreads quoted: if a dealer has relatively high inventory holdings, it is likely that she will skew quotes to reduce inventory risk, hence the hit & miss will be higher if there are more quotes overall in the direction of risk reduction. 
 
 If the dealer has estimated a model that estimates the probability of winning the RfQs, and the model is well calibrated, it can be evaluated for the same windows of RfQs as the empirical hit & miss (H&M). If we compute the latter at time $t$ using the last $n$ RfQs, it is given by:
 
@@ -499,35 +500,35 @@ Here, $\mathcal{F}_{t_i}$ are the filtrations at the time $t_i$ of request of th
 
 $$\delta_i = \text{side} (P_{i} - m_{t_i})$$
 
-with $P_{i}$ the price quoted for the i-th RfQ and $m_{t_i}$ the estimation of the fair price at time $t_i$. 
+with $P_{i}$ the price quoted for the i-th RfQ and $m_{t_i}$ the estimation of the fair value at time $t_i$. 
 
 If we consider each RfQ independent of each other, the variance of the hit & miss provides us with a scale of natural variability of our estimation versus the empirical hit & miss:
 
 $$ Var[\text{H\&M}] = \frac{1}{n} \sum_{i=1}^n  P(\text{win}_i|\mathcal{F}_{t_i}) (1-P(\text{win}_i|\mathcal{F}_{t_i})) $$
 
-Intuitively, then, if we get a persistent deviation between $\text{H\&M}_t$ and $E[\text{H\&M}_{t}]$ that cannot be explained by the expected variability from the randomness of the RfQ process, this could be attributed to a potential bias in the estimation of $m_t$, which becomes a further pricing source for our fair price estimation model. Further modelization is required, though, to inject this information into the Kalman filter, which goes beyond the scope of this book. For us, it suffices to point out how we can potentially convert hit & miss deviations from the target into pricing information. 
+Intuitively, then, if we get a persistent deviation between $\text{H\&M}_t$ and $E[\text{H\&M}_{t}]$ that cannot be explained by the expected variability from the randomness of the RfQ process, this could be attributed to a potential bias in the estimation of $m_t$, which becomes a further pricing source for our fair value estimation model. Further modelization is required, though, to inject this information into the Kalman filter, which goes beyond the scope of this book. For us, it suffices to point out how we can potentially convert hit & miss deviations from the target into pricing information. 
 
 #### Correlated instruments
 
-As we discussed above, if a set of instruments exhibit historical price correlations and we have reasons to believe those are structural correlations, i.e. they will continue existing in the present, we can do a joint estimation of the fair prices using a multivariate Kalman filter. This way, information about the price of one instrument can be used to improve the estimation of the others. The pricing sources for these instruments can be any of those discussed previously. 
+As we discussed above, if a set of instruments exhibit historical price correlations and we have reasons to believe those are structural correlations, i.e. they will continue existing in the present, we can do a joint estimation of the fair values using a multivariate Kalman filter. This way, information about the price of one instrument can be used to improve the estimation of the others. The pricing sources for these instruments can be any of those discussed previously. 
 
 There are some caveats though to take into account when using this source of pricing information:
 * The first one is that correlations are **inferred parameters** ans therefore themselves subjected to a certain amount of model risk. The Kalman filter model uses point estimations of the correlations for the updates, and therefore ignores the potential uncertainty associated to the estimation when updating the price. This issue can actually become quite relevant in certain situations, for example when estimating the price of illiquid instruments using more liquid ones. The liquid instrument will have a smaller estimation error than the illiquid one. If point correlation between the instruments is high, it can have a over-weighted influence on the estimation of the price of the illiquid instrument, overriding the intrinsic price dynamics of the illiquid instrument. A Bayesian treatment of correlation can overcome these issues, but then the Kalman filter estimation algorithm can no longer be used, requiring a numerical computation of posterior probabilities for the predict and update steps. 
-* The second one arises when **estimating the correlations** to be used in the Kalman filter model. The typical estimation of correlations used in financial models uses synchronous pricing data, for instance end of day prices. However, rigorously speaking, the correlations used in the Kalman filter model for fair price estimation are between latent fair prices, not price observations. A consistent estimation therefore requires us to compute them endogenously, for example using Maximum Likelihood Estimation or Expectation Maximization over the historical pricing data. The difficulty lies when defining estimators (e.g. MLE ones) for the covariance matrix of asynchronous data. The standard estimator is not valid and we must resort to other less standard estimators. This topic is discussed extensively in {cite:p}`guo2017quantitative`, where they suggest using Fourier methods, among others. Again, as in the previous case, a Bayesian modelling approach for the covariance matrix provides the natural way to circumvent these issues, at the price of adding numerical complexity to the computation. 
+* The second one arises when **estimating the correlations** to be used in the Kalman filter model. The typical estimation of correlations used in financial models uses synchronous pricing data, for instance end of day prices. However, rigorously speaking, the correlations used in the Kalman filter model for fair value estimation are between latent fair values, not price observations. A consistent estimation therefore requires us to compute them endogenously, for example using Maximum Likelihood Estimation or Expectation Maximization over the historical pricing data. The difficulty lies when defining estimators (e.g. MLE ones) for the covariance matrix of asynchronous data. The standard estimator is not valid and we must resort to other less standard estimators. This topic is discussed extensively in {cite:p}`guo2017quantitative`, where they suggest using Fourier methods, among others. Again, as in the previous case, a Bayesian modelling approach for the covariance matrix provides the natural way to circumvent these issues, at the price of adding numerical complexity to the computation. 
 
-## Fundamental models for fair price estimation
+## Fundamental models for fair value estimation
 
-Fundamental models estimate the fair price of a financial instrument by analysing the value of their future cash-flows. Recall from our introductory chapter on financial markets {ref}`intro_financial_markets`, that financial instruments are essentially contracts that promise to pay back funds to the investor that purchases it under conditions specified in the contract. 
+Fundamental models estimate the fair value of a financial instrument by analysing the value of their future cash-flows. Recall from our introductory chapter on financial markets {ref}`intro_financial_markets`, that financial instruments are essentially contracts that promise to pay back funds to the investor that purchases it under conditions specified in the contract. 
 
-### The present value theory of fair price
+### The present value theory of fair value
 
-Even the most simple financial instrument, a promise to pay back a deterministic amount of money in a future fixed date, requires some theoretical hypothesis to estimate its fair price. The basic idea is that a unit of currency received today is worth more than the same unit received in the future, because it can be invested in the interim. Consider a risk-free deposit that pays a deterministic interest rate $r$. An amount of one unit invested today grows to $(1+r)^T$ units after $T$ periods, as far as interest rate payments are reinvested at the same rate (compounded interest). Conversely, receiving one unit in $t$ periods is economically equivalent to receiving $1/(1+r)^T$ units today. This opportunity cost argument implies that any future cash flow must be discounted by the factor $(1+r)^T$ to make it comparable with cash today. Such economic consideration is referred as the *time value of money*.
+Even the most simple financial instrument, a promise to pay back a deterministic amount of money in a future fixed date, requires some theoretical hypothesis to estimate its fair value. The basic idea is that a unit of currency received today is worth more than the same unit received in the future, because it can be invested in the interim. Consider a risk-free deposit that pays a deterministic interest rate $r$. An amount of one unit invested today grows to $(1+r)^T$ units after $T$ periods, as far as interest rate payments are reinvested at the same rate (compounded interest). Conversely, receiving one unit in $t$ periods is economically equivalent to receiving $1/(1+r)^T$ units today. This opportunity cost argument implies that any future cash flow must be discounted by the factor $(1+r)^T$ to make it comparable with cash today. Such economic consideration is referred as the *time value of money*.
 
 Formally, for an investment that delivers a future cash flow $C_T$ at time $T$, the *present value* $PV$ satisfies
 
 $$PV = \frac{C_T}{(1+r)^T}$$
 
-where we have assumed that an interest payment of $r C_T$ is paid each unit of time. The factor $1/(1+r)^T$ is called the *discount factor*, since it is used to discount future cash-flows. Present values becomes our fair price estimation within this framework.
+where we have assumed that an interest payment of $r C_T$ is paid each unit of time. The factor $1/(1+r)^T$ is called the *discount factor*, since it is used to discount future cash-flows. Present values becomes our fair value estimation within this framework.
 
 A typical hypothesis that provides useful mathematical simplifications is that of continuously accrued interest rates. This is also a good approximation for real situations where interests are paid daily, for instance in money market funds. Consider and account that pays interests each time period of size $\Delta$. The interest paid is $r \Delta$ over a unitary notional. If we reinvest the interests, at time $t$ we have accumulated $(1+ r \Delta)^{T/\Delta}$. If we now take the limit $\Delta \rightarrow 0$:
 
@@ -545,7 +546,7 @@ $$ NPV = e^{-rT} C_T - C_0 $$
 
 Notice that, therefore, a rational investor will only be willing to invest in this financial instrument if $C_0 \leq e^{-rT} C_T$, otherwise its NPV would be negative. 
 
-We can now generalize this expression for a financial instrument that pays a stream of deterministic cash-flows $C_{t_i}$ at times $t_i, i = 1, ..., N$. The fair price given by present value becomes then:
+We can now generalize this expression for a financial instrument that pays a stream of deterministic cash-flows $C_{t_i}$ at times $t_i, i = 1, ..., N$. The fair value given by present value becomes then:
 
 $$PV = \sum_{i=1}^N e^{-r t_i} C_{t_i}$$
 
@@ -559,7 +560,7 @@ $$PV_0 = \sum_{i=1}^N e^{-r t_i} {\mathbb E}_0 \left[C_{t_i}\right]$$
 
 The issue with this approach is that, once future cash-flows become uncertain, their expected value is a point estimation of their possible range of values that neglects the rest of potential scenarios that can happen. Recall from our discussion in chapter {ref}`intro_bayesian`, that choosing to represent a random variable by their expected value in terms of decision theory (and fair value estimation is in the end linked to the decision to buy or sell a financial instrument) makes sense when the investor penalizes errors in the estimation using a square loss function. The behavior of real rational investors, though, shows a more asymmetric loss function, in which generally potential extra gains are valued less than the equivalent potential losses. This kind of behavior is better capture by using utility functions, as we will discuss in the next section. 
 
-### The utility indifference theory of fair pricing 
+### The utility indifference theory of fair value estimation 
 
 To ground the discussion in another example, let us consider a specific case of a future uncertain cash-flow whose value depends on the price of another instrument at the time of payment, $S_T$, for example a stock. The cash-flow is therefore $C_T = f(S_T)$. Notice that this is a specific case of a derivative's contract. The function $f(S_T)$ is called the *pay-off* of the derivative, the instrument whose price is $S_T$ is called the *underlying* of the derivative, and the time $T$ is the expiry date of the derivative. Apart from the value $S_T$, it can also depend on other parameters that are deterministic. For instance, for an European call option we have $C_T = (S_T-K)^+$, where $K$ is called the *strike* of the option. An european put options has a payoff $C_T = (K-S_T)^+$. There are also American options where the option can be exercised before the expiry date, which becomes itself a random variable. 
 
@@ -573,7 +574,7 @@ $$ \mathbb{E}_t[U] = 1- \mathbb{E}_t[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)
 
 where $\gamma_i$ is the risk aversion coefficient of the investor. We have discounted the payoff at $T$ by the discount factor $e^{-r(T-t)}$ in order to consider the time value of money, as discussed in the previous section, although now we consider for generality a initial time $t$. 
 
-The fair price in this formalism is the so-called *premium* of the derivative, denoted $C_t$, that the investors is willing to pay (or be paid, depending on the pay-off function) to enter into the derivative's contract today. This changes the utility calculation, since it needs to take into account the premium:
+The fair value in this formalism is the so-called *premium* of the derivative, denoted $C_t$, that the investors is willing to pay (or be paid, depending on the pay-off function) to enter into the derivative's contract today. This changes the utility calculation, since it needs to take into account the premium:
 
 $$ \mathbb{E}_t[U] = 1- \mathbb{E}_t[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T) -C_t\right)}] $$
 
@@ -1024,7 +1025,7 @@ $$0 = m_t {\mathbb E}_{t}[d p_t] + p_t {\mathbb E}_{t}[d m_t] + {\mathbb E}_{t}[
 
 #### Practical applications of the SDF pricing framework
 
-As we have discussed extensively in this chapter, we need fundamental pricing frameworks when we don't have access to liquid market prices of financial instruments, otherwise we can just extract the fair prices using filtering techniques. If we have complete markets, the general idea is to compute the stochastic discount factor using available prices of instruments, and then use those prices to price illiquid instruments which share the same risk factors as those of tradable instruments. 
+As we have discussed extensively in this chapter, we need fundamental pricing frameworks when we don't have access to liquid market prices of financial instruments, otherwise we can just extract the fair values using filtering techniques. If we have complete markets, the general idea is to compute the stochastic discount factor using available prices of instruments, and then use those prices to price illiquid instruments which share the same risk factors as those of tradable instruments. 
 
 Notice that if the market is not complete, we can still use this framework to find a projection of the discount factor on the subspace of instruments with available market prices. This discount factor can be used to find a consistent price of instruments that have some risk factors out of this subspace, by decomposing the general discount factor in:
 * the projection in the subspace

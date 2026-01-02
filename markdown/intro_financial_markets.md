@@ -1,3 +1,4 @@
+(intro_financial_markets)=  
 # Financial Markets
 
 Financial markets address a perennial challenge faced by societies: the efficient allocation of savings toward productive uses. Individuals and institutions with excess funds aim to achieve the highest returns (investment) while maintaining maximum liquidity. Consequently, they often prefer to lend money on a short-term basis. Conversely, those requiring capital—whether to launch new ventures, expand existing businesses, acquire assets such as homes through mortgages, or finance social programs—seek to secure funds at minimal cost and for extended periods. Without a mechanism to reconcile these opposing objectives, surplus funds may remain idle, hindering their potential to contribute to economic productivity.

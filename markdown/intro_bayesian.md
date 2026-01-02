@@ -1,3 +1,4 @@
+(intro_bayesian)=
 # Bayesian Modelling
 
 ## Bayesian probability
@@ -156,9 +157,9 @@ which corresponds to the so-called *Jeffrey's non-informative prior* for this pa
 
 ### Bayesian inference and hypothesis testing
 
-Bayes' theorem can be used as the main tool to guide a theory of rational inference under uncertainty, providing us with a way to quantify the quality of a hypothesis $H$ about the world based on the evidence (observations) available $E$::
+Bayes' theorem can be used as the main tool to guide a theory of rational inference under uncertainty, providing us with a way to quantify the quality of a hypothesis $H$ about the world based on the evidence (observations) available $E$:
 
-$P(H|E) = \frac{P(E|H)}{P(E)} P(H)$
+$$P(H|E) = \frac{P(E|H)}{P(E)} P(H)$$
 
 A high score is achieved in different ways:
 * When the prior probability of the hypothesis is high, meaning that the hypothesis was belief to be true even before analyzing the evidence.
@@ -649,7 +650,7 @@ where information up to time $T$ is taken into account. The equations derived fo
 
 In the next subsection, we will derive both the filtering and the smoothing equations computing these probability distributions for a simple instance of the Kalman filter: the local level model.
 
-Kalman filters have many applications in multiple domains. In financial markets, they can be used to combine different noisy observations of spot prices to infer a consistent estimate of a fair or mid price, to be used typically in the market-making of relatively illiquid instruments like bonds or some derivatives {cite:p}`synclair2010option`. Another use case is to infer prices of instruments when markets are closed, which can be useful for hedging indexes that have components with different time zones. In reference {cite:p}`javaheri2003filtering`, they have been applied to the estimation of term structure models. And in the context of investment strategies, they have a relatively popular application to improve pairs trading strategies {cite:p}`chan2013algorithmic`. We will delve into some of these applications later in this book.
+Kalman filters have many applications in multiple domains. In financial markets, they can be used to combine different noisy observations of spot prices to infer a consistent estimate of a fair or mid price, to be used typically in the market-making of relatively illiquid instruments like bonds or some derivatives {cite:p}`sinclair2010option`. Another use case is to infer prices of instruments when markets are closed, which can be useful for hedging indexes that have components with different time zones. In reference {cite:p}`javaheri2003filtering`, they have been applied to the estimation of term structure models. And in the context of investment strategies, they have a relatively popular application to improve pairs trading strategies {cite:p}`chan2013algorithmic`. We will delve into some of these applications later in this book.
 
 ##### The local level model
 

@@ -130,7 +130,7 @@ Two main sources of risk characterise market making. The first is **inventory ri
 Algorithmic market making automates the process of quote generation and risk management. A full market-making algorithm typically needs to maintain good estimations of the fair price of the instrument quoted and determine appropriate bid and ask quotes around that price, taking into account current market conditions and internal risk constraints. Quotes may be adjusted asymmetrically to manage inventory, for example by quoting more aggressively on one side of the market to reduce accumulated exposure. In many implementations, inventory risk is further mitigated through automatic hedging using correlated instruments. The following figure sketches the components of a market-making algorithm for Interest Rate Swaps:
 
 ```{figure} figures/market-making.png
-:name: fig:twap
+:name: fig:market_making
 :width: 8in
 A market-making algorithm for standard Interest Rate Swaps (IRS) quoted in interbank markets based on a limit order book. The main components of the algorithm are 1) fair price determination (mid-price in the order book), 2) spread determination, 3) hedging portfolio exposures, in this case using liquid futures on government bonds.
 ```
