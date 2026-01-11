@@ -3,7 +3,7 @@ project:
   title: Advanced Analytics and Algorithmic Trading
   authors:
     - name: Javier Sabio González
-  github: https://xaviweise.github.io/aaat/
+  github: xaviweise/aaat
   bibliography:
     - references.bib
   exports:
