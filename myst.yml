@@ -70,6 +70,7 @@ project:
 site:
   options:
     folders: true
+    base_url: "/"
   template: book-theme
   actions:
     - title: Advanced Analytics and Algorithmic Trading
