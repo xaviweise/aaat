@@ -546,7 +546,7 @@ $$ NPV = e^{-rT} C_T - C_0 $$
 
 Notice that, therefore, a rational investor will only be willing to invest in this financial instrument if $C_0 \leq e^{-rT} C_T$, otherwise its NPV would be negative. 
 
-We can now generalize this expression for a financial instrument that pays a stream of deterministic cash-flows $C_{t_i}$ at times $t_i, i = 1, ..., N$. The fair value given by present value becomes then:
+We can now generalize this expression for a financial instrument that pays a stream of deterministic cash-flows $C_{t_i}$ at times $t_i, i = 1, ..., N$. This is the case for example of standard government bonds issued by most countries. The fair value given by present value becomes then:
 
 $$PV = \sum_{i=1}^N e^{-r t_i} C_{t_i}$$
 
@@ -584,7 +584,7 @@ $$ \mathbb{E}_t[U] = 1- \mathbb{E}_t[e^{-\gamma_d \left(C_t - e^{-r(T-t)}f(S_T) 
 
 but even introducing the dealer's utility function, how could we compute the value of the premium?
 
-For the answer, we need first to frame the problem in other terms: what is the maximum premium that the investor would be willing to pay to enter into the contract? Since the alternative to not entering into the contract implies a zero payoff with total certainty, whose expected utility in this framework is $0$$, we can argue that the investor would be willing to buy the derivative as far as the premium makes him/her better off, i.e. $\mathbb{E}_t[U] > 0$. For a value of the premium such that $\mathbb{E}_t[U] = 0 $, the investor is indifferent to buy or not buy. This value of the premium is called the <em>reservation price</em> or the <em>utility indifference price</em> of the investor. Of course the same computation could be done for the dealer, obtaining a different reservation price. An agreement will only happen if the maximum premium that the investor is willing to pay is above the minimum premium that the dealer is willing to receive. 
+For the answer, we need first to frame the problem in other terms: what is the maximum premium that the investor would be willing to pay to enter into the contract? Since the alternative to not entering into the contract implies a zero payoff with total certainty, whose expected utility in this framework is $0\$$, we can argue that the investor would be willing to buy the derivative as far as the premium makes him/her better off, i.e. $\mathbb{E}_t[U] > 0$. For a value of the premium such that $\mathbb{E}_t[U] = 0 $, the investor is indifferent to buy or not buy. This value of the premium is called the <em>reservation price</em> or the <em>utility indifference price</em> of the investor. Of course the same computation could be done for the dealer, obtaining a different reservation price. An agreement will only happen if the maximum premium that the investor is willing to pay is above the minimum premium that the dealer is willing to receive. 
  
 Let us first see the problem from the dealer's point of view. In real situations, it is typically the investor who comes to the dealer and request a price for the derivative. The minimum premium that the dealer would be willing to accept to provide the contract as a reference for derivatives pricing, i.e. the reservation price of the dealer, is the one that solves:
 
@@ -1033,12 +1033,121 @@ Notice that if the market is not complete, we can still use this framework to fi
 
 This will provide us with a price that has the minimum uncertainty given the available prices.
 
-In complete markets, we have the guarantee to be a 
+In complete markets, we have the guarantee that a stochastic discount factor exists. Let us compute it for some representative financial instruments. 
+
+##### Bond pricing
+
+We consider a standard bond paying a fixed coupon rate $c$ at periodic times $t_i = 1, ..., N$. The day-count fraction $\gamma_i$ is the annualized fraction of days between coupon payments. The bond is referred to a notional $M$, so the coupon cash-flows are $C_i = \gamma_i c M$ and the principal paid at maturity $T = t_N$ is $M$. 
+
+The payoff is therefore:
+
+$$X = \sum_{i=1}^{N} \gamma_i c M 1_{t_i} + M 1_T$$
+
+The price at time $t$ is therefore given by:
+
+$$B_t = {\mathbb E}_t\left[ \sum_{i=1}^{N} \frac{m_{t_i}}{m_t}\gamma_i c M 1_{t_i} + \frac{m_{T}}{m_t} M 1_T \right] =  \sum_{i=1}^{N} {\mathbb E}_t\left[ \frac{m_{t_i}}{m_t}\right] \gamma_i c M + {\mathbb E}_t\left[\frac{m_{T}}{m_t}\right] M  $$
+
+We define the discount factor as $D(t, t_i) \equiv {\mathbb E}_t\left[ \frac{m_{t_i}}{m_t}\right]$, so we have:
+
+$$B_t = \sum_{i=1}^{N} D(t, t_i) \gamma_i c M + D(t, T) M$$
+
+How to proceed from here depends on our modelling choices regarding the risk factors that are relevant for pricing as well as the set of liquid instruments with available prices. For example, if we have a set of $N$ bonds from the same issuer paying coupons at the same dates $t_i$ but with different maturities, we could simply write the $N$ pricing equations and solve for the discount factors $D(t, t_i)$, without having to compute explicitely the SDF. This could be used to price non-standard bonds (e.g. with different deterministic coupons or day-count fraction conventions) as far as they pay on the same time grid. If they pay at different times, we need to make some theoretical hypothesis to be able to interporlate the value of the discount factors, or directly build a model of the SDF. 
+
+A first simple model is assuming that bonds only depend on a single risk factor, an overall macroeconomic interest rate $r_t$, for example a short-term interbank rate  (e.g. one linked to collateralized contracts like overnight index swaps, see chapter {ref}`intro_financial_instruments).  For the moment, we consider it deterministic and constant: $r_t = r$. Let us assume in this market we have access to a money-market account that accrues interest continuously. The pay-off at time $T$ of the money market account is $\beta_T = \beta_t e^{r(T-t)}$, for a initial investment $\beta_t$, which is also naturally the price of this instrument at time $t$. Therefore, the pricing equation is given by:
+
+$$m_t \beta_t=  {\mathbb E}_t\left[ m_T \beta_T \right] = m_T \beta_T$$
+
+where, in the second step, we have applied that interest rates are deterministic and also the only risk factor in our model, so the SDF becomes deterministic as well. Therefore, the SDF is given by:
+
+$$m_T = m_t e^{-r(T-t)}$$
+
+whose dynamics is: $dm_t = - r m_t dt$. We can then simply compute the discount factors at any arbitrary time as $D(t, t_i) = e^{-r(t_i -t)}$, and the price of a standard bond simplifies to:
+
+$$B_t = \sum_{i=1}^{N} e^{-r(t_i-t)} \gamma_i c M + e^{-r(T-t)} M  $$
+
+Notice that we have recovered the pricing equation derived in the present value pricing framework. As already anticipated, the SDF framework is general enough to incorporate this pricing framework, which corresponds to the case of a simple market with only one tradable instrument, the money-market account, and the hypothesis that interest rates are deterministic and constant. It is actually not difficult to generalize this result to time-dependent deterministic interest rates $r_t$. Using $dm_t = -r_t m_t dt$, we have $m_T = m_t e^{-\int_t^T r_t dt}$, i.e. $D(t, t_i) =  e^{-\int_t^{t_i} r_t dt}$.
+
+In practice, though, it is too simplistic to consider that the price of bonds, even those issued by governments with sound finances, does not have an idiosyncratic country risk factor. This can be seen empirically, since the price of traded bonds don't usually matches the discounting of their future cash-flows using interbank rates. The standard practice is to introduce their own interest rate risk factors, defined by the so-called yield curve $y(t, T_k)$, which by definition is the interest rate that matches market prices of standard bonds with maturities $T_k$:
+
+$$B_{k,t}^{mkt} = \sum_{i=1}^{N} e^{-y(t, T_k)(t_i-t)} \gamma_i c_k M_k + e^{-y(t, T_k)(T_k-t)} M_k  $$
+
+Again, in order to extend this pricing framework to other instruments with non-liquid prices, we need to be able to interporlate the yield curve to other maturities. Market practitioners might directly use interpolation schemes that ensure the yield curve is well behaved, e.g. does not produce prices that are arbitragable. There is also a large literatur on *term-structure* interest rate models from which consistent yield curve parametric functions can be derived, that are then fitted to market prices. We refer the reader to {cite:p}`BrigoMercurio2006` {cite:p}`AndersenPiterbarg2010a` {cite:p}`AndersenPiterbarg2010b` for more details. 
+
+For the purpose of our discussion on how to build stochastic discount factor models, let us consider one of the most simple instances of such term-structure models, the Vasicek model {cite:p}`Vasicek1977`. This model assumes that the entire yield curve is driven by a single risk factor, represented by an instantaneous continuously compounded short rate $r_t$ that drives the movements of the full yield curve $y(t, T)$. The short rate $r_t$ is modeled as a stochastic process following an Ornstein–Uhlenbeck mean-reverting dynamics, as discussed in {ref}`stochastic_calculus`:
+
+$$dr_t = \kappa (\theta - r_t) + \sigma dW_t$$
+
+where $\kappa > 0$ is the speed of mean reversion, $\theta$ the long run mean level, $\sigma > 0 $ the volatility and $W_t$ a Wiener process. Notice that this short-rate is not anymore a interbank reference rate, but a funding rate linked to the issuer. As mentioned above, an alternative model could try to keep an explicit decomposition as $r_t = r_t^{ois} + s_t$, where now $r_t^{ois}$ is the interbank rate and $s_t$ the spread associated with the specific issuer, linked to specific funding, credit and liquidity characteristics of the issuer. But we will not follow this path in this section. 
+
+In order to find the SDF, we still assume there is a money-market account $\beta_t$ now linked to the funding short-rate $r_t$ of the issuer. Additionally, we define so-called zero-coupon bonds (ZCBs) that pay only a principal of 1$ at maturity $T$, whose prices are directly the discount factors, since:
+
+$$P_t(1_{T}) = {\mathbb E}_t \left[\frac{m_T}{m_t} \right] = D(t, T)$$
+
+We propose the simplest ansatz for the SDF that preserves non-arbitrability, i.e. as we discussed in chapter {ref}`stochastic_calculus`, a log-normal process whose stochastic differential equation is given by:
+
+$$\frac{d m_t}{m_t} = \mu_t(r_t) dt + \lambda_t(r_t) dW_t$$
+
+where $\mu$ and $\lambda$ are, for the moment, generic functions of time and the short-rate. 
+
+Our SDF has to price all the instruments in our market: the money-market account and the zero-coupon bonds. We first apply the continuous-time version of our pricing equation to the money-market equation, namely:
+
+$${\mathbb E}[d(m_t \beta_t)] = 0$$
+
+where, recall, $d\beta_t = r_t \beta dt$. Applying Ito's Lemma:
+
+$$d(m_t \beta_t) = dm_t \beta_t + m_t d\beta_t + dm_t d\beta_t = \beta_t m_t (\mu_t(r_t)  + r_t) dt + \beta_t  m_t  \lambda_t(r_t) dW_t$$
+
+Applying the pricing equation, we get a condition on the SDF:
+
+$${\mathbb E}[d(m_t \beta_t)] =  \beta_t m_t (\mu_t(r_t)  - r_t) dt = 0 \rightarrow \mu_t(r_t) = - r_t$$
+
+Let us apply it now to the ZCBs. We make the ansatz $D(t, T) = f(t, r_t)$ given that the SDF itself is Markovian on $r_t$. Applying Ito's lemma to this expression, we get:
+
+$$d f(t, r_t) = \frac{\partial f}{\partial t} dt + \frac{\partial f}{\partial r_t} dr_t + \frac{1}{2}  \frac{\partial^2 f}{\partial^2 r_t} \sigma^2 dt$$
+
+where we have used the $SDE$ for $r_t$ given by the Vasicek model. Now we apply Ito's on $d(m_t f(t, r_t))$:
+
+$$ d (m_t f(t, r_t)) = m_t \left(\frac{\partial f}{\partial t} + \kappa (\theta - r_t) \frac{\partial f}{\partial r_t} +  \frac{1}{2}   \sigma^2 \frac{\partial^2 f}{\partial^2 r_t}\right) + m_t \sigma  \frac{\partial f}{\partial r_t} dW_t + f m_t (-r dt + \lambda_t dW_t) + \lambda_t m_t \sigma  \frac{\partial f}{\partial r_t} dt $$
+
+We use now the pricing equation:
+
+$${\mathbb E}[d(m_t D(t, T))] = 0$$
+
+to get the following partial differential equation for $f(t, r_t)$:
+
+$$\frac{\partial f}{\partial t} + \kappa (\theta - r_t) \frac{\partial f}{\partial r_t} +  \frac{1}{2}   \sigma^2 \frac{\partial^2 f}{\partial^2 r_t} - f r  + \lambda_t \sigma  \frac{\partial f}{\partial r_t} = 0$$
+
+with terminal condition $f(T, r_T) = 1$. To solve this equation we make a farther simplification and consider that $\lambda_t(r_t)$ is affine in $r_t$, meaning it is a linear function:
+
+$$\lambda_t(r_t) = \lambda_0 + \lambda_1 r_t$$
+
+In this case, the exponential ansatz $f(t, r_t) = A(t, T) e^{-B(t, T)r_t}$ transform the problem into the following two PDEs:
+
+$$\dot{B}(t, T) = 1 - (\kappa + \lambda_1 \sigma) B(t, T)$$
+
+$$\dot{A}(t, T) = A(t, T)[\kappa \theta B(t, T) - \frac{1}{2}\sigma^2 B(t, T)^2 - \lambda_0 \sigma B(t, T)]$$
+
+with terminal conditions $B(T, T) = 0$ and $A(T, T) = 1$. The solution reads:
+
+$$B(t, T) = \frac{1- e^{-(\kappa + \sigma \lambda_1)(T-t)}}{\kappa + \sigma \lambda_1}$$
+
+$$A(t, T) = \left(\frac{\kappa \theta - \sigma \lambda_0}{\kappa + \sigma \lambda_1} - \frac{\sigma^2}{2 (\kappa + \sigma \lambda_1)}\right)(B(t, T) - (T-t)) - \frac{\sigma^2}{4(\kappa + \sigma \lambda_1)}B(t, T)^2$$
+
+with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to prices of zero coupon bonds that can be themselves be extracted from liquid bond prices. Of course we two parameters we will be ablo to fit only approximately this term structure. In order to fit the prices of any set of liquid bonds from a given issuer, we would need a model that allows for further flexibility. One such model is for example the Hull & White model {cite:p}`HullWhite1990`.
+
+#### Stock pricing
+
+
+
+#### Option pricing
+
+
+
+
 
 - simple deterministic cashflows (bond)
 - stock?
 - option
-- incomplete markets: projection
 
 
 #### Connection to previous pricing frameworks

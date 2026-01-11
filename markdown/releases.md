@@ -3,7 +3,7 @@
 # Release Notes
 
 ## 12.25 
-Finished first version of chapter on fair price estimation. Added new sections on Algorithmic Trading and Intro to Financial Instruments chapters. Fixed some typos in references. 
+Expanded fair price estimation chapter with fundamental models for fair pricing, including the stochastic discount factor model, with an extensive example from fixed income. Added new sections on Algorithmic Trading and Intro to Financial Instruments chapters. Fixed some typos in references. 
 
 ## 11.25
 Started chapter introducing the generalities of Algorithmic Trading. Continued working on financial instruments chapter and extended the discussion of fair value estimation using Kalman filters to add a discussion on specific pricing sources.
