@@ -1,5 +1,0 @@
-# Factor Investing
-
-## Introduction
-
-## Exercises

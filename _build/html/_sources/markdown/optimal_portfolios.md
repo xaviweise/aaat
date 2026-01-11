@@ -1,5 +1,0 @@
-# Optimal portfolios
-
-## Introduction
-
-## Exercises

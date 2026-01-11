@@ -1,5 +1,0 @@
-# Liquidity modelling
-
-## Introduction
-
-## Exercises
