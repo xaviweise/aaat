@@ -70,8 +70,8 @@ project:
 site:
   options:
     folders: true
+    baseurl: "/"
   template: book-theme
+  domains:
+    - www.datasciencealgotrading.com
   nav: []
-  actions:
-    - title: Data Science Algo Trading
-      url: https://www.datasciencealgotrading.com
