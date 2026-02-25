@@ -257,13 +257,15 @@ $$\text{Hit \& Miss Ratio} = \frac{\text{Number of Hits}}{\text{Total Number of 
 
 The effectiveness of an algorithmic trading strategy is not solely determined by the sophistication of the algorithm itself, but also by the robustness and efficiency of the infrastructure that supports it. A well-designed infrastructure ensures low latency, high capacity, and resilience—qualities that are indispensable in modern electronic markets. The infrastructure required for algorithmic trading is composed of several interconnected components, each playing a critical role in the execution, monitoring, and optimization of trading strategies.
 
-### Core Requirements of Algorithmic Trading Infrastructure
+### Core Requirements 
 
-To support the demands of algorithmic trading, the infrastructure must meet several fundamental requirements. First and foremost is the need for **high speed and low latency**. Delays in transmitting data or executing orders can significantly impact performance, particularly for high-frequency trading (HFT) strategies, where microsecond-level latency can make the difference between profit and loss. The necessary latency threshold depends on the type of algorithm and the markets in which it operates. For instance, HFT strategies often require microsecond-level precision, while execution algorithms may tolerate slightly higher delays.
+To support the demands of algorithmic trading, the infrastructure must meet several fundamental requirements:
 
-Another critical requirement is **capacity**. Algorithmic trading generates a vast number of messages due to the high frequency of orders, cancellations, and updates. The infrastructure must be capable of handling this volume without degradation in performance, ensuring that the system remains responsive even during periods of peak activity.
+*  **High speed and low latency**: delays in transmitting data or executing orders can significantly impact performance, particularly for high-frequency trading (HFT) strategies, where microsecond-level latency can make the difference between profit and loss. The necessary latency threshold depends on the type of algorithm and the markets in which it operates. For instance, HFT strategies often require microsecond-level precision, while execution algorithms may tolerate slightly higher delays.
 
-Finally, **resiliency** is essential. The system must include mechanisms for monitoring performance in real-time and handling failures gracefully. This includes the ability to disconnect from the market quickly and orderly if necessary, as well as redundant systems to ensure continuity in the event of hardware or software failures. Resiliency also involves implementing pre-trade and post-trade controls to prevent errors and detect potential market abuse, ensuring that the trading process remains both efficient and compliant.
+* **Capacity**: algorithmic trading generates a vast number of messages due to the high frequency of orders, cancellations, and updates. The infrastructure must be capable of handling this volume without degradation in performance, ensuring that the system remains responsive even during periods of peak activity.
+
+* **Resiliency**: the system must include mechanisms for monitoring performance in real-time and handling failures gracefully. This includes the ability to disconnect from the market quickly and orderly if necessary, as well as redundant systems to ensure continuity in the event of hardware or software failures. Resiliency also involves implementing pre-trade and post-trade controls to prevent errors and detect potential market abuse, ensuring that the trading process remains both efficient and compliant.
 
 ### Key Components of Algorithmic Trading Infrastructure
 
@@ -279,56 +281,56 @@ Architecture of an algorithmic trading system. The overall principle for the tem
 
 The algorithmic trading server, often referred to as a "strategy container," is the core platform where trading algorithms are executed. It generates orders based on the algorithm’s logic and reacts to real-time market data. There are several approaches to building this component, each with its own advantages and trade-offs.
 
-Firms may choose to use **third-party servers** that include a suite of pre-built algorithms. These platforms often provide tools for developing proprietary strategies, ranging from support for traditional programming languages to complex graphical interfaces. Examples of such providers are **Algo Trader**, **Pragma360** and **QuantConnect**.
+Firms may choose to use third-party servers that include a suite of pre-built algorithms. These platforms often provide tools for developing proprietary strategies, ranging from support for traditional programming languages to complex graphical interfaces. Examples of such providers are Algo Trader, Pragma360 and QuantConnect.
 
-On the other hand, large brokers, dealers, and hedge funds often develop their own algorithmic trading servers **in-house**. This approach allows for greater customization and differentiation, as proprietary algorithms can be tailored to specific market conditions and trading objectives. The choice of programming language depends on performance requirements, with high-performance code typically written in languages like Java, C#, or C++, while Python and MATLAB are often used for prototyping and less latency-sensitive applications.
+On the other hand, large brokers, dealers, and hedge funds often develop their own algorithmic trading servers in-house. This approach allows for greater customization and differentiation, as proprietary algorithms can be tailored to specific market conditions and trading objectives. The choice of programming language depends on performance requirements, with high-performance code typically written in languages like Java, C#, or C++, while Python and MATLAB are often used for prototyping and less latency-sensitive applications.
 
-The server typically employs **complex event processing (CEP)** logic to handle real-time data streams and make rapid trading decisions. They are also sometimes built using **reactive programming** principles, which allow the system to respond dynamically to changes in market conditions, further enhancing the agility and responsiveness of the trading infrastructure.
+The server typically employs complex event processing (CEP) logic to handle real-time data streams and make rapid trading decisions. They are also sometimes built using reactive programming principles, which allow the system to respond dynamically to changes in market conditions, further enhancing the agility and responsiveness of the trading infrastructure.
 
 #### Market Data Server (MDS)
 
-The Market Data Server (MDS) serves as the central hub for both historical and real-time market data, which is essential for algorithm calibration, backtesting, and live trading. Historical data is stored in a "data store," "data lake," or "data repository" and is used for calibrating and backtesting strategies. **KDB+** remains the industry standard for handling time-series data due to its in-memory performance and ability to process vast datasets at high speed. It is widely used in finance for algorithmic trading, risk management, and market surveillance, particularly in environments where latency and accuracy are paramount.
+The Market Data Server (MDS) serves as the central hub for both historical and real-time market data, which is essential for algorithm calibration, backtesting, and live trading. Historical data is stored in a "data store," "data lake," or "data repository" and is used for calibrating and backtesting strategies. KDB+ remains the industry standard for handling time-series data due to its in-memory performance and ability to process vast datasets at high speed. It is widely used in finance for algorithmic trading, risk management, and market surveillance, particularly in environments where latency and accuracy are paramount.
 
-For real-time data, firms can obtain market data either directly from trading venues or through vendors like **LSEG** (acronym for London Stock Exchange Group, which bought Refinitiv, previously known as Thomson Reuters)  or **Bloomberg**. While vendors offer the advantage of a single point of access and standardized data formats, connecting directly to exchanges can reduce latency, which is critical for high-frequency and latency-sensitive strategies. For professional applications, it is recommended to have at least two alternative data sources to ensure redundancy and reliability.
+For real-time data, firms can obtain market data either directly from trading venues or through vendors like LSEG (acronym for London Stock Exchange Group, which bought Refinitiv, previously known as Thomson Reuters)  or Bloomberg. While vendors offer the advantage of a single point of access and standardized data formats, connecting directly to exchanges can reduce latency, which is critical for high-frequency and latency-sensitive strategies. For professional applications, it is recommended to have at least two alternative data sources to ensure redundancy and reliability.
 
 #### Order Management System (OMS)
 
 The Order Management System (OMS) is responsible for handling all orders sent to trading venues. It manages order entry, routing, and status monitoring, as well as trade booking and reconciliation. Key functionalities include order entry, which can be done manually or via algorithms, and order routing, which involves encoding orders according to a standardized protocol and transmitting them to trading venues.
 
-The **Financial Information eXchange (FIX) protocol** remains the most widely used standard in electronic trading, providing a consistent and efficient means of communication between clients, brokers, and exchanges. OMS platforms such as **Bloomberg AIM**, **Fidessa OMS**, and **FIS Valdi** continue to be prominent in the industry, offering robust solutions for managing order flow across multiple asset classes and regions.
+The Financial Information eXchange (FIX) protocol remains the most widely used standard in electronic trading, providing a consistent and efficient means of communication between clients, brokers, and exchanges. OMS platforms such as Bloomberg AIM, Fidessa OMS, and FIS Valdi continue to be prominent in the industry, offering robust solutions for managing order flow across multiple asset classes and regions.
 
 #### Execution Management System (EMS)
 
 While OMS platforms focus on order management, Execution Management Systems (EMS) are specialized for order execution and algorithmic trading. EMS platforms often overlap with OMS in functionality but are more outward-facing, offering connectivity to multiple exchanges, brokers, and trading platforms. They provide tools for pre-trade and post-trade analysis, real-time monitoring, and Direct Market Access (DMA).
 
-**Bloomberg EMSX** remains a leading EMS platform, offering global, broker-neutral equities and futures trading, as well as integration with Bloomberg’s buy-side OMS, AIM. EMSX supports a wide range of asset classes, including equities, futures, options, and index swaps, and provides access to nearly every listed market through its extensive network of broker destinations.
+Bloomberg EMSX remains a leading EMS platform, offering global, broker-neutral equities and futures trading, as well as integration with Bloomberg’s buy-side OMS, AIM. EMSX supports a wide range of asset classes, including equities, futures, options, and index swaps, and provides access to nearly every listed market through its extensive network of broker destinations.
 
 #### Market Making Trading Platforms
 
 For firms engaged in market-making activities, specialized platforms are available that provide tools for managing Request for Quote (RfQ) and Request for Stream (RfS) workflows. These platforms typically include pricing and quoting engines, auto-quoting and auto-hedging capabilities, and integration with OMS and EMS.
 
-**Itiviti**, now part of Broadridge, continues to offer a suite of market-making solutions, including Tbricks and Orc Trader, which are designed for listed derivatives and provide real-time risk control and customization. **Numerix Oneview for Trading** ioffers real-time pricing, market data management, and risk calculations for structured products and derivatives. **ION Trading** is a major player offering platforms for Fixed Income trading. 
+Itiviti, now part of Broadridge, continues to offer a suite of market-making solutions, including Tbricks and Orc Trader, which are designed for listed derivatives and provide real-time risk control and customization. Numerix Oneview for Trading offers real-time pricing, market data management, and risk calculations for structured products and derivatives. ION Trading is a major player offering platforms for Fixed Income trading. 
 
 #### Analytics and Backtesting Server
 
 The analytics server is used for off-line analysis, including the calibration of algorithm parameters and performance evaluation. It relies on historical or synthetic data to simulate how strategies would have performed under different market conditions. Historical data reflects real market conditions but is limited to past scenarios, while synthetic data can be generated to simulate a wider range of market conditions, including extreme or unlikely scenarios.
 
-Platforms like **QuantConnect** and **Deltix** provide comprehensive backtesting and analytics capabilities, allowing traders to test and refine their strategies before deployment.
+Platforms like QuantConnect and Deltix provide comprehensive backtesting and analytics capabilities, allowing traders to test and refine their strategies before deployment.
 
 
 #### Profit & Loss (P&L) and Risk Server
 
 The P&L and risk server tracks the real-time performance of trading positions, providing metrics such as profit and loss, exposure, and risk indicators. These systems are often integrated with the firm’s broader risk management infrastructure but may include specialized features for algorithmic trading.
 
-**Murex MX.3** remains a leading platform in this space, offering integrated solutions for trading, risk management, and processing across a wide range of asset classes. It provides real-time risk monitoring and analysis, enabling institutions to identify and mitigate potential risks promptly.
+Murex MX.3 is a leading platform in this space, offering integrated solutions for trading, risk management, and processing across a wide range of asset classes. It provides real-time risk monitoring and analysis, enabling institutions to identify and mitigate potential risks promptly.
 
 #### Infrastructure for Small Firms and Private Investors
 
 Not all market participants require the same level of infrastructure. Small firms and private investors often rely on third-party solutions that bundle algorithmic trading servers, analytics, backtesting, and connectivity to brokers and exchanges.
 
-Platforms like **MetaTrader 5 (MT5)**, **Interactive Brokers**, and **QuantConnect** offer accessible and cost-effective alternatives, providing a range of tools for developing, testing, and deploying trading strategies. **Crowdsourced hedge funds** such as **Numerai** and **Quantiacs** continue to provide environments for developing and backtesting trading algorithms, with the best-performing strategies potentially being included in the fund’s portfolio.
+Platforms like MetaTrader 5 (MT5), Interactive Brokers, and QuantConnect offer accessible and cost-effective alternatives, providing a range of tools for developing, testing, and deploying trading strategies. Crowdsourced hedge funds such as Numerai and Quantiacs continue to provide environments for developing and backtesting trading algorithms, with the best-performing strategies potentially being included in the fund’s portfolio.
 
-For those with limited resources, open-source libraries like **PyAlgoTrade**, **Zipline**, and **Backtrader** provide cost-effective alternatives for backtesting and strategy development. Cloud infrastructure from providers like **AWS**, **Google Cloud**, and **Microsoft Azure** further enhances accessibility, allowing traders to scale their operations without significant upfront investment.
+For those with limited resources, open-source libraries like PyAlgoTrade, Zipline, and Backtrader provide cost-effective alternatives for backtesting and strategy development. Cloud infrastructure from providers like AWS, Google Cloud, and Microsoft Azure further enhances accessibility, allowing traders to scale their operations without significant upfront investment.
 
 
 
