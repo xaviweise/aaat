@@ -150,3 +150,186 @@ By contrast, investment algorithms operating over **longer time horizons** —su
 In other cases, particularly in systematic and robo-investment strategies, algorithms take on a more comprehensive role. They may determine asset allocation, rebalance portfolios periodically, and manage risk in a largely automated fashion. Execution itself may still be delegated to specialised execution algorithms, but the investment logic —how capital is allocated across assets and over time— is embedded directly in the algorithmic framework.
 
 As the number of strategies, instruments, or portfolios managed by an institution increases, the economic rationale for automation becomes stronger. Managing a large and diverse set of investment strategies manually is costly and error-prone, even when trading frequencies are relatively low. In such environments, investment algorithms provide scalability, consistency, and the ability to manage complexity in a controlled and systematic way.
+
+## Developing Trading Algorithms
+
+Developing a trading algorithm is a structured and iterative process that begins with a clear definition of its objectives. The purpose of the algorithm dictates the approach, data requirements, and performance metrics. For **execution algorithms**, the primary objective is to minimize transaction costs and market impact when buying or selling large volumes of assets. This often involves breaking down orders into smaller trades and executing them over time or across multiple venues to avoid moving the market. For **market-making algorithms**, the goal is to provide liquidity by continuously quoting bid and ask prices, profiting from the spread while carefully managing inventory risk and adverse selection. Meanwhile, **intraday investment algorithms** aim to generate returns by exploiting short-term price inefficiencies, arbitrage opportunities, or momentum effects, where speed and precision are critical.
+
+Once the objective is defined, the next step is to establish how the algorithm’s performance will be measured. The choice of benchmarks is crucial, as it determines how success is evaluated and how different strategies are compared. Performance metrics vary depending on the type of algorithm. For example, execution algorithms are often evaluated based on their ability to achieve a favorable average price relative to the market, while investment strategies focus on risk-adjusted returns and drawdowns. Market - making algorithms typically track the profit & loss of the portfolio, as well as specific liquidity provision measures like the percentage of time during the market hours that bid and ask quotes were posted (for LOB based market-making) or the percentage of request for quotes for which a price has been provided (for RfQ based market-making).
+
+Data plays a central role in algorithmic trading. The type and quality of data required depend on the strategy: high-frequency trading demands ultra-low-latency, tick-level data, while longer-term strategies may rely on daily or hourly price series. Historical data is used for both backtesting and calibrating the algorithm’s parameters. However, it is essential to recognize the limitations of historical data, as markets evolve and past performance does not guarantee future results. Overfitting—where an algorithm is excessively tailored to historical patterns—can lead to poor performance in live trading. To address this, developers use techniques such as out-of-sample testing, cross-validation, and stress testing under different market conditions.
+
+The design phase is where the algorithm is developed. There are several approaches to strategy creation:
+
+- **Mathematical Optimization:** Techniques like Dynamic Programming or Mean - Variance optimization are used to design a strategy that achieves the selected goal. 
+- **Machine Learning:** Algorithms can be trained to recognize patterns in market data, adapt to changing conditions, or predict short-term price movements. In addition, techniques like Reinforcement Learning can be used for developing adaptive trading strategies.
+- **Heuristic Rules:** Some strategies are based on empirical observations or trader intuition, codified into rules that guide the algorithm’s actions. While these may lack the complexity of data-driven models, they can be effective in markets where human judgment is still valuable.
+- **Hybrid Approaches:** Many algorithms combine elements of the above, leveraging machine learning for pattern recognition and mathematical optimization for efficient execution.
+
+After the design phase, the algorithm is implemented in code, typically using languages such as Python, C++, or Java, depending on performance requirements. The algorithm is then tested in a controlled environment, first through historical backtesting and later in real-time simulations or paper trading. Backtesting helps assess how the algorithm would have performed in past market conditions, but it is important to account for transaction costs, slippage, and market impact, which are often overlooked in simplified tests. Stress testing under extreme scenarios—such as flash crashes or periods of low liquidity—helps identify potential vulnerabilities before deployment.
+
+Deployment marks the beginning of a new phase: continuous monitoring and refinement. Markets are dynamic, and an algorithm that performs well in one regime may struggle in another. Real-time analytics are used to track performance and risk metrics, allowing for quick adjustments if needed. Successful algorithmic trading requires not only robust initial development but also ongoing adaptation to maintain effectiveness in changing market conditions.
+
+## Benchmarks for Algorithmic Strategies
+
+The choice of benchmarks depends on the type of algorithm and its objectives. Below are the most common benchmarks used in the industry, defined mathematically where applicable:
+
+### Execution Strategies
+For algorithms focused on executing trades with minimal market impact, the following benchmarks are typically used:
+
+- **Close:** The mid-price of the asset at the time the strategy completes execution.
+- **Market Order Close:** The cost of executing a market order at the end of the strategy’s time horizon, using the notional value of the strategy.
+- **Open-High-Low-Close (OHLC) Average:** The average of the mid-prices at the open, high, low, and close during the execution period.
+- **Time Weighted Average Price (TWAP):**
+  The arithmetic mean of the asset’s price over the execution window, calculated as:
+  $$
+  \text{TWAP} = \frac{1}{N} \sum_{i=1}^{N} P_i
+  $$
+  where $P_i$ is the mid-price at time $i$ and $N$ is the number of time intervals.
+
+- **Volume Weighted Average Price (VWAP):**
+  The average price weighted by trading volume over the execution period, calculated as:
+  $$
+  \text{VWAP} = \frac{\sum_{i=1}^{N} (P_i \times V_i)}{\sum_{i=1}^{N} V_i}
+  $$
+  where $P_i$ is the price at time $i$ and \(V_i\) is the volume traded at that time.
+
+- **Decision Open:** The mid-price of the asset at the time the strategy is initiated.
+- **Market Order Decision Open:** The cost of executing a market order at the time the strategy is launched, using the notional value of the strategy.
+- **Arrival Open:** The mid-price of the asset when the first order generated by the strategy reaches the market.
+- **Market Order Arrival Open:** The cost of executing a market order at the time the first order reaches the market, using the notional value of the strategy.
+
+### Market-Making and investment Strategies
+For algorithms designed to generate returns or provide liquidity, such as market-making, momentum, mean-reversion, or arbitrage strategies, the following benchmarks are commonly used:
+
+- **Profit and Loss (P&L):**
+  The cumulative return of the strategy over a given period, starting from an initial position or inventory.
+
+- **Sharpe Ratio:**
+  Measures the excess return per unit of risk (volatility), defined as:
+  $$
+  S_a = \frac{E[R_a - R_b]}{\sigma_a}
+  $$
+  where $E[R_a - R_b]$ is the expected excess return of the strategy over a risk-free rate, and $\sigma_a$ is the standard deviation of the strategy’s returns.
+
+- **Beta ($\beta$):**
+  Indicates the sensitivity of the strategy’s returns to market movements. A beta greater than 1 suggests the strategy is more volatile than the market, while a beta less than 1 indicates lower volatility.
+
+- **Maximum Drawdown:**
+  The largest peak-to-trough decline in the strategy’s cumulative returns over a specified period. It is a measure of downside risk.
+
+- **Sortino Ratio:**
+  A variation of the Sharpe ratio that focuses on downside volatility, defined as:
+  $$
+  S = \frac{R - T}{DR}
+  $$
+  where $R$ is the average return, $T$ is the target return (often the risk-free rate), and $DR$ is the standard deviation of negative returns (downside deviation).
+
+- **Omega Ratio ($\Omega$):**
+  Compares the probability of achieving returns above a threshold to the probability of returns below that threshold, defined as:
+  $$
+  \Omega(r) = \frac{\int_{r}^{\infty} (1 - F(x)) \, dx}{\int_{-\infty}^{r} F(x) \, dx}
+  $$
+  where $F(x)$ is the cumulative distribution function of returns, and $r$ is the target return.
+
+Market-making algorithms are also evaluated based on their ability to provide liquidity consistently and effectively. The following metrics are commonly used:
+
+- **Percentage of Time Quoted (LOB-based market making)**:
+The proportion of the trading session during which the algorithm maintains active bid and ask quotes in the limit order book (LOB). This reflects the algorithm’s presence and commitment to providing liquidity.
+
+- **Percentage of Requests for Quote (RfQs) Quoted (RfQ-based market making)**:
+The ratio of RfQs for which the algorithm returns a price to the client, calculated as:
+
+$$\text{Quote Rate} = \frac{\text{Number of RfQs Quoted}}{\text{Total Number of RfQs Received}}$$
+
+- **Hit Ratio (RfQ-based market making)**:
+The ratio of RfQs that result in a trade (hit) to the total number of RfQs received, defined as:
+
+$$\text{Hit Ratio} = \frac{\text{Number of Hits}}{\text{Total Number of RfQs Received}}$$
+
+- **Hit & Miss Ratio (RfQ-based market making)**:
+The ratio of RfQs that result in a trade (hit) to the total number of RfQs that are closed by any dealer (i.e., the client traded). This excludes *price discovery* RfQs where the client did not trade, and is calculated as:
+
+$$\text{Hit \& Miss Ratio} = \frac{\text{Number of Hits}}{\text{Total Number of RfQs Closed by Any Dealer}}$$
+
+
+## Algorithmic Trading Infrastructure
+
+The effectiveness of an algorithmic trading strategy is not solely determined by the sophistication of the algorithm itself, but also by the robustness and efficiency of the infrastructure that supports it. A well-designed infrastructure ensures low latency, high capacity, and resilience—qualities that are indispensable in modern electronic markets. The infrastructure required for algorithmic trading is composed of several interconnected components, each playing a critical role in the execution, monitoring, and optimization of trading strategies.
+
+### Core Requirements of Algorithmic Trading Infrastructure
+
+To support the demands of algorithmic trading, the infrastructure must meet several fundamental requirements. First and foremost is the need for **high speed and low latency**. Delays in transmitting data or executing orders can significantly impact performance, particularly for high-frequency trading (HFT) strategies, where microsecond-level latency can make the difference between profit and loss. The necessary latency threshold depends on the type of algorithm and the markets in which it operates. For instance, HFT strategies often require microsecond-level precision, while execution algorithms may tolerate slightly higher delays.
+
+Another critical requirement is **capacity**. Algorithmic trading generates a vast number of messages due to the high frequency of orders, cancellations, and updates. The infrastructure must be capable of handling this volume without degradation in performance, ensuring that the system remains responsive even during periods of peak activity.
+
+Finally, **resiliency** is essential. The system must include mechanisms for monitoring performance in real-time and handling failures gracefully. This includes the ability to disconnect from the market quickly and orderly if necessary, as well as redundant systems to ensure continuity in the event of hardware or software failures. Resiliency also involves implementing pre-trade and post-trade controls to prevent errors and detect potential market abuse, ensuring that the trading process remains both efficient and compliant.
+
+### Key Components of Algorithmic Trading Infrastructure
+
+A robust algorithmic trading system relies on modular, interconnected components, each designed for a distinct role in the trading workflow. While real-world setups may consolidate some functions—especially in smaller or simpler systems—the architecture naturally evolves toward this specialized structure as complexity and scale increase. Below, we break down the key elements of this framework, as illustrated in the following figure.
+
+```{figure} figures/algo_infrastructure.png
+:name: fig:algo_infrastructure
+:width: 8in
+Architecture of an algorithmic trading system. The overall principle for the template is based on encapsulation and functional specialization of each component. 
+```
+
+#### Algorithmic Trading Server
+
+The algorithmic trading server, often referred to as a "strategy container," is the core platform where trading algorithms are executed. It generates orders based on the algorithm’s logic and reacts to real-time market data. There are several approaches to building this component, each with its own advantages and trade-offs.
+
+Firms may choose to use **third-party servers** that include a suite of pre-built algorithms. These platforms often provide tools for developing proprietary strategies, ranging from support for traditional programming languages to complex graphical interfaces. Examples of such providers are **Algo Trader**, **Pragma360** and **QuantConnect**.
+
+On the other hand, large brokers, dealers, and hedge funds often develop their own algorithmic trading servers **in-house**. This approach allows for greater customization and differentiation, as proprietary algorithms can be tailored to specific market conditions and trading objectives. The choice of programming language depends on performance requirements, with high-performance code typically written in languages like Java, C#, or C++, while Python and MATLAB are often used for prototyping and less latency-sensitive applications.
+
+The server typically employs **complex event processing (CEP)** logic to handle real-time data streams and make rapid trading decisions. They are also sometimes built using **reactive programming** principles, which allow the system to respond dynamically to changes in market conditions, further enhancing the agility and responsiveness of the trading infrastructure.
+
+#### Market Data Server (MDS)
+
+The Market Data Server (MDS) serves as the central hub for both historical and real-time market data, which is essential for algorithm calibration, backtesting, and live trading. Historical data is stored in a "data store," "data lake," or "data repository" and is used for calibrating and backtesting strategies. **KDB+** remains the industry standard for handling time-series data due to its in-memory performance and ability to process vast datasets at high speed. It is widely used in finance for algorithmic trading, risk management, and market surveillance, particularly in environments where latency and accuracy are paramount.
+
+For real-time data, firms can obtain market data either directly from trading venues or through vendors like **LSEG** (acronym for London Stock Exchange Group, which bought Refinitiv, previously known as Thomson Reuters)  or **Bloomberg**. While vendors offer the advantage of a single point of access and standardized data formats, connecting directly to exchanges can reduce latency, which is critical for high-frequency and latency-sensitive strategies. For professional applications, it is recommended to have at least two alternative data sources to ensure redundancy and reliability.
+
+#### Order Management System (OMS)
+
+The Order Management System (OMS) is responsible for handling all orders sent to trading venues. It manages order entry, routing, and status monitoring, as well as trade booking and reconciliation. Key functionalities include order entry, which can be done manually or via algorithms, and order routing, which involves encoding orders according to a standardized protocol and transmitting them to trading venues.
+
+The **Financial Information eXchange (FIX) protocol** remains the most widely used standard in electronic trading, providing a consistent and efficient means of communication between clients, brokers, and exchanges. OMS platforms such as **Bloomberg AIM**, **Fidessa OMS**, and **FIS Valdi** continue to be prominent in the industry, offering robust solutions for managing order flow across multiple asset classes and regions.
+
+#### Execution Management System (EMS)
+
+While OMS platforms focus on order management, Execution Management Systems (EMS) are specialized for order execution and algorithmic trading. EMS platforms often overlap with OMS in functionality but are more outward-facing, offering connectivity to multiple exchanges, brokers, and trading platforms. They provide tools for pre-trade and post-trade analysis, real-time monitoring, and Direct Market Access (DMA).
+
+**Bloomberg EMSX** remains a leading EMS platform, offering global, broker-neutral equities and futures trading, as well as integration with Bloomberg’s buy-side OMS, AIM. EMSX supports a wide range of asset classes, including equities, futures, options, and index swaps, and provides access to nearly every listed market through its extensive network of broker destinations.
+
+#### Market Making Trading Platforms
+
+For firms engaged in market-making activities, specialized platforms are available that provide tools for managing Request for Quote (RfQ) and Request for Stream (RfS) workflows. These platforms typically include pricing and quoting engines, auto-quoting and auto-hedging capabilities, and integration with OMS and EMS.
+
+**Itiviti**, now part of Broadridge, continues to offer a suite of market-making solutions, including Tbricks and Orc Trader, which are designed for listed derivatives and provide real-time risk control and customization. **Numerix Oneview for Trading** ioffers real-time pricing, market data management, and risk calculations for structured products and derivatives. **ION Trading** is a major player offering platforms for Fixed Income trading. 
+
+#### Analytics and Backtesting Server
+
+The analytics server is used for off-line analysis, including the calibration of algorithm parameters and performance evaluation. It relies on historical or synthetic data to simulate how strategies would have performed under different market conditions. Historical data reflects real market conditions but is limited to past scenarios, while synthetic data can be generated to simulate a wider range of market conditions, including extreme or unlikely scenarios.
+
+Platforms like **QuantConnect** and **Deltix** provide comprehensive backtesting and analytics capabilities, allowing traders to test and refine their strategies before deployment.
+
+
+#### Profit & Loss (P&L) and Risk Server
+
+The P&L and risk server tracks the real-time performance of trading positions, providing metrics such as profit and loss, exposure, and risk indicators. These systems are often integrated with the firm’s broader risk management infrastructure but may include specialized features for algorithmic trading.
+
+**Murex MX.3** remains a leading platform in this space, offering integrated solutions for trading, risk management, and processing across a wide range of asset classes. It provides real-time risk monitoring and analysis, enabling institutions to identify and mitigate potential risks promptly.
+
+#### Infrastructure for Small Firms and Private Investors
+
+Not all market participants require the same level of infrastructure. Small firms and private investors often rely on third-party solutions that bundle algorithmic trading servers, analytics, backtesting, and connectivity to brokers and exchanges.
+
+Platforms like **MetaTrader 5 (MT5)**, **Interactive Brokers**, and **QuantConnect** offer accessible and cost-effective alternatives, providing a range of tools for developing, testing, and deploying trading strategies. **Crowdsourced hedge funds** such as **Numerai** and **Quantiacs** continue to provide environments for developing and backtesting trading algorithms, with the best-performing strategies potentially being included in the fund’s portfolio.
+
+For those with limited resources, open-source libraries like **PyAlgoTrade**, **Zipline**, and **Backtrader** provide cost-effective alternatives for backtesting and strategy development. Cloud infrastructure from providers like **AWS**, **Google Cloud**, and **Microsoft Azure** further enhances accessibility, allowing traders to scale their operations without significant upfront investment.
+
+
+
+

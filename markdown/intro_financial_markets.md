@@ -11,9 +11,9 @@ In the banking system the center is the bank, an institution or private company 
 with excess funds, and long-term loans to those who need funds. A capital cushion based on short-term loans or directly cash is maintained in order to fulfills withdrawals. Their activity is not exempt from
 risks:
 
--   liquidity risk, which can happens if the demand to withdraw deposits exceeds the capital cushion, and depositors cannot be satisfied(bank run)
+-   **liquidity risk**, which can happens if the demand to withdraw deposits exceeds the capital cushion, and depositors cannot be satisfied(bank run)
 
--   credit risk, which happens when borrowers of funds default on their obligations and don't give back those funds.
+-   **credit risk**, which happens when borrowers of funds default on their obligations and don't give back those funds.
 
 Banks compensate those risks by charging a spread between interest of
 loans and interest of deposits, on top of a margin to pay for their
@@ -44,7 +44,7 @@ On the demand side, institutional investors such as hedge funds, mutual funds, p
 
 In terms of intermediation, banks and brokers facilitate market transactions. Banks, particularly in their role as market-makers, are key *liquidity providers*. They stand ready to buy or sell financial instruments, profiting from the spread—the difference between the buying and selling price—which compensates them for holding the instrument until an opposing counterparty emerges. Brokers, on the other hand, connect buyers and sellers through their networks or proprietary platforms, charging a fee for their matchmaking services without holding the financial instruments themselves.
 
-An increasingly important role in financial markets today is played by **new liquidity providers**—technology-driven financial firms. Many of these firms originated from **high-frequency trading** and now use advanced algorithms to provide liquidity in electronic markets. This new breed of liquidity providers competes with traditional market-makers, leveraging automation and sophisticated trading strategies to ensure tighter spreads and more efficient markets.
+An increasingly important role in financial markets today is played by new liquidity providers —technology-driven financial firms. Many of these firms originated from high-frequency trading and now use advanced algorithms to provide liquidity in electronic markets. This new breed of liquidity providers competes with traditional market-makers, leveraging automation and sophisticated trading strategies to ensure tighter spreads and more efficient markets.
 
 ## Types of Financial Instruments and Asset Classes
 
@@ -66,13 +66,13 @@ Both stocks and bonds are often referred to as *cash instruments*, meaning their
 
 ### Money Markets
 
-Within the fixed income category, there is a sub-sector known as the **money market**, which some consider an asset class of its own due to its distinct features. **Money market instruments** are short-term debt securities that typically mature in less than a year, such as **Treasury bills**, **commercial paper**, and **certificates of deposit**. These instruments are highly liquid and relatively low-risk, making them an attractive option for institutions and governments looking to manage short-term liquidity needs, as well as for investors seeking a safe place to park cash temporarily.
+Within the fixed income category, there is a sub-sector known as the money market, which some consider an asset class of its own due to its distinct features. Money market instruments are short-term debt securities that typically mature in less than a year, such as Treasury bills, commercial paper, and certificates of deposit. These instruments are highly liquid and relatively low-risk, making them an attractive option for institutions and governments looking to manage short-term liquidity needs, as well as for investors seeking a safe place to park cash temporarily.
 
 ### Derivatives
 
-**Derivatives** are financial contracts whose value is derived from the performance of an underlying asset, index, or rate. They can be based on a wide range of underlying assets, including stocks, bonds, commodities, currencies, and interest rates. This is why some categorize derivatives within the asset class of the underlying instrument, though they are often considered an **asset class** of their own due to their unique characteristics.
+Derivatives are financial contracts whose value is derived from the performance of an underlying asset, index, or rate. They can be based on a wide range of underlying assets, including stocks, bonds, commodities, currencies, and interest rates. This is why some categorize derivatives within the asset class of the underlying instrument, though they are often considered an asset class of their own due to their unique characteristics.
 
-Derivatives are versatile and serve several purposes, such as **hedging** risks, **speculating** on price movements, or **leveraging** positions. Common types of derivatives include **futures**, **options**, **swaps**, and **forwards**, each offering different structures and risk profiles. For example, a company might use derivatives to hedge against fluctuations in interest rates or commodity prices, while a trader might use options to speculate on the price of a stock.
+Derivatives are versatile and serve several purposes, such as hedging risks, speculating on price movements, or leveraging positions. Common types of derivatives include futures, options, swaps, and forwards, each offering different structures and risk profiles. For example, a company might use derivatives to hedge against fluctuations in interest rates or commodity prices, while a trader might use options to speculate on the price of a stock.
 
 ### Foreign Exchange (FX)
 
@@ -80,7 +80,7 @@ The foreign exchange (FX) market is a critical component of the global financial
 
 - **Spot transactions** involve the immediate exchange of currencies, typically settling within two business days. While FX spot transactions are essential for international trade and finance, they are not classified as financial instruments under MiFID II, as they do not involve contractual obligations extending beyond the settlement period. 
 
-- FX **derivatives**, such as forwards, options, and swaps, are used to hedge currency risk or speculate on currency movements. Unlike spot transactions, these contracts involve specific obligations between parties and are therefore considered financial instruments.
+- **FX derivatives**, such as forwards, options, and swaps, are used to hedge currency risk or speculate on currency movements. Unlike spot transactions, these contracts involve specific obligations between parties and are therefore considered financial instruments.
 
 FX markets are used by a wide range of participants, including central banks (to manage currency reserves), corporations (to hedge currency risk in international operations), and investors looking to profit from currency fluctuations.
 

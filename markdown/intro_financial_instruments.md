@@ -162,11 +162,11 @@ Repos are fundamental to liquidity management and collateral circulation. They e
 
 Mechanically, two key parameters define the economics of a repo: the repo rate and the haircut—the percentage discount applied to the market value of the collateral. A higher haircut protects the lender against a fall in collateral value but increases the borrower’s funding cost. Haircuts vary with the perceived credit quality and liquidity of the collateral: Treasury securities typically carry haircuts close to zero, while corporate bonds or structured products may require 5–20%. In stressed conditions, haircuts often rise sharply, forcing deleveraging and amplifying market instability, as seen during the 2008 financial crisis.
 
-For example, consider a repo in which a bank borrows $98 million in cash for one week and pledges $100 million in Treasury bonds as collateral. The haircut is therefore 2%. If the agreed repo rate is 3% per annum, the repurchase price after seven days will be:
+For example, consider a repo in which a bank borrows $\$98$ million in cash for one week and pledges $\$100$ million in Treasury bonds as collateral. The haircut is therefore 2%. If the agreed repo rate is 3% per annum, the repurchase price after seven days will be:
 
 $$98,000,000×(1+0.03×\frac{7}{360})≈98,057,166\$ $$
 
-At maturity, the bank repays $98.06 million and receives back its $100 million in bonds. For the cash lender, the repo rate represents the secured yield on the transaction, while for the borrower, it represents the funding cost of holding the securities.
+At maturity, the bank repays $\$98.06$ million and receives back its $\$100$ million in bonds. For the cash lender, the repo rate represents the secured yield on the transaction, while for the borrower, it represents the funding cost of holding the securities.
 
 Repos are also integral to the market-making business. Suppose a dealer sells a bond to an asset manager such as Amundi, but does not hold the bond in inventory. The dealer can borrow the bond in the repo market, for instance from another asset manager like BlackRock, who lends it against cash collateral. The dealer delivers the bond to the client and must then either wait for another client to take the opposite position, renew the repo agreement upon maturity, or buy the bond in the interbank market to close the position. This continuous use of repos allows dealers to provide liquidity and make markets without holding large inventories of bonds.
 

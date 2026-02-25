@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 02.26
+Added new sections to the Algorithmic Trading chapters.
+
 ## 12.25 
 Expanded fair price estimation chapter with fundamental models for fair pricing, including the stochastic discount factor model, with an extensive example from fixed income. Added new sections on Algorithmic Trading and Intro to Financial Instruments chapters. Fixed some typos in references. 
 

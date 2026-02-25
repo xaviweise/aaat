@@ -1133,7 +1133,7 @@ $$B(t, T) = \frac{1- e^{-(\kappa + \sigma \lambda_1)(T-t)}}{\kappa + \sigma \lam
 
 $$A(t, T) = \left(\frac{\kappa \theta - \sigma \lambda_0}{\kappa + \sigma \lambda_1} - \frac{\sigma^2}{2 (\kappa + \sigma \lambda_1)}\right)(B(t, T) - (T-t)) - \frac{\sigma^2}{4(\kappa + \sigma \lambda_1)}B(t, T)^2$$
 
-with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to prices of zero coupon bonds that can be themselves be extracted from liquid bond prices. Of course we two parameters we will be ablo to fit only approximately this term structure. In order to fit the prices of any set of liquid bonds from a given issuer, we would need a model that allows for further flexibility. One such model is for example the Hull & White model {cite:p}`HullWhite1990`.
+with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to prices of zero coupon bonds that can be themselves be extracted from liquid bond prices. As expected, though, with two parameters we will be able to fit only approximately this term structure. In order to fit the prices of any set of liquid bonds from a given issuer, we need a model that allows for further flexibility. One such model is for example the Hull & White model {cite:p}`HullWhite1990`.
 
 #### Stock pricing
 
