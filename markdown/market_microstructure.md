@@ -57,23 +57,23 @@ The timing of trades and the frequency with which they occur are essential aspec
 
 Continuous trading is the most common method used in modern financial markets, where trading happens continuously within a defined window of time. During this window, market participants can submit and execute orders at any moment, allowing for a constant flow of trades and real-time price updates. This method is particularly effective in markets with high trading volumes, where liquidity is readily available throughout the trading day.
 
-- **Order-Driven Continuous Trading**: In order-driven markets, continuous trading typically takes place using a **continuous double auction** mechanism. In this system, all buy and sell orders are collected in a **limit order book**, where they are matched based on price and time priority. The order book allows for ongoing price discovery as orders are continuously executed whenever a matching counterparty is found. Traders have full visibility of the order book, seeing both the available bids and asks at various price levels, which ensures transparency and competitive pricing.
+- **Order-Driven Continuous Trading**: In order-driven markets, continuous trading typically takes place using a continuous double auction mechanism. In this system, all buy and sell orders are collected in a limit order book, where they are matched based on price and time priority. The order book allows for ongoing price discovery as orders are continuously executed whenever a matching counterparty is found. Traders have full visibility of the order book, seeing both the available bids and asks at various price levels, which ensures transparency and competitive pricing.
 
-- **Quote-Driven Continuous Trading**: In quote-driven markets, dealers play a pivotal role in continuous trading by constantly updating their **bid** and **offer prices** for the instruments they manage. In **purely quote-driven markets**, these prices are often indicative, meaning they serve as guidelines and may require negotiation before a trade can be executed. However, in **hybrid markets**, dealers may quote **firm prices**, which are executable immediately for specific quantities. This ensures that liquidity is available continuously, even when direct order matching between investors is not feasible.
+- **Quote-Driven Continuous Trading**: In quote-driven markets, dealers play a pivotal role in continuous trading by constantly updating their bid and offer prices for the instruments they manage. In purely quote-driven markets, these prices are often indicative, meaning they serve as guidelines and may require negotiation before a trade can be executed. However, in hybrid markets, dealers may quote firm prices, which are executable immediately for specific quantities. This ensures that liquidity is available continuously, even when direct order matching between investors is not feasible.
 
 Continuous trading is particularly advantageous for markets with high liquidity, as it enables fast execution and efficient price formation. However, in periods of high volatility, continuous trading can exacerbate price fluctuations, as large orders or sudden imbalances between supply and demand can cause significant price swings.
 
 **Continuous Trading with Scheduled Call Auctions**
 
-To address the challenges of volatility in continuous markets, some systems introduce scheduled **call auctions** at key points during the trading day. A call auction is a method where all orders are temporarily pooled and then executed simultaneously at a single price, which balances supply and demand. 
+To address the challenges of volatility in continuous markets, some systems introduce scheduled call auctions at key points during the trading day. A call auction is a method where all orders are temporarily pooled and then executed simultaneously at a single price, which balances supply and demand. 
 
-In a **continuous trading with call auctions** model, the market operates continuously but pauses at predetermined times, such as the market **open** or **close**, or during periods of heightened volatility, to conduct a call auction. These auctions help stabilize prices by concentrating liquidity into a single moment, allowing for a more orderly transition between trading sessions or a more controlled response to volatility spikes.
+In a continuous trading with call auctions model, the market operates continuously but pauses at predetermined times, such as the market open or close, or during periods of heightened volatility, to conduct a call auction. These auctions help stabilize prices by concentrating liquidity into a single moment, allowing for a more orderly transition between trading sessions or a more controlled response to volatility spikes.
 
 At the open, for example, call auctions help manage the influx of orders that accumulate overnight, ensuring that the market starts trading at a fair price that reflects the balance of supply and demand. Similarly, at the close, call auctions help establish a final price for the trading session, which is often used as a reference for pricing derivatives and other financial products.
 
 **Scheduled Call Auctions**
 
-In markets that rely on **scheduled call auctions**, trades only happen at specific times, rather than continuously. Investors submit their buy and sell orders in advance, and these orders are aggregated until a scheduled auction takes place. At the auction time, the market clears at a single price that maximizes the volume of trades, ensuring that the highest number of buy and sell orders are matched.
+In markets that rely on scheduled call auctions, trades only happen at specific times, rather than continuously. Investors submit their buy and sell orders in advance, and these orders are aggregated until a scheduled auction takes place. At the auction time, the market clears at a single price that maximizes the volume of trades, ensuring that the highest number of buy and sell orders are matched.
 
 Scheduled call auctions are often used in less liquid markets, where continuous trading might lead to significant price instability due to the low number of orders. By pooling orders into a single event, scheduled auctions create concentrated liquidity and help prevent large price jumps between trades.
 
@@ -93,23 +93,23 @@ The choice of trading frequency and timing mechanism reflects the unique charact
 
 ## Order-Driven Markets and the Central Limit Order Book (CLOB)
 
-Order-driven markets are a fundamental type of financial market structure where prices and liquidity are determined directly by the orders placed by market participants, without the need for intermediaries such as dealers. In these markets, investors interact through a **central limit order book (CLOB)**, a system that aggregates and displays buy and sell orders in real time. The CLOB organizes these orders based on price, ensuring that the best available prices are always visible to participants, making the system transparent and efficient.
+Order-driven markets are a fundamental type of financial market structure where prices and liquidity are determined directly by the orders placed by market participants, without the need for intermediaries such as dealers. In these markets, investors interact through a central limit order book (CLOB), a system that aggregates and displays buy and sell orders in real time. The CLOB organizes these orders based on price, ensuring that the best available prices are always visible to participants, making the system transparent and efficient.
 
-CLOBs don't allow orders at arbitrary prices, instead enforcing minimum price increments known as **tick sizes**, which define the smallest allowable difference between order prices. The tick size choice traditionally falls to the market owner, who aims to balance liquidity by setting smaller tick sizes, encouraging tighter spreads and more precise pricing. However, overly small tick sizes can also penalize liquidity providers who maintain constant bid and ask orders in the CLOB, as they may face more frequent price competition and increased order cancellations.
+CLOBs don't allow orders at arbitrary prices, instead enforcing minimum price increments known as tick sizes, which define the smallest allowable difference between order prices. The tick size choice traditionally falls to the market owner, who aims to balance liquidity by setting smaller tick sizes, encouraging tighter spreads and more precise pricing. However, overly small tick sizes can also penalize liquidity providers who maintain constant bid and ask orders in the CLOB, as they may face more frequent price competition and increased order cancellations.
 
 In recent years, regulatory bodies in some markets have implemented restrictions on tick sizes to stabilize order book structures and reduce excessive market noise. For instance, in the European Union, MiFID II introduced a tick size regime based on price levels and average daily number of trades for specific instruments, limiting the ability of markets to set overly fine increments. Similarly, in the U.S., tick size pilot programs have explored tick adjustments for smaller-cap stocks to assess impacts on liquidity and execution quality. Such regulatory measures aim to ensure fairer conditions for both liquidity providers and market participants, while supporting orderly and efficient markets.
 
-Additionally to tick sizes, markets typically impose restrictions on the the quantities that can be traded, known as **lot sizes**.
+Additionally to tick sizes, markets typically impose restrictions on the the quantities that can be traded, known as lot sizes.
 
 ### The Structure of the Central Limit Order Book (CLOB)
 
-At any given moment, the CLOB provides a snapshot of the market by showing all active buy and sell orders. These orders are aggregated anonymously and displayed in two columns: one for **buy orders** (bids) and another for **sell orders** (asks or offers). Each column is ordered by price, with the best bid (the highest price a buyer is willing to pay) and the best ask (the lowest price a seller is willing to accept) at the top.
+At any given moment, the CLOB provides a snapshot of the market by showing all active buy and sell orders. These orders are aggregated anonymously and displayed in two columns: one for buy orders (bids) and another for sell orders (asks or offers). Each column is ordered by price, with the best bid (the highest price a buyer is willing to pay) and the best ask (the lowest price a seller is willing to accept) at the top.
 
 **Best Bid/Ask**: The best bid and ask, $P^b_{best}$ and $P^a_{best}$, represent the highest and lowest prices, respectively, that are currently available in the market. The difference between them is the **bid-ask spread**, which can serve as a measure of liquidity. A narrow spread generally indicates higher liquidity.
 
-**Market Depth**: The CLOB also shows the **market depth**, which refers to the number of orders available at various price levels. Market depth gives traders insight into the potential for price movements based on the volume of buy and sell interest at different prices.
+**Market Depth**: The CLOB also shows the market depth, which refers to the number of orders available at various price levels. Market depth gives traders insight into the potential for price movements based on the volume of buy and sell interest at different prices.
 
-**Mid-Price**: The **mid-price** is calculated as the average of the best bid and best ask prices. It serves as an estimate of the fair market price at a given moment:
+**Mid-Price**: The mid-price is calculated as the average of the best bid and best ask prices. It serves as an estimate of the fair market price at a given moment:
 
 $$ P_{mid} = \frac{1}{2}(P^b_{best} + P^a_{best}) $$
 
@@ -133,7 +133,7 @@ Market Depth visualization of a Central Limit Order Book, with orders sorted by 
 
 Market participants in order-driven markets can use a variety of order types, each serving different trading objectives:
 
-**Market Orders**: These orders instruct the system to buy or sell immediately at the best available price, consuming always the liquidity available at best prices (**price priority**). Market orders are executed quickly, but they carry the risk of paying a higher price or receiving a lower price than expected if there is insufficient liquidity at the best bid or ask. In this case, the order may "walk the book," executing across multiple price levels and resulting in a higher average price (for buys) or lower average price (for sells). The execution price of an order that consumes liquidity across various levels is computed using the **volume weighted average price (VWAP)**:
+**Market Orders**: These orders instruct the system to buy or sell immediately at the best available price, consuming always the liquidity available at best prices (price priority). Market orders are executed quickly, but they carry the risk of paying a higher price or receiving a lower price than expected if there is insufficient liquidity at the best bid or ask. In this case, the order may "walk the book," executing across multiple price levels and resulting in a higher average price (for buys) or lower average price (for sells). The execution price of an order that consumes liquidity across various levels is computed using the volume weighted average price (VWAP):
 
 $$ P_{exec} = \frac{\sum_i v_i P_i}{\sum_i v_i} $$
 
@@ -148,7 +148,7 @@ Effect of a buy market order of size 500 in the Central Limit Order Book.
 
 **Limit Orders**: These specify a price at which the trader is willing to buy or sell. If the limit price is not immediately available to trade, the order remains in the order book until a matching counter-party arrives or the order is canceled. Limit orders allow traders to control the price at which they execute but come with the risk that the order may not be executed if the market price moves away from the limit.
 
-When an order is added to a level with existing liquidity, there is the question of which order has the priority when a matching order arrives at the CLOB. Most markets use a **time priority** or first in first out (FIFO) rule, in which orders that arrived earlier are consumed first. It is not the only rule, though. For instance some markets use a **pro-rata rule**, in which all existing orders are consumed proportionally to their size. 
+When an order is added to a level with existing liquidity, there is the question of which order has the priority when a matching order arrives at the CLOB. Most markets use a time priority or first in first out (FIFO) rule, in which orders that arrived earlier are consumed first. It is not the only rule, though. For instance some markets use a pro-rata rule, in which all existing orders are consumed proportionally to their size. 
 
    **Example 1**: Using again the previous order book, suppose and investor wants to buy the 500 shares but instead of sending a market order, it uses a limit order at price 98. Since there are order existing at that price level, the order sits at the bottom of the level. If this is a market with a time priority rule, this means this order will be the last to be consumed at the level. After placing the order, the mid-price and the spread does not change, but the imbalance is affected, see figure below.
 
@@ -199,7 +199,7 @@ Order-driven markets often provide different levels of data to market participan
 
 - **Level III**: The most detailed level of data, showing individual orders, their sizes, prices, and time stamps. This information is typically used by algorithmic traders and market makers to track the behavior of specific market participants.
 
-Historical data from order books is called **tick data**, and captures every change that occurs in the order book. It is  provided by the exchanges or via financial data companies like LSEG (ex Refinitiv) and Bloomberg, which aggregate and normalize this data.  There are also free resources with samples of data like Lobster. 
+Historical data from order books is called tick data, and captures every change that occurs in the order book. It is  provided by the exchanges or via financial data companies like LSEG (ex Refinitiv) and Bloomberg, which aggregate and normalize this data.  There are also free resources with samples of data like Lobster. 
 
 Tick data generally comes in two forms:
 
@@ -209,11 +209,11 @@ Tick data generally comes in two forms:
 
 ### Advantages and Challenges of Order-Driven Markets
 
-The CLOB system provides significant **pre-trade transparency**, as market participants can view the full order book and adjust their strategies based on available prices and liquidity. This transparency promotes price discovery, helping ensure that prices reflect the collective expectations of all market participants.
+The CLOB system provides significant pre-trade transparency, as market participants can view the full order book and adjust their strategies based on available prices and liquidity. This transparency promotes price discovery, helping ensure that prices reflect the collective expectations of all market participants.
 
-However, the system is not without challenges. In less liquid markets, **price volatility** can be higher due to the lack of continuous buy and sell interest. Large market orders can "sweep" through multiple price levels, causing significant short-term price fluctuations. Moreover, the transparency of the system can also lead to **front-running**, where certain traders take advantage of visible large orders by placing their own orders ahead of them.
+However, the system is not without challenges. In less liquid markets, price volatility can be higher due to the lack of continuous buy and sell interest. Large market orders can "sweep" through multiple price levels, causing significant short-term price fluctuations. Moreover, the transparency of the system can also lead to front-running, where certain traders take advantage of visible large orders by placing their own orders ahead of them.
 
-To mitigate these issues, many markets incorporate mechanisms like **circuit breakers** and **trading halts** during periods of extreme volatility, as well as **opening and closing auctions** to establish stable prices at the beginning and end of trading sessions.
+To mitigate these issues, many markets incorporate mechanisms like circuit breakers and trading halts during periods of extreme volatility, as well as opening and closing auctions to establish stable prices at the beginning and end of trading sessions.
 
 ## Quote-driven markets: the Request for Quote protocol
 
@@ -293,14 +293,14 @@ In both cases, the dataset typically includes the type or RfQ (RfQ, RfS, RfM), t
 
 To conclude the chapter, let us review various unique identification codes that are used to uniquely identify financial instruments. These codes ensure clarity and reduce errors in transactions:
 
-**Ticker Symbol**: A ticker symbol is a unique identifier assigned to a specific security listed on an exchange or traded publicly. All listed securities have a unique ticker symbol, which facilitates their identification during trading. **Example**: IBM, MSFT
+**Ticker Symbol**: A ticker symbol is a unique identifier assigned to a specific security listed on an exchange or traded publicly. All listed securities have a unique ticker symbol, which facilitates their identification during trading. Example: IBM, MSFT
 
 **ISIN (International Securities Identification Number)**:
-The International Securities Identification Number (ISIN) is a globally recognized identifier based on ISO standards. It uniquely identifies a security regardless of its currency or the exchange on which it is traded. However, to specify the exchange, another identifier, such as the Market Identifier Code (MIC), is often required. ISINs are widely used for bonds, equities, warrants, commercial paper, and most listed derivatives. **Example**: LT0000610040
+The International Securities Identification Number (ISIN) is a globally recognized identifier based on ISO standards. It uniquely identifies a security regardless of its currency or the exchange on which it is traded. However, to specify the exchange, another identifier, such as the Market Identifier Code (MIC), is often required. ISINs are widely used for bonds, equities, warrants, commercial paper, and most listed derivatives. Example: LT0000610040
 
-**CUSIP (Committee on Uniform Securities Identification Procedures)**: The CUSIP is an identifier used primarily in the United States to represent stocks and bonds. It consists of nine characters: the first six denote the issuer, the next two specify the type of instrument, and the last is a control digit. **Example**: 008000AA7
+**CUSIP (Committee on Uniform Securities Identification Procedures)**: The CUSIP is an identifier used primarily in the United States to represent stocks and bonds. It consists of nine characters: the first six denote the issuer, the next two specify the type of instrument, and the last is a control digit. Example: 008000AA7
 
-**SEDOL (Stock Exchange Daily Official List)**: The SEDOL code is used for securities trading on the London Stock Exchange and other exchanges in the United Kingdom. It is particularly useful for securities not traded in the United States. While SEDOL does not depend on the exchange, the MIC is required for specifying the exchange. **Example**: B0WNLY7
+**SEDOL (Stock Exchange Daily Official List)**: The SEDOL code is used for securities trading on the London Stock Exchange and other exchanges in the United Kingdom. It is particularly useful for securities not traded in the United States. While SEDOL does not depend on the exchange, the MIC is required for specifying the exchange. Example: B0WNLY7
 
-**RIC (Reuters Instrument Code)**: The Reuters Instrument Code (RIC) is a proprietary code used by Reuters to identify financial instruments and indices. It consists of two parts separated by a period (“.”). The first part represents the instrument, while the second, which is optional, denotes the exchange. **Example**: MSFT.OQ
+**RIC (Reuters Instrument Code)**: The Reuters Instrument Code (RIC) is a proprietary code used by Reuters to identify financial instruments and indices. It consists of two parts separated by a period (“.”). The first part represents the instrument, while the second, which is optional, denotes the exchange. Example: MSFT.OQ
 

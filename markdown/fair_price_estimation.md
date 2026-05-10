@@ -7,7 +7,7 @@ In this chapter we introduce techniques to estimate the fair value of a financia
 
 > Fair value is the price at which a financial instrument is economically equivalent, at a given time and under a given information set, to its future cash flows or payoffs, once transactions costs, opportunity costs and risk are appropriately accounted for
 
-In this chapter we will focus on two conceptually different ways to estimate fair value. The first one assumes markets are efficient enough so that prices observed in the market are our best estimation of fair value, bar some idiosyncratic components coming from trading fictions like liquidity premiums, dealer spreads, and transaction costs. In this case, fair value estimation can be seen as a *filtering problem*, and we will study a simple albeit powerful model to carry out this task: the Kalman filter. 
+In this chapter we will focus on two conceptually different ways to estimate fair value. The first one assumes markets are efficient enough so that prices observed in the market are our best estimation of fair value, bar some idiosyncratic components coming from trading frictions like liquidity premiums, dealer spreads, and transaction costs. In this case, fair value estimation can be seen as a *filtering problem*, and we will study a simple albeit powerful model to carry out this task: the Kalman filter. 
 
 When financial instruments are highly illiquid or do not trade directly in organized markets, fair value estimation must rely on economic—often referred to as fundamental—valuation models. These models infer the value of a financial instrument from the future cash flows specified by its contractual structure. Central to this approach is the concept of the time value of money, which states that a payment received in the future is not economically equivalent to the same payment received today, due to opportunity costs. As a result, future cash flows must be converted into present values through the application of a discount factor, which renders cash flows occurring at different points in time comparable.
 
@@ -21,9 +21,9 @@ Finally, a unifying pricing framework that can accommodate both the risk-aversio
 
 As mentioned in the introduction, for financial instruments that are relatively liquid, we can aim at extracting all the pricing information from price indications and trades in the market, without having to resort to economic theories of fair value. In this setup, we consider as their fair value the one that market participants are willing to pay for. 
 
-The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair value, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair value is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide of liquidity is thin in the first levels, such estimation is not necessary very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability. 
+The issue, though, is that price indications and trades cannot be considered themselves pure observations of fair value, since they might be affected by market frictions: bid ask spreads, particularities of the negotiation mechanism, liquidity fluctuations, specific needs of market participants at a given time, etc. When instruments trade in limit order books, a popular estimation of the fair value is using the mid-price, the arithmetic average of the best bid and ask. However, if bid-ask spreads are wide or liquidity is thin in the first levels, such estimation is not necessarily very precise. Trades provide a lot of information, since they are real transaction and not indications of interests, the larger they are in principle the more information. Still, they are subject to the aforementioned market frictions that reduce their reliability. 
 
-These makes all these price observations noisy estimates of the fair value, so if we want to estimate a fair value out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what, under certain model assumptions, a **Kalman filter** does. 
+These make all these price observations noisy estimates of the fair value, so if we want to estimate a fair value out of them we need to be able to separate the signal from the noise, or in other words, filter those observations. This is precisely what, under certain model assumptions, a **Kalman filter** does. 
 
 The Kalman filter was introduced in the chapter on [Bayesian Theory](intro_bayesian.md). It is a Bayesian filtering algorithm that allows to perform exact inference, i.e. compute the closed-form distribution, of the latent state vector in a Linear Gaussian State Space Model (LG-SSM). 
 
@@ -59,9 +59,9 @@ $$p_t = m_t + \nu_t, \nu_t \sim N(0, \sigma_\nu^2)$$
 
 Readers will recognize that this is the local level model discussed extensively in the Chapter on [Bayesian Modelling](intro_bayesian.md). For the observation noise we can introduce prior business knowledge about the confidence we have on trade observations as a source of pricing information. In his Option Trading's book {cite:p}`sinclair2010option`, Euan Sinclair describes a simple model that quantifies the information provided by trades based on the size of the trade, $v$:
 
-$$\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+$$
+$$\sigma_\nu (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1\right)^+$$
 
-where $\sigma_p$ is a baseline observation noise and $v_\text{max}$ is an input to the model, the trade size we believe saturates information the information provided in the sense that our mid estimation will essentially move the price of the trade. In contrast, trades of small size, $v \ll v_\text{max}$, will have $\sigma_p \rightarrow \infty$ and will provide a negligible pricing information. An alternative simple model is: 
+where $\sigma_p$ is a baseline observation noise and $v_\text{max}$ is an input to the model, the trade size we believe saturates the information provided in the sense that our mid estimation will essentially move to the price of the trade. In contrast, trades of small size, $v \ll v_\text{max}$, will have $\sigma_\nu(v) \rightarrow \infty$ and will provide negligible pricing information. An alternative simple model is: 
 
 $$\sigma_\nu(v) = \sigma_p \frac{v_0}{v}$$
 
@@ -105,7 +105,7 @@ $$E[\frac{1}{N-1} \sum_{i=1}^{N-1} d_{t_i}^2]= \frac{1}{N-1} \sum_{i=1}^{N-1} \l
 
 Moving into the 1-lag covariance, we have:
 
-$$E[\frac{1}{N-2}\sum_{i=2}^{N-1} d_{t_i} d_{t_{i}-\Delta t}] = - \frac{1}{N-2}\sum_{i=2}^{N-1} \sigma_v^2(v_{t_i})$$
+$$E[\frac{1}{N-2}\sum_{i=2}^{N-1} d_{t_i} d_{t_{i}-\Delta t}] = - \frac{1}{N-2}\sum_{i=2}^{N-1} \sigma_\nu^2(v_{t_i})$$
 
 As far as we the volume dependency has a single parameter to fit, we can still use these two equations to solve for the parameters. If we use, for instance, the simple model $\sigma_\nu(v) = \sigma_p \frac{v_0}{v}$, where $v_0$ is given and $\sigma_p$ is to be estimated from data (notice that we could simply estimate $\sigma_p v_0$, the factorization is useful for business interpretation):
 
@@ -118,9 +118,9 @@ In this simple case, the estimation of the parameters $\sigma_p$ and $\sigma_\ep
 
 ### Inference on the simple pricing model
 
-We can use the general Kalman filter equations described in [Bayesian Modelling](intro_bayesian.md) to derive the distribution of our mid - price at the next time $t + \Delta t$ where a trade happens.
+We can use the general Kalman filter equations described in [Bayesian Modelling](intro_bayesian.md) to derive the distribution of our mid-price at the next time $t + \Delta t$ when a trade happens.
 
-The Kalman filter algorithm operates sequentially over observation steps applying two steps, the *predict* step, where we compute the distribution of the fair value based purely on the random walk model, and the *update* step in which we incorporate the information provided by the observation of a new trade. We define $m_{t+\Delta t}^t$ as the distribution of the fair value at $t+\Delta t$ before observing the trade, and $m_{t+\Delta}^{t+\Delta t}$ afterwards. 
+The Kalman filter algorithm operates sequentially over observation steps applying two steps, the *predict* step, where we compute the distribution of the fair value based purely on the random walk model, and the *update* step in which we incorporate the information provided by the observation of a new trade. We define $m_{t+\Delta t}^t$ as the distribution of the fair value at $t+\Delta t$ before observing the trade, and $m_{t+\Delta t}^{t+\Delta t}$ afterwards. 
 
 Let us apply first the predict step. The distribution of $m_{t+\Delta t}^t$ is Gaussian with mean and variance given by:
 
@@ -132,29 +132,29 @@ Since our model uses a drift-less random walk dynamics for the evolution of the 
 
 Now we use the update step to incorporate the information from a trade happening at $t + \Delta t$:
 
-$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t} + K_t (p_{t +\Delta t}  - \bar{m}_{t}^{t+\Delta t}) $$
+$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t+\Delta t}^{t} + K_t (p_{t +\Delta t}  - \bar{m}_{t+\Delta t}^{t}) $$
 
-$$(\sigma_{m,t+\Delta t}^{t+\Delta t})^2 = \frac{(\sigma_{m,t+\Delta t}^t)^2  \sigma_\eta^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma_\eta^2}$$
+$$(\sigma_{m,t+\Delta t}^{t+\Delta t})^2 = \frac{(\sigma_{m,t+\Delta t}^t)^2  \sigma_\nu^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma_\nu^2}$$
 
 where $K_t$ is the Kalman gain, given by:
 
-$$K_t = \frac{(\sigma_{m,t+\Delta t}^t)^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma_\eta^2} $$
+$$K_t = \frac{(\sigma_{m,t+\Delta t}^t)^2}{(\sigma_{m,t+\Delta t}^t)^2  + \sigma_\nu^2} $$
 
 The updated mean is an interpolation between the predicted mean and the trade observation, weighted by the Kalman gain
 
-* If the observation noise is much smaller than the uncertainty in the mean in the prediction step, namely $\sigma_\eta \ll \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 1$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = p_{t+\Delta t}$, i.e. since our confidence on the information from the trade is much higher than our best estimation of the mean, we essentially update the mean with the trade price. 
-* On the contrary, if $\sigma_\eta \gg \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 0$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t}$. In this case, our confidence on the information provided by the trade is very low, so essentially we ignore the trade information and use the predicted mean. 
+* If the observation noise is much smaller than the uncertainty in the mean in the prediction step, namely $\sigma_\nu \ll \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 1$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = p_{t+\Delta t}$, i.e. since our confidence on the information from the trade is much higher than our best estimation of the mean, we essentially update the mean with the trade price. 
+* On the contrary, if $\sigma_\nu \gg \sigma_{m,t+\Delta t}^t$, the Kalman gain then tends to $K_t \rightarrow 0$ and $\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t+\Delta t}^{t}$. In this case, our confidence on the information provided by the trade is very low, so essentially we ignore the trade information and use the predicted mean. 
 * In between those two limiting cases, the updated mean combines the information from the prediction using the internal dynamics and our last update, and the trade information. 
 
 If we look at the new standard deviation, we also find similar limiting behaviors:
-* If $\sigma_\eta \ll \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_\eta$, since as we discussed above, we essentially use the trade information to inform our estimation of the mid.
-* If $\sigma_\eta \gg \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_{m,t+\Delta t}^t$, i.e. we stick with the estimation from the predict step
+* If $\sigma_\nu \ll \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_\nu$, since as we discussed above, we essentially use the trade information to inform our estimation of the mid.
+* If $\sigma_\nu \gg \sigma_{m,t+\Delta t}$, then $\sigma_{m,t+\Delta t}^{t+\Delta t} \rightarrow \sigma_{m,t+\Delta t}^t$, i.e. we stick with the estimation from the predict step
 
-One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite $\sigma_\eta$ is always smaller: the information from the trade always contributes to improve our estimation of the fair value.  This is easily seen writing:
+One interesting consequence of the optimality of the Kalman filter is that the updated standard deviation cannot be larger than the predicted one, and for any finite $\sigma_\nu$ is always smaller: the information from the trade always contributes to improve our estimation of the fair value.  This is easily seen writing:
 
-$$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta})^2  + 1}}$$
+$$\sigma_{m,t+\Delta t}^{t+\Delta t} =\sigma_{m,t+\Delta t}^t \frac{1}{\sqrt{(\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\nu})^2  + 1}}$$
 
-Since $\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\eta}$ is non-negative, then the denominator is never lower than 1. 
+Since $\frac{\sigma_{m,t+\Delta t}^t}{\sigma_\nu}$ is non-negative, then the denominator is never lower than 1. 
 
 In some applications of the local level model to pricing we might also be interested in the Kalman smoothing algorithm. Recall that the difference with the Kalman filtering we have just seen is that in smoothing we estimate the latent variable using all the available data, including the future. Of course this means Kalman smoothing does not make sense for online price inference, but there are other applications of this pricing model where using the best estimation of the latent fair value is relevant:
 
@@ -169,7 +169,7 @@ If they happen synchronously, though, we need to expand the Kalman filter to cop
 
 $$p_{t,i} = m_t + \nu_{t,i}, \vec{\nu}_{t,i} \sim N(0, \sigma_{\nu, i}^2)$$
 
-We can compute the Kalman gain in this case, which is a vector matrix: 
+We can compute the Kalman gain in this case, which is a matrix: 
 
 $$K_{t,i} = \frac{(\sigma_{m,t+\Delta t}^{\,t})^2/\sigma_{\nu,i}^2}{1 + (\sigma_{m,t+\Delta t}^{\,t})^2/\Lambda}$$
 
@@ -179,14 +179,14 @@ $$\Lambda = \sum_{i=1}^n \frac{1}{\sigma_{\nu,i}^2}$$
 
 is the total observation *precision*. Notice that, as a sanity check, in the case of a single observation we recover the Kalman gain derived in the previous section. For multiple observations, the update equation then reads:
 
-$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t+\Delta t} + \sum_{i=1}^n K_{t,i} (p_{t + \Delta t ,i} - \bar{m}_{t}^{t+\Delta t}) $$
+$$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t+\Delta t}^{t} + \sum_{i=1}^n K_{t,i} (p_{t + \Delta t ,i} - \bar{m}_{t+\Delta t}^{t}) $$
 
 The relative weight of influence of each observation depends on the fraction of the total variance that the observation variance represents, with more noisy observations having a smaller effect in the update. 
 
 
 ### Multiple correlated instruments
 
-The Kalman filter model for pricing becomes even more relevant when we include information from other financial instruments that are historically correlated with the one whose fair value we are estimated. Typical situations are:
+The Kalman filter model for pricing becomes even more relevant when we include information from other financial instruments that are historically correlated with the one whose fair value we are estimating. Typical situations are:
 
 * Instruments that are more liquid, i.e. they trade more often and with smaller bid and ask spreads. This allows us to improve the estimation of the fair value until we observe a new trade from the instrument, anticipating potential relevant movements derived from common market factors. 
 
@@ -200,7 +200,7 @@ where $\Sigma_\epsilon$ is now a covariance matrix that takes into account the e
 
 $$\vec{p}_t = \vec{m}_t + \vec{\nu}_t, \vec{\nu}_t \sim N(0, \Sigma_\nu)$$
 
-In this case, since we are already modelling correlations at fair value level, a typical choice is to take $\Sigma_\nu$ diagonal, i.e. $\Sigma_\nu = \text{diag}(\sigma_{\nu,1}^2, ..., \sigma_{\nu_N}^2)$, although in certain setups one might want to include some of form of bid-ask spread correlation between instruments. 
+In this case, since we are already modelling correlations at fair value level, a typical choice is to take $\Sigma_\nu$ diagonal, i.e. $\Sigma_\nu = \text{diag}(\sigma_{\nu,1}^2, ..., \sigma_{\nu,N}^2)$, although in certain setups one might want to include some of form of bid-ask spread correlation between instruments. 
 
 With this model specification, we can directly use the filtering, smoothing and EM equations discussed in the [Bayesian Modelling](intro_bayesian.md) chapter. Let us though specifically focus on the case of $N=2$ instruments, where we can work out in detail the Kalman filter equations to get further insights into the model's inner workings. 
 
@@ -265,25 +265,25 @@ Let us analyze some particular cases:
 
   The update equations for each instruments fair value read:
 
-  $$m_{1,t|t} = m_{1,t|t-1} + \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t + \Delta t})$$
+  $$m_{1,t|t} = m_{1,t|t-1} + \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}\sigma_{2,t}^{t-1}}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (P_{2,t + \Delta t} - m_{2,t|t-1})$$
 
 
-  $$m_{2,t|t} = m_{2,t|t-1} + \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (m_{2,t|t-1} - P_{2,t + \Delta t}) $$
+  $$m_{2,t|t} = m_{2,t|t-1} + \frac{(\sigma_{2,t}^{t-1})^2}{\sigma_{\nu,2}^2 + (\sigma_{2,t}^{t-1})^2} (P_{2,t + \Delta t} - m_{2,t|t-1}) $$
 
   Notice that these equations are equivalent to the ones that we would derive if we use an observation matrix $H = (0, 1)$ and compute the update step for arbitrary values of the parameters. Going into the results, the second equation is the same update equation we had for a single instrument for which we have observed a trade. The first equation is more interesting, since it isolates the effect that an observation of a trade in an instrument has in our fair value estimation of a correlated instrument. As expected, the influence is proportional to the estimated correlation between the instruments, $\rho_t^{t-1}$. The effect of the influence depends on the relative sizes of the variances in play. It helps to rewrite the equation as:
 
-  $$m_{1,t|t} = m_{1,t|t-1} + \beta_{12,t}^{t-1} \frac{1}{1+ \frac{\sigma_{\nu,2}^2}{ (\sigma_{2,t}^{t-1})^2}} (m_{2,t|t-1} - P_{2,t + \Delta t})$$
+  $$m_{1,t|t} = m_{1,t|t-1} + \beta_{12,t}^{t-1} \frac{1}{1+ \frac{\sigma_{\nu,2}^2}{ (\sigma_{2,t}^{t-1})^2}} (P_{2,t + \Delta t} - m_{2,t|t-1})$$
 
   where $\beta_{12,t}^{t-1} \equiv \frac{\rho_t^{t-1} \sigma_{1,t}^{t-1}}{\sigma_{2,t}^{t-1}}$ is the linear regression coefficient between $m_{1,t}$ and $m_{2,t}$. It provides an upper bound on the Kalman gain between the two instruments, which happens when the observation in the second instrument has no error $\sigma_{\nu, 2} = 0$. This makes sense, since in the absence of noise in the observation of the second instrument, the update equation becomes the best linear prediction of $m_{1,t}$ using $m_{2,t}$.
 
-priceLet’s evaluate this model in one of the typical scenarios for fair value discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair values for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.
+Let us evaluate this model in one of the typical scenarios for fair value discovery discussed above: two correlated instruments traded in markets with some periods of non-overlapping trading. The objective is to leverage their correlation to estimate fair values for the instrument whose market is closed. The underlying principle is that new information affecting the price of the actively traded instrument during its market hours would similarly impact the closed-market instrument, if it were tradable.
 
-For that, we first generate synthetic fair values using a correlated Brownian motion with $\rho = 0.9$, $\sigma_1 = 5e-4$ and $\sigma_2 = 4e-4$. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, on in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the fair value, so correlation is driven exclusively by fair value correlations. To generate the trades, we use standard deviations in the observation covariance of $0.032$ and $0.045$, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the fair value to the real simulated values. The results can be seen in the following figure:
+For that, we first generate synthetic fair values using a correlated Brownian motion with $\rho = 0.9$, $\sigma_1 = 5e-4$ and $\sigma_2 = 4e-4$. Then we generate trades over 22 days but for each day, each day consisting on 60 time-steps to make the simulation efficient. We consider three situations: one in which only the first instrument is traded, one in which only the second instrument is traded, and a third one in which both are simultaneously traded. We use a diagonal observation covariance to generate the trades, i.e. we assume that there is no correlation between the spreads with respect to the fair value, so correlation is driven exclusively by fair value correlations. To generate the trades, we use standard deviations in the observation covariance of $0.032$ and $0.045$, respectively. Then we use Expectation Maximization (EM) over the first half of the synthetic trade data to estimate the parameters of the model, and run the Kalman filter over the second half of the data to compare the estimations of the fair value to the real simulated values. The results can be seen in the following figure:
 
 ```{figure} figures/kalman_correlated.png
 :name: fig:KalmanCorrelated
 :width: 8in
-Estimation of the fair value of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the fair values are generated (blue lines) and trades (blue dots) are simulated when the market is open, which. happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the fair values estimated using the Kalman filter, which is trained with half of the data using EM and the run over the second half of the data. The figure focus on four days of test data. 
+Estimation of the fair value of instruments when their market is closed, using information from correlated instrument that trade at those times. The results are based on a simulation in which first the fair values are generated (blue lines) and trades (blue dots) are simulated when the market is open, which happens half of the day. Notice that a third of the day both instruments trade simultaneously. The orange line are the fair values estimated using the Kalman filter, which is trained with half of the data using EM and then run over the second half of the data. The figure focus on four days of test data. 
 ```
 
 As we see, the Kalman filter successfully exploits the correlation between instruments to update the fair value of the instruments when the market is closed. The updates are not perfect but they capture the overnight trends, improving over typical baselines like the closing price of the instrument. In general, the estimated fair values include the true fair values within one standard deviation, depicted as the shaded grey area in the figure. 
@@ -315,7 +315,7 @@ The choice of a Gaussian distribution is for simplicity, since it captures well 
 
 Of course, in many situations this pricing source might not be sufficient for actual applications, since in illiquid markets the bid-ask spreads are large and therefore the pricing source has a large uncertainty. In those situations is precisely where the Kalman filter model plays a part. 
 
-Using directly $m_t^{\text{LOB}}$ as an observation in the Kalman filter is problematic, since the feed is available in streaming and therefore, even if we limit the updates to the Kalman filter to the moments in which the LOB gets updates (i.e. arriving of new orders, cancellations, modifications), the pricing observations might jam the Kalman filter estimation, making the model to consider that $m_t^{\text{LOB}}$ is a perfect source of pricing information. To see this, let us see the effect of a second observation following an initial one. Recall that the first predict plus update gave: 
+Using directly $m_t^{\text{LOB}}$ as an observation in the Kalman filter is problematic, since the feed is available in streaming and therefore, even if we limit the updates to the Kalman filter to the moments in which the LOB gets updates (i.e. arriving of new orders, cancellations, modifications), the pricing observations might jam the Kalman filter estimation, making the model consider that $m_t^{\text{LOB}}$ is a perfect source of pricing information. To see this, let us see the effect of a second observation following an initial one. Recall that the first predict plus update gave: 
 
 $$\bar{m}_{t+\Delta t}^{t+\Delta t} = \bar{m}_{t}^{t} + K_t (p_{t+\Delta t} - \bar{m}_{t}^{t}) $$
 
@@ -358,14 +358,14 @@ $$\bar{m}_{t+2\Delta t}^{t+2\Delta t} = (1-2K_{t+\Delta t}) \bar{m}_{t}^{t}  + K
 If we continue applying $n$ predict plus update steps in the $\Delta \rightarrow 0$ limit, by using the induction principle we arrive at the following result:
 
 $$\bar{m}_{t+n\Delta t}^{t+n\Delta t} = \frac{\sigma_\eta^2}{n (\sigma_{m,t}^t)^2  + \sigma_\eta^2}  \bar{m}_{t}^{t}  + 
- \frac{(\sigma_{m,t}^t)^2 }{n (\sigma_{m,t}^t)^2  + \sigma_\eta^2} \sum_{i=1}^n p_{t+n \Delta t} $$
+ \frac{(\sigma_{m,t}^t)^2 }{n (\sigma_{m,t}^t)^2  + \sigma_\eta^2} \sum_{i=1}^n p_{t+i \Delta t} $$
 
 $$(\sigma_{m,t+n\Delta t}^{t+n\Delta t})^2 = \frac{(\sigma_{m,t}^{t})^2   \sigma_\eta^2}{n (\sigma_{m,t}^{t})^2 + \sigma_\eta^2}$$
 
 If we now take the limit $n\rightarrow \infty$ we converge to:
 
 $$\bar{m}_{t+n\Delta t}^{t+n\Delta t} \rightarrow 
- \frac{1}{n} \sum_{i=1}^n p_{t+n \Delta t} $$
+ \frac{1}{n} \sum_{i=1}^n p_{t+i \Delta t} $$
 
 $$(\sigma_{m,t+n\Delta t}^{t+n\Delta t})^2 \rightarrow 0$$
 
@@ -399,7 +399,7 @@ Notice that, since the combined fair value estimator is reconstructed independen
 
 ##### Trades
 
-Trades happening in the LOB are a valuable source of pricing information, since they correspond to real transaction prices and not only interests to trade as limit orders. When a trade happens, the exchange reports publicly the time, the size and the price, but not the parties or the orders involved. The latter is particularly relevant since a relevant pricing information is the side (buy or sell) of the order that was aggressive, meaning the one that consumed the liquidity in the order book. As we discussed in {ref}`market_microstructure`, this can typically a market order or a limit order at a price that is equal or better that prices available in the opposite side. Reverse engineering the side from a trade is an inference problem, and requires a model. A simple one widely used is the so-called *tick-rule model* which consists on comparing the price of the trade with the mid-price available in the order book just before the trade:
+Trades happening in the LOB are a valuable source of pricing information, since they correspond to real transaction prices and not only interests to trade as limit orders. When a trade happens, the exchange reports publicly the time, the size and the price, but not the parties or the orders involved. The latter is particularly relevant since a relevant pricing information is the side (buy or sell) of the order that was aggressive, meaning the one that consumed the liquidity in the order book. As we discussed in {ref}`market_microstructure`, this can typically be a market order or a limit order at a price that is equal or better that prices available in the opposite side. Reverse engineering the side from a trade is an inference problem, and requires a model. A simple one widely used is the so-called *tick-rule model* which consists on comparing the price of the trade with the mid-price available in the order book just before the trade:
 
 * If the price of the trade is below the mid-price, then we assume it was an aggressive sell order, since the the trade price has to be an average weighted by size of the limit orders available. Therefore, it makes sense to assume the trade consumed liquidity in the side closer to the trade price using the mid-price as a reference.
 * If the price of the trade is above the mid-price, we assume it was an aggressive buy order
@@ -408,15 +408,15 @@ This model is not perfect, however. It does not account for hidden liquidity tha
 
 Once we have the relevant pricing information for the trade, namely time, side, size and or course price, it can be used to update the current fair value estimation of the financial instrument. The size information is useful to include some measure of information content in the order, as discussed in the simple pricing model section when introducing the Sinclair model: intuitively, a very small size trade should not be as relevant as a large size trade when updating our fair value estimation. Sinclair proposes to model a trade observation as a Gaussian random variable ${\mathcal N}(P_t^{\text{trade}}, \sigma^2(v))$, where $P_t^{\text{trade}}$ is the observed trade price at time $t$, and $\sigma(v)$ is given by:
 
-$$\sigma (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1)\right)^+$$
+$$\sigma (v)= \sigma_p \left(\frac{v_\text{max}}{v}-1\right)^+$$
 
-where $\sigma_p$ is a constant to be estimated, and $v_{\text{max}}$ is an exogenous parameters that provides a typical scale for which trades are considered informative. It can be given by business prior knowledge or estimated from the statistical distribution of trade sizes. Notice that this error has the desirable properties of becoming zero at the scale $v_{\text{max}}$ and above, i.e. trades above this scale are considered maximally informative and the fair value is instantaneously update to this value. It also becomes infinitely large as the volume tends to zero, which makes the Kalman filter model to essentially ignore those observations. 
+where $\sigma_p$ is a constant to be estimated, and $v_{\text{max}}$ is an exogenous parameters that provides a typical scale for which trades are considered informative. It can be given by business prior knowledge or estimated from the statistical distribution of trade sizes. Notice that this error has the desirable properties of becoming zero at the scale $v_{\text{max}}$ and above, i.e. trades above this scale are considered maximally informative and the fair value is instantaneously updated to this value. It also becomes infinitely large as the volume tends to zero, which makes the Kalman filter model to essentially ignore those observations. 
 
 Sinclair's model is not the only way to introduce this behavior into the model. Other choices of $\sigma(v)$ are also valid. For example, the model:
 
 $$\sigma (v)= \sigma_0 \frac{\exp(-\frac{v}{v_0})}{1+ \exp(-\frac{v}{v_0})}$$
 
-might be more realistic in the sense that volume adjusts the degree of information but it never completely ignores small trades, for which the error tends to $\sigma_0/2$. Another alternative that does not completely agree with trades or large size is the following:
+might be more realistic in the sense that volume adjusts the degree of information but it never completely ignores small trades, for which the error tends to $\sigma_0/2$. Another alternative that does not completely saturate for trades of large size is the following:
 
 $$\sigma (v)= \sigma_{\min} + (\sigma_0 - \sigma_{\min}) e^{-\frac{v}{v_0}}$$
 
@@ -428,7 +428,7 @@ So far we have not used the side information inferred from the tick-rule model. 
 
 We have discussed the Request for Quote (RfQ) protocol in the chapter on [Market Microstructure](market_microstructure.md). In terms of pricing information, the main difference with LOBs is the asymmetry in information between the different participants in the process: dealers and clients. Let us focus on the case of negotiation via Multi-Dealer-to-Client platforms, which has the richer casuistic, from the point of view of the dealer, who is typically the one actively trying to calculate the fair value of the instruments. The pricing information that the dealer receives is the following:
 * **Platform composites**: the platform does not provide individual streaming bid and ask prices from other dealers, this is an information only available to clients. However, the platform typically offers a composite price, and index calculated aggregating the individual feeds from the dealers and applying proprietary rules. A composite typically consists on a stream of bid and ask prices that roughly represent average indicative or sometimes executable streamed prices from the dealers active in the platform. For example:
-  * Bloombergs' CBBT for bonds (Composite Bloomberg Bond Trader), using executable bid and ask streams from dealers
+  * Bloomberg's CBBT for bonds (Composite Bloomberg Bond Trader), using executable bid and ask streams from dealers
   * Tradeweb's TW Composite, using both indicative and executable prices
 
   In some cases, the platforms offer pricing feeds that already incorporate multiple pricing sources. For instance, Bloomberg offers BGN (Bloomberg Generic Price) for multiple instruments, which incorporates several pricing sources in the calculation, from dealer's indicative prices, interdealer brokers, traded data from exchanges (if available), etc. Marketaxess offers CP+ (Composite plus) for bonds, using indicative and executable streams from dealers but adding also information from trades within its platform as well as reported data from trade repositories like Trax and TRACE (see below)
@@ -466,7 +466,7 @@ where $b_t^\text{comp}$, $a_t^\text{comp}$ are, respectively, the bid and ask co
 
 The information from RfQs depends, as discussed above, on the final status of the dealer in the process. If the dealer wins the RfQ, the observation corresponds to a trade, and the modelization is overall similar to the one discussed in the context of trades in the LOB. There is, though, one key difference with the case of LOBs, in that the cover price is also informed to the dealer. 
 
-Intuitively, the closer the cover and the trade price, the more confidence we might put on the trade price as a pricing source, since we have the agreement from a second dealer quoting a similar level. Or put it in a different way, if the dealer wins the trade at a price much further than the cover price, it might imply a clear miss-pricing that needs to be adjusted, not a reliable pricing source. One way to incorporate this into the model is to make the observation error a function of the distance to the cover:
+Intuitively, the closer the cover and the trade price, the more confidence we might put on the trade price as a pricing source, since we have the agreement from a second dealer quoting a similar level. Or put it in a different way, if the dealer wins the trade at a price much further than the cover price, it might imply a clear mispricing that needs to be adjusted, not a reliable pricing source. One way to incorporate this into the model is to make the observation error a function of the distance to the cover:
 
   $$\sigma (v, d_t^{\text{cover}}) = \sigma(v) g(d_t^{\text{cover}})$$
 
@@ -513,7 +513,7 @@ Intuitively, then, if we get a persistent deviation between $\text{H\&M}_t$ and 
 As we discussed above, if a set of instruments exhibit historical price correlations and we have reasons to believe those are structural correlations, i.e. they will continue existing in the present, we can do a joint estimation of the fair values using a multivariate Kalman filter. This way, information about the price of one instrument can be used to improve the estimation of the others. The pricing sources for these instruments can be any of those discussed previously. 
 
 There are some caveats though to take into account when using this source of pricing information:
-* The first one is that correlations are **inferred parameters** ans therefore themselves subjected to a certain amount of model risk. The Kalman filter model uses point estimations of the correlations for the updates, and therefore ignores the potential uncertainty associated to the estimation when updating the price. This issue can actually become quite relevant in certain situations, for example when estimating the price of illiquid instruments using more liquid ones. The liquid instrument will have a smaller estimation error than the illiquid one. If point correlation between the instruments is high, it can have a over-weighted influence on the estimation of the price of the illiquid instrument, overriding the intrinsic price dynamics of the illiquid instrument. A Bayesian treatment of correlation can overcome these issues, but then the Kalman filter estimation algorithm can no longer be used, requiring a numerical computation of posterior probabilities for the predict and update steps. 
+* The first one is that correlations are **inferred parameters** and therefore themselves subjected to a certain amount of model risk. The Kalman filter model uses point estimations of the correlations for the updates, and therefore ignores the potential uncertainty associated to the estimation when updating the price. This issue can actually become quite relevant in certain situations, for example when estimating the price of illiquid instruments using more liquid ones. The liquid instrument will have a smaller estimation error than the illiquid one. If point correlation between the instruments is high, it can have a over-weighted influence on the estimation of the price of the illiquid instrument, overriding the intrinsic price dynamics of the illiquid instrument. A Bayesian treatment of correlation can overcome these issues, but then the Kalman filter estimation algorithm can no longer be used, requiring a numerical computation of posterior probabilities for the predict and update steps. 
 * The second one arises when **estimating the correlations** to be used in the Kalman filter model. The typical estimation of correlations used in financial models uses synchronous pricing data, for instance end of day prices. However, rigorously speaking, the correlations used in the Kalman filter model for fair value estimation are between latent fair values, not price observations. A consistent estimation therefore requires us to compute them endogenously, for example using Maximum Likelihood Estimation or Expectation Maximization over the historical pricing data. The difficulty lies when defining estimators (e.g. MLE ones) for the covariance matrix of asynchronous data. The standard estimator is not valid and we must resort to other less standard estimators. This topic is discussed extensively in {cite:p}`guo2017quantitative`, where they suggest using Fourier methods, among others. Again, as in the previous case, a Bayesian modelling approach for the covariance matrix provides the natural way to circumvent these issues, at the price of adding numerical complexity to the computation. 
 
 ## Fundamental models for fair value estimation
@@ -530,11 +530,11 @@ $$PV = \frac{C_T}{(1+r)^T}$$
 
 where we have assumed that an interest payment of $r C_T$ is paid each unit of time. The factor $1/(1+r)^T$ is called the *discount factor*, since it is used to discount future cash-flows. Present values becomes our fair value estimation within this framework.
 
-A typical hypothesis that provides useful mathematical simplifications is that of continuously accrued interest rates. This is also a good approximation for real situations where interests are paid daily, for instance in money market funds. Consider and account that pays interests each time period of size $\Delta$. The interest paid is $r \Delta$ over a unitary notional. If we reinvest the interests, at time $t$ we have accumulated $(1+ r \Delta)^{T/\Delta}$. If we now take the limit $\Delta \rightarrow 0$:
+A typical hypothesis that provides useful mathematical simplifications is that of continuously accrued interest rates. This is also a good approximation for real situations where interests are paid daily, for instance in money market funds. Consider an account that pays interest each time period of size $\Delta$. The interest paid is $r \Delta$ over a unitary notional. If we reinvest the interests, at time $t$ we have accumulated $(1+ r \Delta)^{T/\Delta}$. If we now take the limit $\Delta \rightarrow 0$:
 
 $$\lim_{\Delta \rightarrow 0} (1+ r \Delta)^{T/\Delta} = \lim_{\Delta \rightarrow 0} e^{\frac{T}{\Delta} \log (1 + r \Delta)} =  e^{rT}$$
 
-This gives us the expression of the discount factor for continuously paying interest rates, given by the inverse $e^{-rT}$. Under this approximation, the preset value of our simple financial instrument becomes: 
+This gives us the expression of the discount factor for continuously paying interest rates, given by the inverse $e^{-rT}$. Under this approximation, the present value of our simple financial instrument becomes: 
 
 $$PV = e^{-rT} C_T$$
 
@@ -562,13 +562,13 @@ The issue with this approach is that, once future cash-flows become uncertain, t
 
 ### The utility indifference theory of fair value estimation 
 
-To ground the discussion in another example, let us consider a specific case of a future uncertain cash-flow whose value depends on the price of another instrument at the time of payment, $S_T$, for example a stock. The cash-flow is therefore $C_T = f(S_T)$. Notice that this is a specific case of a derivative's contract. The function $f(S_T)$ is called the *pay-off* of the derivative, the instrument whose price is $S_T$ is called the *underlying* of the derivative, and the time $T$ is the expiry date of the derivative. Apart from the value $S_T$, it can also depend on other parameters that are deterministic. For instance, for an European call option we have $C_T = (S_T-K)^+$, where $K$ is called the *strike* of the option. An european put options has a payoff $C_T = (K-S_T)^+$. There are also American options where the option can be exercised before the expiry date, which becomes itself a random variable. 
+To ground the discussion in another example, let us consider a specific case of a future uncertain cash-flow whose value depends on the price of another instrument at the time of payment, $S_T$, for example a stock. The cash-flow is therefore $C_T = f(S_T)$. Notice that this is a specific case of a derivative's contract. The function $f(S_T)$ is called the *pay-off* of the derivative, the instrument whose price is $S_T$ is called the *underlying* of the derivative, and the time $T$ is the expiry date of the derivative. Apart from the value $S_T$, it can also depend on other parameters that are deterministic. For instance, for a forward contract we have $C_T = (S_T-F)$ where $F$ is called the forward price; and for an European call option we have $C_T = (S_T-K)^+$, where $K$ is called the *strike* of the option. An european put options has a payoff $C_T = (K-S_T)^+$. There are also American options where the option can be exercised before the expiry date, which becomes itself a random variable. 
 
 This derivative pays in the future a quantity that is contingent to the future value of the underlying, whose value is known today but is uncertain in the future. To get an estimation, we need to use probability theory to put some bounds to our uncertainty, so we characterize $S_T$ by a random distribution function $g(S_T)$. As we saw in chapter {ref}`stochastic_calculus`, a popular model that allows us to compute such future distribution is a random walk model or a geometric random walk, the latter being a natural choice for prices that cannot be negative. In those cases the future distribution can be computed, being a normal distribution in the first case, and a log-normal distribution in the second, e.g. in the case of stocks. Although for short expiries the random walk can also be a good model for stocks. These models allow us to get sometimes closed-form solutions, but more realistic models that capture better empirical distributions of prices can be used. 
 
-As mentioned in the previous section, we cannot just value this cash-flow using the expected value of the pay-off, since it would ignore the risk-profile of the investor. As discussed in more detail in chapter{ref}`stochastic_optimal_control`, utility functions provide a mathematical formalism that allows us to capture realistic risk behaviors. Utility provides a description of the value that the cash-flows derived from the financial instrument have for the investor. Typical utility functions show the notion of marginally decreasing utility for increasingly larger cash-flows. In situations where cash-flows are random variables, such behavior models investors that are risk averse, meaning that they need to be compensated increasingly more to take on extra risk. 
+As mentioned in the previous section, we cannot just value this cash-flow using the expected value of the pay-off, since it would ignore the risk-profile of the investor. As discussed in more detail in chapter {ref}`stochastic_optimal_control`, utility functions provide a mathematical formalism that allows us to capture realistic risk behaviors. Utility provides a description of the value that the cash-flows derived from the financial instrument have for the investor. Typical utility functions show the notion of marginally decreasing utility for increasingly larger cash-flows. In situations where cash-flows are random variables, such behavior models investors that are risk averse, meaning that they need to be compensated increasingly more to take on extra risk. 
 
-To apply the utility function framework to the problem of fair pricing, we need to compute expected utilities to characterize the value that the investor places on the contract. Using a exponential utility function for simplicity, this means:
+To apply the utility function framework to the problem of fair pricing, we need to compute expected utilities to characterize the value that the investor places on the contract. Using an exponential utility function for simplicity, this means:
 
 $$ \mathbb{E}_t[U] = 1- \mathbb{E}_t[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)}] $$
 
@@ -578,15 +578,15 @@ The fair value in this formalism is the so-called *premium* of the derivative, d
 
 $$ \mathbb{E}_t[U] = 1- \mathbb{E}_t[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T) -C_t\right)}] $$
 
-When modelling rational risk-averse agents with utility functions, we model their decisions as those that maximize the expected utility. However, in this case this cannot be used to compute the premium, since naturally the premium that maximizes utility is $C_t = -\infty$!. The problem is, of course, that it does not take into account the utility maximization of the dealer selling the derivative, who would not enter into the contract at this premium. Of course, the same framework could be used to model the dealer's payoff, which is the reverse from the investor, albeit with a different dealer's risk aversion, $\gamma_d$:
+When modelling rational risk-averse agents with utility functions, we model their decisions as those that maximize the expected utility. However, in this case this cannot be used to compute the premium, since naturally the premium that maximizes utility is $C_t = -\infty$!. The problem is, of course, that it does not take into account the utility maximization of the dealer selling the derivative, who would not enter into the contract at this premium. The same framework could be used to model the dealer's payoff, which is the reverse from the investor, albeit with a different dealer's risk aversion, $\gamma_d$:
 
 $$ \mathbb{E}_t[U] = 1- \mathbb{E}_t[e^{-\gamma_d \left(C_t - e^{-r(T-t)}f(S_T) \right)}] $$
 
 but even introducing the dealer's utility function, how could we compute the value of the premium?
 
-For the answer, we need first to frame the problem in other terms: what is the maximum premium that the investor would be willing to pay to enter into the contract? Since the alternative to not entering into the contract implies a zero payoff with total certainty, whose expected utility in this framework is $0\$$, we can argue that the investor would be willing to buy the derivative as far as the premium makes him/her better off, i.e. $\mathbb{E}_t[U] > 0$. For a value of the premium such that $\mathbb{E}_t[U] = 0 $, the investor is indifferent to buy or not buy. This value of the premium is called the <em>reservation price</em> or the <em>utility indifference price</em> of the investor. Of course the same computation could be done for the dealer, obtaining a different reservation price. An agreement will only happen if the maximum premium that the investor is willing to pay is above the minimum premium that the dealer is willing to receive. 
+For the answer, we need first to frame the problem in other terms: what is the maximum premium that the investor would be willing to pay to enter into the contract? Since the alternative to not entering into the contract implies a zero payoff with total certainty, whose expected utility in this framework is $0\$$, we can argue that the investor would be willing to buy the derivative as far as the premium makes him/her better off, i.e. $\mathbb{E}_t[U] > 0$. For a value of the premium such that $\mathbb{E}_t[U] = 0 $, the investor is indifferent to buy or not buy. This value of the premium calculated this way is called the <em>certain equivalence price</em> of the investor, since it is the guaranteed payoff that the client would accept now rather than taking the chance of a higher, but uncertain, payoff. Of course the same computation could be done for the dealer, obtaining a different certain equivalence price. An agreement will only happen if the maximum premium that the investor is willing to pay is above the minimum premium that the dealer is willing to receive. 
  
-Let us first see the problem from the dealer's point of view. In real situations, it is typically the investor who comes to the dealer and request a price for the derivative. The minimum premium that the dealer would be willing to accept to provide the contract as a reference for derivatives pricing, i.e. the reservation price of the dealer, is the one that solves:
+Let us first see the problem from the dealer's point of view. In real situations, it is typically the investor who comes to the dealer and request a price for the derivative. The minimum premium that the dealer would be willing to accept to provide the contract as a reference for derivatives pricing, i.e. the certain equivalence price of the dealer, is the one that solves:
 
 $$ 1- \mathbb{E}_0[e^{-\gamma_d \left(C_t - e^{-r(T-t)}f(S_T) \right)}] = 0$$
 
@@ -602,7 +602,7 @@ And for small, but positive risk aversion:
 
 $$ C_t^d = C_{t}(0) +  \frac{\gamma_d}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_d^2)$$
 
-We can derive the same expression for a investor we get:
+We can derive the same expression for an investor; we get:
 
 $$ C_t^i =  -\frac{1}{\gamma_i} \log \mathbb{E}_0[e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)}] = -\frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i \left(e^{-r(T-t)}f(S_T)\right)} $$
 
@@ -610,7 +610,11 @@ If the investor has a small but positive risk aversion:
 
 $$ C_t^i = C_{t}(0)- \frac{\gamma_i}{2}\int dS_T g(S_T) e^{-2r(T-t)}f^2(S_T) + O(\gamma_i^2)$$
 
-We see immediately that $C_t^i \leq C_d^i$, so there is only agreement if both investor and dealer are risk neutral, or at least one is risk prone, which is not a normal situation. Therefore, according to this theory of pricing, there would not be trading of derivatives! However, we know empirically that it is not the case. So what was wrong in our theory? We will see that the dealer is not simply taking the opposite bet than the investor, and therefore we need to modify this analysis. Before that, though, let us see particular examples of the computation of the premium for investors.
+We see immediately that $C_t^i \leq C_t^d$, so there is only agreement if both investor and dealer are risk neutral, or at least one is sufficiently risk prone. Dealers are expected to be naturally risk averse, and some clients (speculative ones) will be risk prone, but not all. This would imply that derivatives transactions happen less often that what we empirically observe. What's going on? There are two caveats to this discussion
+* Some clients might use derivatives to hedge their risks, i.e. they have an existing exposure into a risky instrument, and are willing to pay a premium to reduce the risk. This exposure needs to be introduced into the pricing framework to derive the correct certain equivalence price.
+* Dealers don't simply passively take the opposite risk from the derivative contract. They actively hedge their exposure, changing as well the final payoff and therefore the price they are willing to accept. 
+
+Let us see a few examples to illustrate this.
 
 #### Example: pricing of a simple contingent claim
 A contingent claim is a contract that pays off only under the realization of an uncertain event. Many derivatives contracts like options are contingent claims. The most simple contingent claim pays 1$ under the realization of a specific uncertain event, and zero in all other cases. These contingent claims are called Arrow-Debreu securities, and have a theoretical interest since we could in principle decompose any contingent claim as a linear combination of these securities. Therefore, if we know the prices (premiums) of Arrow-Debreu securities, we could price any contingent claim. We say that in this case we have a *complete market*, where we can trade instruments linked to any future state of the market. 
@@ -619,27 +623,45 @@ For our purposes, though, we just want to discuss a simple example of reservatio
 
 $$ C_t^i = -\frac{1}{\gamma_i} \log \left(\frac{1}{2}e^{-\gamma_i} + \frac{1}{2} \right) = \frac{1}{2} - \frac{1}{\gamma_i}\log \cosh \left(\frac{\gamma_i}{2}\right)$$
 
-For a risk-neutral investor, by making $\gamma_i \rightarrow 0$, we get simply $C_t^i = 1/2$, which makes sense: the investor is willing to pay 0.5\$ to make the game <em>fair</em>. Or in other terms, to make the expected value of the game zero. A fully risk averse investor for whom $\gamma_i \rightarrow \infty$ has $C_t = 0$, i.e. only is willing to buy the contract when there is guarantee of no losses under any scenario. In the middle, the premium lies between those two values: the investor will be willing to pay more than 0$ to trade, as far as the payoff is skewed in its favor. 
+For a risk-neutral investor, by making $\gamma_i \rightarrow 0$, we get simply $C_t^i = 1/2$, which makes sense: the investor is willing to pay 0.5\$ to make the game <em>fair</em>. Or in other terms, to make the expected value of the game zero. A fully risk averse investor for whom $\gamma_i \rightarrow \infty$ has $C_t^i = 0$, i.e. only is willing to buy the contract when there is guarantee of no losses under any scenario. In the middle, the premium lies between those two values: the investor will be willing to pay more than 0$ to trade, as far as the payoff is skewed in its favor. 
 
 #### Example: Forward on a non-dividend paying stock 
 
-Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock [^1]. The buyer of a forward has the obligation to buy a stock at the expire $T$ at a pre-agreed price $K$. Therefore, the payoff function reads:
+Let us now focus on a more realistic case and find the maximum premium that a risk averse investor would be willing to pay for a forward contract on a non-dividend paying stock [^1]. The buyer of a forward has the obligation to buy a stock at the expire $T$ at a pre-agreed price $F$. Therefore, the payoff function reads:
 
-$$ f(S_T) = S_T - K$$
+$$ f(S_T) = S_T - F$$
 
 The maximum premium that the investor is willing to pay reads then:
 
-$$ C_t^i = - \frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i e^{-r(T-t)}(S_T-K)} $$
+$$ C_t^i = - \frac{1}{\gamma_i} \log \int dS_T g(S_T) e^{-\gamma_i e^{-r(T-t)}(S_T-F)} $$
 
-which in the case of a risk-neutral investor reduces to:
+Let us assume a Brownian motion model for the (non-dividend paying) stock:
 
-$$ C_{t}^i(0) = \int dS_T g(S_T) e^{-r(T-t)}(S_T-K) = e^{-r(T-t)}(E[S_T] - K) 
-$$
+$$dS_t = \mu dt + \sigma dW_t$$
 
-i.e. the price is simply the discounted expected pay-off. The expectation represents the belief from the investor on the value of the stock at expiry. It is model-free, meaning that don't need to specify a model for the evolution of the stock to compute the maximum premium, although of course an investor could use a model to compute it. The value of the premium has the following dependencies:
-* The larger the expected value of the stock at T, the more the investor is willing to pay for the forward
-* The larger the risk-free interest rate $r$, the lower the investor is willing to pay for the forward, since the present value of the payoff is reduced
-* The larger the strike, the less attractive is the forward purchase and therefore the less the investor is willing to pay for it.
+where $\mu$ is the drift (expected revaluation), $\sigma$ is the volatility and $W_t$ a Wiener process. Integrating this SDE we have $S_T \sim {\mathcal N}(S_t + \mu (T-t), \sigma^2 (T-t))$. Notice that it is only a realistic model as far as $\sigma^2 (T-t) \gg S_t + \mu (T-t)$, since otherwise the stock price could become negative in a relevant proportion of scenarios, which is not financially possible. The advantage of this model is that allows us to compute a closed-form for the premium, since the integral becomes the expected value of a log-normal random variable $Z = e^{-\gamma e^{-r (T-t)} S_T}$, which is known \footnote{If $X \sim {\mathcal N}(\mu_X, \sigma_X^2)$ and $Z = e^X$ then $\mathbb{E}[Z] = e^{\mu_X + \frac{1}{2} \sigma_X^2}$}:
+
+$$ C_t^i = - e^{-r(T-t)} F - \frac{1}{\gamma_i} \log \mathbb{E}_t\left[ e^{-\gamma_i e^{-r(T-t)}S_T}\right] \nonumber \\ = - e^{-r(T-t)} (F - S_t - \mu (T-t)) - \frac{\gamma_i}{2} e^{-2r(T-t)} \sigma^2 (T-t)$$
+
+Forward contracts are usually priced choosing the forward price $F$ that makes the premium zero, $C_t^i = 0$ so there is not cash transacted at the time of inception of the contract. In this case:
+
+$$F^i = S_t + \mu (T-t) -  \frac{\gamma_i}{2} e^{-r(T-t)} \sigma^2 (T-t)$$
+
+Unless the client has strong expectations of future returns of the stock (characterized by its drift $\mu (T-t)$), a risk averse client will only accept a forward price $F$ smaller than the current spot price, given the risk penalty in the right side of the equation, which is negative. 
+
+As mentioned before, though, many clients buy forwards as a way to hedge their risk with respect to the underlying. For example, let us assume the client holds one share of a company and cannot liquidate it until the time $T$. This means the client is exposed to market risk, which could neutralize by entering into a forward contract. In this case, the client has to compare the utility of two different scenarios: in the first one, the client liquidates the stock at time $T$ at the market price available, $S_T$. In the second one, it enters into a short forward contract at time $t$ that expires at time $T$. The forward price is agreed so that the client does not need to pay a premium at time $t$. The expected utility of the first scenario is:
+
+$$\mathbb{E}_t(U_1) = 1 - \mathbb{E}_t\left[ e^{-\gamma_i e^{-r (T-t)} S_T}\right] = 1 - e^{-\gamma_i \left(e^{-r (T-t)}S_t + e^{-r (T-t)} \mu (T-t)\right) + \frac{\gamma_i^2}{2} e^{-2 r (T-t)} \sigma^2 (T-t)}$$
+
+The expected utility of the second scenarios is now:
+
+$$\mathbb{E}_t(U_2) = 1 - \mathbb{E}_t\left[ e^{-\gamma_i e^{-r (T-t)} (S_T + (F - S_T))}\right] = 1 - e^{-\gamma_i e^{-r (T-t)} F}$$
+
+The certain equivalence forward price for the client can be obtained by equating both expressions:
+
+$$F^i = S_t + \mu (T-t) +  \frac{\gamma_i}{2} e^{-r(T-t)} \sigma^2 (T-t)$$
+
+As we would expect, now the risk-averse client is willing to pay a higher forward price to remove the exposure to market risk.
 
 
 #### Example: European Call Options 
@@ -656,15 +678,15 @@ In the limit of a risk-neutral investor, the premium is:
 
 $$ C_{t}^i(0) = \int dS_T g(S_T) e^{-r(T-t)} (S_T-K)^+ $$
 
-Let us consider the case of a non-dividend paying stock, which we model as Geometrical Brownian Motion to ensure non-negative prices are allowed:
+Let us consider again the case of a non-dividend paying stock, but in this case we will model it a as Geometrical Brownian Motion to ensure negative prices are not allowed:
 
 $$d S_t = \mu S_t dt + \sigma S_t d W_t$$
 
-where $\mu$ and $\sigma$ are the drift and volatility of the stock, respectively, and $W_t$ a Wiener process. Integrating this SDE up to T:
+Integrating this SDE up to T:
 
 $$ S_T = S_t e^{(\mu - \frac{\sigma^2}{2})(T-t) + \sigma \sqrt{T-t} Z} $$
 
-where $Z \sim N(0,1)$. We can further decompose the expression of the premimum as:
+where $Z \sim N(0,1)$. We can further decompose the expression of the premium as:
 
 $$C_{t}^i(0) = \int_0^\infty dS_T g(S_T) e^{-r(T-t)}  (S_T-K)^+ = \int_K^\infty dS_T g(S_T) e^{-r(T-t)}  (S_T - K) $$
 
@@ -680,9 +702,9 @@ $$ = S_t e^{\mu (T-t)} \left(1-N(-d_1(\mu))\right)$$
 
 where we have defined the functions:
 
-$$d_1(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (\mu - \frac{\sigma^2}{2})(T-t)\right) $$
+$$d_1(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (\mu + \frac{\sigma^2}{2})(T-t)\right) $$
 
-$$d_2(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (\mu + \frac{\sigma^2}{2})(T-t)\right) $$
+$$d_2(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (\mu - \frac{\sigma^2}{2})(T-t)\right) $$
 
 and $N(x)$ is the cumulative distribution function of the standard normal distribution. The second integral is then:
 
@@ -716,55 +738,55 @@ Dependencies of a call option premium for a risk neutral investor, derived as th
 
 ### The arbitrage-free theory of derivatives pricing
 
-When we were applying the utility indifference theory of derivatives pricing to both parties agreeing in the transaction, the investor and the dealer, we found the issue that according to this theory, there would be a trade only if both of them are risk averse, since they are taking opposite sides of the bet on the payoff result. In reality, both dealers are investors are generally risk-averse and we observe transactions, so what are we missing in our theory?
+So far we have looked closely at the pricing behaviour of clients who are willing to transact derivatives either because they want to bet on the market (risk prone) or hedge their exposure (risk averse). The dealers who are typically at the other side of the transaction are typically risk averse (as is expected for a banking business). However, if they were passively to take the opposite side of the bet, they would transact only against those risk prone or risk averse enough to accept the premiums they would be willing to accept. 
 
-The answer, as we anticipated above, is that the dealer is not really simply taking the opposite of the bet. There are mainly two ways a dealer will conduct this business:
-* If the market on derivatives is relatively liquid in both sides, with plenty of investors willing to take the long or short position in the derivative over periods much shorter than the expiry, the dealer will act as a market-maker of the derivatives. In this case, the dealer will quote bid and asks prices for the derivatives that compensate it for the provision of liquidity with its own capital, incurring potential inventory risk or information asymmetry risk
+In reality, as we anticipated above, dealers take on a more active role in order to handle their exposure to the risks of the derivatives they are transacting with the clients. There are mainly two ways a dealer will conduct this business:
+* If the market on derivatives is relatively liquid on both sides, with plenty of investors willing to take the long or short position in the derivative over periods much shorter than the expiry, the dealer will act as a market-maker of the derivatives. In this case, the dealer will quote bid and asks prices for the derivatives that compensate it for the provision of liquidity with its own capital, incurring potential inventory risk or information asymmetry risk
 * If the market is one-sided and / or illiquid, in the sense of having a small number of potential transactions before the expiry of the contract, the dealer will try to hedge the risk using other financial instruments available.
 * In practice, a combination of both situations will also happen often
 
 As we discussed in the first part of this chapter, if we are in the first situation, we might not need a derivatives pricing model since we can extract the prices of derivatives directly from observations of trades or request for quotes that are not closed. It is the second case where we need a theory of derivatives pricing that takes into account potential hedging strategies that mitigate the risk of the dealer. We anticipate then that in this framework, the minimum price or premium that the dealer will accept to sell the derivative will be one that compensates it for the costs of hedging plus the residual risk.
 
-More interestingly, we will see that in some cases, under certain theoretical situations, a perfect hedging strategy might exist, so the minimum price will be exactly the cost of the hedging strategy, which in this setup is also called the perfect replication strategy (since a perfect hedging implies no risk, and therefore a replication of the payoff using other financial instruments). A consequence of the existence of such replication strategy is that dealers are forced to price derivatives consistently, otherwise they would be generating risk-free arbitrage opportunities where other dealers who price correctly the derivative trade with the one miss-pricing it, and pocket the difference without risk. Hence, this theory of derivatives pricing is also called the arbitrage-free theory of derivatives pricing.
+More interestingly, we will see that in some cases, under certain theoretical situations, a perfect hedging strategy might exist, so the minimum price will be exactly the cost of the hedging strategy, which in this setup is also called the perfect replication strategy (since a perfect hedging implies no risk, and therefore a replication of the payoff using other financial instruments). A consequence of the existence of such replication strategy is that dealers are forced to price derivatives consistently, otherwise they would be generating risk-free arbitrage opportunities where other dealers who price correctly the derivative trade with the one mispricing it, and pocket the difference without risk. Hence, this theory of derivatives pricing is also called the arbitrage-free theory of derivatives pricing.
 
 Let us revisit the case of forwards and options under this optic.
 
 #### Example: Forward on a non-dividend paying stock 
 
-Under the modelling hypothesis used in the previous sections to value the premium of a forward, namely, that 1) the interest risk is locked during the period of the forward, 2) there is no counter-party risk, i.e. no risk that the investor will not satisfy its obligations, then there is actually a simple replication strategy that hedges all the risk of the contract. If the dealer is selling the forward to the investor, therefore guaranteeing a price $K$ to buy a share at time $T$, then:
+Under the modelling hypothesis used in the previous sections to value the premium of a forward, namely, that 1) the interest risk is locked during the period of the forward, 2) there is no counter-party risk, i.e. no risk that the investor will not satisfy its obligations, then there is actually a simple replication strategy that hedges all the risk of the contract. If the dealer is selling the forward to the investor, therefore guaranteeing a price $F$ to buy a share at time $T$, then:
 
 * Borrows $S_t$ dollars in the repo monetary markets at interest rate $r$ during the period of the forward. We assume that interest accrues daily but is settled at the expiry. The stock bought is used as collateral in the repo.
 * Buys the underlying stock with this money at inception, paying $S_t$
-* At the expiry of the forward it delivers the stock to the investor, receives $K$ and repays the loan plus remaining interests
+* At the expiry of the forward it delivers the stock to the investor, receives $F$ and repays the loan plus remaining interests
 
 If we consider that daily accruing of interest can be well approximated by continuous accruing, then the investor needs to repay at $T$ an amount $S_t e^{r(T-t)}$. The payoff for the dealer at the expiry is therefore:
 
-$$ K - S_t e^{r(T-t)}$$
+$$ F - S_t e^{r(T-t)}$$
 
 which is deterministic under the hypotheses of the model. A rational dealer of course will not accept a determinist loss, so the minimum premium that will command for this contract is the discounted value of this payoff:
 
-$$C_{F,t} = K e^{-r(T-t)} - S_t$$
+$$C_{F,t} = F e^{-r(T-t)} - S_t$$
 
 In practice, forward markets work by quoting the strike such that the premium is zero, hence:
 
-$$ F_t \equiv K = S_t e^{r(T-t)} $$
+$$ F_t \equiv S_t e^{r(T-t)} $$
 
-This is the arbitrage-free price of a forward contract. As mentioned above, it is called arbitrage-free since any other price would represent a risk-free arbitrage opportunity for other dealer. For example, let's assume this dealer quotes a $\bar{K}_t < K_t$. Another dealer could buy the forward from the dealer, and use the opposite replication strategy: 
+This is the arbitrage-free price of a forward contract. As mentioned above, it is called arbitrage-free since any other price would represent a risk-free arbitrage opportunity for other dealer. For example, let's assume this dealer quotes a $\bar{F}_t < F_t$. Another dealer could buy the forward from the dealer, and use the opposite replication strategy: 
 
 * Borrow the stock in repo and sell it in the market at price $S_t$ to fund the repo. 
-* At time $T$ close the repo with the stock delivered by the dealer selling the forward, receive $S_t e^{r(T-t)}$ in cash and pay $\bar{K}_t$. 
+* At time $T$ close the repo with the stock delivered by the dealer selling the forward, receive $S_t e^{r(T-t)}$ in cash and pay $\bar{F}_t$. 
 
 The payoff for this dealer is then:
 
-$$  S_t e^{r(T-t)} - \bar{K}_t >  S_t e^{r(T-t)} - S_t e^{r(T-t)}  = 0$$
+$$  S_t e^{r(T-t)} - \bar{F}_t >  S_t e^{r(T-t)} - S_t e^{r(T-t)}  = 0$$
 
 i.e. a risk-free profit!
 
 #### Example: European Call Options 
 
 In the case of options there is no such obvious static replication strategy if we are only allowed to use the underlying stock and repo contracts. By static replication strategy we mean that we don't need to modify the positions of the replication portfolio (the stock and the repo) during the life of the forward. If we are able to trade other derivatives there is actually a static replication strategy. If the dealer sells the call option to an investor, then immediately
-* Buys to other dealer a put option with the same strike and expiry
-* Buys to another dealer a forward with the same strike and expiry
+* Buys from another dealer a put option with the same strike and expiry
+* Buys from another dealer a forward with the same strike and expiry
 
 The payoff at the expiry is:
 
@@ -772,11 +794,11 @@ $$ -(S_T-K)^+ + (K-S_T)^+ + (S_T-K) = 0 $$
 
 meaning that the replication portfolio of a put and a forward replicates the call option. At inception, the dealer is paid for the call a premium $C_{C,t}$ and pays $C_{P,t}$ for the put and $C_{F,t}$ for the forward, hence the payoff at inception is:
 
-$$C_{C,t} - C_{F,t} - C_{F,t}$$
+$$C_{C,t} - C_{P,t} - C_{F,t}$$
 
 In order to avoid losses, the minimum premium that must command is therefore:
 
-$$C_{C,t} = C_{F,t} + C_{F,t}$$
+$$C_{C,t} = C_{P,t} + C_{F,t}$$
 
 which is called the *put-call parity* relationship. The premium for the forward can be derived as discussed in the previous section, however we are left with a sort of chicken and the egg problem with regards to the call and put premiums: given one, we can determine the other, but we don't have yet a replication strategy for the put to derive the call premium, and vice-versa. 
 
@@ -864,13 +886,13 @@ From a financial point of view, though, it is convenient not to lose the connect
 
 The computation of the expectation value for the option premium can be reused from the one done in the context of utility indifference pricing, simply by substituting $\mu \rightarrow r$ in the expressions: 
 
-$$C(S_t,t)= S_t N(d_1(\mu))-K e^{-r(T-t)} N(d_2(\mu)) $$
+$$C(S_t,t)= S_t N(d_1)-K e^{-r(T-t)} N(d_2) $$
 
 where:
 
-$$d_1(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r - \frac{\sigma^2}{2})(T-t)\right) $$
+$$d_1 = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r + \frac{\sigma^2}{2})(T-t)\right) $$
 
-$$d_2(\mu) = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r + \frac{\sigma^2}{2})(T-t)\right) $$
+$$d_2 = \frac{1}{\sigma \sqrt{T-t}} \left(\log \frac{S_t}{K} + (r - \frac{\sigma^2}{2})(T-t)\right) $$
 
 This is the infamous Black-Scholes-Merton option pricing formula. It provides dealers with option prices that depend on
 
@@ -901,7 +923,7 @@ The second big difference is of course the dependence with respect to the expect
 
 #### An alternative derivation: the market price of risk
 
-An alternative derivation of the BSM equation that can be helpful to gain intuition on the theory uses the financial concept of market price of risk. The market price of risk is essentially a Sharpe ratio, commonly used in the theory of investment. The Sharpe ratio computes the excess returns of an investment, i.e. the expected returns devoted fom the risk-free interest, over their risk defined as the volatility of the returns. For the stock that is the underlying of the option, and using continuos time, this is:
+An alternative derivation of the BSM equation that can be helpful to gain intuition on the theory uses the financial concept of market price of risk. The market price of risk is essentially a Sharpe ratio, commonly used in the theory of investment. The Sharpe ratio computes the excess returns of an investment, i.e. the expected returns deviating from the risk-free interest, over their risk defined as the volatility of the returns. For the stock that is the underlying of the option, and using continuos time, this is:
 
 $$\lambda_{S} = \frac{ \mathbb{E}[\frac{dS_t}{S_t}]- rdt}{\sqrt{Var[\frac{dS_t}{S_t}]}} = \frac{\mu_t - r}{\sigma}\sqrt{dt}$$
 
@@ -911,7 +933,7 @@ $$\lambda_{C} = \frac{ \mathbb{E}[\frac{dC}{C}]- rdt}{\sqrt{Var[\frac{dC}{C}]}} 
 
 We can now apply a different version of the arbitrage-free theory. Since the value of the option is essentially derived from the underlying stock, which the only risk factor affecting the option price in the BSM theory, then as investment opportunities both should have the same Sharpe ratio or market price of risk, i.e. $\lambda_S = \lambda_C$. Otherwise, investors would bid up the price of the one with the largest Sharpe ratio until both of them equalize. Applying this equality the terms proportional to the drift $\mu_t$ cancel and we get back to the BSM differential equation.
 
-One could of course have used the argument in reverse, reorganizing the BSM equation in terms of market prices of risk to prove that the equality of those is a consequence of the arbitrate-free argument used when building the replication portfolio. 
+One could of course have used the argument in reverse, reorganizing the BSM equation in terms of market prices of risk to prove that the equality of those is a consequence of the arbitrage-free argument used when building the replication portfolio. 
 
 
 #### Using the BSM framework in practice
@@ -948,13 +970,13 @@ In the plots, we can see the different impacts that the violations produce on th
 
 ### The stochastic discount factor (SDF) pricing framework
 
-This pricing framework estipulates a fundamental pricing equation for any asset (and, in particular, financial instruments) with a similar form as the naive pricing equation for the present value pricing framework when applied to assets with uncertain future cash-flows:
+This pricing framework stipulates a fundamental pricing equation for any asset (and, in particular, financial instruments) with a similar form as the naive pricing equation for the present value pricing framework when applied to assets with uncertain future cash-flows:
 
 $$p_t = {\mathbb E}_t \left[\sum_{i=1}^N m_{t_i} C_{t_i}\right]$$
 
 The difference being that now $m_{t_i}$ is a stochastic discount factor that does not necessarily has the form derived using the argument based on the time value of money, namely $e^{-rt_i}$. That such pricing equation is general enough to price any asset can be derived based on two hypotheses:
 
-* The **law of one price**, which states that states that the price of an instrument delivering two cash-flows $C_1$ and $C_2$ -which may be uncertain and contingent on different future states- is equal to the sum of the prices of two assets delivering each cash-flow separately:
+* The **law of one price**, which states that the price of an instrument delivering two cash-flows $C_1$ and $C_2$ -which may be uncertain and contingent on different future states- is equal to the sum of the prices of two assets delivering each cash-flow separately:
 
   $$p(X_{C_1 + C_2}) = p(X_{C_1}) + p(X_{C_2})$$
   where $X$ denotes a generic instrument and $p(\cdot)$ its market price. This property reflects the absence of arbitrage opportunities: two instruments that generate identical payoffs in all states of the world must have the same price.
@@ -993,7 +1015,7 @@ Using this corrected formula:
 
 $$p_{t_0}(1_{s_t, i}) = {\mathbb E}_{t_0}\left[{\mathbb E}_{t'}\left[\frac{m_t}{m_{t_0}}  1_{s_t, i}\right]\right] =  {\mathbb E}_{t_0}\left[\frac{m_{t'}}{m_{t_0}} p_{t'}(1_{s_t, i})\right] $$
 
-which is now consistent. The intuition behind this adjustment is that the stochastic discont factor implicitly defines the numeraire of the economy - that is, a reference asset used as a unit of account, that ensures that prices are consistent across time. Deflating by the discount factor at the pricing date ensures that all values are measured in the same unit of account, so that prices observed at different times can be consistently compared and aggregated. 
+which is now consistent. The intuition behind this adjustment is that the stochastic discount factor implicitly defines the numeraire of the economy - that is, a reference asset used as a unit of account, that ensures that prices are consistent across time. Deflating by the discount factor at the pricing date ensures that all values are measured in the same unit of account, so that prices observed at different times can be consistently compared and aggregated. 
 
 We can now extend the pricing formula to our generic instrument $X$:
 
@@ -1051,7 +1073,7 @@ We define the discount factor as $D(t, t_i) \equiv {\mathbb E}_t\left[ \frac{m_{
 
 $$B_t = \sum_{i=1}^{N} D(t, t_i) \gamma_i c M + D(t, T) M$$
 
-How to proceed from here depends on our modelling choices regarding the risk factors that are relevant for pricing as well as the set of liquid instruments with available prices. For example, if we have a set of $N$ bonds from the same issuer paying coupons at the same dates $t_i$ but with different maturities, we could simply write the $N$ pricing equations and solve for the discount factors $D(t, t_i)$, without having to compute explicitely the SDF. This could be used to price non-standard bonds (e.g. with different deterministic coupons or day-count fraction conventions) as far as they pay on the same time grid. If they pay at different times, we need to make some theoretical hypothesis to be able to interporlate the value of the discount factors, or directly build a model of the SDF. 
+How to proceed from here depends on our modelling choices regarding the risk factors that are relevant for pricing as well as the set of liquid instruments with available prices. For example, if we have a set of $N$ bonds from the same issuer paying coupons at the same dates $t_i$ but with different maturities, we could simply write the $N$ pricing equations and solve for the discount factors $D(t, t_i)$, without having to compute explicitely the SDF. This could be used to price non-standard bonds (e.g. with different deterministic coupons or day-count fraction conventions) as far as they pay on the same time grid. If they pay at different times, we need to make some theoretical hypothesis to be able to interpolate the value of the discount factors, or directly build a model of the SDF. 
 
 A first simple model is assuming that bonds only depend on a single risk factor, an overall macroeconomic interest rate $r_t$, for example a short-term interbank rate  (e.g. one linked to collateralized contracts like overnight index swaps, see chapter {ref}`intro_financial_instruments).  For the moment, we consider it deterministic and constant: $r_t = r$. Let us assume in this market we have access to a money-market account that accrues interest continuously. The pay-off at time $T$ of the money market account is $\beta_T = \beta_t e^{r(T-t)}$, for a initial investment $\beta_t$, which is also naturally the price of this instrument at time $t$. Therefore, the pricing equation is given by:
 
@@ -1071,11 +1093,11 @@ In practice, though, it is too simplistic to consider that the price of bonds, e
 
 $$B_{k,t}^{mkt} = \sum_{i=1}^{N} e^{-y(t, T_k)(t_i-t)} \gamma_i c_k M_k + e^{-y(t, T_k)(T_k-t)} M_k  $$
 
-Again, in order to extend this pricing framework to other instruments with non-liquid prices, we need to be able to interporlate the yield curve to other maturities. Market practitioners might directly use interpolation schemes that ensure the yield curve is well behaved, e.g. does not produce prices that are arbitragable. There is also a large literatur on *term-structure* interest rate models from which consistent yield curve parametric functions can be derived, that are then fitted to market prices. We refer the reader to {cite:p}`BrigoMercurio2006` {cite:p}`AndersenPiterbarg2010a` {cite:p}`AndersenPiterbarg2010b` for more details. 
+Again, in order to extend this pricing framework to other instruments with non-liquid prices, we need to be able to interpolate the yield curve to other maturities. Market practitioners might directly use interpolation schemes that ensure the yield curve is well behaved, e.g. does not produce prices that are arbitragable. There is also a large literatur on *term-structure* interest rate models from which consistent yield curve parametric functions can be derived, that are then fitted to market prices. We refer the reader to {cite:p}`BrigoMercurio2006` {cite:p}`AndersenPiterbarg2010a` {cite:p}`AndersenPiterbarg2010b` for more details. 
 
 For the purpose of our discussion on how to build stochastic discount factor models, let us consider one of the most simple instances of such term-structure models, the Vasicek model {cite:p}`Vasicek1977`. This model assumes that the entire yield curve is driven by a single risk factor, represented by an instantaneous continuously compounded short rate $r_t$ that drives the movements of the full yield curve $y(t, T)$. The short rate $r_t$ is modeled as a stochastic process following an Ornstein–Uhlenbeck mean-reverting dynamics, as discussed in {ref}`stochastic_calculus`:
 
-$$dr_t = \kappa (\theta - r_t) + \sigma dW_t$$
+$$dr_t = \kappa (\theta - r_t) dt + \sigma dW_t$$
 
 where $\kappa > 0$ is the speed of mean reversion, $\theta$ the long run mean level, $\sigma > 0 $ the volatility and $W_t$ a Wiener process. Notice that this short-rate is not anymore a interbank reference rate, but a funding rate linked to the issuer. As mentioned above, an alternative model could try to keep an explicit decomposition as $r_t = r_t^{ois} + s_t$, where now $r_t^{ois}$ is the interbank rate and $s_t$ the spread associated with the specific issuer, linked to specific funding, credit and liquidity characteristics of the issuer. But we will not follow this path in this section. 
 
@@ -1137,13 +1159,15 @@ with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to
 
 #### Stock pricing
 
+- assume two factors, interest rates, and dividend growth, negatively correlated
+- sdf is a function of both risk factors, use again log-normal
+- derive equation for money market
+- derive equation for stock 
+- this allows the computation of the sdf
+- show how this equation for stocks, given the correlation sdf with dividends, is decomposed E[xy] = E[x]E[y] + cov(x,y) so the issues with Shiller theory are potentially overcome
 
 
 #### Option pricing
-
-
-
-
 
 - simple deterministic cashflows (bond)
 - stock?
@@ -1154,7 +1178,7 @@ with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to
 
 - deterministic discount factor 
 - utility functions as sdf
-- radom nykodim as sdf and the risk neutral measure
+- Radon-Nikodym derivative as sdf and the risk neutral measure
 
 
 
@@ -1164,6 +1188,6 @@ with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to
 
 ## Exercises
 
-* Derive the optimal linear combination of predictors in the senses that minimizes the variance of the combined predictor, for the case in which the individual predictors are correlated. 
+* Derive the optimal linear combination of predictors in the sense that minimizes the variance of the combined predictor, for the case in which the individual predictors are correlated. 
 
 * Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike $K_1$ and maturity $T$, using another (liquid) option tradable in the market with strike $K_2$ and same maturity $T$. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is $\Pi_t = \Delta_t C_2(S_t, t) + \beta_t$, with the terminal condition $\Pi_T = C_1(S_T, T)$. Hint: link the result with the market price of risk for options introduced in this chapter.

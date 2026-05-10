@@ -2,6 +2,9 @@
 
 # Release Notes
 
+## 05.26
+Added new sections to the Algorithmic Trading and Fair Price Estimation chapters. Fixed typos. 
+
 ## 02.26
 Added new sections to the Algorithmic Trading chapters.
 

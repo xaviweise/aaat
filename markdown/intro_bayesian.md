@@ -408,7 +408,7 @@ In general, the posterior distribution of the parameters will not have a closed-
 * Monte Carlo methods, which aim to generate samples from the posterior distribution, despite not having a closed form. In particular, Markov Chain Monte Carlo (MCMC) methods are the most popular ones, which rely on building a Markov Chain that asymptotically converges to the posterior.
 * Variational methods, which seek to analytically approximate the posterior by finding the closest one from a more simple family of distributions (e.g. Gaussian ones). For a distance between distributions, the Kullback–Leibler divergence is typically used. A particular case of a variational methods is that of Mean Field Theory, widely used in Statistical Physics, in which the posterior distribution is approximated by the distribution of a set of independent latent factors. 
 
-For an introduction to the most computational demanding methods like MCMC and Variational Methods, a good starting reference is [ONLINE BAYESIAN BOOK]
+For an introduction to the most computational demanding methods like MCMC and Variational Methods, a good starting reference is {cite:p}`BMCP2021`.
 
 #### Bayesian online learning
 
@@ -510,7 +510,7 @@ where ${\rm x}$ are the set of observable variables and ${\rm z}$ the latent one
 
 ### Partially observable latent variable models
 
-As mentioned above, in this case we are dealing with a problem of missing data, where some of the data points of a set of variables have not been recorded for potentially various reasons. Rubin {cite:p}`little2019statistical` distinguishes between tree different situations regarding the generative model (i.e. the full probability distribution) for missing data:
+As mentioned above, in this case we are dealing with a problem of missing data, where some of the data points of a set of variables have not been recorded for potentially various reasons. Rubin {cite:p}`little2019statistical` distinguishes between tree different situations regarding the generative model (i.e. the full joint probability distribution) for missing data:
 
 * Missing Completely at Random (MCAR): there is no pattern in the missing data. The missing data is uncorrelated with observed and unobserved data. For instance, if some trades in a booking database are missing due to corruption of the physical support. 
 
