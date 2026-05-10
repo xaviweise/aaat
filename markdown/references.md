@@ -3,5 +3,4 @@
 # References
 
 ```{bibliography}
-:style: unsrt
 ```
