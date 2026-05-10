@@ -1,3 +1,4 @@
+(intro_causal)=
 # Causal inference
 
 ## Introduction
