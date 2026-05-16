@@ -444,7 +444,7 @@ For a deeper dive into the systematics of backtesting, the book by Marcos López
 
 ### Testing in simulated markets
 
-There are several reasos why backtesting with historical data might not provide enough safe guarantees when it comes to estimate the real performance in trading conditions. Let us summarize the main ones:
+There are several reasons why backtesting with historical data might not provide enough safe guarantees when it comes to estimate the real performance in trading conditions. Let us summarize the main ones:
 
 * **Lack of enough historical data**: there might be simply not enough data from previous trading sessions to do a comprehensive assessment, particularly for strategies that use end of day prices or even larger time intervals. The problem is compounded when we know that markets are continually changing so the older the data, the less representative might be of future trading conditions. 
 
@@ -454,19 +454,8 @@ There are several reasos why backtesting with historical data might not provide 
 
 This motivates the use of market simulators that are able to generate an unlimited number of trading scenarios and provide a comprehensive feedback mechanism. These simulators might still rely on historical data for calibration or initialization, but the role of this data ends there. 
 
-There are two major ways to build market simulations that we will cover in this chapter. The first one is based on estimating a generative probabilistic model for the orders in the market. The second one tries to model the behaviour of representative agents that operate in markets, which generate in turn the orders that arrive to the simulation. 
+There are two major ways to build market simulations. The first one is based on estimating a generative probabilistic model for the orders in the market. The second one tries to model the behaviour of representative agents that operate in markets, which generate in turn the orders that arrive to the simulation. We will cover the simulation of dealer-to-client markets that operate with request for quotes in chapter {ref}`rfq_models`. Simulation of limit order book (LOB) markets is discussed in detail in {ref}`lob_models`.
 
-#### Generative models for market simulation
-
-As discussed in chapter {ref}`intro_bayesian`, a generative probabilistic model describes the joint probability distribution of the relevant variables of the problem. For a simulated market, this means modelling the probability distribution of the orders, e.g. limit or market orders in limit order book (LOB) based markets, or request for quotes in dealer-to-client platforms. 
-
-Let us first discuss the case of LOB based markets. One typical way to construct generative models is to proceed hierarchically: 
-
-* First, we model the distribution of the arrival of orders to the market. These are point processes in continuous time, and a natural choice of models are the jump processes introduced in chapter {ref}`stochastic_calculus`. The most simple process is the Poisson process, in which orders arrive independently. More realistic choices are for instance Hawkes processes, that incorporate the empirical observation that orders tend to cluster in time, something that can be explained if they self-exciting. 
-
-* Since a market has at least limit and market orders available, and possibly more, a second model can be used to choose the type of order conditional on the arrival of an order. This can be simply modelled with a multinomial distribution. Alternatively, a separate jump process can be modelled for each different order type. 
-
-#### Agent-based models for market simulation
 
 
 

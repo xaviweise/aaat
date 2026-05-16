@@ -102,7 +102,7 @@ $$P(V \in [v, v+dv]| s, c, p, \text{RfQ}) = \frac{\alpha -1}{v_\text{min}}\left(
 
 where $v \geq v_\text{min}$, $\alpha > 1$. 
 
-The side $s$, being a binary variable, buy or sell, is typically modelled using a Bernoulli distribution. Finally, the probabilities that RfQs come from a specific client or product can be modelled using a multinomial distribution.
+The side $s$, being a binary variable, buy or sell, is typically modelled using a Bernoulli distribution. Finally, the probabilities that RfQs come from a specific client or product can be modelled using a categorical distribution, a generalization of Bernoulli distributions for more than two categories.
 
 
 ### Attrition risk
