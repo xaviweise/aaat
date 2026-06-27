@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(pdftotext \"/Users/javier/pCloud Drive/Documents/Teaching/Master Big Data & Analytics IE/Master Big Data & Analytics IE 2022/AlgoTradingIII.pdf\" -)",
+      "Bash(python3 -c \"import json; nb=json.load\\(open\\('notebooks/bayesian_theory.ipynb'\\)\\); print\\(json.dumps\\(nb['metadata'], indent=2\\)\\); print\\('---'\\); print\\(json.dumps\\(nb['cells'][0], indent=2\\)\\)\")",
+      "Bash(python3)",
+      "Bash(jupyter nbconvert *)",
+      "Bash(xargs -I{} sh -c 'echo \"=== {} ===\"; sed -n \"4,6p\" \"{}\"')",
+      "Bash(ls /Users/javier/Documents/ | grep -i kb && ls /Users/javier/Documents/ | grep -i algo)",
+      "Read(//Users/javier/Documents/**)",
+      "Bash(grep -n \"^## Introduction$\" /Users/javier/Documents/aaat/markdown/intro_causal.md /Users/javier/Documents/aaat/markdown/intro_bayesian.md /Users/javier/Documents/aaat/markdown/market_microstructure.md)",
+      "Bash(grep -n \"{ref}\\\\`sec:el\\\\|{ref}\\\\`sec:lqsc\\\\|{ref}\\\\`sec:hjb\" /Users/javier/Documents/aaat/markdown/optimal_execution.md)",
+      "Bash(grep -n \"{ref}\\\\`rfq_models\\\\|{ref}\\\\`market_making_fundamentals\\\\|{ref}\\\\`optimal_market_making\" /Users/javier/Documents/aaat/markdown/rfq_models.md)",
+      "Bash(grep -n \"{ref}\\\\`sec:\" /Users/javier/Documents/aaat/markdown/rfq_models.md)"
+    ]
+  }
+}

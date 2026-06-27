@@ -1,3 +1,4 @@
+(execution_tactics)=
 # Execution tactics
 
 ## Introduction

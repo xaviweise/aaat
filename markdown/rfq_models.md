@@ -3,8 +3,11 @@
 
 ## Introduction
 
-In the context of platforms where the client identity is known, like Dealer to Client platforms, the analysis of the client patterns of trading is relevant in order to fine-tune pricing and hedging models, or to optime the management of axes. 
+In Dealer-to-Client (D2C) bond markets, the dealer occupies a unique position: she knows the identity of the counterparty she is quoting, the bond being requested, and the history of previous interactions. This information richness distinguishes D2C platforms from anonymous order-driven markets and opens the door to a class of models that exploit client and product heterogeneity to improve pricing, risk management, and client coverage.
 
+This chapter develops a suite of models for the Request-for-Quote (RfQ) process on Multi-Dealer-to-Client (MD2C) platforms. The chapter is organized as follows. We begin by constructing a **probabilistic graphical model** for the full RfQ process, identifying the observable and latent variables that govern RfQ outcomes. The following section develops **generative models for RfQ activity**: arrival models based on counting processes, **attrition risk** models that detect when clients have stopped engaging with the dealer, and **anomaly detection** models for clients exhibiting abnormal trading patterns. The next section presents the **generative model for negotiation**, which follows {cite:t}`GueantProbWin` and {cite:t}`marin2025causalmd2c` in modelling the latent reservation spread and competitor quotes as parametric distributions, yielding an explicit hit probability formula. The chapter then turns to **causal interventions**: drawing on the framework of {ref}`intro_causal`, we apply the back-door criterion to the RfQ causal graph to obtain an identifiable hit probability, and use this as the foundation for two dealer decisions — **optimal pricing** and the **axe matcher**. Optimal pricing is covered in two regimes: a streaming price setting where only trades are observed (no miss information), and a full RfQ setting with observable hit/miss outcomes. The axe matcher formalizes client targeting as an average causal effect computation.
+
+(sec:rfq_pgm)=
 ## Probabilistic graphical model for RfQs
 
 A model that captures the Request for Quote process discussed in the [Market Microstructure](market_microstructure.md) chapter is the probabilistic graphical model proposed by {cite:p}`marin2025causalmd2c`, which we reproduce in the following figure:
@@ -73,6 +76,7 @@ Both $\mu$ and $\sigma$ are latent variables—not observable at trade time.  Ho
     This is particularly useful for identifying **information asymmetry (IA)**, as such informational advantages typically manifest within short timeframes before being diluted by general market dynamics (**MXF**).
 
 
+(sec:rfq_generative)=
 ## Generative models for the request for quote activity
 
 ### Models for the arrival of RfQs
@@ -115,11 +119,11 @@ $$P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|F_t) = P(\tau_{\text{RfQ}
 
 where we have implicitly used the fact that $P(\tau_{\text{RfQ}(\text{c, p, s, v)}} \in [t, t+dt]|a = 0, F_t) = 0$, i.e. we don't expect the arrival of RfQs for clients that are inactive. We are therefore interested in characterizing $P(a = 1|F_t)$ or most typically $P(a = 0|F_t) = 1- P(a = 1|F_t)$, which is known in the marketing analytics literature as the *attrition risk* model. 
 
-Inferences of attrition risk can be done by analyzing the historical patterns of client trading activity.  A simple albeit elegant model is that from Fader et al {cite:p}`fader2010customer`, where they consider daily (or any other time scale) client activity as a set of independent identically distributed Bernoulli random variables $Y_t$ with probability $p$. In our RfQ setup, this means $Y_t = 1$ if the client sends any RfQ, or $Y_t = 0$ otherwise.  Additionally, a client can become inactive at the beginning of the day with probability $\theta$. Given a pattern of historical daily activity $D$ of a client we can compute the probability that the client is active using Bayes' theorem:
+Inferences of attrition risk can be done by analyzing the historical patterns of client trading activity.  A simple albeit elegant model is that from {cite:t}`fader2010customer`, where they consider daily (or any other time scale) client activity as a set of independent identically distributed Bernoulli random variables $Y_t$ with probability $p$. In our RfQ setup, this means $Y_t = 1$ if the client sends any RfQ, or $Y_t = 0$ otherwise.  Additionally, a client can become inactive at the beginning of the day with probability $\theta$. Given a pattern of historical daily activity $D$ of a client we can compute the probability that the client is active using Bayes' theorem:
 
 $$P(a = 1|D, p, \theta) = \frac{P(D|a=1, p, \theta)P(a = 1|p, \theta)}{P(D|a=1, p, \theta)P(a=1|p, \theta) + P(D|a=0, p, \theta)P(a=0|p, \theta)}$$
 
-For example, for the pattern $D = 10100$, the likelihood in the denominator is calculated as the probability that the the observed pattern is simply explained by the natural probabilities of requesting RfQs:
+For example, for the pattern $D = 10100$, the likelihood in the denominator is calculated as the probability that the observed pattern is simply explained by the natural probabilities of requesting RfQs:
 
 $$P(D|a=1, p, \theta) = p(1-p)p(1-p)^2$$
 
@@ -137,7 +141,7 @@ $$P(a = 1|D, p, \theta) = \frac{p(1-p)p(1-p)^2(1-\theta)^5}{p(1-p)p(1-p)^2(1-\th
 
 $$ =  \frac{(1-p)^2(1-\theta)^2}{(1-p)^2(1-\theta)^2+ (1-p)(1-\theta) \theta +  \theta}$$
 
-As pointed out by the authors, any other trading pattern with the same number of active days --denoted as $x$ (*frequency* in the marketing jargon), and the same number of days since the last RfQ --the *recency* $r$, has the same likelihood. For instance, $P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)$. see the exercise at the end of the chapter. This is an interesting insight that naturally links the model with the traditional heuristics based on recency and frequency in the Marketing Analytics literature, see for example {cite:p}`GrigsbyMarketing`. The general result for a pattern consisting of $n$ days of trading activity, frequency $x$ and recency $r$, we have:
+As pointed out by the authors, any other trading pattern with the same number of active days — denoted as $x$ (*frequency* in the marketing jargon), and the same number of days since the last RfQ — the *recency* $r$, has the same likelihood. For instance, $P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)$. See the exercise at the end of the chapter. This is an interesting insight that naturally links the model with the traditional heuristics based on recency and frequency in the Marketing Analytics literature, see for example {cite:p}`GrigsbyMarketing`. The general result for a pattern consisting of $n$ days of trading activity, frequency $x$ and recency $r$, we have:
 
 $$P(D|a=1, p, \theta)P(a = 1|p, \theta)= p^{x}(1-p)^{n-x} (1-\theta)^n$$
 
@@ -162,7 +166,7 @@ where the Beta function is by definition:
 
 $$B(\alpha, \beta) \equiv \int dp p^{\alpha - 1} (1-p)^{\beta - 1}$$
 
-This allow us to characterize the segment of clients with four parameters, $\alpha$, $\beta$, $\gamma$ and $\delta$. Notice that this model does not capture the possibility of multiple segments within the population of clients. To capture that, a simple extension is to use a mixture of Betas, see next section for a simple application of such model in anomaly detection. 
+This allows us to characterize the segment of clients with four parameters, $\alpha$, $\beta$, $\gamma$ and $\delta$. Notice that this model does not capture the possibility of multiple segments within the population of clients. To capture that, a simple extension is to use a mixture of Betas, see next section for a simple application of such model in anomaly detection. 
 
 Continuing with the single segment model, the likelihood now requires to integrate over the distribution of $p$ and $\theta$:
 
@@ -186,7 +190,7 @@ For model parameters estimation, the authors suggests using maximum likelihood o
 
 #### Simulation of attrition risk
 
-Let us see how this model works in practice. We simulate a segment of 50 clients that send RfQs to a dealer according to the Poisson model discussed in the previous section. For simplicity, we only consider the situation in which the client wants to buy from the dealer. Each client is characterized by an intensity of RfQ arrival drawn from a Gaussian distribution with mean 1 (i.e. a client on average sends one RfQ per day) and standard deviation 0.05. In principle such choice of parameters makes highly unlikely to generate negative intensities, but if that happens we simply force them to be positive. The clients' reservation prices, i.e. the maximum prices they would accept in order to trade, also follows a Gaussian distribution, in this case with mean 100 (which could be considered the fair price of the financial product) and standard deviation of 10% around this mean. These reservation prices are not static, though: they fluctuate over time with some noise that models the potential impact of changing market conditions. We choose 20% of the mean for this parameter. 
+Let us see how this model works in practice. We simulate a segment of 50 clients that send RfQs to a dealer according to the Poisson model discussed in the previous section. For simplicity, we only consider the situation in which the client wants to buy from the dealer. Each client is characterized by an intensity of RfQ arrival drawn from a Gaussian distribution with mean 1 (i.e. a client on average sends one RfQ per day) and standard deviation 0.05. In principle such choice of parameters makes it highly unlikely to generate negative intensities, but if that happens we simply force them to be positive. The clients' reservation prices, i.e. the maximum prices they would accept in order to trade, also follows a Gaussian distribution, in this case with mean 100 (which could be considered the fair price of the financial product) and standard deviation of 10% around this mean. These reservation prices are not static, though: they fluctuate over time with some noise that models the potential impact of changing market conditions. We choose 20% of the mean for this parameter. 
 
 We model attrition in this setup by considering that clients will stop sending RfQs to the dealer if the average hit rate (percentage ot trades over RfQs sent) is below a given threshold over a window of time. We take 10% as the threshold for all clients (although we could also model a distribution over the segment) and suppose that clients evaluate the hit rate with the dealer over a 10 days window (again, this could be made client dependent but we choose not to in this simulation).
 
@@ -293,7 +297,7 @@ We estimate the model using the first 100 days of simulation, although we exclud
 ```{figure} figures/good_vs_bad.png
 :name: fig:good_vs_bad
 :width: 8in
-Probability densities for the god and bad components of the model. The good data density is highly concentrated around a range of trading probabilities, becoming essentially a Gaussian distribution. The bad data density, on the other hand, places most of its density in the extreme values of very high and very low trading activity. The probability $q_g$ equals 89% when fitted to the data, reflecting that bad data captures anomalies. 
+Probability densities for the good and bad components of the model. The good data density is highly concentrated around a range of trading probabilities, becoming essentially a Gaussian distribution. The bad data density, on the other hand, places most of its density in the extreme values of very high and very low trading activity. The probability $q_g$ equals 89% when fitted to the data, reflecting that bad data captures anomalies. 
 ```
 
 With the model estimated, we use a 10 days window of days to compute the probability of abnormal client behavior over the second half of the dataset. This means that we only compute results for the last 90 days, since 10 days are needed to gather sufficient data. Bear in mind that this is not necessary in a Bayesian paradigm, since we could perfectly get estimations for any window, including zero data --defaulting to the prior probability of the hypotheses $q_g$.  We choose a 50% threshold on $P({\rm good} |D)$ to trigger alerts. Over a dataset of 50 clients and 90 days tested, i.e. 4500 points, the model produced 3,811 true negatives (correctly identifying normal cases) and 545 true positives (correctly identifying abnormal cases). It made 75 false positives (normal cases incorrectly flagged as abnormal) and 69 false negatives (abnormal cases missed). Overall, this means the global abnormality rule (inactive OR boosted) shows high specificity (≈ 98% of normal cases correctly classified) and strong sensitivity (≈ 89% of abnormal cases detected), with a relatively small number of errors on both sides. Therefore, the approach seems reliable at detecting abnormal clients while only rarely misclassifying normal ones.
@@ -316,14 +320,232 @@ In the following figure we can see the predictions for specific clients showing 
 In conclusion, despite its simplicity, the Good vs. Bad Data model performs well in identifying abnormal clients in the simulation, both those with unusually high trading activity and those with unusually low activity. For the latter, it performs on par with the attrition risk model presented earlier. Moreover, the framework could be extended into a multi-label classifier by comparing trading probabilities against the mean of the good-data cluster, issuing attrition risk alerts for unusually low activity and boosted activity alerts for the opposite case.
 
 
+(sec:rfq_negotiation)=
 ## A Generative model for RfQs in negotiation
 
+The preceding sections model the *arrival* of RfQs and the *activity patterns* of clients, but not the negotiation itself: given that an RfQ arrives, what determines whether the dealer wins the trade? The seminal work of {cite:t}`GueantProbWin` introduced the first rigorous statistical framework for this question, fitting a parametric model to a large database of RfQ outcomes on Bloomberg Fixed Income Trading (Bloomberg FIT). Their framework models the two unobservable quantities that govern the outcome of each RfQ — the client's reservation spread and the competitors' quoted spreads — as parametric distributions whose parameters are estimated by maximum likelihood from observable outcomes. {cite:t}`marin2025causalmd2c` extend this framework by embedding it in the causal graphical model discussed in the previous section, which allows the dealer to separate the causal effect of her spread from confounding by pricing policies, and to formulate pricing and client-targeting decisions as causal interventions.
 
-## Causal interventions 
+### Deal mechanism and normalization
+
+On a buy RfQ (client wants to buy; dealer answers an ask price), a trade occurs if and only if at least one dealer proposes a price below the client's reservation price $V$ — the maximum she is willing to pay. When multiple dealers qualify, the client deals with the one quoting the lowest ask. For a reference dealer with quote $Y$ and $n$ competing dealers with quotes $W_1, \ldots, W_n$:
+
+- **Done** ($I=1$): the reference dealer wins — $Y \leq V$ and $Y \leq W_k$ for all competing quotes.
+- **Traded Away** ($I=2$): a competitor wins — some $W_k < \min(Y, V)$.
+  - *Covered* ($J=2$): the reference dealer quoted the second-best price. Typically, the winning dealer is informed of the cover price.
+  - *Tied Traded Away* ($J=1$): the reference dealer and the winner proposed the same price but the client chose the competitor.
+  - *Other Traded Away* ($J=3$): no rank information available to the reference dealer.
+- **Not Traded** ($I=3$): all quoted prices exceed the client's reservation price — $V < \min(Y, \min_k W_k)$.
+
+This outcome taxonomy is what the reference dealer can observe post-trade, together with their own quote $Y$ and, when covered, the cover price $C$. Everything else — the client's reservation price $V$, the competitors' quotes $W_k$, and the number of competitors who actually answered — is latent.
+
+Since the platform publishes a composite best-bid-offer price (CBBT), all spreads are naturally normalized by this reference. Denoting the CBBT mid-price $\text{CBBT}$ and the half bid-ask spread $\Delta$ as a liquidity proxy, the reduced quote for a buy RfQ is $\tilde{Y} = (Y - \text{CBBT})/\Delta$, and all distributional assumptions are stated in these normalized units.
+
+### Distributional assumptions
+
+**Client reservation spread.** The client's reservation price $V$, in reduced units, is modelled as Gaussian {cite:p}`GueantProbWin`:
+
+$$V/\Delta \sim \mathcal{N}(\nu, \tau^2)$$
+
+For buy RfQs the expected value satisfies $\nu > 0$ (the client believes the bond is underpriced relative to CBBT), while for sell RfQs $\nu^* < 0$. Empirically {cite:p}`GueantProbWin`, $\nu \approx 1.7$ in the partial-participation model: on average, buy clients are willing to pay roughly 1.7 times the CBBT half-spread above the CBBT mid-price. {cite:t}`marin2025causalmd2c` extend the Gaussian conditional distribution to depend on bond features, client features, RfQ features, volatility, and the latent information asymmetry indicator:
+
+$$\frac{\delta_{\text{res}}}{\Delta} \;\Big|\; \sigma, CF, BF, RF, IA \;\sim\; \mathcal{N}\!\left(a_{\text{res}} + b_{\text{res}}\sigma + \sum_i c_i CF_i + \sum_j d_j BF_j + \sum_k e_k RF_k + f\,\mathbb{1}_{IA=1},\; \sigma_{\text{res}}^2\right)$$
+
+The Gaussian form has no strong distributional justification but yields tractable likelihoods and fits observed data well. The $IA$ shift reflects that informed clients may be more motivated to execute, accepting a wider spread to trade quickly.
+
+**Competitor spreads: the Skew Exponential Power distribution.** The empirical distribution of competitor reduced quotes is leptokurtic (fat-tailed), spiky near zero, and asymmetric. {cite:t}`GueantProbWin` model it with the **Skew Exponential Power (SEP)** distribution, defined via the Exponential Power (EP, also called Subbotin) density:
+
+$$f_{\text{EP}}(x;\, \mu, \sigma, \alpha) = \frac{1}{c\sigma} \exp\!\left(-\frac{|z|^\alpha}{\alpha}\right), \quad z = \frac{x-\mu}{\sigma}, \quad c = 2^{1/\alpha - 1}\Gamma(1/\alpha)$$
+
+where $\alpha > 0$ controls tail heaviness ($\alpha = 2$ recovers the Gaussian; $\alpha < 2$ gives heavier tails). The SEP introduces asymmetry via the Azzalini skewing mechanism:
+
+$$f_{\text{SEP}}(x;\, \mu, \sigma, \alpha, \lambda) = 2\,\Phi(w)\, f_{\text{EP}}(x;\, \mu, \sigma, \alpha), \quad w = \text{sign}(z)\,|z|^{\alpha/2}\,\lambda\,\sqrt{2/\alpha}$$
+
+where $\lambda \in \mathbb{R}$ is the asymmetry parameter and $\Phi$ is the standard normal CDF. When $\lambda = 0$ the SEP reduces to the symmetric EP; when $\alpha = 2$ to the skew-normal.
+
+Each answering competitor's reduced quote is drawn i.i.d. from SEP$(\mu, \sigma, \alpha, \lambda)$ with:
+- **Fat tails** ($\alpha \approx 0.7 < 2$ empirically): competitors occasionally quote very conservatively.
+- **Positive asymmetry** for buy RfQs ($\lambda > 0$): there is more economic difference between an aggressive and a moderately aggressive quote than between a conservative and a very conservative one. Symmetric logic yields $\lambda^* < 0$ for sell RfQs.
+
+In the extended conditional model {cite:p}`marin2025causalmd2c`, the location parameter of the SEP depends on observables:
+
+$$\frac{\delta_{\text{dealer}}}{\Delta} \;\Big|\; \sigma, CF, BF, RF \;\sim\; \text{SEP}\!\left(a_d + b_d\sigma + \sum_i c_{d,i} CF_i + \sum_j d_{d,j} BF_j + \sum_k e_{d,k} RF_k,\; \sigma_d, \alpha_d, \lambda_d\right)$$
+
+### Partial participation
+
+A key empirical finding of {cite:t}`GueantProbWin` is that not all invited dealers answer: in their Bloomberg FIT dataset, only about 40% of requested competitors actually submit a quote ($p_{\text{quote}} \approx 0.4$). Ignoring this — the *full-participation* assumption — inflates the apparent heaviness of the dealer quote distribution tails and creates a spurious pattern where dealers appear to quote more conservatively as the number of competitors $n$ increases.
+
+The **partial-participation** model {cite:p}`GueantProbWin` treats the number of answering competitors $\tilde{n}$ as a Binomial random variable:
+
+$$\tilde{n} \sim \text{Binomial}(n,\, p_{\text{quote}})$$
+
+Each outcome likelihood is then a mixture over $\tilde{n}$:
+
+$$\mathcal{L}_i = \sum_{j=0}^{n} \binom{n}{j} p_{\text{quote}}^j (1 - p_{\text{quote}})^{n-j} \mathcal{L}_i(j)$$
+
+where $\mathcal{L}_i(j)$ is the likelihood contribution for outcome $i$ given exactly $j$ answering competitors (derived below). The answering probability itself may depend on $n$: larger competition fields attract lower participation from any individual dealer ($p_{\text{quote}}(n)$ decreasing in $n$). A remarkable empirical regularity {cite:p}`GueantProbWin` is that the effective number of competitors — $(n+1)\,p_{\text{quote}}(n)$, counting also the reference dealer — is approximately **2** for all values of $n$ in the dataset. Clients appear to wait for roughly two responses before making their decision, regardless of how many dealers they invited.
+
+### Maximum likelihood estimation
+
+All RfQ outcome likelihoods can be expressed analytically in terms of the CDF $F$ and PDF $f$ of the competitor spread distribution and the CDF $G$ and PDF $g$ of the reservation price distribution. For a buy RfQ with $j$ answering competitors {cite:p}`GueantProbWin`:
+
+**Done with cover price $C > Y$:**
+$$\mathcal{L}^{(1)}_{\text{cover}}(j) = j\, f(C)\,(1-F(C))^{j-1}\,(1-G(Y))$$
+
+**Done without cover:**
+$$\mathcal{L}^{(1)}_{\text{no cover}}(j) = (1-F(Y))^j\,(1-G(Y))$$
+
+**Tied Traded Away:**
+$$\mathcal{L}^{(2,\text{tied})}(j) = j\,(1-F(Y))^{j-1} f(Y)\,(1-G(Y))$$
+
+**Covered (reference dealer proposed second-best price):**
+$$\mathcal{L}^{(2,\text{cov})}(j) = j(1-F(Y))^{j-1}\!\left[1-(1-F(Y))(1-G(Y)) - \int_{-\infty}^{Y}(1-F(w))\,g(w)\,dw\right]$$
+
+**Not Traded:**
+$$\mathcal{L}^{(3)}(j) = \int_{-\infty}^{Y}(1-F(v))^j\,g(v)\,dv$$
+
+All non-trivial likelihoods reduce to integrals of the form $\int_{-\infty}^{Y} (1-F(v))^k\,g(v)\,dv$ for $k \in \{0,\ldots,n\}$. Since $F$ is the SEP CDF and $G$ is the Gaussian CDF, these integrals have no closed form but are efficiently computed by rescaling to $(-1,1)$ via a tanh transform and approximating with Chebyshev polynomials of the first kind — whose antiderivatives are available analytically. Model parameters are estimated by maximizing the full log-likelihood over all observed RfQs using Powell's method (gradient-free optimization).
+
+### Hit probability
+
+Combining all components, the full generative hit probability under the causal model {cite:p}`marin2025causalmd2c` is:
+
+$$P(\text{hit} \mid \delta, \text{RfQ}, \sigma, RF, BF, CF) = (1 - P(PD=1 \mid BF,CF))\sum_{a=0}^{1} P(IA=a \mid CF) \int_{\delta}^{\infty} d\delta_{\text{res}}\, f_{\text{res}}(\delta_{\text{res}} \mid \sigma, RF, BF, CF, a)$$
+$$\times \sum_{k=0}^{n} \binom{n}{k} p_{\text{quote}}^k (1 - p_{\text{quote}})^{n-k} \int \cdots \int \prod_{i=1}^{k} d\delta_{\text{dealer},i}\, f_{\text{dealer}}(\delta_{\text{dealer},i} \mid \sigma, RF, BF, CF)\; \mathbb{1}_{\delta \leq \min_i \delta_{\text{dealer},i}}$$
+
+where the price discovery probability $P(PD=1 \mid BF,CF)$ is estimated via logistic regression, and $P(IA=a \mid CF)$ is the prior probability that the client has information asymmetry given their features. This expression is **monotone decreasing in $\delta$** by construction: the indicator $\mathbb{1}_{\delta \leq \min_i \delta_{\text{dealer},i}}$ and the integration region $\delta_{\text{res}} \geq \delta$ both shrink as $\delta$ increases, ensuring that quoting a higher spread can never increase the probability of winning. This economic constraint is satisfied by the generative model automatically, whereas purely discriminative models such as gradient-boosted trees can violate it.
+
+### Empirical findings
+
+On the Bloomberg FIT dataset of European corporate bonds {cite:p}`GueantProbWin`, the partial-participation model yields the following key findings:
+
+- **Answer probability $p_{\text{quote}} \approx 0.4$**: only 40% of invited competitors respond, far from the full-participation assumption. This removes the artificial monotonicity of dealer spreads with competition level seen in the full-participation model.
+- **SEP shape $\alpha \approx 0.7$ (partial)**: moderately fat-tailed, significantly lighter than the full-participation estimate ($\alpha \approx 0.4$), since the heavy tails in the full model were largely an artefact of non-answering dealers.
+- **Positive asymmetry** ($\lambda > 0$ for buy, $\lambda^* < 0$ for sell) is robust across model specifications.
+- **Client mean** $\nu \approx 1.7\Delta$: buy-side clients are willing to pay approximately 1.7 times the CBBT half-spread above mid-price; sell-side clients are symmetric.
+- **Effective competitors $\approx 2$** regardless of $n$: clients appear to decide after receiving approximately two quotes.
+
+On European Government Bond data {cite:p}`marin2025causalmd2c`, the generative model achieves an AUC-ROC of 0.742, matching a LightGBM classifier (0.743) while enforcing spread monotonicity — a critical requirement for reliable optimal pricing. Logistic regression achieves only 0.684.
+
+
+(sec:rfq_causal)=
+## Causal interventions
+
+The generative model for the negotiation describes the observational distribution: what outcomes we expect given the historical pricing policies encoded in the training data. But a dealer using this model to set prices is not observing the world — she is *intervening* in it. Her decision to quote $\delta$ is not determined by her bond and client characteristics in the same way historical prices were; it is a deliberate choice.
+
+This distinction matters because historical data is confounded. The dealer's past pricing policy depended on $\sigma$, $BF$, $CF$, and $RF$: bonds with higher volatility received wider spreads, and this correlation appears in the data independently of any causal effect of $\delta$ on the hit probability. Regressing hit outcomes on $\delta$ alone would mix the genuine effect of the spread with the selection effect of the pricing policy.
+
+The framework of causal inference — introduced in {ref}`intro_causal` — resolves this by replacing the observational quantity $P(\text{hit} \mid \delta)$ with the interventional quantity $P(\text{hit} \mid \text{do}(\delta))$. The do-operator removes the arrow from all variables into $\delta$, representing a dealer who sets her spread by deliberate choice rather than by any policy function. The back-door criterion then identifies the set of variables that must be conditioned on for this interventional probability to equal an estimable observational conditional probability.
+
+**Back-door identification.** In the causal DAG (see {ref}`fig:pgm_rfq`), the confounding paths from $\delta$ to $\text{hit}$ run through $\sigma$ (which affects both $\delta$ and $\delta_{\text{dealer}},\, \delta_{\text{res}}$), through $BF$ and $CF$ (which affect both $\delta$ and client behavior), and through $RF$ (RfQ features such as volume and number of competitors). The minimal conditioning set that blocks all back-door paths is {cite:p}`marin2025causalmd2c`:
+
+$$\mathcal{Z}_t^{\min} = \{\sigma, RF, BF, CF\}$$
+
+giving the identification result:
+
+$$P(\text{hit} \mid \text{do}(\delta), \text{RfQ}, \mathcal{Z}_t) = P(\text{hit} \mid \delta, \text{RfQ}, \sigma, RF, BF, CF)$$
+
+The left-hand side is the causal quantity that the dealer wants to maximize; the right-hand side is a standard conditional probability that can be estimated from historical data. Concretely, this means that any model for the hit probability — the generative model of the previous section, a logistic regression, or a gradient-boosted tree — should be trained with features $\{\delta, \sigma, RF, BF, CF\}$ as inputs. Models trained without the full conditioning set will produce biased estimates of the causal effect of $\delta$.
 
 ### Optimal pricing
 
+#### Case 1: streaming prices without hit/miss feedback
+
+In some instruments — particularly in the rates and FX markets — dealers stream continuous executable prices to clients (e.g., via Bloomberg TSOX or similar platforms). A client can trade at the displayed price at any time, but the dealer does not receive a request in advance and does not observe whether the client considered the price and chose not to trade (a miss). The only observable feedback is a trade when one occurs.
+
+This is the classical **one-sided censored demand** problem from dynamic pricing. The dealer can observe that a client traded at price $\delta$ (demand $d = v > 0$ if the client executes notional $v$, zero otherwise), but misses are invisible — she does not know how many clients saw her price and decided against trading.
+
+We model demand using an exponential demand curve, which is the canonical choice in the dynamic pricing literature and is consistent with clients having exponentially distributed reservation spreads:
+
+$$D(\delta) = Q \, e^{-\alpha \delta}$$
+
+where $Q$ is the baseline demand (trades per unit time at zero spread) and $\alpha > 0$ is the price sensitivity. The revenue-maximizing spread solves $\frac{d}{d\delta}[\delta D(\delta)] = 0$, giving $\delta^* = 1/\alpha$. Estimating $\alpha$ from data is therefore the core task.
+
+**Bayesian demand estimation.** Taking logarithms, the model becomes linear in the parameters:
+
+$$\log d_t = \log Q - \alpha \delta_t + \varepsilon_t, \quad \varepsilon_t \sim \mathcal{N}(0, \sigma_\varepsilon^2)$$
+
+where $d_t$ is the observed demand at quoted spread $\delta_t$. With a Gaussian prior on the weight vector $w = (\log Q,\, \alpha)^\top$, this is a Bayesian Linear Regression problem (see {ref}`blr-section`). The posterior is Gaussian with closed-form parameters:
+
+$$w \mid \mathcal{D}_n,\, \sigma_\varepsilon^2 \sim \mathcal{N}(\mu_n, \Lambda_n)$$
+
+$$\mu_n = \Lambda_n \bigl(\Lambda_0^{-1} \mu_0 + \sigma_\varepsilon^{-2} X_n^\top \log d_n \bigr), \qquad \Lambda_n = \bigl(\Lambda_0^{-1} + \sigma_\varepsilon^{-2} X_n^\top X_n\bigr)^{-1}$$
+
+where $X_n$ is the design matrix with rows $(1, \delta_t)$ and $\log d_n$ is the vector of log-demands. The posterior mean $\mu_n$ is the optimal point estimate for the demand parameters, giving a current best guess $\hat{\delta}^* = 1/\mu_{n,\alpha}$.
+
+**Thompson Sampling for exploration.** However, committing to $\hat{\delta}^*$ permanently is risky: if the demand estimate is wrong, the dealer never discovers it. The exploration–exploitation trade-off introduced in {ref}`intro_bayesian` (Thompson Sampling) provides a principled solution. At each pricing decision:
+
+1. Sample demand parameters from the posterior: $w_{\text{s}} \sim \mathcal{N}(\mu_n, \Lambda_n)$.
+2. Quote the revenue-maximizing spread under the sampled parameters: $\delta_{\text{s}}^* = 1/w_{\text{s},\alpha}$.
+3. Observe demand $d$ at price $\delta_{\text{s}}^*$ and update the posterior.
+
+The sampled spread $\delta_{\text{s}}^*$ will be close to $\hat{\delta}^*$ most of the time (exploitation), but will occasionally deviate when the sampler draws from the tail of the posterior (exploration). As the posterior concentrates around the true parameters, exploration decays automatically. Thompson Sampling achieves asymptotically optimal regret in this bandit setting.
+
+#### Case 2: RfQ markets with observable hit/miss outcomes
+
+In a full RfQ setting, the dealer observes both hits and misses, which provides direct information about the hit probability function $f(\delta) \equiv P(\text{hit} \mid \text{do}(\delta), \text{RfQ}, \mathcal{Z}_t)$. Optimal pricing under this richer information set is analyzed in {cite:t}`marin2025causalmd2c`.
+
+**Revenue maximization (instantaneous flow value).** The dealer maximizes expected instantaneous revenue per RfQ:
+
+$$\delta_{\text{opt}} = \arg\max_\delta \; \mathbb{E}[v\delta\, \mathbb{1}_{\text{hit}} \mid \text{do}(\delta), \text{RfQ}, \mathcal{Z}_t] = \arg\max_\delta \; v\delta\, f(\delta)$$
+
+The first-order condition $\frac{d}{d\delta}[\delta f(\delta)] = 0$ gives:
+
+$$\boxed{\delta_{\text{opt}} = -\frac{f(\delta_{\text{opt}})}{f'(\delta_{\text{opt}})}}$$
+
+This is the classical **unit-elasticity condition**: the optimal spread is where the elasticity of the hit probability with respect to the spread equals $-1$. For the exponential hit probability $f(\delta) = p_0 e^{-\alpha\delta}$, this gives $\delta_{\text{opt}} = 1/\alpha$, recovering the streaming-price result.
+
+**Utility maximization with transactional risk.** A risk-averse dealer maximizes expected utility rather than expected revenue. With an exponential utility function $U(x) = 1 - e^{-\gamma x}$ and risk-aversion parameter $\gamma > 0$, the optimal spread satisfies:
+
+$$\boxed{\delta_{\text{opt}} = \frac{1}{\gamma v} \log\!\left(1 - \gamma v\, \frac{f(\delta_{\text{opt}})}{f'(\delta_{\text{opt}})}\right)}$$
+
+As $\gamma \to 0$, this recovers the revenue-maximizing formula. For $\gamma > 0$, the optimal spread is *lower* than the revenue-maximizing one: a risk-averse dealer sacrifices some per-trade profit to increase the probability of winning the trade, reducing the variance of her revenue stream.
+
+**Information asymmetry correction.** When the client may have an informational advantage (as introduced in the probabilistic graphical model at the start of this chapter, and formalized in {ref}`intro_causal`), the dealer must account for the expected adverse price movement that follows trading with an informed client. Conditioning on the client's information asymmetry indicator $IA$ and using a short-term revenue horizon $T-t$, the optimal spread becomes {cite:p}`marin2025causalmd2c`:
+
+$$\delta_{\text{opt}}^{IA} = \frac{1}{\gamma v} \log\!\left[\frac{p_{IA}\, e^{-\gamma(q + sv)\hat{\mu}(T-t)} + H(\delta_{\text{opt}}^{IA})(1 - p_{IA})}{p_{IA}\, e^{-\gamma q\hat{\mu}(T-t)} + H(\delta_{\text{opt}}^{IA})(1 - p_{IA})}\right]$$
+
+where $p_{IA} \equiv P(IA=1 \mid CF)$ is the prior probability that this client has information asymmetry (estimated from client features), $q$ is the current inventory, $s \in \{-1, +1\}$ is the trade side, $\hat{\mu}$ is the expected price drift conditioned on $IA=1$, and $H$ collects terms involving $f(\delta)/f'(\delta)$. As $p_{IA} \to 1$, the dealer must charge the full expected adverse drift — a result analogous to the Glosten-Milgrom adverse selection premium. As $p_{IA} \to 0$, the formula reduces to the utility-maximizing spread without information asymmetry.
+
+The optimal spread formulas above optimize a single-RfQ objective. When the dealer manages a portfolio of RfQs and cares about inventory risk accumulated over time, the problem becomes a stochastic control problem that generalizes the Avellaneda-Stoikov framework. This multi-RfQ setting is covered in chapter {ref}`optimal_market_making`, where the framework of {ref}`stochastic_optimal_control` is applied to derive the full inventory-adjusted quoting policy.
+
+**Revenue potential.** Beyond optimal pricing, the dealer may want to know whether a given RfQ is likely to be profitable. The *revenue potential* is the probability that an RfQ generates positive revenue:
+
+$$P(R > 0 \mid \text{do}(\delta), \text{RfQ}, \mathcal{Z}_t) = P(\text{hit} \mid \text{do}(\delta), \mathcal{Z}_t) \cdot P(R > 0 \mid \text{do}(\delta), \text{hit}, \mathcal{Z}_t)$$
+
+The first factor is the hit probability model derived above. The second — the probability of a positive revenue conditional on winning — depends on whether the client had information asymmetry. Using Brownian motion for mid-price dynamics and integrating over $IA$ {cite:p}`marin2025causalmd2c`:
+
+$$P(R_T > 0 \mid \delta, \text{hit}, IA, \sigma, RF) = 1 - \Phi\!\left(\frac{-\delta - \hat{\mu}\, \mathbb{1}_{IA=1}(T-t)}{\sigma\sqrt{T-t}}\right) \quad (s = 1)$$
+
+where $\Phi$ is the standard normal CDF. When $IA=0$ and the spread is positive ($\delta > 0$), this probability is always above $1/2$ and increases with the spread. When $IA=1$, the adverse drift $\hat{\mu}(T-t)$ erodes the spread premium and can push revenue potential below $1/2$ for small spreads on long holding periods.
+
+(sec:rfq_axe)=
 ### Axe matcher
+
+A dealer holding excess inventory in a bond — an **axe** position — has a natural incentive to trade it out. The question is: which clients should the dealer proactively contact (via the sales force or an automated call system) to maximize the probability of generating a profitable RfQ?
+
+Formalizing this as a causal decision problem {cite:p}`marin2025causalmd2c`, the dealer compares two interventions for each candidate client: calling ($\text{call}=1$) versus not calling ($\text{call}=0$). The value of a call is measured by its **Average Causal Effect (ACE)** on the hit probability:
+
+$$ACE = P(\text{hit} \mid \text{do}(\text{call}=1), \text{do}(\delta), \text{axe}=1, CF, BF, \mathcal{Z}_t) - P(\text{hit} \mid \text{do}(\text{call}=0), \text{do}(\delta), \text{axe}=1, CF, BF, \mathcal{Z}_t)$$
+
+Using the causal graph structure, this decomposes as {cite:p}`marin2025causalmd2c`:
+
+$$ACE = P(\text{hit} \mid \text{do}(\delta), \text{RfQ}, \text{axe}=1, CF, BF, \mathcal{Z}_t) \times \Delta P(\text{RfQ})$$
+
+where:
+
+$$\Delta P(\text{RfQ}) \equiv P(\text{RfQ} \mid \text{do}(\text{call}=1), \text{axe}=1, CF, BF) - P(\text{RfQ} \mid \text{do}(\text{call}=0), \text{axe}=1, CF, BF)$$
+
+is the **uplift**: the incremental probability of receiving an RfQ from this client as a result of the call. Since conditioning on axe blocks all spurious paths from call to RfQ in the causal graph, the do-operator can be dropped on the right-hand side:
+
+$$P(\text{RfQ} \mid \text{do}(\text{call}=c), \text{axe}=1, CF, BF) = P(\text{RfQ} \mid \text{call}=c, \text{axe}=1, CF, BF)$$
+
+The uplift is therefore estimable from observational data on the historical rate of RfQ generation following commercial calls. Using Bayes' theorem, the uplift model further factors into three interpretable components:
+
+- $P(\text{call} \mid \text{axe}, \text{RfQ})$: the conversion rate of commercial campaigns into RfQs (estimated from historical campaign data).
+- $P(\text{axe} \mid \text{RfQ})$: the distribution of axed RfQs across bonds and clients.
+- $P(\text{RfQ} \mid CF, BF)$: baseline client-bond demand preferences, estimated via collaborative filtering or topic models (e.g., latent Dirichlet allocation on historical trading flows).
+
+The ACE provides a single score for each candidate (client, bond, spread) triple. The dealer ranks all candidates by their ACE and contacts the top-ranked clients, allocating salesforce effort to maximize the expected number of profitable RfQs from the axe.
 
 
 ## Exercises

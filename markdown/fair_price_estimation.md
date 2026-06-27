@@ -31,7 +31,7 @@ Recall that a *State Space Model (SSM)* is a model to describe dynamic systems w
 
 $$ \mathbf{x}_{t+\Delta t} = f(\mathbf{x}_t, \mathbf{u}_t) + \mathbf{\epsilon}_t$$
 
-where $f(\mathbf{x}_t, \mathbf{u}_t)$ is a general function, $\mathbf{u}_t$ are inputs (or controls) that affect the dynamics, $\Delta t$ is the time-step between observations, and $\mathbf{ \epsilon}_t$ is a transition noise with a given distribution. The state is observed indirectly via a proxy vector $\mathbf{y}$ via the observation equation:
+where $f(\mathbf{x}_t, \mathbf{u}_t)$ is a general function, $\mathbf{u}_t$ are inputs (or controls) that affect the dynamics, $\Delta t$ is the time-step between observations, and $\mathbf{\epsilon}_t$ is a transition noise with a given distribution. The state is observed indirectly via a proxy vector $\mathbf{y}$ via the observation equation:
 
 $$\mathbf{y}_t = g(\mathbf{x}_t, \mathbf{u}_t)  + \mathbf{\eta}$$
 
@@ -401,7 +401,7 @@ Notice that, since the combined fair value estimator is reconstructed independen
 
 Trades happening in the LOB are a valuable source of pricing information, since they correspond to real transaction prices and not only interests to trade as limit orders. When a trade happens, the exchange reports publicly the time, the size and the price, but not the parties or the orders involved. The latter is particularly relevant since a relevant pricing information is the side (buy or sell) of the order that was aggressive, meaning the one that consumed the liquidity in the order book. As we discussed in {ref}`market_microstructure`, this can typically be a market order or a limit order at a price that is equal or better that prices available in the opposite side. Reverse engineering the side from a trade is an inference problem, and requires a model. A simple one widely used is the so-called *tick-rule model* which consists on comparing the price of the trade with the mid-price available in the order book just before the trade:
 
-* If the price of the trade is below the mid-price, then we assume it was an aggressive sell order, since the the trade price has to be an average weighted by size of the limit orders available. Therefore, it makes sense to assume the trade consumed liquidity in the side closer to the trade price using the mid-price as a reference.
+* If the price of the trade is below the mid-price, then we assume it was an aggressive sell order, since the trade price has to be an average weighted by size of the limit orders available. Therefore, it makes sense to assume the trade consumed liquidity in the side closer to the trade price using the mid-price as a reference.
 * If the price of the trade is above the mid-price, we assume it was an aggressive buy order
 
 This model is not perfect, however. It does not account for hidden liquidity that might exist at more favorable prices than those displayed, which would alter the reference mid-price and, consequently, the trade classification logic. Moreover, it assumes a sequential processing of orders, whereas in practice, multiple orders may arrive simultaneously. In such cases, the exchange’s internal matching engine determines execution priority and order pairing through mechanisms that are not observable externally, meaning the apparent sequence of trades and quote updates in public data may not reflect the true matching process. This lack of transparency can lead to misclassification when applying the tick rule or similar models.
@@ -639,7 +639,7 @@ Let us assume a Brownian motion model for the (non-dividend paying) stock:
 
 $$dS_t = \mu dt + \sigma dW_t$$
 
-where $\mu$ is the drift (expected revaluation), $\sigma$ is the volatility and $W_t$ a Wiener process. Integrating this SDE we have $S_T \sim {\mathcal N}(S_t + \mu (T-t), \sigma^2 (T-t))$. Notice that it is only a realistic model as far as $\sigma^2 (T-t) \gg S_t + \mu (T-t)$, since otherwise the stock price could become negative in a relevant proportion of scenarios, which is not financially possible. The advantage of this model is that allows us to compute a closed-form for the premium, since the integral becomes the expected value of a log-normal random variable $Z = e^{-\gamma e^{-r (T-t)} S_T}$, which is known[^2]:
+where $\mu$ is the drift (expected revaluation), $\sigma$ is the volatility and $W_t$ a Wiener process. Integrating this SDE we have $S_T \sim {\mathcal N}(S_t + \mu (T-t), \sigma^2 (T-t))$. Notice that it is only a realistic model as far as $\sigma^2 (T-t) \gg S_t + \mu (T-t)$, since otherwise the stock price could become negative in a relevant proportion of scenarios, which is not financially possible. The advantage of this model is that allows us to compute a closed-form for the premium, since the integral becomes the expected value of a log-normal random variable $Z = e^{-\gamma e^{-r (T-t)} S_T}$, which is known [^2]:
 
 $$ C_t^i = - e^{-r(T-t)} F - \frac{1}{\gamma_i} \log \mathbb{E}_t\left[ e^{-\gamma_i e^{-r(T-t)}S_T}\right] \nonumber \\ = - e^{-r(T-t)} (F - S_t - \mu (T-t)) - \frac{\gamma_i}{2} e^{-2r(T-t)} \sigma^2 (T-t)$$
 
@@ -860,7 +860,7 @@ Before discussing the solution to this equation, we can get another insight simp
 
 #### Solving the Black-Scholes-Merton equation
 
-There are different ways to solve the BSM equation. Most introductory textbooks on the topic (see for example {cite:p}`joshi2003concepts`, {cite:p}`wilmott2007introduces`) follow the derivation used in the seminal paper that uses an ansatz for the solution that transforms the equation into the heat-equation, whose analytical solution is well-known {cite:p}`evans2010partial`. Here, we will take a different approach and use the Feynman - Kac theorem introduced in Chapter (#stochastic_calculus), section (#feynman_kac). Recall that the Feynman - Kac theorem provides a general solution to a family of partial differential equations in term of an expected value. In the interest of the reader we review it again here: the solution to the PDE
+There are different ways to solve the BSM equation. Most introductory textbooks on the topic (see for example {cite:p}`joshi2003concepts`, {cite:p}`wilmott2007introduces`) follow the derivation used in the seminal paper that uses an ansatz for the solution that transforms the equation into the heat-equation, whose analytical solution is well-known {cite:p}`evans2010partial`. Here, we will take a different approach and use the Feynman-Kac theorem introduced in chapter {ref}`stochastic_calculus`, section {ref}`feynman_kac`. Recall that the Feynman - Kac theorem provides a general solution to a family of partial differential equations in term of an expected value. In the interest of the reader we review it again here: the solution to the PDE
 
 $$\frac{\partial u}{\partial t} + \mu(x,t) \frac{\partial u}{\partial x} + \frac{1}{2} \sigma^2(x,t) \frac{\partial^2 u}{\partial x^2} - r(x,t)u = 0$$
 
@@ -923,7 +923,7 @@ The second big difference is of course the dependence with respect to the expect
 
 #### An alternative derivation: the market price of risk
 
-An alternative derivation of the BSM equation that can be helpful to gain intuition on the theory uses the financial concept of market price of risk. The market price of risk is essentially a Sharpe ratio, commonly used in the theory of investment. The Sharpe ratio computes the excess returns of an investment, i.e. the expected returns deviating from the risk-free interest, over their risk defined as the volatility of the returns. For the stock that is the underlying of the option, and using continuos time, this is:
+An alternative derivation of the BSM equation that can be helpful to gain intuition on the theory uses the financial concept of market price of risk. The market price of risk is essentially a Sharpe ratio, commonly used in the theory of investment. The Sharpe ratio computes the excess returns of an investment, i.e. the expected returns deviating from the risk-free interest, over their risk defined as the volatility of the returns. For the stock that is the underlying of the option, and using continuous time, this is:
 
 $$\lambda_{S} = \frac{ \mathbb{E}[\frac{dS_t}{S_t}]- rdt}{\sqrt{Var[\frac{dS_t}{S_t}]}} = \frac{\mu_t - r}{\sigma}\sqrt{dt}$$
 

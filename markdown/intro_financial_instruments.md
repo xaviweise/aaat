@@ -329,7 +329,7 @@ where $(.)^+$ denotes the positive part of the argument. On the contrary, a put 
 
 $$P_T = (K-S_T)^+$$
 
-Options can be traded in regulated markets or be quoted by bank dealers. Since the investor that holds the option cannot lose money from it, such option does not come for free, and the question is how much is worth such option, which is called the premium of the option. At expiry, the price is naturally the payoff function. What at at time $t < T$ there is still  uncertainty about the price $S_T$ which will determine the final profit (if any), so the premium will be different. But how much? That is the subject of the theory of option pricing.
+Options can be traded in regulated markets or be quoted by bank dealers. Since the investor that holds the option cannot lose money from it, such option does not come for free, and the question is how much is worth such option, which is called the premium of the option. At expiry, the price is naturally the payoff function. But at time $t < T$ there is still uncertainty about the price $S_T$ which will determine the final profit (if any), so the premium will be different. But how much? That is the subject of the theory of option pricing.
 
 
 #### Basic strategies: long/short positions, spreads, combinations.

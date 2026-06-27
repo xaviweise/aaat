@@ -76,7 +76,7 @@ Derivatives are versatile and serve several purposes, such as hedging risks, spe
 
 ### Foreign Exchange (FX)
 
-The foreign exchange (FX) market is a critical component of the global financial system, where participants trade currencies. Transactions in the FX market are generally categorized as either spot** or derivative transactions.
+The foreign exchange (FX) market is a critical component of the global financial system, where participants trade currencies. Transactions in the FX market are generally categorized as either **spot** or **derivative** transactions.
 
 - **Spot transactions** involve the immediate exchange of currencies, typically settling within two business days. While FX spot transactions are essential for international trade and finance, they are not classified as financial instruments under MiFID II, as they do not involve contractual obligations extending beyond the settlement period. 
 

@@ -1,4 +1,5 @@
-# Mean reversion strategies
+(mean_reversion_strategies)=
+# Mean Reversion Strategies
 
 ## Introduction
 

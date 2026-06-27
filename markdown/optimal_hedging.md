@@ -1,8 +1,9 @@
-# Hedging strategies
+(optimal_hedging)=
+# Optimal Hedging
 
 ## Introduction
 
-## Mininum Variance Hedging
+## Minimum Variance Hedging
 
 ## Factor models
 

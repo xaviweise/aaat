@@ -9,7 +9,7 @@ We start the chapter introducing the study of dynamical systems, focusing initia
 (modelling_dynamical_systems)=
 ## Modelling dynamical systems
 
-We model a dynamical system a a set of variables that follow a time dynamics law
+We model a dynamical system as a set of variables that follow a time dynamics law
 
 $$y = f(t,{X_t})$$
 
@@ -489,14 +489,14 @@ where $Z$ is a standard normal distribution. The following plot simulates the Wi
 ```{figure} figures/wiener_univariate.png
 :name: fig:wiener_univariate
 :width: 8in
-Simulation of five different paths of the the Wiener process using $t_0=0$ $t_N=1$, $N = 100$, $W_0 = 0$
+Simulation of five different paths of the Wiener process using $t_0=0$ $t_N=1$, $N = 100$, $W_0 = 0$
 ```
 Alternatively, we can simulate complete paths of the Wiener process by exploiting its connection to Gaussian processes. Using a Gaussian process framework we get the following results:
 
 ```{figure} figures/wiener_gp.png
 :name: fig:wiener_gp
 :width: 8in
-Simulation of five different paths of the the Wiener process using the same parameters, but sampling from a Gaussian process with a Wiener $min(t_1, t_2)$ kernel
+Simulation of five different paths of the Wiener process using the same parameters, but sampling from a Gaussian process with a Wiener $min(t_1, t_2)$ kernel
 ```
 
 **Multivariate processes**
@@ -681,7 +681,7 @@ The following graph shows samples of the Brownian motion for specific values of 
 ```{figure} figures/BM_simulation.png
 :name: fig:BM_simulation
 :width: 8in
-Simulation of five different paths of the the Brownian Motion with drift process using $t_0=0$ $t_N=1$, $N = 100$, $W_0 = 0$, $\mu = 5$, $\sigma = 2$.
+Simulation of five different paths of the Brownian Motion with drift process using $t_0=0$ $t_N=1$, $N = 100$, $W_0 = 0$, $\mu = 5$, $\sigma = 2$.
 ```
 
 Alternatively, we could use the connection to Gaussian processes to perform the simulations using standard packages. We leave it as an exercise for the reader.
@@ -1166,7 +1166,7 @@ In the following picture we follow the other path and simulate the Brownian Brid
 ```{figure} figures/BB_gps.png
 :name: fig:BB_gps
 :width: 8in
-Simulation of five different paths of the the Brownian Bridge using $t_0=0$ $t_N=1$, $N = 100$.
+Simulation of five different paths of the Brownian Bridge using $t_0=0$ $t_N=1$, $N = 100$.
 ```
 **Applications**
 
@@ -1184,7 +1184,7 @@ As mentioned, though, continuous models are in fact a good description of financ
 
 This is not because the distributions derived in the continuous stochastic processes studied so far don't allow those scenarios. Think for instance that the Gaussian distribution has non-zero probability density over the entire domain, and in real applications one could argue that the jump does not happen instantaneously if short enough time-scales are observed. But they are so unlikely under the model that any real application built upon them will not take into account those scenarios in practice, introducing potential risks. In other words, they are not good generative models of the phenomenon at hand, since such scenarios will not in practice expected when sampling or simulating from them.
 
-Given that we still want to exploit the mathematical simplicity of continuous stochastic processes, we would like to introduce mathematical tools that allow us to incorporate discrete jumps with a meaningful probability in these models. The motivation is again that of mathematical simplicity, since one could argue that more complex continuous models could be built to describe those situations, as far as we agree that at a short enough time - scale what we observe as a jump can be described as a rapidly series of continuous changes. For instance, a model with regime switches in volatility. However, such complexity would penalize the applications of the model, hence the interest in modelling jumps in continuous time. 
+Given that we still want to exploit the mathematical simplicity of continuous stochastic processes, we would like to introduce mathematical tools that allow us to incorporate discrete jumps with a meaningful probability in these models. The motivation is again that of mathematical simplicity, since one could argue that more complex continuous models could be built to describe those situations, as far as we agree that at a short enough time - scale what we observe as a jump can be described as a rapid series of continuous changes. For instance, a model with regime switches in volatility. However, such complexity would penalize the applications of the model, hence the interest in modelling jumps in continuous time. 
 
 In the following section we will motivate such model, that we will formalize later on.
 

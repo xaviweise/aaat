@@ -99,7 +99,7 @@ CLOBs don't allow orders at arbitrary prices, instead enforcing minimum price in
 
 In recent years, regulatory bodies in some markets have implemented restrictions on tick sizes to stabilize order book structures and reduce excessive market noise. For instance, in the European Union, MiFID II introduced a tick size regime based on price levels and average daily number of trades for specific instruments, limiting the ability of markets to set overly fine increments. Similarly, in the U.S., tick size pilot programs have explored tick adjustments for smaller-cap stocks to assess impacts on liquidity and execution quality. Such regulatory measures aim to ensure fairer conditions for both liquidity providers and market participants, while supporting orderly and efficient markets.
 
-Additionally to tick sizes, markets typically impose restrictions on the the quantities that can be traded, known as lot sizes.
+Additionally to tick sizes, markets typically impose restrictions on the quantities that can be traded, known as lot sizes.
 
 ### The Structure of the Central Limit Order Book (CLOB)
 
