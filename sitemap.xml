@@ -1,124 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="http://localhost:3000/sitemap_style.xsl" ?>
+<?xml-stylesheet type="text/xsl" href="http://localhost:3001/sitemap_style.xsl" ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://localhost:3000</loc>
+    <loc>http://localhost:3001</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/releases</loc>
+    <loc>http://localhost:3001/markdown/releases</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/dedication</loc>
+    <loc>http://localhost:3001/markdown/dedication</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/preface</loc>
+    <loc>http://localhost:3001/markdown/preface</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/symbollist</loc>
+    <loc>http://localhost:3001/markdown/symbollist</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/intro-financial-markets</loc>
+    <loc>http://localhost:3001/markdown/intro-financial-markets</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/intro-financial-instruments</loc>
+    <loc>http://localhost:3001/markdown/intro-financial-instruments</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/market-microstructure</loc>
+    <loc>http://localhost:3001/markdown/market-microstructure</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/algorithmic-trading</loc>
+    <loc>http://localhost:3001/markdown/algorithmic-trading</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/intro-bayesian</loc>
+    <loc>http://localhost:3001/markdown/intro-bayesian</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/intro-causal</loc>
+    <loc>http://localhost:3001/markdown/intro-causal</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/stochastic-calculus</loc>
+    <loc>http://localhost:3001/markdown/stochastic-calculus</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/stochastic-optimal-control</loc>
+    <loc>http://localhost:3001/markdown/stochastic-optimal-control</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/data-driven-methods</loc>
+    <loc>http://localhost:3001/markdown/data-driven-methods</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/generative-ai</loc>
+    <loc>http://localhost:3001/markdown/generative-ai</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/execution-fundamentals</loc>
+    <loc>http://localhost:3001/markdown/execution-fundamentals</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/lob-models</loc>
+    <loc>http://localhost:3001/markdown/lob-models</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/almgren-chriss</loc>
+    <loc>http://localhost:3001/markdown/optimal-execution</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/execution-tactics</loc>
+    <loc>http://localhost:3001/markdown/execution-tactics</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/market-making-fundamentals</loc>
+    <loc>http://localhost:3001/markdown/market-making-fundamentals</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/fair-price-estimation</loc>
+    <loc>http://localhost:3001/markdown/fair-price-estimation</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/liquidity-modelling</loc>
+    <loc>http://localhost:3001/markdown/liquidity-modelling</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/rfq-models</loc>
+    <loc>http://localhost:3001/markdown/rfq-models</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/avellaneda-stoikov</loc>
+    <loc>http://localhost:3001/markdown/optimal-market-making</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/enriching-avellaneda</loc>
+    <loc>http://localhost:3001/markdown/optimal-hedging</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/hedging</loc>
+    <loc>http://localhost:3001/markdown/quant-investment-fundamentals</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/market-making-rl</loc>
+    <loc>http://localhost:3001/markdown/optimal-investment-theory</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/quant-investment-fundamentals</loc>
+    <loc>http://localhost:3001/markdown/glossary</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/mean-reversion-strategies</loc>
+    <loc>http://localhost:3001/markdown/references</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/trend-following</loc>
+    <loc>http://localhost:3001/notebooks/stochastic-calculus</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/arbitrage</loc>
+    <loc>http://localhost:3001/notebooks/bayesian-theory</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/factor-investing</loc>
+    <loc>http://localhost:3001/notebooks/market-microstructure</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/optimal-portfolios</loc>
+    <loc>http://localhost:3001/notebooks/lob-models</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/glossary</loc>
+    <loc>http://localhost:3001/notebooks/execution-algorithms</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/markdown/references</loc>
+    <loc>http://localhost:3001/notebooks/fair-price-estimation</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/notebooks/stochastic-calculus</loc>
+    <loc>http://localhost:3001/notebooks/liquidity-modelling</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/notebooks/bayesian-theory</loc>
+    <loc>http://localhost:3001/notebooks/rfq-models</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/notebooks/market-microstructure</loc>
+    <loc>http://localhost:3001/notebooks/market-making</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/notebooks/rfq-models</loc>
+    <loc>http://localhost:3001/notebooks/generative-ai</loc>
   </url>
   <url>
-    <loc>http://localhost:3000/notebooks/fair-price-estimation</loc>
+    <loc>http://localhost:3001/notebooks/data-driven-methods</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3001/notebooks/quant-investment</loc>
   </url>
 </urlset>
