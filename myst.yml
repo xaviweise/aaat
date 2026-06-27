@@ -49,7 +49,6 @@ project:
     - title: Investment Algorithms
       children:
         - file: markdown/quant_investment_fundamentals.md
-        - file: markdown/mean_reversion_strategies.md
         - file: markdown/optimal_investment_theory.md
     - title: Glossary and References
       children:
@@ -67,6 +66,7 @@ project:
         - file: notebooks/rfq_models.ipynb
         - file: notebooks/market_making.ipynb
         - file: notebooks/generative_ai.ipynb
+        - file: notebooks/data_driven_methods.ipynb
         - file: notebooks/quant_investment.ipynb
 site:
   options:

@@ -118,7 +118,7 @@ Sources of alpha hypotheses include:
 
 ### Signal construction
 
-An alpha hypothesis must be translated into a quantitative **signal** $s_t$ — a number that, at each time $t$, scores each instrument in the universe by its expected return over the strategy horizon. Signals are typically normalised (e.g., z-scored across the universe) and may combine multiple raw predictors. Machine-learning models (ridge regression, random forests, gradient boosting, LSTM networks) are widely used to combine signals, especially when the raw features are high-dimensional or non-linearly related to returns {cite:p}`dePrado2018`. A key discipline is ensuring that no future information leaks into the signal computation — the **lookahead bias** trap described in {ref}`sec:qi_pitfalls`.
+An alpha hypothesis must be translated into a quantitative **signal** $s_t$ — a number that, at each time $t$, scores each instrument in the universe by its expected return over the strategy horizon. Signals are typically normalised (e.g., z-scored across the universe) and may combine multiple raw predictors. Machine-learning models (ridge regression, random forests, gradient boosting, LSTM networks) — introduced in {ref}`data_driven_methods` — are widely used to combine signals, especially when the raw features are high-dimensional or non-linearly related to returns {cite:p}`dePrado2018`. A key discipline is ensuring that no future information leaks into the signal computation — the **lookahead bias** trap described in {ref}`sec:qi_pitfalls`.
 
 ### Strategy rules and execution
 
