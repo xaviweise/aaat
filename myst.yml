@@ -36,7 +36,7 @@ project:
       children:
         - file: markdown/execution_fundamentals.md
         - file: markdown/lob_models.md
-        - file: markdown/almgren_chriss.md
+        - file: markdown/optimal_execution.md
         - file: markdown/execution_tactics.md
     - title: Market Making Algorithms
       children:
@@ -44,18 +44,13 @@ project:
         - file: markdown/fair_price_estimation.md
         - file: markdown/liquidity_modelling.md
         - file: markdown/rfq_models.md
-        - file: markdown/avellaneda_stoikov.md
-        - file: markdown/enriching_avellaneda.md
-        - file: markdown/hedging.md
-        - file: markdown/market_making_rl.md
+        - file: markdown/optimal_market_making.md
+        - file: markdown/optimal_hedging.md
     - title: Investment Algorithms
       children:
         - file: markdown/quant_investment_fundamentals.md
         - file: markdown/mean_reversion_strategies.md
-        - file: markdown/trend_following.md
-        - file: markdown/arbitrage.md
-        - file: markdown/factor_investing.md
-        - file: markdown/optimal_portfolios.md
+        - file: markdown/optimal_investment_theory.md
     - title: Glossary and References
       children:
         - file: markdown/glossary.md
@@ -65,8 +60,14 @@ project:
         - file: notebooks/stochastic_calculus.ipynb
         - file: notebooks/bayesian_theory.ipynb
         - file: notebooks/market_microstructure.ipynb
-        - file: notebooks/rfq_models.ipynb
+        - file: notebooks/lob_models.ipynb
+        - file: notebooks/execution_algorithms.ipynb
         - file: notebooks/fair_price_estimation.ipynb
+        - file: notebooks/liquidity_modelling.ipynb
+        - file: notebooks/rfq_models.ipynb
+        - file: notebooks/market_making.ipynb
+        - file: notebooks/generative_ai.ipynb
+        - file: notebooks/quant_investment.ipynb
 site:
   options:
     folders: true
