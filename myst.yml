@@ -67,7 +67,11 @@ project:
         - file: notebooks/market_making.ipynb
         - file: notebooks/generative_ai.ipynb
         - file: notebooks/data_driven_methods.ipynb
+        - file: notebooks/optimal_hedging.ipynb
         - file: notebooks/quant_investment.ipynb
+sphinx:
+  extensions:
+    - sphinxcontrib.mermaid
 site:
   options:
     folders: true

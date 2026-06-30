@@ -23,27 +23,31 @@ In what follows, we organize financial instruments into three broad families:
 
 This structure reflects both the economic function of instruments and the way modern markets are organized in practice.
 
+The chapter is organised as follows. We begin with **cash instruments** ({ref}`sec:ifi_cash`), covering equities ({ref}`sec:ifi_equities`), money market instruments ({ref}`sec:ifi_money_market`), fixed income ({ref}`sec:ifi_fixed_income`), and foreign exchange ({ref}`sec:ifi_fx`). For each family we discuss economic function, valuation principles, and the market risk factors that drive price dynamics. We then turn to **derivative instruments** ({ref}`sec:ifi_derivatives`): forwards and futures ({ref}`sec:ifi_forwards`), swaps ({ref}`sec:ifi_swaps`), and options ({ref}`sec:ifi_options`), developing the no-arbitrage pricing intuition and introducing key concepts such as the cost-of-carry model, the term structure of forward rates, and option Greeks. The chapter closes with **hybrid and structured products** ({ref}`sec:ifi_structured`), which combine features of cash and derivatives to create tailored payoff profiles.
+
+(sec:ifi_cash)=
 ## Cash instruments and the main market risk factors
 
 Cash instruments represent direct claims on an asset, income stream, or borrower. They are the foundation of capital markets, facilitating investment, funding, and liquidity management. Their valuation depends primarily on the expected cash flows, credit risk, and time value of money.
 
 As mentioned above, from a risk perspective, cash instruments can be used to define market risk factors, which are latent factors that can be used to largely explain their observable co-movements in prices. In equities, while individual stocks exhibit significant idiosyncratic risk, the dominant systematic risk factor is captured at the portfolio level through broad market indexes, which represent aggregate exposure to economic growth, risk appetite, and discount-rate dynamics. Fixed-income instruments are primarily driven by the dynamics of interest-rate and credit spreads curves; money-market instruments by short-term funding rates and liquidity conditions; and foreign exchange instruments by relative interest rates, macroeconomic fundamentals, and cross-border capital flows.
 
+(sec:ifi_equities)=
 ### Equities
 
-Equities are financial instruments through which investors provide capital to a company in exchange for participation in its economic performance and governance. Unlike debt, equities do not promise predefined cash flows. Instead, the payoff to equity holders is directly linked to the evolution of the firm’s assets, profitability, and long-term prospects. This feature makes equity the primary risk-bearing instrument in a company’s capital structure and the main channel through which investors gain exposure to corporate growth.
+Equities are financial instruments through which investors provide capital to a company in exchange for participation in its economic performance and governance. Unlike debt, equities do not promise predefined cash flows. Instead, the payoff to equity holders is directly linked to the evolution of the firm's assets, profitability, and long-term prospects. This feature makes equity the primary risk-bearing instrument in a company's capital structure and the main channel through which investors gain exposure to corporate growth.
 
-From a balance sheet perspective, equity represents shareholders’ capital and is defined residually through the fundamental accounting identity
+From a balance sheet perspective, equity represents shareholders' capital and is defined residually through the fundamental accounting identity
 
 $$\text{Assets} = \text{Liabilities} + \text{Equity}$$
 
-This identity must always hold. Consequently, any change in the value of a firm’s assets or liabilities is mechanically reflected in equity. In practice, the nominal value of debt is largely fixed by contract, so short-term fluctuations in firm value are absorbed almost entirely by equity. When asset values decline, equity is reduced first; only after equity is exhausted do losses begin to impair debt holders. This asymmetric position explains both the higher volatility of equity prices and the shareholders’ claim on the firm’s upside.
+This identity must always hold. Consequently, any change in the value of a firm's assets or liabilities is mechanically reflected in equity. In practice, the nominal value of debt is largely fixed by contract, so short-term fluctuations in firm value are absorbed almost entirely by equity. When asset values decline, equity is reduced first; only after equity is exhausted do losses begin to impair debt holders. This asymmetric position explains both the higher volatility of equity prices and the shareholders' claim on the firm's upside.
 
-Companies raise equity by issuing shares, either privately or through public offerings in organized markets. In a public issuance, investors purchase shares in a competitive process, providing cash capital to the firm. A defining feature of equity markets is the existence of a liquid secondary market, where shares can be freely traded among investors. Although trading in the secondary market does not directly affect the firm’s cash position, it plays a crucial economic role: liquidity increases investors’ willingness to supply capital in the primary market and generates a continuously updated market valuation of the firm.
+Companies raise equity by issuing shares, either privately or through public offerings in organized markets. In a public issuance, investors purchase shares in a competitive process, providing cash capital to the firm. A defining feature of equity markets is the existence of a liquid secondary market, where shares can be freely traded among investors. Although trading in the secondary market does not directly affect the firm's cash position, it plays a crucial economic role: liquidity increases investors' willingness to supply capital in the primary market and generates a continuously updated market valuation of the firm.
 
-An equity share typically grants three fundamental rights. First, shareholders participate in the firm’s profits through dividends, when and if these are distributed. Second, they hold a residual claim on the firm’s assets in the event of liquidation, after all creditors have been paid. Third, equity often confers control rights, usually exercised through voting on corporate governance matters. Importantly, equity imposes no obligation on the firm to repay the invested capital or to make regular payments, sharply distinguishing it from debt financing.
+An equity share typically grants three fundamental rights. First, shareholders participate in the firm's profits through dividends, when and if these are distributed. Second, they hold a residual claim on the firm's assets in the event of liquidation, after all creditors have been paid. Third, equity often confers control rights, usually exercised through voting on corporate governance matters. Importantly, equity imposes no obligation on the firm to repay the invested capital or to make regular payments, sharply distinguishing it from debt financing.
 
-This absence of contractual repayment makes equity a flexible and, from the firm’s perspective, often cheaper source of financing. Dividends are paid only when profits allow, whereas debt requires fixed interest payments regardless of business conditions. As a result, adverse shocks to firm value tend to be reflected first and most strongly in equity prices, while debt valuations remain relatively stable until default risk becomes material.
+This absence of contractual repayment makes equity a flexible and, from the firm's perspective, often cheaper source of financing. Dividends are paid only when profits allow, whereas debt requires fixed interest payments regardless of business conditions. As a result, adverse shocks to firm value tend to be reflected first and most strongly in equity prices, while debt valuations remain relatively stable until default risk becomes material.
 
 #### Valuation of Equity
 
@@ -63,7 +67,7 @@ In traded markets, equity is valued through its share price. The market value of
 
 $$\text{Market Capitalization} = P \times N $$
 
-where $P$ denotes the share price and $N$ the number of outstanding shares. Market prices aggregate investors’ expectations about future profitability, risk, growth, and the evolution of both tangible and intangible assets, making equity valuation inherently forward-looking and partially speculative. Persistent deviations between market value and book value are therefore not anomalies per se, but reflections of beliefs about future economic outcomes.
+where $P$ denotes the share price and $N$ the number of outstanding shares. Market prices aggregate investors' expectations about future profitability, risk, growth, and the evolution of both tangible and intangible assets, making equity valuation inherently forward-looking and partially speculative. Persistent deviations between market value and book value are therefore not anomalies per se, but reflections of beliefs about future economic outcomes.
 
 ##### Discounted dividend approach ##### 
 
@@ -73,7 +77,7 @@ $$P_t = \mathbb{E}_t\left[ \sum_{k=1}^{\infty} \frac{d_{t+k}}{(1+r)^k} \right]$$
 
 where $d_{t+k}$ denotes dividends paid in the future, which are brought into present value using discount factors at a rate $r$. This rate cannot, in general, be identified with the risk-free rate if the price is to reflect the risk borne by investors. Instead, $r$ should be interpreted as a risk-adjusted discount rate that compensates investors for both the time value of money and the uncertainty associated with future dividends.
 
-The discounted dividend framework has been subject to important critiques, though. Shiller’s volatility argument {cite:p}`Shiller1981` considers the implication of the present-value relation under rational expectations. Let
+The discounted dividend framework has been subject to important critiques, though. Shiller's volatility argument {cite:p}`Shiller1981` considers the implication of the present-value relation under rational expectations. Let
 
 $$P_t^* = \sum_{k=1}^{\infty} \frac{d_{t+k}}{(1+r)^k}$$
 
@@ -103,6 +107,7 @@ $$R_i - R_f = \alpha_i + \beta_{m,i}(R_m - R_f) + \beta_{s,i}\,\text{SMB} + \bet
 
 In these models, expected equity returns arise from exposure to multiple sources of systematic risk, each associated with a risk premium. Equity pricing thus reflects not only expectations about future cash flows, but also how those cash flows co-vary with broader economic conditions, completing the link between valuation, risk, and returns.
 
+(sec:ifi_money_market)=
 ### Money Market Instruments
 
 Money market instruments are short-term financial instruments used to manage liquidity, fund short-term obligations, and transmit monetary policy through the financial system. They are characterized by short maturities, typically ranging from overnight to one year, high credit quality, and low price volatility under normal market conditions. Unlike equities, money market instruments are not designed to provide exposure to long-term growth, but to preserve capital, provide liquidity, and facilitate the efficient functioning of payment and funding markets.
@@ -123,13 +128,13 @@ Money market instruments are the primary channel through which central banks imp
 
 Because of their short maturity, yields on money market instruments closely track policy rates and expectations of near-term monetary policy. Changes in central bank target rates, corridor systems, or liquidity provision frameworks are rapidly reflected in money market prices. As a result, money markets provide a real-time signal of monetary conditions and play a crucial role in anchoring the short end of the yield curve.
 
-More broadly, conditions in money markets influence the transmission of monetary policy to the rest of the financial system. Disruptions in short-term funding can impair banks’ ability to extend credit, weaken the pass-through of policy rate changes, and force central banks to intervene as lenders of last resort. For this reason, the stability and smooth functioning of money markets are not only a technical concern, but a core objective of modern central banking.
+More broadly, conditions in money markets influence the transmission of monetary policy to the rest of the financial system. Disruptions in short-term funding can impair banks' ability to extend credit, weaken the pass-through of policy rate changes, and force central banks to intervene as lenders of last resort. For this reason, the stability and smooth functioning of money markets are not only a technical concern, but a core objective of modern central banking.
 
 #### Reference Rates 
 
 Modern financial markets rely on reference interest rates—benchmarks used to determine floating-rate payments in loans, bonds, and derivatives. These rates serve as the foundation for trillions of dollars of financial contracts, ensuring a consistent and transparent mechanism for pricing and settlement. Monetary markets play a key role for the determination of reference rates, typically linked to instruments issued in these markets. 
 
-Probably the most famous reference rate is the London Interbank Offered Rate (LIBOR), which became the dominant global benchmark during the 1980s, although its roots date back to the late 1960s. The first recorded use of a LIBOR-like rate appeared in 1969, when a group of London-based banks agreed to price a syndicated loan to the Shah of Iran at a margin over the rate at which they could borrow short-term funds in the interbank market. This convention proved practical for cross-border lending, allowing banks to align loan pricing with their own funding costs. As syndicated lending expanded in the 1970s and derivatives markets emerged in the 1980s, LIBOR was formalized by the British Bankers’ Association (BBA) as a standard daily benchmark, calculated as the average rate at which major banks believed they could borrow from one another on an unsecured basis.
+Probably the most famous reference rate is the London Interbank Offered Rate (LIBOR), which became the dominant global benchmark during the 1980s, although its roots date back to the late 1960s. The first recorded use of a LIBOR-like rate appeared in 1969, when a group of London-based banks agreed to price a syndicated loan to the Shah of Iran at a margin over the rate at which they could borrow short-term funds in the interbank market. This convention proved practical for cross-border lending, allowing banks to align loan pricing with their own funding costs. As syndicated lending expanded in the 1970s and derivatives markets emerged in the 1980s, LIBOR was formalized by the British Bankers' Association (BBA) as a standard daily benchmark, calculated as the average rate at which major banks believed they could borrow from one another on an unsecured basis.
 
 However, the credibility of LIBOR was deeply undermined during the LIBOR manipulation scandal uncovered between 2011 and 2012. Investigations revealed that several panel banks had deliberately altered their submissions, either to profit from derivative positions or to disguise funding stress during the global financial crisis. The scandal exposed structural weaknesses: submissions were often based on expert judgment rather than actual transactions, making the benchmark vulnerable to manipulation. Regulatory responses included substantial fines, criminal prosecutions, and the establishment of new oversight frameworks for benchmark administration. Yet, the damage to trust was profound and accelerated global efforts to reform reference rate frameworks.
 
@@ -144,27 +149,49 @@ The transition from LIBOR to alternative rates has relevant contractual implicat
 
 #### Main monetary market instruments 
 
-
 ##### Treasury Bills
 
+Treasury bills (T-bills) are short-term debt obligations issued by sovereign governments, typically with maturities of one, three, six, or twelve months. They are the most liquid and creditworthy money market instruments, carrying the full faith and credit of the issuing government. As such, their yields serve as the practical benchmark for the risk-free rate at short maturities.
+
+T-bills are issued at a discount to face value and redeemed at par; the investor's return is the difference between the purchase price and the face value. Pricing follows the discount convention:
+
+$$P = N \left(1 - d \cdot \frac{T}{360}\right)$$
+
+where $N$ is face value, $d$ is the discount rate, and $T$ is the number of days to maturity. The equivalent money-market yield, which makes T-bill returns comparable to interest-bearing instruments, is
+
+$$y = \frac{N - P}{P} \cdot \frac{360}{T}$$
+
+T-bill auctions are conducted regularly by treasury departments and are a primary mechanism for government cash management. In secondary markets, T-bills trade at extremely tight bid-ask spreads and serve as near-perfect substitutes for cash, making them the instrument of choice for collateral, reserve management, and short-term investment. The overnight and one-month T-bill yields are closely followed as indicators of monetary policy expectations and funding conditions.
 
 ##### Commercial Paper
 
+Commercial paper (CP) is short-term, unsecured promissory notes issued by corporations, bank holding companies, and financial institutions to meet immediate funding needs. Maturities typically range from overnight to 270 days — the 270-day threshold is significant in the United States, as it exempts issuers from full SEC registration requirements, reducing issuance costs. In practice, the bulk of commercial paper outstanding has maturities of thirty days or less.
+
+Like T-bills, CP is typically issued at a discount and redeemed at par. Pricing and yield conventions mirror those of T-bills, using the discount rate and a 360-day year. However, unlike T-bills, CP carries credit risk. Only issuers with strong credit ratings can access the CP market at competitive spreads; lower-rated issuers either pay a substantial premium or are effectively excluded. Credit ratings from agencies such as Moody's, S&P, and Fitch are therefore central to CP market access.
+
+Commercial paper markets distinguish between directly-placed paper, where large financial institutions distribute their own notes to investors without an intermediary, and dealer-placed paper, where investment banks intermediate the issuance. The CP market plays an important role in the funding structure of financial intermediaries: money market funds are among the largest investors, which created systemic vulnerabilities exposed during the 2008 crisis, when the failure of Lehman Brothers triggered a run on money market funds and a near-freeze of the CP market.
 
 ##### Certificates of Deposit
 
+Certificates of deposit (CDs) are time deposits issued by banks that pay a fixed interest rate over a specified term. Unlike ordinary savings deposits, large-denomination negotiable CDs — typically with a minimum face value of $\$100,000$ — can be freely sold in secondary markets before maturity, making them proper money market instruments. Non-negotiable CDs are personal saving products and are not traded.
+
+Negotiable CDs are issued at face value and pay interest at maturity, making their valuation straightforward:
+
+$$\text{Proceeds at maturity} = N \left(1 + r \cdot \frac{T}{360}\right)$$
+
+where $r$ is the agreed deposit rate and $T$ is the term in days. The yield on negotiable CDs trades at a spread above comparable T-bill yields, reflecting the credit risk of the issuing bank and the lower liquidity of secondary markets relative to government paper. During periods of banking stress, CD spreads widen sharply, providing a real-time signal of perceived bank credit risk. Euro-dollar CDs — dollar-denominated CDs issued by banks outside the United States — form an important segment of the global money market, particularly the London market, and historically provided the basis for LIBOR fixings.
 
 ##### Repurchase Agreements (Repos)
 
-Repurchase agreements, or repos, are among the most important instruments in modern money markets. A repo is a short-term secured loan: one party sells a security—typically a government bond—with the commitment to repurchase it at a later date and a slightly higher price. The difference between the sale and repurchase price reflects the repo rate, analogous to an interest rate on a collateralized borrowing. From the counterparty’s point of view, the transaction is a reverse repo, meaning it lends cash against the security as collateral.
+Repurchase agreements, or repos, are among the most important instruments in modern money markets. A repo is a short-term secured loan: one party sells a security—typically a government bond—with the commitment to repurchase it at a later date and a slightly higher price. The difference between the sale and repurchase price reflects the repo rate, analogous to an interest rate on a collateralized borrowing. From the counterparty's point of view, the transaction is a reverse repo, meaning it lends cash against the security as collateral.
 
 Repos are fundamental to liquidity management and collateral circulation. They enable financial institutions to fund positions efficiently, manage short-term liquidity, and facilitate price discovery in fixed income markets. Central banks also rely on repos as a primary instrument of monetary policy, using them to inject or withdraw liquidity and to influence short-term interest rates. The global repo market is vast: outstanding balances are estimated in the tens of trillions of dollars, with the U.S. segment alone exceeding $5 trillion in daily transactions {cite:p}`OFR2023repo`.
 
-Mechanically, two key parameters define the economics of a repo: the repo rate and the haircut—the percentage discount applied to the market value of the collateral. A higher haircut protects the lender against a fall in collateral value but increases the borrower’s funding cost. Haircuts vary with the perceived credit quality and liquidity of the collateral: Treasury securities typically carry haircuts close to zero, while corporate bonds or structured products may require 5–20%. In stressed conditions, haircuts often rise sharply, forcing deleveraging and amplifying market instability, as seen during the 2008 financial crisis.
+Mechanically, two key parameters define the economics of a repo: the repo rate and the haircut—the percentage discount applied to the market value of the collateral. A higher haircut protects the lender against a fall in collateral value but increases the borrower's funding cost. Haircuts vary with the perceived credit quality and liquidity of the collateral: Treasury securities typically carry haircuts close to zero, while corporate bonds or structured products may require 5–20%. In stressed conditions, haircuts often rise sharply, forcing deleveraging and amplifying market instability, as seen during the 2008 financial crisis.
 
 For example, consider a repo in which a bank borrows $\$98$ million in cash for one week and pledges $\$100$ million in Treasury bonds as collateral. The haircut is therefore 2%. If the agreed repo rate is 3% per annum, the repurchase price after seven days will be:
 
-$$98,000,000×(1+0.03×\frac{7}{360})≈98,057,166\$ $$
+$$98{,}000{,}000 \times \left(1 + 0.03 \times \frac{7}{360}\right) \approx 98{,}057{,}166\,\$$$
 
 At maturity, the bank repays $\$98.06$ million and receives back its $\$100$ million in bonds. For the cash lender, the repo rate represents the secured yield on the transaction, while for the borrower, it represents the funding cost of holding the securities.
 
@@ -172,9 +199,10 @@ Repos are also integral to the market-making business. Suppose a dealer sells a 
 
 Repos also underpin short selling, as they provide the mechanism by which short sellers borrow securities to sell them in anticipation of price declines. However, short positions carry significant risk if prices rise. Public data on open short positions—such as the short‐interest reports published by FINRA, NYSE, and Nasdaq—allow regulators and market participants to monitor short activity and its potential influence on price pressure and funding conditions. For example, the GameStop short squeeze in early 2021 {cite:p}`SEC2021gamestop` demonstrated how short sellers can face extreme pressure when prices move unexpectedly, forcing them to cover positions at large losses. Earlier examples, such as those portrayed in The Big Short {cite:p}`Lewis2010bigshort`, show that even when short sellers are correct in their analysis, they can face severe liquidity and timing risks.
 
+(sec:ifi_fixed_income)=
 ### Fixed Income 
 
-Fixed income instruments are debt securities that promise a predefined set of cash flows over time, either in fixed or variable form. By purchasing a fixed income instrument, investors lend capital to an issuer in exchange for contractual payments and the repayment of principal at maturity. Unlike equity, which represents a residual claim on a firm’s assets, fixed income securities confer senior, legally binding claims. 
+Fixed income instruments are debt securities that promise a predefined set of cash flows over time, either in fixed or variable form. By purchasing a fixed income instrument, investors lend capital to an issuer in exchange for contractual payments and the repayment of principal at maturity. Unlike equity, which represents a residual claim on a firm's assets, fixed income securities confer senior, legally binding claims. 
 
 Issuers of fixed income instruments span the full spectrum of the economy. **Sovereign issuers** finance fiscal activity and provide benchmark risk-free curves. **Corporate issuers** use bonds to fund investment and manage leverage. **Municipal issuers** finance regional and local infrastructure, while **supranational institutions** issue debt to support international development and policy objectives. 
 
@@ -182,13 +210,13 @@ Across all cases, the dominant fixed income instrument is the **bond**, characte
 
 #### Valuation of fixed income instruments
 
-As we will discuss in chapter {ref}`fair_price_estimation`,  The theoretical foundation of fixed income valuation is the **time value of money**.
+As we will discuss in chapter {ref}`fair_price_estimation`, the theoretical foundation of fixed income valuation is the **time value of money**.
 
 This logic extends naturally to bonds, which deliver multiple future cash flows. For a bond with maturity $T$, coupon payments $C_t$, and face value $N$, the price $P$ is given by the sum of discounted promised payments:
 
 $$P = \sum_{t=1}^{T} \frac{C_t}{(1+r_t)^t} + \frac{N}{(1+r_T)^T}$$
 
-In practice, bonds traded in the market have observable prices that do not necessarily match with these theoretical prices, since there are additional risks and liquidity constraints for which investors typically demand an extra *yield* in order to invest in these instruments as alternatives to risk-free deposits. We define the **yield to maturity**  as the constant rate $y$ that equates the discounted value of promised cash flows to the observed market price:
+In practice, bonds traded in the market have observable prices that do not necessarily match with these theoretical prices, since there are additional risks and liquidity constraints for which investors typically demand an extra *yield* in order to invest in these instruments as alternatives to risk-free deposits. We define the **yield to maturity** as the constant rate $y$ that equates the discounted value of promised cash flows to the observed market price:
 
 $$P = \sum_{t=1}^{T} \frac{C_t}{(1+y)^t} + \frac{N}{(1+y)^T}$$
 
@@ -196,7 +224,7 @@ The yield is therefore an implied quantity rather than a fundamental primitive: 
 
 #### Fixed income risk factors
 
-Risk in fixed income markets is commonly organized around two broad dimensions. The first is **interest rate risk**, driven by movements in the level and shape of the yield curve for relatively risk-free issuers, typically sovereign bonds issued by governments with solid finances like the USA, Germany or Japan, or supranational entities like the European Union. Alternatively, interest rate risk factors can also be inferred from short-term monetary instruments and interest rate derivatives like standard interest rate swaps (IRS).  The collection of inferred rates across maturities constitutes the **term structure of interest rates**. Changes in this term structure are typically highly correlated and can be mostly described in term of latent risk factors driving co-movements like parallel shifts, steepening, or flattening of the interest rate curve. Such risk factors are then linked to movements in prices government bond portfolios and other rates products. Notice that short-term rates movements are typically tied to monetary policy decisions, while longer-term rates embed expectations about future policy paths, inflation, and macroeconomic conditions.
+Risk in fixed income markets is commonly organized around two broad dimensions. The first is **interest rate risk**, driven by movements in the level and shape of the yield curve for relatively risk-free issuers, typically sovereign bonds issued by governments with solid finances like the USA, Germany or Japan, or supranational entities like the European Union. Alternatively, interest rate risk factors can also be inferred from short-term monetary instruments and interest rate derivatives like standard interest rate swaps (IRS). The collection of inferred rates across maturities constitutes the **term structure of interest rates**. Changes in this term structure are typically highly correlated and can be mostly described in term of latent risk factors driving co-movements like parallel shifts, steepening, or flattening of the interest rate curve. Such risk factors are then linked to movements in prices government bond portfolios and other rates products. Notice that short-term rates movements are typically tied to monetary policy decisions, while longer-term rates embed expectations about future policy paths, inflation, and macroeconomic conditions.
 
 The second major risk dimension is **credit risk**. Bonds issued by corporations, institutions or governments that are exposed to default risk trade at yields above those of comparable risk-free sovereign benchmarks. The difference between the yield on a risky bond and the yield on a benchmark bond of the same maturity is the **credit spread** $s$:
 
@@ -208,18 +236,29 @@ This distinction between rates risk and credit risk provides the organizing prin
 
 #### Main fixed income instrument types
 
+**Coupon types.** Bonds are classified by the structure of their coupon payments. A **fixed-coupon bond** pays a constant coupon $C = c \cdot N$ at each period, where $c$ is the coupon rate and $N$ is the face value. A **floating-rate note** (FRN) pays a coupon that resets periodically, typically equal to a reference rate (SOFR, €STR, or a legacy LIBOR rate) plus a fixed spread: $C_t = (r_t^{\text{ref}} + s) \cdot N$. Because the coupon resets to market rates, FRNs have low duration and trade close to par under normal conditions, making them a common choice for issuers and investors who wish to minimise interest rate risk. A **zero-coupon bond** pays no intermediate coupons; the investor receives only the face value $N$ at maturity $T$, and the price is simply $P = N / (1+y)^T$. Zero-coupon bonds have the highest duration for a given maturity and are widely used in liability-driven investment and as building blocks for stripping coupon bonds into their constituent cash flows.
 
-* Bonds with different coupon types: fixed, floating, zero-coupon.
+**Price conventions.** Bond prices are quoted in two ways. The **dirty price** (or full price) is the actual cash consideration paid by the buyer and equals the present value of all remaining cash flows. The **clean price** (or flat price) is the dirty price minus the **accrued interest** — the portion of the next coupon payment that has accrued since the last coupon date:
 
-* Price conventions: clean/dirty price.
+$$\text{Accrued Interest} = C \cdot \frac{\text{days since last coupon}}{\text{days in coupon period}}$$
 
-* Risk factors from the term structured: pca, factor models
+In most markets, bonds are quoted on a clean price basis, even though settlement occurs at the dirty price. This convention stabilizes the quoted price around par between coupon dates, making it easier to compare bonds with different coupon frequencies. At each coupon payment date, the clean and dirty prices coincide.
 
-* Interest rate sensitivity: duration, convexity.
+**Interest rate sensitivity: duration and convexity.** The sensitivity of a bond's price to changes in yield is captured by two measures. **Modified duration** $\mathcal{D}$ is the percentage change in price for a unit increase in yield:
 
-* Credit bond valuation: recovery rates, default risk. Anecdote recovery FTX
+$$\mathcal{D} = -\frac{1}{P}\frac{\partial P}{\partial y}$$
 
+For a fixed-coupon bond, modified duration is approximately equal to the weighted average time to receipt of cash flows (Macaulay duration) divided by $(1+y)$. A bond with duration of 5 years loses approximately 5% in price for a 100 basis point rise in yield. For portfolios, the aggregate DV01 (dollar value of a basis point) — the dollar change in portfolio value for a one-basis-point move in yields — is the standard risk measure in fixed income trading.
 
+Duration provides a first-order approximation. The second-order correction, **convexity**, captures the curvature of the price-yield relationship:
+
+$$\Delta P \approx -\mathcal{D} \cdot P \cdot \Delta y + \frac{1}{2} \cdot \text{Convexity} \cdot P \cdot (\Delta y)^2$$
+
+Positive convexity means that a bond gains more than duration predicts when yields fall, and loses less than duration predicts when yields rise — a desirable property. Standard fixed-coupon bonds have positive convexity; mortgage-backed securities and callable bonds can exhibit negative convexity in certain rate environments because of their embedded optionality.
+
+**Credit bond valuation.** For bonds subject to default risk, the promised yield $y$ exceeds the risk-free rate $r_f$ by the credit spread $s$. A simple structural model sets the spread as compensation for expected default losses: if the issuer defaults with annual probability $\lambda$ and bondholders recover a fraction $R$ of face value, the fair spread satisfies approximately $s \approx \lambda(1-R)$. In practice, credit spreads also embed liquidity premia and risk premia for the uncertainty of default timing. A well-known episode illustrating the materiality of recovery assumptions was the bankruptcy of the FTX cryptocurrency exchange in 2022, where the ultimate recovery for creditors was subject to extreme uncertainty, and even senior claims traded at deep discounts reflecting the legal and operational complexity of the estate.
+
+(sec:ifi_fx)=
 ### Foreign Exchange (FX) 
 
 The foreign exchange (FX) market enables the transfer of funds and the management of exposures between currencies. It is the mechanism through which international trade, investment, and financing are denominated, settled, and hedged. Participants include corporations managing cross-border payments, investors reallocating portfolios internationally, banks optimizing liquidity, and central banks implementing monetary policy or intervention.
@@ -255,9 +294,7 @@ An FX forward is a contract to exchange two currencies at a future date and a pr
 
 Formally, for currencies $A$ and $B$:
 
-$$
-F_{A/B} = S_{A/B} \times \frac{(1 + i_A T)}{(1 + i_B T)}
-$$
+$$F_{A/B} = S_{A/B} \times \frac{(1 + i_A T)}{(1 + i_B T)}$$
 
 where $S_{A/B}$ is the spot rate (price of one unit of A in units of B), $i_A$ and $i_B$ are the interest rates in each currency, and $T$ is the maturity in years.
 
@@ -281,110 +318,143 @@ While short-term FX movements can be driven by order flow, risk sentiment, or ce
   Real interest rates (nominal rates adjusted for inflation) between two economies can significantly influence currency valuation. When one economy offers higher real yields, global investors may shift capital to take advantage of the better return, increasing demand for that currency and driving its spot FX price higher.
 
 - **Local Stock Market Performance:**  
-  Strong performance in a country’s stock market can attract foreign investment, as investors seek higher returns. To purchase local equities, they must first acquire the domestic currency, boosting its demand and potentially appreciating its spot value.
+  Strong performance in a country's stock market can attract foreign investment, as investors seek higher returns. To purchase local equities, they must first acquire the domestic currency, boosting its demand and potentially appreciating its spot value.
 
 - **Trade Balance (Exports vs. Imports):**  
-  The balance of trade between countries also impacts currency valuation. If a country exports more than it imports, foreign buyers must convert their currency into the exporter’s currency to pay for goods. Over time, sustained trade surpluses can increase demand for the exporter’s currency, appreciating its value. Conversely, persistent deficits may weaken it.
+  The balance of trade between countries also impacts currency valuation. If a country exports more than it imports, foreign buyers must convert their currency into the exporter's currency to pay for goods. Over time, sustained trade surpluses can increase demand for the exporter's currency, appreciating its value. Conversely, persistent deficits may weaken it.
 
-
+(sec:ifi_derivatives)=
 ## Derivative Instruments
 
-Derivatives are contracts whose value depends on the price or level of an underlying asset, rate, or index. They allow market participants to transfer, hedge, or create specific risk exposures. Their valuation rests on no-arbitrage principles, linking them to the prices of cash instruments.
+Derivatives are contracts whose value depends on the price or level of an underlying asset, rate, or index. They allow market participants to transfer, hedge, or create specific risk exposures without exchanging the underlying asset itself. Their valuation rests on no-arbitrage principles, linking them to the prices of cash instruments and to the dynamics of the underlying via stochastic models developed in {ref}`stochastic_calculus` and {ref}`fair_price_estimation`.
 
+(sec:ifi_forwards)=
 ### Forwards and Futures
 
-Definition: agreements to buy/sell an asset at a future date and price.
+A **forward contract** is a bilateral agreement to buy or sell an asset at a future date $T$ at a price $F$ agreed today. No cash changes hands at inception. At maturity, the buyer receives the asset (or its cash equivalent) and pays $F$; the seller delivers and receives $F$. The payoff to the long position is $S_T - F$, where $S_T$ is the spot price at maturity.
 
-Pricing intuition: cost-of-carry model; relationship to spot price.
+**Cost-of-carry pricing.** The no-arbitrage forward price is determined by the cost of carrying the underlying asset from today to maturity. For a non-dividend-paying asset with spot price $S$ and continuous risk-free rate $r$:
 
-Margining and daily settlement (for futures).
+$$F = S \cdot e^{rT}$$
 
-Examples: FX forwards, bond futures, equity index futures.
+The argument is simple: buying the asset today and financing it at $r$ for $T$ years must be equivalent to locking in the forward purchase. If $F > Se^{rT}$, one can buy the asset, sell the forward, and earn a riskless profit; if $F < Se^{rT}$, the reverse arbitrage applies. For assets that pay a continuous income yield $q$ (dividends for equities, foreign interest rate for FX), the forward price adjusts to $F = S \cdot e^{(r-q)T}$. For bonds, the net cost of carry subtracts the present value $I$ of coupon payments received during the holding period: $F = (S - I) \cdot e^{rT}$.
 
-Uses: hedging, speculation, arbitrage.
+**Futures contracts** are economically equivalent to forwards but are exchange-traded and standardized. Key institutional differences include:
 
+- **Daily mark-to-market and margining**: futures gains and losses are settled daily in a margin account. If the margin falls below the maintenance level, the holder receives a margin call. This eliminates counterparty credit risk but introduces funding liquidity risk.
+- **Standardization**: contract size, delivery date, and underlying specifications are fixed by the exchange, enabling liquid secondary markets.
+- **Central clearing**: futures are cleared through a central counterparty (CCP), which further reduces bilateral credit risk.
+
+Major futures markets include equity index futures (S&P 500, Euro Stoxx 50), government bond futures (where delivery involves a cheapest-to-deliver bond selected from a basket, with a conversion factor adjusting for coupon and maturity differences), and commodity futures. Forward contracts dominate in FX and OTC fixed income, where customization is more important than secondary market liquidity.
+
+(sec:ifi_swaps)=
 ### Swaps
 
-Interest rate swaps (IRS): fixed-for-floating exchange, notionals, netting.
+A swap is a bilateral contract to exchange a series of cash flows over time, according to a pre-agreed schedule and formula. Swaps are the most widely used derivatives by notional outstanding and are fundamental instruments for transforming interest rate, currency, and credit exposures.
 
-Pricing and valuation: discounting, forward rates, and par swap rates.
+**Interest rate swaps (IRS).** In a plain vanilla IRS, one party pays a fixed rate $K$ (the swap rate) on a notional $N$ and receives a floating rate (typically SOFR or €STR for new contracts) on the same notional, for a sequence of payment dates $t_1 < t_2 < \ldots < t_n = T$. The fixed leg pays $K \cdot \delta_i \cdot N$ at each date $t_i$, where $\delta_i$ is the day-count fraction for the period; the floating leg pays the reference rate observed at the start of each period, accrued over $\delta_i$. Only net cash flows are exchanged — there is no exchange of notional. The **par swap rate** $K$ is the fixed rate that makes the initial value of the swap equal to zero:
 
-Cross-currency swaps: exchanging cash flows in different currencies.
+$$K = \frac{\sum_{i=1}^{n} \delta_i \cdot P(0, t_i) \cdot f(0; t_{i-1}, t_i)}{\sum_{i=1}^{n} \delta_i \cdot P(0, t_i)}$$
 
-Credit default swaps (CDS): protection leg, premium leg, credit events.
+where $P(0,t_i)$ is today's discount factor for maturity $t_i$ and $f(0; t_{i-1}, t_i)$ is the forward rate for the period $[t_{i-1}, t_i]$. Once traded, an IRS gains or loses value as interest rates move: a receiver of fixed (payer of floating) gains when rates fall and loses when rates rise, with a duration profile similar to a fixed-coupon bond of the same maturity.
 
-Applications: managing funding costs, transforming exposures.
+**Cross-currency swaps** exchange cash flows in two different currencies, including the notional at inception and maturity. They are used to transform funding from one currency to another and to manage the currency exposure of foreign-currency assets or liabilities. The pricing builds on covered interest parity but also incorporates a **cross-currency basis** — an additional spread that reflects supply and demand for funding in different currencies and which widened dramatically during the 2008 and 2020 crises.
 
-Market conventions: day count, accrual, ISDA documentation.
+**Credit default swaps (CDS).** A CDS is a contract that provides insurance against the default of a reference entity. The **protection buyer** pays a periodic spread $s$ (the CDS spread, quoted in basis points per annum on notional $N$) and receives a payment from the **protection seller** if a credit event occurs. The payment on default is typically $(1-R) \cdot N$, where $R$ is the recovery rate. The CDS spread therefore reflects the market's implied default probability and recovery assumptions. In the absence of arbitrage, a CDS on a bond issuer should be priced consistently with the credit spread on the issuer's bonds, though basis between cash and CDS markets arises from funding costs, supply-demand imbalances, and technical factors. CDS are governed by ISDA documentation, which specifies the list of credit events (bankruptcy, failure to pay, restructuring) and settlement mechanisms (physical or cash).
 
+(sec:ifi_options)=
 ### Options
 
-Options are derivatives contracts that grant the holder the  the option (hence the name) to buy or sell (depending on the option) a given financial instrument (the underlying) at a price at time contingent to the clauses of the contract. The most simple option, the European option, pre-specifies a given time $T$, the expire, and price $K$, to exercise this option. But there are many other variations in the market. An option to buy a financial instrument is referred as a call option, and an option to sell is a put option. 
+Options are derivatives contracts that grant the holder the option (hence the name) to buy or sell (depending on the option) a given financial instrument (the underlying) at a price contingent to the clauses of the contract. The most simple option, the European option, pre-specifies a given time $T$, the expiry, and price $K$, the strike, to exercise this option. But there are many other variations in the market. An option to buy a financial instrument is referred to as a call option, and an option to sell is a put option. 
 
-Let us consider european options of stocks. If the market price of the stock at the expiry is $S_T$, a call option will be exercised by a rational investor only if the price is higher than the strike $K$, making a profit of $S_T-K$, which in some cases is directly paid in cash, in others the actual stock is received, but of course it could be directly sold in the market at a favorable price. Therefore, the payoff of a call option can be written as:
+Let us consider European options on stocks. If the market price of the stock at expiry is $S_T$, a call option will be exercised by a rational investor only if the price is higher than the strike $K$, making a profit of $S_T - K$, which in some cases is directly paid in cash, in others the actual stock is received, but of course it could be directly sold in the market at a favourable price. Therefore, the payoff of a call option can be written as:
 
-$$C_T = (S_T-K)^+$$
+$$C_T = (S_T - K)^+$$
 
 where $(.)^+$ denotes the positive part of the argument. On the contrary, a put option will only be exercised if the market price is below the strike, hence the payoff is:
 
-$$P_T = (K-S_T)^+$$
+$$P_T = (K - S_T)^+$$
 
-Options can be traded in regulated markets or be quoted by bank dealers. Since the investor that holds the option cannot lose money from it, such option does not come for free, and the question is how much is worth such option, which is called the premium of the option. At expiry, the price is naturally the payoff function. But at time $t < T$ there is still uncertainty about the price $S_T$ which will determine the final profit (if any), so the premium will be different. But how much? That is the subject of the theory of option pricing.
+Options can be traded in regulated markets or be quoted by bank dealers. Since the investor that holds the option cannot lose money from it, such option does not come for free, and the question is how much such an option is worth, which is called the premium of the option. At expiry, the price is naturally the payoff function. But at time $t < T$ there is still uncertainty about the price $S_T$ which will determine the final profit (if any), so the premium will be different. The theory of option pricing is developed in detail in {ref}`fair_price_estimation` using the tools of stochastic calculus and no-arbitrage arguments.
 
+#### Basic strategies
 
-#### Basic strategies: long/short positions, spreads, combinations.
+Options can be combined into a wide variety of payoff structures. The most fundamental is the **put-call parity** relationship, which links the prices of European calls and puts with the same strike and expiry under no-arbitrage:
 
-#### Valuation intuition: time value, volatility, and Greeks.
+$$C - P = S - K e^{-rT}$$
 
-#### Implied volatility and surface.
+This identity — a call minus a put equals the forward — holds regardless of the model and can be verified by a simple portfolio argument: a portfolio long a call and short a put replicates the payoff of a forward contract.
 
-#### Market conventions: OTC vs. exchange-traded, delta quoting.
+Common single-option strategies include the **protective put** (long underlying + long put), which caps downside losses while preserving upside exposure, and the **covered call** (long underlying + short call), which generates income from the option premium at the cost of capped upside. Multi-leg strategies combine options to express views on direction and volatility: a **straddle** (long call + long put at the same strike) profits from large moves in either direction, while a **strangle** uses out-of-the-money options to achieve a similar payoff at lower premium cost. **Spread strategies** (call spreads, put spreads) combine a long and a short option at different strikes to cap both the maximum gain and the maximum cost.
 
-### Other Derivative Types (optional)
+#### Valuation: time value, volatility, and Greeks
 
-* CDO tranches (intro).
+At any time $t < T$, the option premium decomposes into **intrinsic value** — the payoff if exercised immediately, $\max(S_t - K, 0)$ for a call — and **time value**, the additional premium reflecting the possibility of favourable moves before expiry. Time value is always non-negative for a standard European option and declines to zero as $t \to T$.
 
-* Commodity and volatility derivatives.
+The sensitivity of an option's price to its inputs is captured by the **Greeks**:
 
-* Exotic options: barriers, Asians, digitals (brief mention).
+- **Delta** $\Delta = \partial C / \partial S$: the change in option price per unit change in the underlying. A call has $\Delta \in (0,1)$; a put has $\Delta \in (-1,0)$. Delta-neutral hedging — holding $-\Delta$ units of the underlying per option — eliminates first-order directional exposure.
+- **Gamma** $\Gamma = \partial^2 C / \partial S^2$: the rate of change of delta with respect to the underlying. Long option positions have positive gamma, meaning the hedge ratio must be adjusted as the underlying moves. Positive gamma also means that the P&L from gamma exceeds the cost of hedging when the underlying moves significantly, connecting option pricing to realized volatility.
+- **Theta** $\Theta = \partial C / \partial t$: the change in option price with the passage of time. Theta is typically negative for long options (time decay), reflecting the loss of time value as expiry approaches. Long gamma and short theta are the two sides of the same trade: buyers of options pay time decay and profit from large moves.
+- **Vega** $\mathcal{V} = \partial C / \partial \sigma$: the sensitivity to changes in volatility. Options are long vega — their value increases when volatility rises. Vega is largest for at-the-money options with long expiry.
+- **Rho** $\rho = \partial C / \partial r$: the sensitivity to the risk-free rate. Rho is typically small for short-dated options but more relevant for long-dated equity options or interest rate options.
 
+The fundamental result of Black-Scholes-Merton theory ({ref}`fair_price_estimation`) is that, under log-normal dynamics for the underlying, a delta-hedged option position earns or loses money at a rate proportional to $\frac{1}{2}\Gamma S^2(\sigma_{\text{realized}}^2 - \sigma_{\text{implied}}^2)$ — the difference between realized and implied variance. This connection makes options the natural instrument for trading views on volatility.
 
+#### Implied volatility and volatility surface
+
+The Black-Scholes formula provides a bijective mapping between option prices and a single volatility parameter $\sigma$. **Implied volatility** $\sigma_{\text{impl}}(K, T)$ is defined as the value of $\sigma$ that makes the Black-Scholes formula reproduce the observed market price for the option with strike $K$ and expiry $T$.
+
+In practice, implied volatility varies across strikes and expiries, forming the **volatility surface**. Two main features are observed:
+
+- **Volatility smile / skew**: for equity options, implied volatility is typically higher for low strikes (out-of-the-money puts) than for high strikes (out-of-the-money calls). This **skew** reflects the asymmetric demand for downside protection and the empirical finding that large negative equity moves are more likely than Black-Scholes predicts. For FX options, the pattern is more symmetric (a smile), reflecting two-sided tail risk.
+- **Term structure**: implied volatility varies with expiry, typically rising during periods of uncertainty and falling as conditions stabilize. The term structure encodes the market's expectation of future realized volatility at different horizons.
+
+The volatility surface is not a model-free object — its shape and dynamics are specific to each underlying and market. Advanced models (local volatility, stochastic volatility, jump-diffusion) attempt to reproduce the observed surface while remaining internally consistent with no-arbitrage.
+
+#### Market conventions
+
+In exchange-traded options markets (CME, Eurex, CBOE), options are standardized with fixed expiries and strikes, and cleared through a CCP with daily margining. In OTC markets — which dominate for FX, interest rate, and credit options — contracts are customized and documentation follows ISDA or similar frameworks.
+
+For FX options, a distinctive quoting convention expresses prices in terms of delta rather than strike, since the delta is more informative about the position's directional exposure. Risk reversals (the premium of a call over a put at the same delta, e.g., 25-delta) and strangles (the average of call and put at the same delta) are the standard building blocks of the FX volatility market and encode the skew and smile separately.
+
+### Other Derivative Types
+
+Beyond the core derivative families, markets have developed a range of specialized instruments. **Commodity derivatives** — futures and options on oil, natural gas, metals, and agricultural products — are among the oldest derivative markets and share the same pricing logic as financial derivatives, with the cost-of-carry adjusted for storage costs and convenience yield. **Volatility derivatives**, notably variance swaps and the VIX futures market, allow participants to trade the realized or implied volatility of an index directly, without taking directional exposure to the level of the index. **Exotic options** extend the European framework with path-dependent or state-dependent payoffs: barrier options activate or extinguish if the underlying crosses a level; Asian options pay based on an average of the underlying over the life of the contract; digital (binary) options pay a fixed amount if the underlying is above or below a strike at expiry.
+
+(sec:ifi_structured)=
 ## Hybrid and Structured Products
 
 Hybrid and structured products combine features of multiple instruments to create customized payoff profiles. They often embed derivative components within a funding or investment vehicle, enabling issuers and investors to fine-tune exposure to market variables, credit risk, or volatility.
 
 ### Structured Notes and Deposits
 
-Concept: debt instrument plus embedded option.
+A structured note is a debt instrument issued by a financial institution that embeds one or more derivative payoffs within a bond-like wrapper. The issuer borrows at a spread to the risk-free rate and uses part of that spread — or accepts a below-market coupon — to purchase an embedded option, the payoff of which is passed on to the investor.
 
-Examples: equity-linked notes, reverse convertibles, range accruals.
+The two archetypal designs are **principal-protected notes** and **principal-at-risk notes**. A principal-protected note guarantees the return of face value at maturity (via a zero-coupon bond) while allocating the remaining budget to a call option on an underlying index, giving investors full upside participation with no downside risk to capital. A reverse convertible is a principal-at-risk structure: the investor receives an enhanced coupon, but if the underlying falls below a barrier, the principal is repaid in shares (or at a loss), effectively because the investor has sold a put option to the issuer.
 
-Payoff design: principal protection, participation rates, caps/floors.
-
-Valuation and risks: credit of issuer, liquidity, complexity.
+Common variations include **range accruals** (coupons accrue only while an index stays within a range), **auto-callables** (the note redeems early at a premium if the underlying is above a trigger level on specific observation dates), and **capital-protected participation notes** with digital payoffs. Valuation of structured notes requires decomposing the product into its bond and derivative components, pricing each separately, and adding the issuer's credit spread. Investors must also account for the liquidity premium embedded in the OTC wrapper: structured products often trade at wide bid-ask spreads or have no secondary market.
 
 ### Credit-Linked Instruments
 
-Credit-linked notes (CLN).
+Credit-linked notes (CLNs) are funded versions of credit default swaps: the investor buys a note whose coupon is enhanced by a CDS premium, and the principal is at risk if a specified credit event occurs on a reference entity. From the issuer's perspective, a CLN is an alternative to buying CDS protection: it provides funded protection — the cash is received upfront and returned only if there is no default. CLNs are commonly issued by banks as a way to transfer concentrated credit exposures to a broader investor base.
 
-Securitized credit exposures (ABS, MBS).
-
-Tranching and credit enhancement mechanisms.
-
-Relation to CDS markets.
+Asset-backed securities (ABS) and mortgage-backed securities (MBS) securitize pools of cash-flow generating assets — residential mortgages, auto loans, credit card receivables — into tradable securities. The cash flows from the underlying pool are allocated across **tranches** in a defined priority order (the **waterfall**): senior tranches absorb losses last and receive the lowest yield; mezzanine tranches absorb intermediate losses; the equity tranche absorbs the first losses and earns the highest return. Tranching allows different investors to access the risk-return profile that matches their mandate, and enables the originating institution to transfer credit risk off its balance sheet. Collateralized debt obligations (CDOs) extend this logic to pools of bonds or CDS, creating additional layers of tranching. The mispricing of CDO tranches — particularly the correlation assumptions embedded in their valuation — was a central mechanism in the buildup and amplification of the 2008 financial crisis.
 
 ### Securitization and Structured Finance
 
-Economic rationale: transferring credit risk and freeing balance sheet capacity.
+Securitization is the process of pooling illiquid financial assets and issuing tradable securities backed by the cash flows of that pool. The economic rationale is twofold: it frees balance sheet capacity for originators (banks can lend more by transferring credit risk), and it creates investment instruments with cash-flow profiles that are difficult to replicate with standard bonds.
 
-Structure: SPV, collateral pool, tranches, waterfalls.
+The legal structure involves a **special purpose vehicle** (SPV): a bankruptcy-remote entity to which the originator sells the underlying assets (a **true sale**), isolating them from the originator's own credit risk. The SPV then issues securities to investors, backed solely by the asset pool. The **waterfall** determines how interest and principal receipts are distributed across the tranches at each payment date, typically prioritizing senior tranches in both interest and principal repayment.
 
-Market evolution and crises context (e.g., 2008).
+Securitization is regulated following the lessons of 2008, when poor underwriting standards and opaque structures led to massive losses in MBS and CDO markets. Post-crisis regulation — including risk retention rules (the originator must retain at least 5% of the economic exposure in the EU and US), increased disclosure requirements, and stricter capital treatment for securitization exposures held by banks — has substantially reshaped the market structure.
 
 ### Hybrid Securities
 
-Convertible and exchangeable bonds.
+Hybrid securities occupy the boundary between debt and equity in the capital structure, combining features of both to achieve specific regulatory, accounting, or funding objectives.
 
-Perpetual bonds and contingent convertibles (CoCos).
+**Convertible bonds** are corporate bonds with an embedded equity call option: the holder has the right to convert the bond into a fixed number of shares at a predetermined conversion price. If the share price rises above the conversion price, conversion becomes attractive and the bond behaves like equity; below that level, the bond floor provides downside protection. Convertibles are therefore long-gamma instruments and are actively traded by hedge funds who exploit the optionality through delta-hedging. From the issuer's perspective, convertibles allow borrowing at a below-market coupon in exchange for the potential dilution of existing shareholders.
 
-Preferred shares and hybrids between debt and equity.
+**Contingent convertible bonds** (CoCos) are hybrid capital instruments issued by banks that convert into equity or are written down if the issuing bank's capital ratio falls below a trigger level. They are designed to absorb losses in stress scenarios and to strengthen the bank's capital position precisely when it is most needed. The conversion trigger and loss-absorption mechanism introduce path-dependency and model risk into their valuation; investors must therefore assess not only the credit risk of the issuer but also the regulatory and accounting treatment of the capital trigger.
+
+**Preferred shares** rank between senior debt and common equity in the capital structure. They typically carry fixed cumulative dividends that must be paid before any dividend is paid on common shares, but they rank behind all creditors in the event of liquidation. Preferred shares are used extensively in bank capital structures (as Additional Tier 1 or AT1 capital under Basel III) and in private equity structures, where their seniority in distributions and liquidation preferences are negotiated contractually.

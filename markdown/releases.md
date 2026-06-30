@@ -2,56 +2,70 @@
 
 # Release Notes
 
+## 06.26
+
+Added a new chapter on data-driven methods covering the mathematical foundations of machine learning.  Completed the financial instruments chapter. Included chapters on optimal market making, optimal execution, and optimal investment theory. Revised the chapter structure for the algorithmic trading section. Continued work on the Agentic AI, Bayesian Theory, and Causal Inference chapters.
+
 ## 05.26
-Added new sections to the Algorithmic Trading and Fair Price Estimation chapters. Fixed typos. 
+
+Added new sections to the Algorithmic Trading and Fair Price Estimation chapters. Fixed various typos throughout.
 
 ## 02.26
+
 Added new sections to the Algorithmic Trading chapters.
 
-## 12.25 
-Expanded fair price estimation chapter with fundamental models for fair pricing, including the stochastic discount factor model, with an extensive example from fixed income. Added new sections on Algorithmic Trading and Intro to Financial Instruments chapters. Fixed some typos in references. 
+## 12.25
+
+Expanded the Fair Price Estimation chapter with fundamental models for fair pricing, including the stochastic discount factor framework, illustrated with an extensive fixed income example. Added new sections to the Algorithmic Trading and Financial Instruments chapters. Fixed citation and reference typos.
 
 ## 11.25
-Started chapter introducing the generalities of Algorithmic Trading. Continued working on financial instruments chapter and extended the discussion of fair value estimation using Kalman filters to add a discussion on specific pricing sources.
+
+Began the Algorithmic Trading chapter, covering the general taxonomy of trading strategies. Continued the Financial Instruments chapter and extended the discussion of fair value estimation using Kalman filters to include a treatment of specific pricing sources.
 
 ## 10.25
-Completed the section Kalman filter for fair estimation, including an example with simulated data. Working on the introduction to the mechanics of financial instruments.
+
+Completed the Kalman filter section on fair price estimation, including a simulation-based numerical example. Began the Financial Instruments chapter.
 
 ## 09.25
-Completed the section on latent variable models within the Introduction to Bayesian Probability chapter. Added EM derivations for the Gaussian Mixture Model, the Hidden Markov Model and the Local Level Model (simple version of the Kalman Filter). Provided simulations in the accompanying notebooks. 
+
+Completed the latent variable models section in the Bayesian Probability chapter, including EM algorithm derivations for the Gaussian Mixture Model, the Hidden Markov Model, and the Local Level Model (a simplified Kalman filter). Added supporting simulations in the accompanying notebooks.
 
 ## 08.25
-Started section on RfQ models, describing a general model for the RfQ process, as well as models for the arrival of RfQs, attrition risk and abnormal client behavior. A new notebook has been uploaded with the full code for the simulation of synthetic client data and implementations of the models. Additionally, worked on Gen AI and Bayesian chapters. 
 
-## 05.25 
-Kalman filter and smoothing derivation for local level model. Introduction to Bayesian probability and decision theory.
+Began the RFQ Models chapter, covering a general model of the request-for-quote process and specific models for RFQ arrival, attrition risk, and abnormal client behaviour. A new notebook provides full simulation code for synthetic client data and model implementations. Continued work on the Generative AI and Bayesian chapters.
+
+## 05.25
+
+Derived the Kalman filter and smoother equations for the local level model. Developed the Introduction to Bayesian Probability and Decision Theory chapter.
 
 ## 02.25
-Kalman filter models for mid-price estimation section started. New chapter on Gen AI started.
+
+Began the Kalman filter section on mid-price estimation. Started the Generative AI chapter.
 
 ## 01.25
-First version of intro to financial markets and market structure chapter finished.
+
+Completed a first version of the Financial Markets and Market Structure chapter.
 
 ## 12.24
-First version of market microstructure chapter finished.
 
-## 11.24 
-Started chapters on financial markets and market microstructure, with particular emphasis on the central limit order book. Added new notebooks on market microstructure. Added simulation of processes in stochastic calculus chapter
+Completed a first version of the Market Microstructure chapter.
+
+## 11.24
+
+Began the Financial Markets and Market Microstructure chapters, with particular emphasis on the central limit order book. Added notebooks on market microstructure. Added simulations of stochastic processes to the Stochastic Calculus chapter.
 
 ## 10.24
-Added jump processes sections. Added several simulations for stochastic processes, including code in the notebooks section. Added market price of risk for options discussion in the Fair price estimation chapter.
+
+Added sections on jump processes and extended the stochastic process simulations in the accompanying notebooks. Added a discussion of the market price of risk for options in the Fair Price Estimation chapter.
 
 ## 09.24
-Added section for the arbitrage - free theory of options (Black - Scholes - Merton theory) within the Fair Price Estimation chapter
+
+Added the arbitrage-free theory of options (Black–Scholes–Merton theory) to the Fair Price Estimation chapter.
 
 ## 05.24
-Started working on chapter Fair Price Estimation. Added section on how to price derivatives using utility indifference theory
+
+Began the Fair Price Estimation chapter. Added a section on pricing derivatives via utility indifference theory.
 
 ## 03.24
-Created online book. Started work on the following chapters: Financial Markets, Bayesian Modelling and Stochastic Calculus
 
-
-
-
-
-
+Created the online book. Began work on the Financial Markets, Bayesian Modelling, and Stochastic Calculus chapters.

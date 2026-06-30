@@ -1,9 +1,9 @@
 (data_driven_methods)=
 # Data-Driven Methods
 
-Machine learning provides a collection of principled statistical methods for learning mappings from data, bypassing the need to specify a closed-form generative model for every phenomenon of interest. In algorithmic trading, the range of applications is broad: predicting short-term price displacements in {ref}`fair_price_estimation`, fitting win-probability curves in {ref}`rfq_models`, constructing composite liquidity indicators in {ref}`liquidity_modelling`, and generating investment signals in {ref}`quant_investment_fundamentals`. This chapter develops the mathematical foundations that underpin all of these applications, emphasising core theory rather than software libraries or data pipelines.
-
 ## Introduction
+
+Machine learning provides a collection of principled statistical methods for learning mappings from data, bypassing the need to specify a closed-form generative model for every phenomenon of interest. In algorithmic trading, the range of applications is broad: predicting short-term price displacements in {ref}`fair_price_estimation`, fitting win-probability curves in {ref}`rfq_models`, constructing composite liquidity indicators in {ref}`liquidity_modelling`, and generating investment signals in {ref}`quant_investment_fundamentals`. This chapter develops the mathematical foundations that underpin all of these applications, emphasising core theory rather than software libraries or data pipelines.
 
 The chapter is organised as follows. We open with the **statistical learning framework** ({ref}`sec:ddm_framework`): the formalisation of learning as risk minimisation, the bias–variance decomposition, and the tools of regularisation and cross-validation. The bulk of the chapter is devoted to **supervised learning** ({ref}`sec:ddm_supervised`): linear regression and its probabilistic interpretation, ridge and lasso regularisation as MAP inference, logistic regression for classification, kernel methods and support vector machines, tree ensembles (random forests and gradient boosting), and the fundamentals of neural networks. We then cover **unsupervised learning** ({ref}`sec:ddm_unsupervised`): principal component analysis derived as a variance-maximising projection, and $k$-means clustering as a special case of the EM algorithm. The chapter closes with **reinforcement learning** ({ref}`sec:ddm_rl`): the Markov decision process, Bellman equations, $Q$-learning, and policy gradient methods, providing the theoretical scaffold for sequential decision-making in trading.
 
@@ -239,6 +239,56 @@ PCA has many financial applications: extracting common risk factors from a retur
 :name: fig:ddm_pca
 :width: 9in
 Left: a two-dimensional correlated dataset with the two principal component directions overlaid; arrow length is proportional to the square root of the corresponding eigenvalue. Right: cumulative explained variance ratio as a function of the number of components for a ten-dimensional dataset; the elbow marks the intrinsic dimensionality of the data.
+```
+
+(sec:ddm_autoencoders)=
+### Autoencoders
+
+PCA finds a linear subspace that best reconstructs the data. An **autoencoder** generalises this to nonlinear embeddings by parameterising both the projection and its inverse as neural networks. The architecture consists of two components: an **encoder** $f_\phi: \mathbb{R}^D \to \mathbb{R}^M$ that maps a high-dimensional input $\mathbf{x}$ to a low-dimensional **latent code** $\mathbf{z} = f_\phi(\mathbf{x})$, and a **decoder** $g_\psi: \mathbb{R}^M \to \mathbb{R}^D$ that reconstructs the input from the latent code $\hat{\mathbf{x}} = g_\psi(\mathbf{z})$. Training minimises the reconstruction loss:
+
+$$\mathcal{L}(\phi, \psi) = \frac{1}{N}\sum_{n=1}^N \|\mathbf{x}_n - g_\psi(f_\phi(\mathbf{x}_n))\|^2$$
+
+by gradient descent through both encoder and decoder simultaneously. When encoder and decoder are restricted to affine maps and the bottleneck dimension is $M$, the optimal solution recovers the $M$-dimensional PCA subspace — autoencoders are therefore a strict generalisation of PCA.
+
+With nonlinear activations, the latent code $\mathbf{z}$ can capture curved manifolds and interactions between variables that a linear projection misses. For a yield curve with $D = 30$ maturities, for example, a nonlinear autoencoder with $M = 3$ latent dimensions can reconstruct shapes that lie far from any three-dimensional linear subspace, provided the yield curve moves tend to concentrate on a smooth manifold in $\mathbb{R}^{30}$.
+
+**Variational autoencoders.** A standard autoencoder learns a deterministic mapping and provides no guarantee that the latent space is continuous or well-structured. The **variational autoencoder** (VAE) {cite:p}`kingma2013auto` places a probabilistic prior on the latent code, $p(\mathbf{z}) = \mathcal{N}(\mathbf{0}, \mathbf{I})$, and trains the encoder to output a distribution $q_\phi(\mathbf{z}\mid\mathbf{x}) = \mathcal{N}(\boldsymbol{\mu}_\phi(\mathbf{x}), \mathrm{diag}(\boldsymbol{\sigma}^2_\phi(\mathbf{x})))$ rather than a point. The training objective is the **evidence lower bound** (ELBO):
+
+$$\mathcal{L}_{\text{ELBO}}(\phi, \psi) = \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}[\log p_\psi(\mathbf{x}\mid\mathbf{z})] - D_{\text{KL}}(q_\phi(\mathbf{z}\mid\mathbf{x})\,\|\,p(\mathbf{z}))$$
+
+The first term is the reconstruction likelihood; the second regularises the posterior toward the prior, encouraging a smooth and interpretable latent space. The ELBO is maximised using the **reparameterisation trick**: sample $\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ and set $\mathbf{z} = \boldsymbol{\mu}_\phi(\mathbf{x}) + \boldsymbol{\sigma}_\phi(\mathbf{x}) \odot \boldsymbol{\varepsilon}$, making the gradient with respect to $\phi$ tractable.
+
+**Financial applications.** Autoencoders are used in finance wherever PCA's linearity is a binding constraint. Three recurring applications are: (i) **yield curve compression** — learning a 3–5 dimensional nonlinear representation of a 30-point yield curve for risk management; (ii) **covariance matrix estimation** — using the latent structure to denoise the sample covariance, reducing estimation error for large portfolios; and (iii) **factor hedging** — computing instrument sensitivities with respect to the latent factors by automatic differentiation through the decoder, giving nonlinear hedging coefficients that generalise the linear PCA hedge ({ref}`optimal_hedging`).
+
+```{figure} figures/ddm_autoencoder.png
+:name: fig:ddm_autoencoder
+:width: 9in
+Left: reconstruction of a held-out yield curve by a two-hidden-layer autoencoder with $M=3$ latent dimensions (red) against the true curve (blue); the residual is plotted below. Right: the three latent codes over time for a sequence of yield curves; the first code tracks the level of the curve and the second its slope, analogous to the first two PCA factors but in a nonlinear embedding.
+```
+
+(sec:ddm_monotone)=
+### Monotone Neural Networks
+
+Standard neural networks are universal approximators with no built-in constraint on the relationship between outputs and inputs. Many pricing and hedging functions, however, must satisfy **monotonicity** properties that follow from no-arbitrage: a call option price must be non-increasing in strike $K$ and non-decreasing in spot $S$ and volatility $\sigma$; a bond price must be non-increasing in yield; a portfolio value must be non-decreasing in the amounts of assets held (when they are non-negative contributors). Approximating such functions with an unconstrained neural network risks producing arbitrage-violating outputs in regions of the input space where the training data are sparse.
+
+A **monotone neural network** is an architecture that guarantees $\partial f / \partial x_j \geq 0$ (or $\leq 0$) for every input and every realisation of the weights, not just on average. The simplest construction enforces non-negativity of all weight matrices applied to the constrained inputs, combined with a non-decreasing activation function:
+
+$$h^{(\ell)} = g\!\left(\mathbf{W}^{(\ell)}_+ h^{(\ell-1)}\right), \qquad \mathbf{W}^{(\ell)}_+ = \exp(\tilde{\mathbf{W}}^{(\ell)})$$
+
+where $\tilde{\mathbf{W}}^{(\ell)}$ are unconstrained parameters and $\exp$ is applied element-wise. Since $\mathbf{W}^{(\ell)}_+$ is strictly positive and $g = \text{softplus}$ or $g = \text{ReLU}$ is non-decreasing, the chain rule gives $\partial f / \partial x_j \geq 0$ for any composition depth. The cost is a reduction in expressiveness: the function class is restricted to isotone maps in the constrained arguments.
+
+A richer construction is the **input convex neural network** (ICNN) {cite:p}`amos2017input`, in which the output is a convex function of the inputs. Convex functions are monotone in their gradient, so ICCNs can represent monotone relationships while retaining more flexibility in the unconstrained arguments. The ICNN architecture passes skip connections from the input directly to each hidden layer with non-negative weights, guaranteeing convexity in those arguments:
+
+$$h^{(0)} = \mathbf{x}, \qquad h^{(\ell)} = g\!\left(\mathbf{W}^{(\ell)}_z h^{(\ell-1)} + \mathbf{W}^{(\ell)}_x \mathbf{x} + \mathbf{b}^{(\ell)}\right)$$
+
+where $\mathbf{W}^{(\ell)}_z \geq 0$ (element-wise non-negative). The output is then convex in $\mathbf{x}$, so $\nabla_\mathbf{x} f$ is a monotone map from $\mathbf{x}$ to $\mathbb{R}^D$.
+
+**Application to Greeks computation.** Once a monotone network is trained to approximate an option price $C(S, K, T, \sigma, r)$, the hedge ratios follow by automatic differentiation: $\Delta = \partial C/\partial S$, $\Gamma = \partial^2 C/\partial S^2$, $\mathcal{V} = \partial C/\partial \sigma$. This is fast (one backward pass through the network) and exact with respect to the surrogate. The monotonicity constraint ensures that the computed delta lies in $[0, 1]$ for calls and $[-1, 0]$ for puts, even for inputs outside the training distribution. This application is discussed further in {ref}`sec:oh_ml`.
+
+```{figure} figures/ddm_monotone_nn.png
+:name: fig:ddm_monotone_nn
+:width: 9in
+Left: BSM call price surface (ground truth) against the approximation by a standard MLP and a monotone MLP, for varying moneyness $S/K$ and time-to-maturity $T$. Right: the call delta $\partial C/\partial S$ computed by automatic differentiation through each network; the monotone network lies within $[0,1]$ everywhere whereas the standard MLP produces negative deltas in sparse regions.
 ```
 
 (sec:ddm_clustering)=
