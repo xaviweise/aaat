@@ -122,6 +122,9 @@
     <loc>http://localhost:3001/notebooks/data-driven-methods</loc>
   </url>
   <url>
+    <loc>http://localhost:3001/notebooks/optimal-hedging</loc>
+  </url>
+  <url>
     <loc>http://localhost:3001/notebooks/quant-investment</loc>
   </url>
 </urlset>
