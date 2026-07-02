@@ -376,6 +376,11 @@ A powerful extension of multi-asset portfolio execution is the use of **proxy in
 
 In the framework above, proxy instruments enter the optimisation with boundary conditions $x_0^{(\text{proxy})} = 0$ and $x_T^{(\text{proxy})} = 0$: they carry no net position change but can be used as intermediaries to reduce portfolio-level risk during the execution window. The optimizer freely uses them as they appear in the covariance matrix $\Sigma$ and their use is only constrained by their boundary conditions. This allows the algorithm to temporarily take on a proxy position to hedge inventory risk, then unwind it as the primary positions are completed.
 
+## Optimal execution using Reinforcement Learning
+
+See my KB
+Add some references
+
 ## Exercises
 
 1. Derive the formula $\mathbb{E}[IS] = \eta \int_0^T v_t^2 \, dt + \frac{\gamma}{2} X^2$ from the definition of implementation shortfall and the price model $dS_t = \sigma \, dW_t - \gamma v_t \, dt$ with execution price $P_t^{\text{exec}} = S_t - \eta v_t$. Confirm that the permanent impact term $\frac{\gamma}{2}X^2$ is path-independent by computing $\int_0^T v_t \gamma \int_0^t v_s \, ds \, dt$ using integration by parts.

@@ -1,6 +1,8 @@
 (market_microstructure)=
 # Market microstructure
 
+## Introduction
+
 Market microstructure is the study of the processes and mechanisms through which financial instruments are traded in financial markets. It focuses on how different participants —such as investors, intermediaries, and liquidity providers—interact, and how their actions affect the price formation, liquidity, and efficiency of markets. Whereas many financial models often assume that prices reflect all available information, market microstructure digs deeper into the realities of trading: the role of transaction costs, bid-ask spreads, order types, and how information asymmetry influences trading strategies and outcomes.
 
 At the core of market microstructure is the understanding that prices are not simply the result of supply and demand but are shaped by specific choices in the architecture of the market. These include:

@@ -453,6 +453,10 @@ The practical implications are significant. A market maker dealing with a highly
 
 In the multi-asset, multi-client setting, the full model becomes computationally challenging. {cite:t}`gueant2019market` develop a deep reinforcement learning approach that parametrises the value function with a neural network and optimises over client quotes directly, enabling solution of market-making problems with dozens of instruments and hundreds of clients.
 
+### Optimal market-making using Reinforcerment Learning 
+
+Search for papers to add
+
 ## Exercises
 
 1. **Grossman-Miller derivation.** Suppose $p = 1/2$ in the GM model and the price uncertainty between $t=1$ and $t=2$ is $\sigma^2_\text{intra}$ (not the full day volatility). The MM faces $n = 3$ competitors and the LT sells $i = 200$ units with $\gamma = 5$ and $\sigma_\text{intra} = 0.015$. Compute the equilibrium bid price and the bid-ask spread. How does the spread change if a fourth MM enters the market? What happens in the limit $n \to \infty$?

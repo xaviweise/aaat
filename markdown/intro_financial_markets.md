@@ -1,6 +1,8 @@
 (intro_financial_markets)=  
 # Financial Markets
 
+## Introduction
+
 Financial markets address a perennial challenge faced by societies: the efficient allocation of savings toward productive uses. Individuals and institutions with excess funds aim to achieve the highest returns (investment) while maintaining maximum liquidity. Consequently, they often prefer to lend money on a short-term basis. Conversely, those requiring capital—whether to launch new ventures, expand existing businesses, acquire assets such as homes through mortgages, or finance social programs—seek to secure funds at minimal cost and for extended periods. Without a mechanism to reconcile these opposing objectives, surplus funds may remain idle, hindering their potential to contribute to economic productivity.
 
 Modern capitalist societies solve this problem in two ways, which form the backbone of the financial system: the banking system and financial markets.
@@ -145,7 +147,7 @@ In Europe, MiFID II four types of market structure are defined:
 
 ### Exchanges
 
-Exchanges (also known are regulated markets) are among the oldest institutions in financial markets, serving as centralized venues where buyers and sellers meet to trade financial instruments. They provide a structured environment for trading, ensuring transparency, fairness, and efficiency in the execution of transactions. Historically, exchanges were physical locations where traders gathered to negotiate prices through verbal communication and hand signals. Over time, these systems evolved into highly sophisticated electronic platforms that now dominate the financial landscape.
+Exchanges are among the oldest institutions in financial markets, serving as centralized venues where buyers and sellers meet to trade financial instruments. They provide a structured environment for trading, ensuring transparency, fairness, and efficiency in the execution of transactions. Historically, exchanges were physical locations where traders gathered to negotiate prices through verbal communication and hand signals. Over time, these systems evolved into highly sophisticated electronic platforms that now dominate the financial landscape.
 
 The primary role of an exchange is to facilitate the matching of buy and sell orders, ensuring that trades are executed efficiently and at market-driven prices. This process of price discovery is one of the most critical functions of an exchange. By aggregating supply and demand, exchanges reflect the collective valuation of financial instruments, providing a transparent benchmark for investors. This transparency extends to the dissemination of information, as exchanges publicly display orders and executed trades, enhancing market confidence and reducing information asymmetry among participants.
 

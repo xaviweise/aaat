@@ -1075,7 +1075,7 @@ $$B_t = \sum_{i=1}^{N} D(t, t_i) \gamma_i c M + D(t, T) M$$
 
 How to proceed from here depends on our modelling choices regarding the risk factors that are relevant for pricing as well as the set of liquid instruments with available prices. For example, if we have a set of $N$ bonds from the same issuer paying coupons at the same dates $t_i$ but with different maturities, we could simply write the $N$ pricing equations and solve for the discount factors $D(t, t_i)$, without having to compute explicitely the SDF. This could be used to price non-standard bonds (e.g. with different deterministic coupons or day-count fraction conventions) as far as they pay on the same time grid. If they pay at different times, we need to make some theoretical hypothesis to be able to interpolate the value of the discount factors, or directly build a model of the SDF. 
 
-A first simple model is assuming that bonds only depend on a single risk factor, an overall macroeconomic interest rate $r_t$, for example a short-term interbank rate  (e.g. one linked to collateralized contracts like overnight index swaps, see chapter {ref}`intro_financial_instruments).  For the moment, we consider it deterministic and constant: $r_t = r$. Let us assume in this market we have access to a money-market account that accrues interest continuously. The pay-off at time $T$ of the money market account is $\beta_T = \beta_t e^{r(T-t)}$, for a initial investment $\beta_t$, which is also naturally the price of this instrument at time $t$. Therefore, the pricing equation is given by:
+A first simple model is assuming that bonds only depend on a single risk factor, an overall macroeconomic interest rate $r_t$, for example a short-term interbank rate  (e.g. one linked to collateralized contracts like overnight index swaps, see chapter {ref}`intro_financial_instruments`).  For the moment, we consider it deterministic and constant: $r_t = r$. Let us assume in this market we have access to a money-market account that accrues interest continuously. The pay-off at time $T$ of the money market account is $\beta_T = \beta_t e^{r(T-t)}$, for a initial investment $\beta_t$, which is also naturally the price of this instrument at time $t$. Therefore, the pricing equation is given by:
 
 $$m_t \beta_t=  {\mathbb E}_t\left[ m_T \beta_T \right] = m_T \beta_T$$
 
@@ -1159,26 +1159,87 @@ with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to
 
 #### Stock pricing
 
-- assume two factors, interest rates, and dividend growth, negatively correlated
-- sdf is a function of both risk factors, use again log-normal
-- derive equation for money market
-- derive equation for stock 
-- this allows the computation of the sdf
-- show how this equation for stocks, given the correlation sdf with dividends, is decomposed E[xy] = E[x]E[y] + cov(x,y) so the issues with Shiller theory are potentially overcome
+We now consider stock pricing within the SDF framework. Stocks are fundamentally different from bonds because they are claims to an uncertain and potentially growing dividend stream, and their value depends on multiple macroeconomic risk factors simultaneously. We consider a two-factor model where the relevant risk drivers are the interest rate $r_t$ (following the Vasicek dynamics introduced above) and a dividend growth factor.
 
+Dividends $D_t$ follow a log-normal process:
+
+$$\frac{dD_t}{D_t} = g \, dt + \sigma_D \, dW_D$$
+
+where $g$ is the long-run expected dividend growth rate, $\sigma_D$ is the volatility of dividend growth, and $W_D$ is a Brownian motion independent of the interest rate Brownian motion $W_r$. The SDF must account for both sources of risk, and the two-factor extension of the log-normal SDF is:
+
+$$\frac{dm_t}{m_t} = -r_t \, dt - \lambda_r \, dW_r - \lambda_D \, dW_D$$
+
+where $\lambda_r$ and $\lambda_D$ are the market prices of interest rate risk and dividend growth risk respectively. As in the bond pricing case, calibrating from the money market account — which pays $r_t$ with no exposure to either risk factor — pins down the drift of $m_t$ to $-r_t$, consistently with the SDF above.
+
+For the stock, we assume the price $S_t$ is driven by both risk factors:
+
+$$\frac{dS_t}{S_t} = \mu_S \, dt + \sigma_{S,r} \, dW_r + \sigma_{S,D} \, dW_D$$
+
+Applying Ito's product rule to $m_t S_t$ and imposing the SDF pricing condition — that $m_t S_t + \int_0^t m_s D_s \, ds$ is a martingale — the drift of this process must vanish. Computing the cross-variation terms gives $d\langle m, S \rangle_t = m_t S_t(-\lambda_r \sigma_{S,r} - \lambda_D \sigma_{S,D}) \, dt$, and setting the total drift to zero yields:
+
+$$\mu_S - r_t = \lambda_r \sigma_{S,r} + \lambda_D \sigma_{S,D} - \frac{D_t}{S_t}$$
+
+The left-hand side is the expected excess capital gain over the risk-free rate, and rearranging shows that the expected excess *total* return (capital gain plus dividend yield) equals the risk premium:
+
+$$\underbrace{\mu_S + \frac{D_t}{S_t}}_{\text{total expected return}} - r_t = \lambda_r \sigma_{S,r} + \lambda_D \sigma_{S,D}$$
+
+This is the continuous-time ICAPM: the equity risk premium is compensation for exposure to each priced risk factor, weighted by the stock's sensitivity to that factor. Typically $\sigma_{S,D} > 0$ (positive dividend shocks raise prices) and $\lambda_D > 0$, so dividend growth risk earns a positive premium. The interest rate sensitivity $\sigma_{S,r}$ is often negative for long-duration growth stocks (rising rates reduce the present value of distant dividends), so the interest rate risk premium $\lambda_r \sigma_{S,r}$ may partially offset the dividend premium. The two market prices of risk $\lambda_r$ and $\lambda_D$ must be inferred from cross-sectional asset pricing data or calibrated to observed risk premia.
+
+**Shiller decomposition.** In discrete time, the SDF pricing equation reads:
+
+$$S_t = E_t[m_{t+1}(D_{t+1} + S_{t+1})]$$
+
+Applying the identity $\mathbb{E}[XY] = \mathbb{E}[X] \, \mathbb{E}[Y] + \text{Cov}(X, Y)$:
+
+$$S_t = \underbrace{E_t[m_{t+1}]}_{\displaystyle\frac{1}{1+r_f}} E_t[D_{t+1} + S_{t+1}] + \text{Cov}_t(m_{t+1},\, D_{t+1} + S_{t+1})$$
+
+The covariance term is negative: in recessions, the SDF is high (marginal utility is high when consumption is scarce) and dividends are low, so $\text{Cov}(m, D) < 0$. This negative covariance acts as an additional discounting channel beyond the risk-free rate. Crucially, the covariance is *time-varying*: it is more negative in bad times (when risk premia are elevated) than in good times. This time-variation in risk premia resolves Shiller's excess volatility puzzle {cite:p}`Shiller1981`: the empirical observation that stock prices vary far more than the present value of future dividends — discounted at a constant rate — implies. Under the SDF framework, price volatility reflects not only news about future dividends but also changes in the covariance between the SDF and future payoffs, i.e., changes in risk premia across the business cycle.
 
 #### Option pricing
 
-- simple deterministic cashflows (bond)
-- stock?
-- option
+Options are non-linear claims on an underlying asset, but the SDF framework prices them in exactly the same way as bonds and stocks. Consider a European option with payoff $f(S_T)$ at maturity $T$ — for a call, $f(S_T) = (S_T - K)^+$. The SDF pricing equation gives:
 
+$$C_0 = E^P[m_T \, f(S_T)]$$
+
+To evaluate this expectation we exploit the structure of the log-normal SDF. In the one-factor BSM setting (a single Brownian motion $W_t$ driving the stock), the SDF is:
+
+$$m_T = \exp\!\left(-rT - \lambda W_T - \frac{1}{2}\lambda^2 T\right), \qquad \lambda = \frac{\mu - r}{\sigma}$$
+
+Separating the time-discounting factor:
+
+$$C_0 = e^{-rT} \, E^P\!\left[\underbrace{e^{-\lambda W_T - \frac{1}{2}\lambda^2 T}}_{\displaystyle Z_T} \, f(S_T)\right]$$
+
+The term $Z_T = e^{-\lambda W_T - \frac{1}{2}\lambda^2 T}$ is the Radon-Nikodym derivative of a new probability measure $Q$ with respect to $P$, i.e., $dQ/dP = Z_T$. By Girsanov's theorem, $\tilde{W}_t = W_t + \lambda t$ is a standard Brownian motion under $Q$, and substituting into the stock dynamics:
+
+$$\frac{dS_t}{S_t} = \mu \, dt + \sigma \, dW_t = r \, dt + \sigma \, d\tilde{W}_t$$
+
+Under $Q$ the stock grows at the risk-free rate $r$, and the option price simplifies to:
+
+$$C_0 = e^{-rT} \, E^Q\!\left[f(S_T)\right]$$
+
+Substituting the log-normal distribution of $S_T$ under $Q$ recovers the BSM formula. The SDF approach makes transparent what the PDE argument leaves implicit: the risk-neutral pricing formula is not specific to the BSM model, but follows directly from the existence of a positive SDF. The market price of risk $\lambda$ does not appear in the final formula because it is absorbed into the change of measure — option prices are independent of investors' views on the drift $\mu$ of the stock. In complete markets the SDF is *unique*, so the risk-neutral measure $Q$ is unique and derivatives have a single arbitrage-free price. When markets are incomplete — for example with stochastic volatility not spanned by traded assets — infinitely many valid SDFs exist, and the resulting range of admissible option prices is precisely the interval of utility indifference prices derived for different risk appetites.
 
 #### Connection to previous pricing frameworks
 
-- deterministic discount factor 
-- utility functions as sdf
-- Radon-Nikodym derivative as sdf and the risk neutral measure
+The SDF provides a single unifying language for all the pricing models introduced in this chapter. Three special cases are particularly instructive.
+
+**Deterministic discount factor.** If there is no uncertainty in future payoffs, or equivalently if all market prices of risk are zero ($\lambda = 0$), the SDF reduces to a deterministic discount factor $m_t = e^{-rt}$ (for a flat term structure) or $m_t = \exp\!\left(-\int_0^t r_s \, ds\right)$ when interest rates are deterministic but time-varying. The SDF pricing equation $p_0 = E[m_T C_T]$ then reduces to the standard present value formula $p_0 = e^{-rT} C_T$, since there is no randomness to integrate over. Bond pricing from deterministic cash flows is therefore the limiting case of the SDF framework with no risk premia.
+
+**Utility functions as SDF.** Consider a representative investor who maximises expected discounted utility over consumption, $\mathbb{E}\!\left[\sum_{t=0}^\infty \beta^t U(C_t)\right]$. The first-order optimality condition for holding an asset with gross return $1 + R_{t+1}$ is:
+
+$$U'(C_t) = \beta \, E_t\!\left[U'(C_{t+1})(1 + R_{t+1})\right]$$
+
+This rearranges to the standard SDF pricing equation $1 = E_t[m_{t+1}(1+R_{t+1})]$ with the SDF given by the intertemporal marginal rate of substitution:
+
+$$m_{t+1} = \beta \, \frac{U'(C_{t+1})}{U'(C_t)}$$
+
+The SDF is high when future consumption is scarce relative to today (high marginal utility), which is precisely the definition of a bad economic state. When $U$ is the exponential utility $U(C) = -e^{-\gamma C}$, the resulting SDF closes the loop with the utility indifference prices derived earlier in this chapter: the indifference price from the dealer's dynamic optimisation is exactly the price implied by using the exponential-utility marginal rate of substitution as the SDF.
+
+**Radon-Nikodym derivative as SDF.** Given any valid SDF $m_T > 0$, the normalised ratio $Z_T = m_T / E[m_T]$ defines a Radon-Nikodym derivative $dQ/dP = Z_T$ that transforms the physical measure $P$ into a risk-neutral measure $Q$. Under $Q$, all traded assets earn the risk-free rate as their expected return, and the SDF pricing equation becomes:
+
+$$p_0 = E^P[m_T C_T] = e^{-r T} \, E^Q[C_T]$$
+
+recovering risk-neutral pricing. Girsanov's theorem makes the change of drift operational: the market price of risk $\lambda$ enters as the drift correction applied to each Brownian motion when switching from $P$ to $Q$. The complete BSM framework — including the absence of the physical drift $\mu$ from option prices — is a direct consequence of this change-of-measure structure embedded in the SDF. All three pricing approaches (present value theory, utility indifference, and risk-neutral pricing) are therefore not competing frameworks but successive enrichments of a single SDF-based theory of asset prices.
 
 
 
@@ -1193,3 +1254,15 @@ with this solution, now we can fit the parameters $\lambda_0$ and $\lambda_1$ to
 * Derive the optimal linear combination of predictors in the sense that minimizes the variance of the combined predictor, for the case in which the individual predictors are correlated. 
 
 * Derive the Black-Scholes-Merton differential equation by using the portfolio replication argument for a dealer that hedges the risk of an european option (call or put) with strike $K_1$ and maturity $T$, using another (liquid) option tradable in the market with strike $K_2$ and same maturity $T$. As in the original BSM derivation, the dealer uses a cash account to remunerate cash positions or borrow cash. Formally, the replication or hedging portfolio is $\Pi_t = \Delta_t C_2(S_t, t) + \beta_t$, with the terminal condition $\Pi_T = C_1(S_T, T)$. Hint: link the result with the market price of risk for options introduced in this chapter.
+
+* The lag-1 autocovariance estimator of the noise variance in the simple linear pricing model $p_t = \alpha + \beta s_t + \epsilon_t$ with $s_t = s_{t-1} + \nu_t$ is related to a classical estimator in market microstructure. Show that the formula for $\hat{\sigma}_\nu^2$ obtained from $\text{Cov}(p_t - p_{t-1}, p_{t-1} - p_{t-2}) = -\sigma_\epsilon^2$ (under the assumption that $\sigma_\nu^2 \approx 0$ relative to the bid-ask bounce) is equivalent to the Roll (1984) estimator of the effective bid-ask spread $s = 2\sqrt{-\text{Cov}(\Delta p_t, \Delta p_{t-1})}$. What market structure assumption does the Roll estimator rely on, and when would it break down?
+
+* Consider the Vasicek model $dr_t = \kappa(\theta - r_t) \, dt + \sigma \, dW_t$ with market prices of risk $\lambda_0$ and $\lambda_1$ as presented in this chapter. (a) Verify that the functions $B(t, T)$ and $A(t, T)$ given in the text solve the ODE system derived from the term structure PDE. (b) Show that in the limit $\kappa \to 0$ (no mean reversion) and $\lambda_0 = \lambda_1 = 0$ (no risk premium), the zero coupon bond price reduces to $P(t, T) = \exp\!\left(-r_t(T-t) + \frac{\sigma^2}{6}(T-t)^3\right)$, which corresponds to the Ho-Lee model driven by a constant-volatility Brownian motion.
+
+* In the utility indifference pricing framework, the certainty equivalent $C_t$ satisfies $-e^{-\gamma C_t} = E_t[-e^{-\gamma \Pi_T}]$ where $\Pi_T$ is the terminal P&L. For an investor who holds an option with payoff $f(S_T)$ and delta-hedges it continuously, show that as $\gamma \to 0$ (risk-neutral limit) the indifference price converges to the BSM price $e^{-r(T-t)} E^Q[f(S_T)]$. Conversely, for large $\gamma$ (very risk-averse investor), show that the indifference price approaches the worst-case payoff $e^{-r(T-t)} \inf_{S_T} f(S_T)$, regardless of the distribution of $S_T$.
+
+* **SDF and the equity risk premium.** In a discrete-time, one-period economy, suppose the SDF is $m = a - b R_M$ where $R_M$ is the gross return on the market portfolio. (a) Using the conditions $E[m R_f] = 1$ (risk-free asset) and $E[m R_M] = 1$ (market), solve for $a$ and $b$ in terms of $R_f$, $E[R_M]$ and $\text{Var}(R_M)$. (b) Show that for any asset $i$ with gross return $R_i$, the SDF pricing equation $E[m R_i] = 1$ reduces to the CAPM: $E[R_i] - R_f = \beta_i (E[R_M] - R_f)$, where $\beta_i = \text{Cov}(R_i, R_M)/\text{Var}(R_M)$. (c) What constraints must $a$ and $b$ satisfy for $m$ to be a valid SDF (strictly positive)?
+
+* **Put-call parity from the SDF.** Consider a European call $C_t = E_t[m_{t,T}(S_T - K)^+]$ and a European put $P_t = E_t[m_{t,T}(K - S_T)^+]$ on the same non-dividend-paying stock $S_t$, with the same strike $K$ and maturity $T$. (a) Using the SDF pricing equation and the identity $(S_T - K)^+ - (K - S_T)^+ = S_T - K$, derive the put-call parity relation $C_t - P_t = S_t - K P(t, T)$ where $P(t, T) = E_t[m_{t,T}]$ is the zero coupon bond price. (b) What property of the SDF is essential for this derivation? (c) Does put-call parity hold in an incomplete market, and why?
+
+* **Kalman filter steady state.** For the single-instrument pricing model with Kalman gain $K_t = \sigma_\nu^2 / (\sigma_\nu^2 + \sigma_\epsilon^2) \equiv K$ constant (steady-state Kalman filter), show that the filtered estimate $\hat{s}_t$ satisfies the exponential weighted moving average (EWMA) recursion $\hat{s}_t = (1-K)\hat{s}_{t-1} + K p_t$. Interpret the Kalman gain as the weight given to the new observation relative to the prior. For what ratio $\sigma_\epsilon^2 / \sigma_\nu^2$ does the filter give equal weight to the new price and the prior estimate?

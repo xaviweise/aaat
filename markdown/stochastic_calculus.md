@@ -1,6 +1,8 @@
 (stochastic_calculus)=
 # Stochastic Calculus
 
+## Introduction
+
 In this chapter we provide an introduction to Stochastic Calculus: a mathematical tool useful to build models of  systems that have a relevant degree of randomness in their evolution, and such randomness is a key determinant of the properties we want to model. The latter is important: the use of Stochastic Calculus complicates the analysis of a model. It is the role of the modeller to assess initially if a deterministic model is sufficient, say because we are just interested in average properties for which randomness averages out and can be neglected. Stochastic Calculus is useful when randomness might generate a variety of outcomes, so we want to study trajectories as scenarios weighted by probability, i.e. probability distributions. 
 
 We start the chapter introducing the study of dynamical systems, focusing initially in those deterministic models that could be a sufficient starting point for the modeller. They are also usually one part of the stochastic model, which as we will see is usually decomposed in a deterministic plus a stochastic dynamics. Then we introduce the Wiener process as a building block to build stochastic models of systems with continuous dynamics. From that, we move into stochastic differential equations as well as a few useful tools to analyze them and solve the probability distributions of their trajectories. There are not many tractable stochastic differential equations, i.e. those whose distribution can be derived in closed-form. We introduce the most typical cases when it is. Finally, we close the chapter introducing jump processes, a second useful tool to model stochastic systems, in this case those that show discontinuities in their dynamics.
