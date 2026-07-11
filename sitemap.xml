@@ -53,6 +53,12 @@
     <loc>http://localhost:3001/markdown/rfq-models</loc>
   </url>
   <url>
+    <loc>http://localhost:3001/markdown/fair-price-estimation</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3001/markdown/liquidity-modelling</loc>
+  </url>
+  <url>
     <loc>http://localhost:3001/markdown/execution-fundamentals</loc>
   </url>
   <url>
@@ -63,12 +69,6 @@
   </url>
   <url>
     <loc>http://localhost:3001/markdown/market-making-fundamentals</loc>
-  </url>
-  <url>
-    <loc>http://localhost:3001/markdown/fair-price-estimation</loc>
-  </url>
-  <url>
-    <loc>http://localhost:3001/markdown/liquidity-modelling</loc>
   </url>
   <url>
     <loc>http://localhost:3001/markdown/optimal-market-making</loc>
