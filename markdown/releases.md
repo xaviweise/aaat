@@ -2,6 +2,10 @@
 
 # Release Notes
 
+## 07.26
+Changed the book blocks structure to introduce a new block on Advanced Analytics for Financial Markets. Completed first version of execution tactics and LOB modelling chapters. Updated the glossary section. Provided extra supporting notebooks. Fixed errors.
+
+
 ## 06.26
 
 Added a new chapter on data-driven methods covering the mathematical foundations of machine learning.  Completed the financial instruments chapter. Included chapters on optimal market making, optimal execution, and optimal investment theory. Revised the chapter structure for the algorithmic trading section. Continued work on the Agentic AI, Bayesian Theory, and Causal Inference chapters.
