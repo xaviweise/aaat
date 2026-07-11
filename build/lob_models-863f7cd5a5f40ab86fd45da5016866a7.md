@@ -1,0 +1,469 @@
+(lob_models)=
+# Modelling the Limit Order Book
+
+## Introduction
+
+The limit order book (LOB) is the core market mechanism in most modern electronic equity and derivatives markets. Understanding its statistical properties — how orders arrive, how they interact with existing quotes, and how prices emerge — is essential for designing execution algorithms, calibrating market impact models, and building realistic simulations for strategy backtesting.
+
+This chapter develops models for the LOB from the ground up. We begin with **models for order arrival** in Section {ref}`sec:lob_order_arrival`: the stochastic processes (Poisson, Hawkes) that govern when and how orders reach the market. Section {ref}`sec:lob_market_impact` covers **market impact models** that quantify how individual trades move prices. Section {ref}`sec:lob_volume_prediction` develops **volume prediction models** for anticipating the participation rate of the market at different times of day. Section {ref}`sec:lob_features` catalogues the standard **LOB features** — order imbalance, spread, depth ratios — used throughout the execution and market-making chapters. Section {ref}`sec:lob_fill_probability` derives the **probability of filling a limit order**, the key stochastic building block for execution tactic design. Section {ref}`sec:lob_short_term` covers **short-term price prediction** from LOB data, and Section {ref}`sec:lob_asymmetry` discusses **information asymmetry** models that link order flow to adverse selection. The chapter closes with **LOB simulation** in Section {ref}`sec:lob_simulation`, covering both probabilistic generative models and the agent-based model of McGroarty et al. {cite:p}`McGroarty2019`.
+
+(sec:lob_order_arrival)=
+## Models for order arrival
+
+Order arrival is the fundamental stochastic process driving LOB dynamics. Three aspects need to be modelled jointly: *when* orders arrive, *what type* of order arrives (limit, market, or cancel), and the *parameters* each order carries (side, size, and price level).
+
+### Poisson process
+
+The simplest model treats orders as a homogeneous Poisson process with constant intensity $\lambda$. Under this model, inter-arrival times are exponentially distributed with mean $1/\lambda$, and the number of orders in any window of length $\tau$ follows $\mathcal{P}(\lambda \tau)$. Despite its simplicity, the Poisson model forms the analytical backbone of many LOB models — including the fill-probability model in Section {ref}`sec:lob_fill_probability` and the Avellaneda-Stoikov market-making model in Chapter {ref}`optimal_market_making`.
+
+A direct empirical observation rules out constant intensity: trading activity follows a strong intraday pattern, peaking at the open and close and troughing at midday — the well-known U-shaped volume curve discussed in Section {ref}`sec:lob_volume_prediction`. The natural extension replaces $\lambda$ with a deterministic time-varying intensity $\lambda(t)$, producing a **non-homogeneous Poisson process**. Conditional on $\lambda(t)$, the process retains independent increments; only the marginal rates change.
+
+### Hawkes self-exciting process
+
+A more fundamental departure from the Poisson model is the **Hawkes process** {cite:p}`hawkes1971spectra`, which adds a self-excitation mechanism: each arriving order temporarily increases the probability that further orders arrive. The intensity at time $t$ is
+
+$$
+\lambda(t) = \mu + \sum_{t_i < t} \alpha\, e^{-\beta(t - t_i)},
+$$
+
+where $\mu > 0$ is the baseline (background) intensity, $\alpha \geq 0$ is the jump in intensity triggered by each event, and $\beta > 0$ is the decay rate. After an order arrives at time $t_i$, intensity jumps by $\alpha$ and then decays exponentially back toward the baseline. The process is **stationary** when $\alpha / \beta < 1$, which imposes a bound on the strength of self-excitation. The stationary mean intensity is $\bar{\lambda} = \mu\beta / (\beta - \alpha)$ and the variance of the event count over a window $\tau$ is asymptotically $\bar{\lambda}\tau \cdot \beta^2/(\beta - \alpha)^2$, the Poisson variance inflated by the self-excitation factor.
+
+The Hawkes process captures two key empirical regularities of high-frequency order flow: **clustering** (orders arrive in bursts) and **persistence** (autocorrelation in the order-sign series persists for hundreds of events). Bacry, Mastromatteo, and Muzy {cite:p}`bacry2015hawkes` showed that Hawkes processes provide an excellent fit to high-frequency order flow in equity markets, reproducing both the inter-arrival distribution and the long-memory autocorrelation structure.
+
+**Multivariate Hawkes models** extend the framework to $K$ interacting event streams — buy limit orders, sell limit orders, buy market orders, sell market orders, and cancels — each with its own baseline intensity. The cross-excitation between streams is captured by a $K \times K$ kernel matrix $\Phi$, where $\Phi_{ij}$ governs how an event of type $j$ influences the intensity of type $i$. Empirically, incoming buy market orders excite further buy market orders on a sub-second timescale (momentum), while a large market sell tends to stimulate sell-side limit order cancellations (dealers pulling quotes in anticipation of further selling).
+
+**Simulation** of a Hawkes process can be performed efficiently using the **thinning algorithm** (also called Lewis-Shedler rejection sampling): propose event times from a dominant Poisson process with rate $\lambda^*(t)$, then accept each with probability $\lambda(t)/\lambda^*(t)$. This avoids the need to evaluate the full history at each step.
+
+### Visible and hidden orders
+
+Not all orders submitted to the exchange are fully visible in the public order book. **Iceberg orders** (also called reserve orders) display only a small portion of their true size, with the remainder hidden until the visible portion is consumed. **Dark pool orders** never appear in the public book at all, matching against contra-side flow in a separate venue. From the perspective of LOB modelling:
+
+- Visible orders affect the quoted depth and order imbalance features directly.
+- Hidden orders must be inferred from patterns in trade executions that exceed the displayed quote size. If a large market order consumes more volume than was visible, the excess reveals a hidden portion.
+
+Detecting hidden liquidity is important for smart order routing: venues with high hidden volume offer better fill rates than their displayed book suggests. Ganchev et al. {cite:p}`ganchev2010censored` formulate dark pool routing as a censored exploration problem.
+
+### Order type, side, and size
+
+Given that an event has occurred, we need models for its attributes:
+
+- **Order type** (limit, market, cancel): typically modelled as a categorical random variable with probabilities $(p_l, p_m, p_c)$, or as separate intensity processes, one per order type.
+- **Side** (buy or sell): a Bernoulli random variable or separate processes for buy-side and sell-side activity. Short runs of same-side market orders — **order-flow autocorrelation** — are a well-documented empirical regularity.
+- **Size**: heavy-tailed. Log-normal distributions are tractable but underestimate large-order probability; empirically, order sizes often follow a power law {cite:p}`gabaix2003theory` with exponent close to $3/2$.
+- **Limit order price**: placed relative to the best quote, with an approximately exponential distribution of depth (most limit orders cluster near the spread) and heavy tails further into the book {cite:p}`bouchaud2002statistical`. A common tractable choice is a geometric distribution with parameter $p$: the probability of placement $k$ ticks from the best quote falls as $(1-p)^{k-1}p$.
+
+(sec:lob_market_impact)=
+## Market impact models
+
+When a trader executes an order of meaningful size, the act of trading moves prices against them. This **market impact** has two components. **Temporary impact** reflects the immediate price pressure: liquidity is consumed and prices move, but over a short horizon they partially recover as new orders replenish the book. **Permanent impact** reflects the long-run information content of the trade: if the execution reveals private information, prices adjust permanently to the new equilibrium. The decomposition is central to the Almgren–Chriss framework discussed in Chapter {ref}`optimal_execution`.
+
+### The square-root impact law
+
+The most empirically robust model for the market impact of a meta-order (a large order executed incrementally over time) is the **square-root law** {cite:p}`toth2011anomalous`:
+
+$$
+\text{MI}(Q) \approx Y \cdot \sigma \cdot \sqrt{\frac{Q}{V_{\text{ADV}}}},
+$$
+
+where $Q$ is the total order size, $V_{\text{ADV}}$ is the average daily volume, $\sigma$ is the daily price volatility, and $Y \approx 0.5$–$1.0$ is an asset-class-dependent constant. The square-root form arises from the statistical mechanics of order book liquidity: if order sizes and available volume are power-law distributed, dimensional analysis forces impact to grow as $Q^{1/2}$.
+
+The law holds remarkably consistently across asset classes, time horizons, and market conditions. Its main practical implication for execution algorithms is that market impact is a **concave function of size**: it is always preferable to split a large order into smaller pieces rather than executing it all at once. This is the rationale for VWAP, TWAP, and participation-rate schedules.
+
+### Kyle's lambda
+
+Kyle {cite:p}`kyle1985` developed the first formal microstructure model of market impact rooted in information asymmetry. In Kyle's model, an informed trader with private information about a future value $v$ submits a market order $x$; noise traders submit aggregate flow $u \sim \mathcal{N}(0, \sigma_u^2)$; and a competitive, risk-neutral market maker observes only total order flow $y = x + u$ and sets prices to break even. The linear equilibrium price impact is:
+
+$$
+P = P_0 + \lambda_K \cdot y, \qquad \lambda_K = \frac{\sigma_v}{2\sigma_u},
+$$
+
+where $\sigma_v$ is the standard deviation of the true asset value. The **Kyle lambda** $\lambda_K$ is the permanent price impact per unit of order flow — higher when the information-to-noise ratio $\sigma_v/\sigma_u$ is large, i.e., when markets are dominated by informed trading. Empirically, $\lambda_K$ is estimated from time-series regressions of price changes on signed order flow. It is wide during illiquid periods and tight in deep, competitive markets.
+
+### Temporary and permanent components
+
+The Almgren–Chriss model (Chapter {ref}`optimal_execution`) decomposes total impact into a **permanent** component $\gamma$ and a **temporary** component $\eta$:
+
+$$
+\tilde{S}_{t_i} = S_0 - \gamma \sum_{j \leq i} v_j - \eta \frac{v_i}{\Delta t},
+$$
+
+where $\tilde{S}_{t_i}$ is the effective execution price and $v_j$ is the volume traded at step $j$. The permanent component corresponds to Kyle's lambda — each unit of trading permanently shifts the equilibrium price by $\gamma$. The temporary component $\eta v_i / \Delta t$ captures the within-slice resiliency cost: the bid-ask spread, queue displacement, and intraday price pressure from rapid execution.
+
+The main limitation of the linear model is that it implies impact grows proportionally with $Q$, while empirically the square-root law applies. More refined models (see {cite:t}`cartea2015algorithmic` for a review) replace the linear temporary impact with concave functions, at the cost of losing closed-form solutions to the execution optimization problem.
+
+(sec:lob_volume_prediction)=
+## Volume prediction models
+
+Volume prediction — forecasting how much of an asset will trade in a given time bucket, or over the rest of the trading day — is a critical input to VWAP and participation-rate execution algorithms (Chapter {ref}`optimal_execution`). Accurate volume forecasts allow the algorithm to construct a target schedule that matches the natural market flow, minimizing schedule slippage.
+
+### Static volume curve
+
+The simplest model is a **static intraday volume curve** estimated from historical data. Let $V_{t,d}$ denote the fraction of total daily volume that trades in bucket $t$ on day $d$. The static curve is:
+
+$$
+\hat{V}_t = \text{median}_{d} \{ V_{t,d} \},
+$$
+
+typically computed separately for different day types (Monday vs Friday, option expiry days, Federal Reserve announcement days, etc.). The curve exhibits the well-known **U-shape**: volume is elevated at the open (overnight news digestion, limit order accumulation) and at the close (index rebalancing, end-of-day institutional flows), with a midday trough.
+
+The static curve is robust and easy to implement but ignores all intraday information. It is appropriate when the forecast horizon covers most of the remaining trading day and no intraday context is available. For shorter horizons where intraday context has accumulated, dynamic models are preferable.
+
+### Dynamic prediction with KNN
+
+**$k$-nearest-neighbour (KNN) regression** uses the partial intraday volume history to find "similar" historical days and predict the remaining volume profile from their realized outcomes. Given a feature vector $\mathbf{x}_t$ capturing the cumulative volume fraction up to time $t$ (and optionally other context variables such as day-of-week, realized volatility, or the volume of a leading correlated instrument), the KNN forecast is:
+
+$$
+\hat{V}_{t:\text{eod}} = \frac{1}{k} \sum_{j \in \mathcal{N}_k(\mathbf{x}_t)} V_{j,t:\text{eod}},
+$$
+
+where $\mathcal{N}_k(\mathbf{x}_t)$ is the set of $k$ historical days most similar to the current feature vector under some distance metric (typically Euclidean or cosine distance). KNN requires no parametric assumptions about the volume curve shape and automatically adapts to the intraday context. Busseti and Boyd {cite:p}`busseti2015vwap` discuss this class of volume-adaptive VWAP strategies.
+
+For large historical datasets, exact KNN search scales as $O(N)$ per query. **Approximate nearest-neighbour (ANN)** methods — ball-trees, locality-sensitive hashing, or FAISS — reduce this to $O(\log N)$, making real-time volume prediction tractable over multi-year historical databases. ANN methods are discussed further in Chapter {ref}`data_driven_methods` in the context of retrieval-augmented models.
+
+### Total daily volume
+
+Predicting the total day volume $V_{\text{day}}$ at the start of trading is useful for pre-trade cost estimation and capacity analysis. Relevant features include:
+
+- **Lagged volume**: yesterday's total volume, the 5-day and 20-day rolling mean (trend in participation).
+- **Volatility**: high-volatility days tend to have elevated volume (the volume-volatility correlation is well documented).
+- **Economic calendar**: FOMC announcements, non-farm payrolls, options expiry, and index rebalancing days produce systematic volume spikes.
+- **Return on open**: a large gap at the open predicts elevated intraday activity as participants adjust positions.
+
+Simple exponential smoothing, linear regression, and gradient boosting all perform well in practice; the choice matters less than feature engineering.
+
+(sec:lob_features)=
+## LOB features
+
+The raw limit order book — the full set of resting limit orders at every price level — is a high-dimensional object. For machine learning models (short-term prediction, execution tactic design, market making), it is standard to compute a smaller set of **LOB features** that capture the economically relevant information. We document the most commonly used features here, as they are referenced throughout the remainder of this chapter and in Chapters {ref}`execution_tactics` and {ref}`optimal_market_making`.
+
+### Spread and mid-price
+
+The **bid-ask spread** is the most basic LOB feature:
+
+$$
+S_t = P_t^{\text{ask}} - P_t^{\text{bid}}.
+$$
+
+It measures the cost of an immediate round-trip trade (buy at ask, sell at bid) and proxies for the market maker's compensation for adverse selection and inventory risk. Wide spreads indicate low liquidity; tight spreads indicate competition among liquidity providers.
+
+The **mid-price** $M_t = (P_t^{\text{ask}} + P_t^{\text{bid}}) / 2$ serves as the reference for fair value in microstructure models. Most LOB features are computed relative to $M_t$.
+
+### Order imbalance
+
+**Order imbalance (OI)** at the best quote captures the relative pressure of buy versus sell liquidity:
+
+$$
+\text{OI}_t = \frac{V_t^{\text{bid}} - V_t^{\text{ask}}}{V_t^{\text{bid}} + V_t^{\text{ask}}},
+$$
+
+where $V_t^{\text{bid}}$ and $V_t^{\text{ask}}$ are the volumes resting at the best bid and ask prices respectively. $\text{OI}_t \in [-1, 1]$; a positive value means more buy-side liquidity is offered at the best quote, while negative indicates more sell-side supply.
+
+Order imbalance is one of the strongest short-term predictors of mid-price movements available from LOB data. Cont, Stoikov, and Talreja {cite:p}`cont2010stochastic` document that OI predicts the sign of the next mid-price move with accuracy above 55% across different instruments and time periods. The mechanism is simple: if there is more volume at the best bid than at the best ask, an incoming market sell order will clear the ask quickly, causing the mid-price to tick down.
+
+**Multi-level order imbalance** extends this to the full visible book by summing over $L$ price levels on each side:
+
+$$
+\text{OI}_t^{(L)} = \frac{\sum_{\ell=1}^{L} V_{t,\ell}^{\text{bid}} - \sum_{\ell=1}^{L} V_{t,\ell}^{\text{ask}}}{\sum_{\ell=1}^{L} V_{t,\ell}^{\text{bid}} + \sum_{\ell=1}^{L} V_{t,\ell}^{\text{ask}}}.
+$$
+
+The multi-level version is more robust to transient quote spoofing at the best level and more predictive at longer (5–30 second) horizons.
+
+### Trade flow imbalance
+
+**Trade flow imbalance (TFI)** over a rolling window $[t-\tau, t]$ captures the net signed order flow from recent executions:
+
+$$
+\text{TFI}_{t,\tau} = \frac{\sum_{t_i \in [t-\tau, t]} s_i v_i}{\sum_{t_i \in [t-\tau, t]} v_i},
+$$
+
+where $s_i = +1$ for buyer-initiated trades and $s_i = -1$ for seller-initiated trades, and $v_i$ is the trade volume. A positive TFI indicates recent net buying pressure. TFI is related to the concept of order flow toxicity discussed in Section {ref}`sec:lob_asymmetry`.
+
+### Depth and volatility features
+
+Additional features commonly used in execution and prediction models include:
+
+- **Depth ratio**: total resting volume on the bid side vs ask side within $n$ ticks of mid, measuring the depth-weighted book imbalance.
+- **Price impact estimate**: $\tilde{\lambda}_t = S_t / (V_t^{\text{bid}} + V_t^{\text{ask}})$ — the cost per unit of consuming the full best-quote volume.
+- **Micro-volatility**: $\hat{\sigma}_\tau = \sqrt{\sum_{i: t_i \in [t-\tau,t]} (M_{t_i} - M_{t_{i-1}})^2}$ — rolling realized volatility at tick frequency.
+- **Tick direction**: the sign of the most recent mid-price change.
+
+```{list-table} Standard LOB features used in execution and market-making models.
+:header-rows: 1
+:name: tab:lob_features
+
+* - Feature
+  - Definition
+  - Primary use
+* - Spread $S_t$
+  - $P^{\text{ask}}_t - P^{\text{bid}}_t$
+  - Market making, adverse selection
+* - Mid-price $M_t$
+  - $(P^{\text{ask}}_t + P^{\text{bid}}_t)/2$
+  - Universal reference price
+* - Order imbalance $\text{OI}_t$
+  - $(V^{\text{bid}}_t - V^{\text{ask}}_t)/(V^{\text{bid}}_t + V^{\text{ask}}_t)$
+  - Short-term direction prediction
+* - Trade flow imbalance $\text{TFI}_{t,\tau}$
+  - Net signed volume fraction over $[t-\tau,t]$
+  - VPIN, momentum signals
+* - Micro-volatility $\hat{\sigma}_\tau$
+  - Rolling squared mid-price changes at tick frequency
+  - Spread setting, risk management
+* - Multi-level OI $\text{OI}_t^{(L)}$
+  - Sum of $L$ bid/ask levels imbalance
+  - Medium-horizon prediction
+```
+
+(sec:lob_fill_probability)=
+## Probability of filling a limit order
+
+### Limit orders as a Poisson process
+
+The fundamental uncertainty in passive execution is whether a resting limit order will be hit before the execution window closes. To model this, consider a sell limit order placed $\delta$ ticks above the current mid-price $S_t$. The order fills when either (i) the mid-price rises by at least $\delta$ ticks, or (ii) an incoming market buy order is large enough to consume liquidity up to and including that price level. From the order-placer's perspective, both mechanisms produce the same observable outcome: the order fills at a random time.
+
+Following Avellaneda and Stoikov {cite:p}`AvellanedaStoikov2008` and the empirical analysis of Cont, Stoikov, and Talreja {cite:p}`cont2010stochastic`, we model fill events as a Poisson process with depth-dependent intensity:
+
+$$
+\lambda(\delta) = A \, e^{-k\delta},
+$$
+
+where $A > 0$ is the base fill rate (fills per unit time at zero depth, i.e., posting at the current mid-price) and $k > 0$ is the depth sensitivity — the rate at which fill probability decays with distance from the mid-price. The exponential form captures the empirical observation that the limit order book thins out approximately exponentially with depth: the probability of being filled within a given time window falls rapidly as the order is placed further from the market.
+
+The probability of a fill occurring within a time window of length $\tau$ is:
+
+$$
+P(\text{fill} \mid \delta, \tau) = 1 - e^{-\lambda(\delta)\tau} = 1 - \exp\!\left(-A e^{-k\delta} \tau\right).
+$$
+
+This increases with $\tau$ (more time, more chance of being hit) and decreases with $\delta$ (deeper placement, lower fill probability). The expected time to fill is $1/\lambda(\delta) = e^{k\delta}/A$, which grows exponentially with depth.
+
+```{figure} figures/tact_fill_probability.png
+:name: fig:lob_fill_probability
+:width: 10in
+Fill probability model. *Left*: fill rate $\lambda(\delta)$ as a function of placement depth $\delta$ (in ticks) for different values of the depth sensitivity $k$ (base rate $A = 1$ fill per minute). *Right*: probability of filling within a time window $\tau$ as a function of $\tau$ for three placement depths ($\delta = 0, 2, 4$ ticks; $A = 1$, $k = 1$). The exponential form captures the rapid decay of fill probability with depth observed empirically in limit order books.
+```
+
+### Calibration
+
+In practice, $A$ and $k$ are calibrated from historical LOB data by regressing observed fill rates against placement depth. The standard approach uses a log-linear regression:
+
+$$
+\log \hat{\lambda}(\delta) = \log A - k\delta,
+$$
+
+where $\hat{\lambda}(\delta)$ is estimated as the empirical fill rate for orders placed at depth $\delta$, computed from a historical dataset of limit orders and their outcomes. A maximum-likelihood estimator for exponentially distributed fill times is:
+
+$$
+\hat{A} = \frac{N_{\text{fill}}}{\sum_{i=1}^{N} e^{k\delta_i} \tau_i},
+$$
+
+where $N_{\text{fill}}$ is the number of orders that filled, and the denominator sums the "risk time" for each order at its posted depth. This requires joint estimation of $(A, k)$ via numerical optimization (e.g., gradient descent on the negative log-likelihood).
+
+The parameters vary systematically across market conditions:
+
+- **Asset class**: equity markets in continuous auction typically show $A \sim 0.5$–$2.0$ fills per minute at zero depth and $k \sim 1$–$3$ per tick. Fixed income and FX markets with wider spreads have smaller $A$ and smaller $k$ — fill rates fall off more slowly because even deep orders can fill within a longer horizon.
+- **Intraday variation**: $A(t)$ is elevated at the open and close (high volume), lower at midday. Incorporating $A(t)$ as a deterministic function of time of day significantly improves fill-probability forecasts.
+- **Regime dependence**: during periods of elevated volatility or wide spreads, $k$ tends to decrease (the LOB is thinner and depth matters less), while $A$ may increase as market orders arrive more frequently.
+
+### Extensions and richer models
+
+The simple two-parameter model $\lambda(\delta) = Ae^{-k\delta}$ is a strong baseline, but richer models can improve calibration and fill-probability estimation:
+
+**Additional features.** Including LOB features (Section {ref}`sec:lob_features`) alongside depth $\delta$ in the fill-rate model substantially improves predictive accuracy. Key covariates include the current spread $S_t$ (a wide spread indicates lower fill probability at a given depth relative to mid), order imbalance $\text{OI}_t$ (an imbalanced book toward the same side as the order reduces fill probability), and micro-volatility $\hat{\sigma}$ (higher volatility increases fill probability by raising the chance that the mid-price moves to the order). A generalized fill-rate model takes the form:
+
+$$
+\lambda(\delta, \mathbf{x}_t) = A(\mathbf{x}_t)\, e^{-k(\mathbf{x}_t)\,\delta},
+$$
+
+where $A(\mathbf{x}_t)$ and $k(\mathbf{x}_t)$ are functions of the current LOB features, estimated via logistic regression, gradient boosting, or neural networks.
+
+**Monotonicity constraints.** For use in optimization problems (such as the HJB tactic design in Chapter {ref}`execution_tactics`), the fill-rate model must be monotone decreasing in $\delta$: posting deeper must never increase fill rate. The exponential family $\lambda(\delta) = A e^{-k\delta}$ with $k > 0$ is monotone by construction. For richer ML models, monotonicity must be enforced explicitly, for example using isotonic regression post-processing or input-convex neural networks {cite:p}`amos2017input`.
+
+**Survival analysis.** Fill time can be modelled directly as a survival time with a hazard function $h(t \mid \delta) = \lambda(\delta)$ for the Poisson case, or with a more general accelerated failure-time or Cox proportional-hazard specification. This framework naturally handles censored observations (orders that are cancelled before filling).
+
+(sec:lob_short_term)=
+## Short-term price prediction
+
+Short-term price prediction models attempt to forecast the direction (or magnitude) of mid-price movements over horizons of a few seconds to minutes using signals derived from the current and recent LOB state. These models underpin **alpha signals** in high-frequency trading strategies and feed into execution tactics that time aggressive order submission.
+
+### Order imbalance as a predictor
+
+The simplest and most robust short-term predictor is **order imbalance** $\text{OI}_t$, introduced in Section {ref}`sec:lob_features`. The key empirical finding is:
+
+$$
+\mathbb{E}[\Delta M_{t+\Delta} \mid \text{OI}_t] \approx \kappa \cdot \text{OI}_t,
+$$
+
+for a constant $\kappa > 0$ and a short prediction horizon $\Delta$ (typically 1–10 seconds). When the bid side is heavier than the ask side ($\text{OI}_t > 0$), the next mid-price movement is on average positive — the model predicts upward pressure. A simple logistic regression on $\text{OI}_t$ predicts next-tick direction with accuracy of 55–65% in most liquid markets, a modest but statistically significant and economically meaningful edge.
+
+The predictability of OI is consistent with the microstructure mechanism: a heavy bid side means that market sell orders are unlikely to clear the queue before a limit-order buy is executed, so the next trade is likely buyer-initiated, pushing the price up.
+
+### Machine learning models
+
+Richer feature sets substantially improve prediction accuracy. A standard pipeline combines:
+
+1. **Feature engineering**: compute the LOB features from {ref}`tab:lob_features` — multi-level OI, trade flow imbalance, spread, and micro-volatility — at multiple lagged timestamps.
+2. **Model**: logistic regression (baseline), gradient boosting machines {cite:p}`friedman2001greedy`, or a recurrent neural network (LSTM {cite:p}`hochreiter1997long`).
+3. **Label**: next mid-price direction (+1, 0, −1) or the signed return over the next $k$ events.
+
+Gradient boosting and LSTM models typically achieve prediction accuracy of 58–68% in liquid equity markets when trained on rich LOB feature vectors, with the exact figure depending on the asset and time horizon.
+
+### Deep learning approaches
+
+**DeepLOB** {cite:p}`zhang2019deeplob` processes the raw LOB snapshot — all bid and ask prices and volumes at the top $L$ levels — as a two-dimensional image using convolutional layers followed by an Inception module and an LSTM. By operating directly on the raw book rather than hand-crafted features, DeepLOB captures complex nonlinear interactions between price levels that summary statistics miss. Zhang et al. report accuracy of 72–78% on mid-price direction prediction at horizons of 10–500 events on NASDAQ equity data.
+
+More recent work applies **Transformer architectures** {cite:p}`vaswani2017attention` directly to LOB event sequences, using self-attention to model the dependencies between order arrivals at different price levels and times. These models require substantial compute for training but achieve state-of-the-art accuracy on public LOB benchmark datasets.
+
+A recurring practical caveat: prediction accuracy computed on held-out historical data tends to overestimate live performance due to regime shifts, microstructure changes, and adverse selection — sophisticated participants learn to avoid being on the wrong side of predictable order flow.
+
+(sec:lob_asymmetry)=
+## Information asymmetry
+
+Information asymmetry in financial markets refers to the situation in which some market participants (informed traders) have access to private information about an asset's future value, while others (noise traders, market makers) do not. The key consequence for LOBs is **adverse selection**: a market maker who passively quotes both sides of the book risks being consistently picked off by informed traders, losing on average on every trade with an informed counterparty.
+
+### The Glosten-Milgrom model
+
+The Glosten-Milgrom model {cite:p}`glosten1985bid` provides the foundational account of how adverse selection determines the bid-ask spread. Chapter {ref}`market_making_fundamentals` gives an economic overview and Chapter {ref}`optimal_market_making` derives the equilibrium in full; here we recall the result and connect it to the LOB observables introduced above.
+
+The model considers a market maker quoting bid $b$ and ask $a$ against two types of incoming order: a fraction $\alpha$ from **informed traders** who know the true asset value — either $V_H$ with prior probability $p$ or $V_L$ with probability $1-p$ — and a fraction $1-\alpha$ from uninformed **noise traders** who buy or sell for liquidity reasons. Letting $\mu = pV_H + (1-p)V_L$ denote the prior expected value, the zero-profit equilibrium yields:
+
+$$
+a = \mu + \alpha(V_H - \mu), \qquad b = \mu - \alpha(\mu - V_L),
+$$
+
+and therefore:
+
+$$
+\text{spread}_{\text{GL}} = a - b = \alpha(V_H - V_L).
+$$
+
+The spread is proportional to the **fraction of informed flow** $\alpha$ and the **magnitude of the information event** $V_H - V_L$. When $\alpha = 0$ the competitive spread is zero; as informed flow increases, the spread widens so that losses on informed trades are subsidised by gains on uninformed ones.
+
+From a LOB perspective, $\alpha$ is not directly observable, but its short-run fluctuations leave a signature in order flow. When informed traders dominate one side of the book — buying because they expect $V_H$ — order flow becomes one-sided: trade flow imbalance $\text{TFI}$ rises and order imbalance $\text{OI}$ shifts in the direction of the information. This is the microstructural link between adverse selection and the features of Section {ref}`sec:lob_features`. The PIN and VPIN measures below operationalise this connection by estimating $\alpha$ from observed order flow statistics.
+
+### PIN: Probability of Informed Trading
+
+The **PIN model** {cite:p}`easley1996liquidity` provides an empirical measure of the fraction of order flow that is information-motivated. The model assumes:
+
+- With probability $\alpha$, a private-information event occurs each day (good news with probability $\delta$, bad news with probability $1-\delta$).
+- On information days, informed traders arrive at Poisson rate $\mu$ on the same side as the news.
+- On all days, noise traders arrive at rate $\varepsilon$ on each side.
+
+The probability of an informed trade in a given transaction is:
+
+$$
+\text{PIN} = \frac{\alpha \mu}{\alpha \mu + 2\varepsilon}.
+$$
+
+The parameters $(\alpha, \delta, \mu, \varepsilon)$ are estimated by maximum likelihood from the daily counts of buys and sells $(B_d, S_d)$. High PIN stocks experience wider spreads, higher price impact, and more adverse selection for market makers — consistent with the Glosten-Milgrom mechanism.
+
+### VPIN: Volume-synchronized PIN
+
+The standard PIN model is estimated at daily frequency and requires structural assumptions about the information arrival process. Easley, López de Prado, and O'Hara {cite:p}`easley2012flow` proposed **VPIN (Volume-synchronized Probability of Informed Trading)** as a high-frequency, real-time measure of order flow toxicity.
+
+VPIN replaces calendar time with a **volume clock**: trading activity is divided into equal-volume buckets of size $V$. Within each bucket, buy volume $V^B$ and sell volume $V^S$ are estimated (e.g., using the Lee-Ready tick-sign algorithm or the bulk volume classification of {cite:t}`easley2012flow`). VPIN is the moving average of the normalized order flow imbalance over the last $n$ buckets:
+
+$$
+\text{VPIN}_t = \frac{1}{n} \sum_{i=t-n+1}^{t} \frac{|V_i^B - V_i^S|}{V}.
+$$
+
+High VPIN indicates that recent order flow is highly one-sided — a signature of informed trading. Easley et al. showed that VPIN was elevated in the minutes before the May 2010 Flash Crash, suggesting that high order-flow toxicity may be a leading indicator of liquidity stress. VPIN is closely related to the trade flow imbalance feature $\text{TFI}_{t,\tau}$ from Section {ref}`sec:lob_features`.
+
+### Amihud illiquidity
+
+The **Amihud illiquidity ratio** {cite:p}`amihud2002illiquidity` measures price impact from daily data, without requiring high-frequency order-level information:
+
+$$
+\text{ILLIQ}_t = \frac{1}{D}\sum_{d=1}^{D} \frac{|r_{t,d}|}{V_{t,d}},
+$$
+
+where $|r_{t,d}|$ is the absolute daily return and $V_{t,d}$ is the daily dollar trading volume on day $d$, averaged over a $D$-day window (typically $D = 21$ trading days). The ratio measures how much price moves per dollar of volume: a high value indicates that the asset is illiquid and susceptible to large price impact. ILLIQ is widely used in cross-sectional studies of equity returns, where assets with higher illiquidity command a risk premium, and in bond market research where LOB data is often unavailable.
+
+(sec:lob_simulation)=
+## Simulation of LOBs
+
+### Probabilistic generative models
+
+As discussed in Chapter {ref}`intro_bayesian`, a probabilistic generative model describes the joint probability distribution of the relevant variables of the problem. For a simulated limit order book, this means modelling the probability distribution of the orders, e.g. limit or market orders in a limit order book. A typical way to construct these generative models is to proceed hierarchically:
+
+* First, we model the distribution of the arrival of orders to the market. These are point processes in continuous time, and a natural choice of models are the jump processes introduced in Chapter {ref}`stochastic_calculus`. The most simple process is the Poisson process, in which orders arrive independently. More realistic choices are for instance Hawkes processes (Section {ref}`sec:lob_order_arrival`), that incorporate the empirical observation that orders tend to cluster in time, something that can be explained if they are self-exciting.
+
+* Since a market has at least limit and market orders available, and possibly more, a second model can be used to choose the type of order conditional on the arrival of one order. This can be simply modelled with a categorical distribution (a generalization of a Bernoulli distribution for more than two discrete categories). Alternatively, a separate jump process can be modelled for each different order type.
+
+* Depending on the type of order, we have to model their parameters. The two simplest orders available in LOBs are limit and market orders. Limit orders have a side (buy or sell), a size and a price. Market orders only have side and size.
+  * The side can be modelled in the same lines as the type of order: as a Bernoulli random variable or by modelling separate point processes for buy and sell.
+  * The size is a continuous positive variable. A log-normal distribution can be used to model sizes, although empirical distributions typically show heavy tails, making power-law distributions more appropriate in some settings {cite:p}`gabaix2003theory`. Notice that depending on the exponent, power-laws may not be well-defined probability distributions; in those cases, maximum order sizes can be included to truncate them.
+  * Finally, the distributions of limit order prices are typically constructed relative to the mid-price, and sign-adjusted to make buy and sell distributions mostly positive. As discussed in {cite:p}`bouchaud2002statistical`, they are right-skewed and heavy-tailed, peaking near the best bid and ask. A simple tractable choice is a log-normal distribution, potentially shifted to place some mass at least up to the opposite best. Log-normal distributions do not have heavy tails, so power-laws are also commonly used.
+
+Once we have a model for the generation of orders, we need to couple it with a matching engine as the one described in Chapter {ref}`market_microstructure`.
+
+### Agent-based models
+
+Agent-based models take a different path for simulation of the order book. In this case, we define a set of agents that seek to capture the stylized behaviour of real market players. These agents are algorithms that given market information make decisions about placing orders in the limit order book. Their internal logic is parametrized so their behaviour can be calibrated externally to generate dynamics that are representative of real markets. As with probabilistic generative models, they need to be coupled with a matching engine in order to execute a real simulation.
+
+To illustrate this paradigm, let us discuss the agent-based model from McGroarty et al. {cite:p}`McGroarty2019`. This model implements a fully functioning LOB populated by five agent types — market makers, liquidity consumers, momentum traders, mean reversion traders and noise traders — each designed to capture a distinct class of real-world market behaviour.
+
+Time is pseudo-continuous: a simulated trading day is divided into a number of $T$ periods. At every period each agent is selected to act with a type-specific probability $\delta_i$, where $i$ indexes the type of agent. When selected, an agent may submit, modify or cancel an order, or do nothing — mirroring the discretion of real participants. For instance, in the original article, the calibrated action probabilities are
+
+$$\delta_{\text{mm}} = 0.1,\quad \delta_{\text{lc}} = 0.1,\quad \delta_{\text{mr}} = 0.4,\quad \delta_{\text{mt}} = 0.4,\quad \delta_{\text{nt}} = 0.75.$$
+
+Notice that higher $\delta$ corresponds to faster trading: noise traders are effectively ultra-high-frequency, while market makers and liquidity consumers act on a much slower timescale.
+
+#### Market makers
+
+Market makers aim to earn the bid–ask spread by posting limit orders simultaneously on both sides of the LOB while keeping an approximately flat inventory. Their order placement is informed by a short-term directional signal: at each step they compute a $w$-period rolling mean of the order-sign time series to predict whether the next arriving order will be a buy or a sell. If they predict a buy, they size up their sell-side limit order, with a volume drawn from a uniform distribution $U(v_{\min}, v_{\max})$. At the same time, they reduce their buy-side quote to a small residual volume $v^-$; the opposite applies when a sell is predicted. This asymmetric quoting allows market makers to lean against anticipated flow and reduces adverse selection.
+
+#### Liquidity consumers
+
+Liquidity consumers model large institutional investors — pension funds, asset managers — who must buy or sell a substantial block of shares over the course of a day while minimising market impact and transaction costs. At the start of each day the agent is randomly assigned a direction (buy or sell with equal probability) and an initial order size drawn from a uniform distribution $h_0 \sim U(h_{\min}, h_{\max})$. Execution is purely passive and incremental: each time the agent is selected it checks the volume available at the opposing best quote $\Phi_t$. If the remaining order $h_t \leq \Phi_t$ it consumes exactly $h_t$; otherwise it takes all available $\Phi_t$. Only market orders are used, so every fill reduces the remaining balance until the block is fully executed.
+
+#### Momentum traders
+
+Momentum traders represent the widespread belief that recent price trends persist. Their signal is the rate of change (ROC) over a look-back window of $n_r$ periods:
+
+$$\text{roc}_t = \frac{p_t - p_{t-n_r}}{p_{t-n_r}}.$$
+
+When $\text{roc}_t \geq \kappa$ the agent submits a buy market order; when $\text{roc}_t \leq -\kappa$ a sell market order. In both cases the order volume is proportional to the signal strength and the agent's current wealth $W_{a,t}$:
+
+$$v_t = |\text{roc}_t| \cdot W_{a,t}.$$
+
+This wealth-scaling makes the agent's footprint grow with realised profits, amplifying trending dynamics.
+
+#### Mean reversion traders
+
+Mean reversion traders operate on the opposite belief: that prices tend to revert to a short-term historical average. Their anchor is an exponential moving average (EMA) updated at each tick:
+
+$$\text{ema}_t = \text{ema}_{t-1} + \alpha\,(p_t - \text{ema}_{t-1}),$$
+
+where $\alpha$ is a recency discount factor. If the current price is $k$ standard deviations above $\text{ema}_t$ the agent places a sell limit order one tick inside the best ask; if it is $k$ standard deviations below, a buy limit order one tick inside the best bid. By posting limit orders rather than market orders these agents add liquidity when prices overshoot, creating a restoring force.
+
+#### Noise traders
+
+Noise traders are typically the most active participants (as reflected in the calibrated probabilities, $\delta_{\text{nt}} = 0.75$) and capture the residual, non-strategic order flow always present in real markets. Each time a noise trader is selected it first chooses a side and then randomly selects an action type: submit a market order (probability $\lambda_m$), submit a limit order ($\lambda_l$), or cancel the oldest outstanding order ($\lambda_c$). Order sizes are drawn from a log-normal distribution:
+
+$$v_t = \exp(\mu + \sigma\, u_v), \quad u_v \sim U(0,1).$$
+
+If a limit order is chosen, the price is determined by one of four sub-cases:
+
+* **Crossing** (probability $\lambda_{\text{crs}}$): the order is placed at the opposing best price, guaranteeing immediate (possibly partial) fill.
+* **Inside spread** ($\lambda_{\text{inspr}}$): the price is drawn uniformly between the current best bid and ask.
+* **At the spread** ($\lambda_{\text{spr}}$): the order is placed at the best price on the agent's side.
+* **Off-spread** ($\lambda_{\text{offspr}}$): the order is placed deeper in the book at a price drawn from a power-law distribution.
+
+#### Calibration
+
+The model has twenty-three input parameters in total. Calibration proceeds by computing statistical properties of the synthetic market data generated by the simulator — the Hurst exponent of volatility, autocorrelation of mid-price returns, autocorrelation of the order-sign series, and the exponent of a power-law price impact function — and minimising the distance to their empirical counterparts over a grid of parameters.
+
+## Exercises
+
+**Exercise 1 (Hawkes process stationarity):** Show that the stationary mean intensity of a univariate Hawkes process is $\bar{\lambda} = \mu\beta/(\beta - \alpha)$, and derive the condition $\alpha < \beta$ for stationarity. Simulate the process using the thinning algorithm for $(\mu, \alpha, \beta) = (0.5, 1.5, 2.0)$ and verify empirically that the sample mean intensity approaches $\bar{\lambda}$.
+
+**Exercise 2 (Square-root impact):** An asset has daily volatility $\sigma = 1\%$ and average daily volume $V_{\text{ADV}} = 10^6$ shares. Using $Y = 0.7$, estimate the market impact of orders of sizes $Q \in \{10^3, 10^4, 10^5\}$ shares. How does doubling the order size compare to trading twice as fast?
+
+**Exercise 3 (Fill probability MLE):** Generate a synthetic dataset of $N = 2000$ limit orders placed at depths $\delta_i \sim U(0,5)$ ticks, with fill times drawn from $\text{Exp}(A e^{-k\delta_i})$ for $(A, k) = (2.0, 1.0)$. Cap each observation at a maximum window $\tau_{\max} = 5$ min (censored). Estimate $(A, k)$ by maximising the likelihood of the censored exponential model and compare to the true values.
+
+**Exercise 4 (Order imbalance predictor):** Using the probabilistic generative model simulation from the notebook, compute $\text{OI}_t$ and the subsequent mid-price change $\Delta M_{t+1}$ for each snapshot. Fit a logistic regression of $\text{sign}(\Delta M_{t+1})$ on $\text{OI}_t$ and report the in-sample accuracy. Why might accuracy fall in live trading?
+
+**Exercise 5 (PIN estimation):** Simulate 50 trading days with $\alpha = 0.4$, $\delta = 0.6$, $\mu = 20$, $\varepsilon = 10$ (buy and sell arrival rates per day). Compute the daily buy/sell counts $(B_d, S_d)$ and estimate the PIN by maximum likelihood. Compare the estimated PIN to the true value $\alpha\mu / (\alpha\mu + 2\varepsilon)$.
+
+**Exercise 6 (Agent-based model calibration):** Using the McGroarty model notebook, vary the noise-trader action probability $\delta_{\text{nt}}$ from 0.5 to 0.9. For each value, compute the Hurst exponent of realized volatility and the first-lag autocorrelation of the order-sign series. Identify the parameter value that best matches stylized facts from a liquid equity market.

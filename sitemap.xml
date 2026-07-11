@@ -104,6 +104,9 @@
     <loc>http://localhost:3001/notebooks/execution-algorithms</loc>
   </url>
   <url>
+    <loc>http://localhost:3001/notebooks/execution-tactics</loc>
+  </url>
+  <url>
     <loc>http://localhost:3001/notebooks/fair-price-estimation</loc>
   </url>
   <url>
