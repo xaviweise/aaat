@@ -1,5 +1,0 @@
-# Arbitrage Strategies
-
-## Introduction
-
-## Exercises
