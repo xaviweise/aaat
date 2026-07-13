@@ -38,13 +38,13 @@ The model is composed of the following elements. Some of them are known pre-trad
 The drivers of the RfQ status in this model include:
 - The client's intent to trade, which is what initiates a **Request for Quote (RfQ)** via a multi-dealer-to-client platform.
 - If the quote is requested solely for **price discovery (PD)** purposes, the only possible outcome with non-zero probability is a *passed* status (i.e., the client walks away without trading).
-- The **half-spread ($\delta$)** quoted by the dealer. Although dealers provide price quotes to clients, we assume that the client's trading decision depends on the quoted spread relative to a reference mid-price $P_{m}$. For example, using a composite price from the platform, the transaction price is modeled as:  
-  $P = P_{m} + s \delta$, where $s = 1$ if the dealer is selling (ask), and $s = -1$ if buying (bid).
+- The **half-spread ($\delta$)** quoted by the dealer. Although dealers provide price quotes to clients, we assume that the client's trading decision depends on the quoted spread relative to a reference mid-price $M_t$. For example, using a composite price from the platform, the transaction price is modeled as:  
+  $P = M_t + s \delta$, where $s = 1$ if the dealer is selling (ask), and $s = -1$ if buying (bid).
 
 - The **spreads quoted by competing dealers**, denoted $\delta_{dealer}$. Clients may choose to include up to $n$ dealers in the RfQ. Naturally, as $n$ increases, so does the probability of receiving a more competitive quote.  Typically, all quoting dealers know the number of participants $n$, but not the individual prices submitted by others. The only partial post-trade information available comes when a dealer wins the RfQ and the platform discloses the *cover price* (i.e., the second-best price). The dealer who submitted this cover price is informed of their status as *covered*, but they do not receive information on the actual winning price.
 - The client’s **reservation spread** $\delta_{res}$: the maximum acceptable spread relative to the mid-price, defined as  
 
-  $\delta_{res} = s(P_{res} - P_{m})$,  
+  $\delta_{res} = s(P_{res} - M_t)$,  
 
     where $s$ is the trade side as defined earlier.  
 If all quoted prices exceed this threshold, the client will not trade (*passed* status). Since $\delta_{res}$ is not directly observable, it must be inferred from historical client behavior. Its determinants include client features ($CF$), bond features ($BF$), and RfQ characteristics ($RF$). Additionally, **information asymmetry ($IA$)** is expected to play a role—clients with better information may be more inclined to accept trades.  
@@ -617,4 +617,12 @@ The pre-trade control layer can be implemented either as a standalone tool invok
 
 ## Exercises
 
-1. Prove the identity $P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)$ by explicitly working out the second term in the equality. 
+1. Prove the identity $P(a = 1|D = 10100, p, \theta) = P(a = 1| D = 01100, p, \theta)$ by explicitly working out the second term in the equality.
+
+2. **Hit probability and causal adjustment.** A logistic hit probability model is estimated as $P(H=1 \mid \delta, \sigma) = \sigma\!\left(2.0 - 0.3\delta - 0.5\sigma\right)$ where $\sigma(\cdot)$ is the sigmoid function and $\sigma$ on the right denotes market volatility (in percent). Assume volatility is marginally distributed as $\sigma_{\text{mkt}} \sim \text{Uniform}[0.5, 2.0]$. (a) Estimate the causal (back-door adjusted) hit probability $f(\delta) = \mathbb{E}_{\sigma_{\text{mkt}}}[P(H=1 \mid \delta, \sigma_{\text{mkt}})]$ for $\delta \in \{1, 3, 5, 8\}$ bps using numerical integration. (b) Compute the optimal spread $\delta^* = \arg\max_\delta \delta \cdot f(\delta)$ numerically. (c) How does the optimal spread change if the market becomes more volatile on average (i.e., $\sigma_{\text{mkt}} \sim \text{Uniform}[1.5, 4.0]$)?
+
+3. **Revenue potential from a missed quote.** A dealer quotes $\delta' = 7$ bps and misses. The client's reservation spread is drawn as $\delta_{\text{res}} \sim \text{Uniform}[0, 15]$. (a) Compute $P(H=0 \mid \delta'=7)$ under this model (assuming no competition). (b) Apply the abduction step to find the posterior $P(\delta_{\text{res}} \mid H=0, \delta'=7)$. (c) For the counterfactual spread $\delta^{\text{cf}} = 4$ bps, compute $P(H_{\delta^{\text{cf}}} = 1 \mid H=0, \delta'=7)$. (d) Given a notional of €500,000, compute the revenue potential of this missed trade. How does this quantity differ from the interventional expected revenue $\delta^{\text{cf}} \cdot f(\delta^{\text{cf}})$?
+
+4. **Attrition risk.** A dealer observes 1,000 RfQs in which she was the best-priced dealer. Of these, 800 resulted in trades, 120 timed out before the client responded, and 80 were cancelled by the client. (a) Estimate the attrition rate $p_{\text{att}}$ and the conditional hit rate $p_{\text{hit}} = P(H=1 \mid \text{no attrition})$. (b) Show that ignoring attrition inflates the estimated win probability by computing the naive win rate vs the attrition-corrected win rate. (c) If attrition probability increases linearly with response latency, argue why a dealer that targets a faster response time faces a different optimal spread than a slow dealer even if their hit-conditional pricing models are identical.
+
+5. **Axe matching and routing.** A dealer receives simultaneous RfQs for two bonds: Bond A (ISIN: XS001) — client wants to buy 5M, dealer has a short position of 4M; Bond B (ISIN: XS002) — client wants to sell 3M, dealer is flat. The dealer uses an axe-matching system that assigns a routing priority score $s = \alpha \cdot \text{axe\_match} - \beta \cdot \delta_{\text{quoted}}$ where $\alpha = 2$ and $\beta = 0.5$, and $\text{axe\_match} = 1$ if the trade reduces inventory risk, $0$ otherwise. (a) Compute the routing scores for both RfQs if $\delta_A = 3$ bps and $\delta_B = 4$ bps. (b) Which RfQ should the dealer prioritise and at what spread? (c) Explain why axe-matching is economically equivalent to adjusting the reservation spread for inventory risk. 

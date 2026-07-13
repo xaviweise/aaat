@@ -233,7 +233,7 @@ For $\kappa T = 1$, the initial rate is about 1.31 times the TWAP rate; for $\ka
 In a production IS algorithm, the continuous-time trajectory is pre-computed at launch and then executed via the tactics layer (chapter {ref}`execution_tactics`). The key parameters required are:
 
 - **Volatility $\sigma$**: estimated from recent realised or implied volatility, typically at the intraday time scale of the execution window.
-- **Temporary impact coefficient $\eta$**: estimated from execution data, typically calibrated using the square-root model as $\eta \approx \alpha \sigma / \sqrt{V}$ where $V$ is average daily volume and $\alpha$ a market-specific constant.
+- **Temporary impact coefficient $\eta$**: estimated from execution data, typically calibrated using the square-root model as $\eta \approx Y \sigma / \sqrt{V}$ where $V$ is average daily volume and $Y$ a market-specific constant.
 - **Risk aversion $\lambda$**: set by the institution's risk tolerance, either directly or derived from an L-VaR target. A common practice is to parametrise $\lambda$ through the *execution horizon* $T$, which is set by specifying a *participation rate* — a target fraction of market volume — and using the predicted total volume to derive the horizon.
 
 The IS algorithm is inherently **static**: the schedule is computed once from current parameter estimates. Dynamic variants re-solve the optimal schedule at each time step using updated estimates of volatility and the remaining horizon, trading additional computation for improved adaptation.

@@ -22,9 +22,8 @@ project:
       children:
         - file: markdown/intro_financial_markets.md
         - file: markdown/intro_financial_instruments.md
-        - file: markdown/market_microstructure.md
         - file: markdown/algorithmic_trading.md
-    - title: Financial Modelling Fundamentals
+    - title: Mathematical and Computational Foundations
       children:
         - file: markdown/intro_bayesian.md
         - file: markdown/intro_causal.md
@@ -32,27 +31,31 @@ project:
         - file: markdown/stochastic_optimal_control.md
         - file: markdown/data_driven_methods.md
         - file: markdown/generative_ai.md
+    - title: Advanced Analytics for Financial Markets
+      children:
+        - file: markdown/market_microstructure.md
+        - file: markdown/lob_models.md
+        - file: markdown/rfq_models.md
+        - file: markdown/fair_price_estimation.md
+        - file: markdown/liquidity_modelling.md
     - title: Execution Algorithms
       children:
         - file: markdown/execution_fundamentals.md
-        - file: markdown/lob_models.md
         - file: markdown/optimal_execution.md
         - file: markdown/execution_tactics.md
     - title: Market Making Algorithms
       children:
         - file: markdown/market_making_fundamentals.md
-        - file: markdown/fair_price_estimation.md
-        - file: markdown/liquidity_modelling.md
-        - file: markdown/rfq_models.md
         - file: markdown/optimal_market_making.md
         - file: markdown/optimal_hedging.md
     - title: Investment Algorithms
       children:
         - file: markdown/quant_investment_fundamentals.md
         - file: markdown/optimal_investment_theory.md
-    - title: Glossary and References
+    - title: Appendices
       children:
         - file: markdown/glossary.md
+        - file: markdown/exercise_solutions.md
         - file: markdown/references.md
     - title: Notebooks
       children:
@@ -61,6 +64,7 @@ project:
         - file: notebooks/market_microstructure.ipynb
         - file: notebooks/lob_models.ipynb
         - file: notebooks/execution_algorithms.ipynb
+        - file: notebooks/execution_tactics.ipynb
         - file: notebooks/fair_price_estimation.ipynb
         - file: notebooks/liquidity_modelling.ipynb
         - file: notebooks/rfq_models.ipynb

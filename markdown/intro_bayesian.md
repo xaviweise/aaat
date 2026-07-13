@@ -1420,3 +1420,13 @@ The converged parameters for this simulation are $\hat{\sigma}_v^2 = 0.872$ and 
 :width: 8in
 Simulated latent state variable and observations for the local level model with $\sigma_v^2 = 1.0$ and $\sigma_w^2 = 0.05$. The green line shows the inferred latent state using the smoothing algorithm, with a two sigma confidence interval shaded.
 ```
+
+## Exercises
+
+1. **Beta-binomial conjugate update.** A coin is tossed $n = 20$ times yielding $k = 14$ heads. Starting from a uniform prior $\text{Beta}(1,1)$: (a) Write down the posterior distribution and identify its parameters. (b) Compute the posterior mean and compare it to the MLE estimate. (c) Compute the 95% credible interval. (d) How many additional fair-coin tosses would be needed, on average, for the posterior mean to fall within 0.01 of 0.5?
+
+2. **BLR predictive distribution.** In the Bayesian linear regression model with prior $p(\mathbf{w}) = \mathcal{N}(\mathbf{0}, \alpha^{-1}\mathbf{I})$ and noise precision $\beta$, the predictive distribution at a new point $x_*$ is $p(y_* \mid x_*, \mathcal{D}) = \mathcal{N}(\mu_*, \sigma_*^2)$. (a) Derive $\mu_* = \mathbf{m}_N^T \boldsymbol{\phi}(x_*)$ and $\sigma_*^2 = \beta^{-1} + \boldsymbol{\phi}(x_*)^T \mathbf{S}_N \boldsymbol{\phi}(x_*)$ from the posterior $p(\mathbf{w} \mid \mathcal{D}) = \mathcal{N}(\mathbf{m}_N, \mathbf{S}_N)$. (b) With $\alpha = 1$, $\beta = 10$, feature map $\boldsymbol{\phi}(x) = (1, x)^T$, and training data $\{(0.2, 1.1), (0.5, 2.3), (0.8, 2.9)\}$, compute $\mathbf{m}_N$, $\mathbf{S}_N$, and the predictive distribution at $x_* = 0.5$.
+
+3. **d-separation.** Consider a Bayesian network with nodes $\{A, B, C, D\}$ and edges $A \to B$, $A \to C$, $B \to D$, $C \to D$ (a "diamond" or "collider" structure). (a) List all the paths between $B$ and $C$. (b) Is $B$ d-separated from $C$ given $\emptyset$? Is it given $\{A\}$? Is it given $\{D\}$? (c) What does this imply about the conditional independence structure, and why does conditioning on the collider $D$ *open* the path between $B$ and $C$?
+
+4. **EM convergence to k-means.** Show that in a Gaussian mixture model with equal spherical covariances $\boldsymbol{\Sigma}_k = \epsilon \mathbf{I}$ and equal mixing weights, as $\epsilon \to 0$: (a) The soft assignment $\gamma_{n,k} = P(z_n = k \mid \mathbf{x}_n, \theta) \to \mathbf{1}[k = k^*(n)]$ where $k^*(n) = \arg\min_k \|\mathbf{x}_n - \boldsymbol{\mu}_k\|^2$. (b) The M-step centroid update $\boldsymbol{\mu}_k^{(s+1)} = \sum_n \gamma_{n,k} \mathbf{x}_n / \sum_n \gamma_{n,k}$ reduces to the k-means update. (c) Why does EM with spherical GMMs not converge to a global minimum in general?

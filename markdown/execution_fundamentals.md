@@ -7,7 +7,7 @@ As introduced in chapter {ref}`algorithmic_trading`, execution algorithms have a
 
 The challenge of execution is fundamentally a consequence of market microstructure. In a hypothetical market with unlimited and instantaneous liquidity at a single price, every order would be filled at that price and transaction costs would reduce to simple commissions. In reality, liquidity at any given price level is finite, large orders move prices against the trader, and delay exposes the unexecuted portion to price uncertainty. Managing these effects—collectively known as *transaction costs*—is the central problem that execution algorithms are designed to solve.
 
-This chapter develops the conceptual and quantitative framework for algorithmic execution. We examine the economic motivations for execution optimization ({ref}`sec:exec_objective`), catalogue the costs that arise when trading large orders ({ref}`sec:exec_risks`), and introduce the benchmarks used to evaluate and price execution quality ({ref}`sec:exec_benchmarks`). The section on execution strategies and tactics ({ref}`sec:exec_strategies`) provides an overview of the algorithmic landscape, which is treated in depth in the subsequent chapters: chapter {ref}`optimal_execution` derives optimal execution schedules mathematically; chapter {ref}`lob_models` examines limit order book dynamics; and chapter {ref}`execution_tactics` addresses the micro-level problem of optimal order placement.
+This chapter develops the conceptual and quantitative framework for algorithmic execution. We examine the economic motivations for execution optimization ({ref}`sec:exec_objective`), catalogue the costs that arise when trading large orders ({ref}`sec:exec_risks`), and introduce the benchmarks used to evaluate and price execution quality ({ref}`sec:exec_benchmarks`). The section on execution strategies and tactics ({ref}`sec:exec_strategies`) provides an overview of the algorithmic landscape, which is treated in depth in the subsequent chapters: chapter {ref}`optimal_execution` derives optimal execution schedules mathematically, and chapter {ref}`execution_tactics` addresses the micro-level problem of optimal order placement. The quantitative models of limit order book dynamics that underpin tactic design — order arrival processes, fill probability, market impact, and short-term price prediction — are developed in Chapter {ref}`lob_models` of the preceding Advanced Analytics for Financial Markets block.
 
 (sec:exec_objective)=
 ## The execution business objective
@@ -71,9 +71,9 @@ Market impact is conventionally decomposed into two components:
 
 A classical and widely-used model for temporary market impact is the **square-root model** {cite:p}`grinold2000active`:
 
-$$\Delta P = \text{Spread cost} + \alpha \sigma \sqrt{\frac{Q}{V}}$$
+$$\Delta P = \text{Spread cost} + Y \sigma \sqrt{\frac{Q}{V}}$$
 
-where $\sigma$ is the average daily volatility, $V$ is average daily volume, $Q$ is the order size, and $\alpha$ is a calibrated constant. The square-root functional form—as opposed to the linear form that is more analytically tractable—reflects an empirical regularity documented across a wide range of asset classes and order sizes: empirical studies show that the square-root model fits impact data over two to three orders of magnitude in relative order size $Q/V$ {cite:p}`toth2011anomalous`. The model can be generalized to a power law and enriched with intraday information (intraday spreads, predicted volume, realized volatility), at the cost of more complex calibration.
+where $\sigma$ is the average daily volatility, $V$ is average daily volume, $Q$ is the order size, and $Y$ is a calibrated constant. The square-root functional form—as opposed to the linear form that is more analytically tractable—reflects an empirical regularity documented across a wide range of asset classes and order sizes: empirical studies show that the square-root model fits impact data over two to three orders of magnitude in relative order size $Q/V$ {cite:p}`toth2011anomalous`. The model can be generalized to a power law and enriched with intraday information (intraday spreads, predicted volume, realized volatility), at the cost of more complex calibration.
 
 The square-root model is used as standard in many theoretical papers and in commercial implementations (e.g., Bloomberg's pre-trade analytics). A linear market impact model—$\Delta P = k q_i$—is less realistic empirically but considerably more tractable and is used extensively in the derivation of optimal execution strategies (see chapter {ref}`optimal_execution`). The three main applications of market impact models are:
 
@@ -257,7 +257,7 @@ Under MiFID II {cite:p}`MiFIDII2014`, investment firms must demonstrate *best ex
 
 ## Exercises
 
-1. A portfolio manager wants to buy 500,000 shares of a stock with an average daily volume of 2,000,000 shares, average daily volatility of 1.5%, and an average bid-ask spread of 5 basis points. Using the square-root market impact model with $\alpha = 1$, estimate the expected market impact of executing the full order as a single market order. Compare this to a TWAP strategy that splits the order into 12 equal slices over a trading day.
+1. A portfolio manager wants to buy 500,000 shares of a stock with an average daily volume of 2,000,000 shares, average daily volatility of 1.5%, and an average bid-ask spread of 5 basis points. Using the square-root market impact model with $Y = 1$, estimate the expected market impact of executing the full order as a single market order. Compare this to a TWAP strategy that splits the order into 12 equal slices over a trading day.
 
 2. An execution algorithm completed a buy order of 100,000 shares at a volume-weighted average price of €50.15. The arrival mid-price was €50.00 and the market VWAP over the execution window was €50.10. Fees amounted to €500. Calculate the IS cost, the VWAP cost, and the IS P&L in basis points.
 

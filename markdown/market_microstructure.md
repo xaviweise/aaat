@@ -117,7 +117,7 @@ $$ P_{mid} = \frac{1}{2}(P^b_{best} + P^a_{best}) $$
 
 **Spread**: The difference between the best bid and ask prices. It is a metric of liquidity in the order book, since the larger it is the less likely is that investors can trade at prices close to the mid-price:
 
-$$ S = P^a_{best} + P^b_{best} $$
+$$ S = P^a_{best} - P^b_{best} $$
 
 **Volume Imbalance**: it refers to the difference in the volume of buy orders, typically at the best bid and ask prices, although a larger number of levels might be taken for a more robust estimation. A significant imbalance can indicate potential price movement; for example, if the volume at the best bid is substantially higher than the volume at the best ask, it may suggest upward pressure on the price. This feature helps traders gauge short-term supply and demand dynamics and assess potential price changes. It is typically reported as a percentage over total volume in the best bid and ask: 
 
@@ -305,4 +305,14 @@ The International Securities Identification Number (ISIN) is a globally recogniz
 **SEDOL (Stock Exchange Daily Official List)**: The SEDOL code is used for securities trading on the London Stock Exchange and other exchanges in the United Kingdom. It is particularly useful for securities not traded in the United States. While SEDOL does not depend on the exchange, the MIC is required for specifying the exchange. Example: B0WNLY7
 
 **RIC (Reuters Instrument Code)**: The Reuters Instrument Code (RIC) is a proprietary code used by Reuters to identify financial instruments and indices. It consists of two parts separated by a period (“.”). The first part represents the instrument, while the second, which is optional, denotes the exchange. Example: MSFT.OQ
+
+## Exercises
+
+1. **Roll estimator.** A market has the following five consecutive trade prices: $[100.00, 100.02, 100.01, 99.98, 100.00]$ with trade directions $[+1, +1, -1, -1, +1]$ (buy $= +1$, sell $= -1$). (a) Compute the first-order autocovariance of price changes $\text{Cov}(\Delta P_t, \Delta P_{t-1})$ across the four consecutive pairs. (b) Apply the Roll (1984) estimator $\hat{s} = 2\sqrt{-\text{Cov}(\Delta P_t, \Delta P_{t-1})}$ to estimate the effective spread. (c) The true bid-ask spread is 3 bps. What component of the spread does the Roll estimator recover, and what component does it miss? Under what market conditions would the estimator fail?
+
+2. **Kyle's lambda.** In Kyle's single-period model, the true asset value is $V \sim \mathcal{N}(0, \sigma_v^2)$ with $\sigma_v = 0.5$. Noise traders submit orders $u \sim \mathcal{N}(0, \sigma_u^2)$ with $\sigma_u = 1.0$. (a) Compute Kyle's lambda $\lambda_K = \sigma_v / (2\sigma_u)$ and the informed trader's optimal position $\beta = \sigma_u / \sigma_v$. (b) The market maker observes total order flow $q = 2.0$. What price does she set? (c) Interpret $\lambda_K$ as a price impact per unit of net order flow. What does a larger $\lambda_K$ imply about the market's informational efficiency?
+
+3. **Limit order book impact.** A limit order book has resting sell volume: 200 shares at the best ask (price $P_a$), 150 shares at $P_a + \$0.01$, and 300 shares at $P_a + \$0.02$. A market buy order for 400 shares arrives. (a) Compute the number of shares filled at each price level. (b) Compute the volume-weighted average execution price as a spread above $P_a$. (c) After the order, the book is replenished to its original state within 5 seconds. What does this imply about the market's resiliency in the sense of {ref}`market_microstructure`? (d) How would the answer change in an RfQ market for an illiquid bond of the same notional?
+
+4. **Market mechanism comparison.** An institutional investor wants to execute a trade of €10 million in a 10-year Italian government bond. Compare execution via: (a) an electronic central limit order book, and (b) a request-for-quote protocol with three competing dealers. For each: identify the main pre-trade transparency available to the investor, the main risk borne by the liquidity provider, and the likely execution cost under normal and stressed market conditions. Which mechanism is better suited to each scenario?
 
